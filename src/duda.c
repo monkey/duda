@@ -70,7 +70,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     struct duda_method *entry_method, *cs_method;
 
     /* Load and invoke duda_main() */
-    service_init = (int (*)()) duda_load_symbol(ws->handler, "duda_maina");
+    service_init = (int (*)()) duda_load_symbol(ws->handler, "duda_main");
     if (!service_init) {
         mk_err("Duda: invalid web service %s", ws->app_name);
         exit(EXIT_FAILURE);
