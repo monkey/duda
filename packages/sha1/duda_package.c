@@ -24,9 +24,9 @@
 #include "duda_package.h"
 #include "sha1.h"
 
-static void sha1_encode (const void *dataIn, unsigned char *dataOut,  
+static void sha1_encode (const void *dataIn, unsigned char *dataOut,
                          unsigned long length)
-{    
+{
     SHA_CTX sha;
     SHA1_Init(&sha);
     SHA1_Update(&sha, dataIn, length);
@@ -46,10 +46,15 @@ struct duda_api_sha1 *get_sha1_api()
     return sha1;
 }
 
-duda_package_t *init_duda_package()
+duda_package_t *init_duda_package(void **api)
 {
-    duda_package_t *dpkg = malloc(sizeof(duda_package_t));
+    duda_package_t *dpkg;
 
+    /* Initialize package internals */
+    duda_package_init();
+
+    /* Package object */
+    dpkg = mk_api->mem_alloc(sizeof(duda_package_t));
     dpkg->name = "sha1";
     dpkg->version = "0.1";
     dpkg->api = get_sha1_api();

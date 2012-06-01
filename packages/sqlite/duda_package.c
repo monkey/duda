@@ -45,12 +45,18 @@ struct duda_api_sqlite *get_sqlite_api()
     return sqlite;
 }
 
-duda_package_t *init_duda_package()
+duda_package_t *init_duda_package(void **api)
 {
-    duda_package_t *dpkg = malloc(sizeof(duda_package_t));
+    duda_package_t *dpkg;
 
+    /* Initialize package internals */
+    duda_package_init();
+
+    /* Init SQLite */
     sql_init();
 
+    /* Package object */
+    dpkg = mk_api->mem_alloc(sizeof(duda_package_t));
     dpkg->name    = "sqlite";
     dpkg->version = "0.1";
     dpkg->api     = get_sqlite_api();

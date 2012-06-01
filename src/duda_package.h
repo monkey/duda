@@ -23,6 +23,7 @@
 #define DUDA_PACKAGE_H
 
 #include <stdlib.h>
+#include "MKPlugin.h"
 
 struct duda_package {
     char *name;
@@ -31,7 +32,13 @@ struct duda_package {
     void *api;
 };
 
+/* Reference the core Monkey API */
+struct plugin_api *mk_api;
+#define duda_package_init() mk_api = *api;
+
+/* Data type */
 typedef struct duda_package duda_package_t;
 
+/* Define package loader */
 duda_package_t *duda_package_load(const char *pkgname);
 #endif
