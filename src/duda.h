@@ -48,7 +48,8 @@ typedef struct duda_request {
     mk_pointer params[MAP_WS_MAX_PARAMS];
     short int n_params;
 
-    /* Monkey request: client_session & session_request */
+    /* Monkey request data: plugin, client_session & session_request */
+    struct plugin *plugin;
     struct client_session *cs;
     struct session_request *sr;
 

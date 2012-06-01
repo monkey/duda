@@ -399,7 +399,8 @@ int duda_service_end(duda_request_t *dr)
     return ret;
 }
 
-int duda_service_run(struct client_session *cs,
+int duda_service_run(struct plugin *plugin,
+                     struct client_session *cs,
                      struct session_request *sr,
                      struct web_service *web_service)
 {
@@ -414,6 +415,7 @@ int duda_service_run(struct client_session *cs,
     /* service details */
     dr->ws_root = web_service;
     dr->n_params = 0;
+    dr->plugin = plugin;
     dr->cs = cs;
     dr->sr = sr;
 
@@ -524,7 +526,7 @@ int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
             return MK_PLUGIN_RET_NOT_ME;
         }
 
-        if (duda_service_run(cs, sr, web_service) == 0) {
+        if (duda_service_run(plugin, cs, sr, web_service) == 0) {
             return MK_PLUGIN_RET_CONTINUE;
         }
     }
