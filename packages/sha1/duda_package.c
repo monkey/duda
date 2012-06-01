@@ -46,7 +46,7 @@ struct duda_api_sha1 *get_sha1_api()
     return sha1;
 }
 
-duda_package_t *init_duda_package(void **api)
+duda_package_t *duda_package_main(void **api)
 {
     duda_package_t *dpkg;
 

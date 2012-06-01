@@ -38,7 +38,7 @@ struct duda_api_base64 *get_base64_api()
     return base64;
 }
 
-duda_package_t *init_duda_package(void **api)
+duda_package_t *duda_package_main(void **api)
 {
     duda_package_t *dpkg;
 

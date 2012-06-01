@@ -31,7 +31,7 @@ duda_package_t *duda_package_load(const char *pkgname)
     void *handle = NULL;
     unsigned long len;
     struct file_info finfo;
-    duda_package_t *(*init_pkg)() = NULL;
+    duda_package_t *(*package_main)() = NULL;
     duda_package_t *package_info;
 
     mk_api->str_build(&package, &len, "%s/%s.dpkg", packages_root, pkgname);
@@ -56,13 +56,13 @@ duda_package_t *duda_package_load(const char *pkgname)
         return NULL;
     }
 
-    init_pkg = duda_load_symbol(handle, "init_duda_package");
-    if (!init_pkg) {
+    package_main = duda_load_symbol(handle, "duda_package_main");
+    if (!package_main) {
         mk_err("Duda: the package '%s' is broken", pkgname);
         exit(EXIT_FAILURE);
     }
 
-    package_info = init_pkg(&mk_api);
+    package_info = package_main(&mk_api);
     mk_api->mem_free(package);
 
     return package_info;

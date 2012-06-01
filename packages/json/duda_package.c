@@ -54,7 +54,7 @@ struct duda_api_json *get_json_api()
     return json;
 }
 
-duda_package_t *init_duda_package(void **api)
+duda_package_t *duda_package_main(void **api)
 {
     duda_package_t *dpkg;
 
