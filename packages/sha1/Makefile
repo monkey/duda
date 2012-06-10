@@ -1,7 +1,7 @@
 CC      = gcc
-CFLAGS  =  -O2 -Wall
+CFLAGS  =  -g -Wall
 LDFLAGS = 
-DEFS    = 
+DEFS    = -DDEBUG -DSAFE_FREE
 INCDIR  = ../../../../src/include -I../../src
 OBJECTS = duda_package.o sha1.o
 SOURCES = duda_package.c sha1.c

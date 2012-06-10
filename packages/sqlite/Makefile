@@ -1,7 +1,7 @@
 CC      = gcc
-CFLAGS  =  -O2 -Wall
+CFLAGS  =  -g -Wall
 LDFLAGS = 
-DEFS    = 
+DEFS    = -DDEBUG -DSAFE_FREE
 INCDIR  = ../../../../src/include -I../../src
 OBJECTS = duda_package.o sqlite.o
 SOURCES = duda_package.c sqlite.c

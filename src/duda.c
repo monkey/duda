@@ -185,7 +185,7 @@ void duda_mem_init()
 
 int _mkp_event_write(int sockfd)
 {
-    return duda_event_write_callback(sockfd);
+    return duda_queue_event_write_callback(sockfd);
 }
 
 void _mkp_core_prctx(struct server_config *config)

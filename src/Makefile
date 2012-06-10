@@ -1,7 +1,7 @@
 CC 	= gcc
-CFLAGS	=  -O2 -Wall
+CFLAGS	=  -g -Wall
 LDFLAGS = 
-DEFS    = 
+DEFS    = -DDEBUG -DSAFE_FREE
 INCDIR  = ../../../src/include
 SOURCES = duda.c duda_conf.c duda_api.c duda_event.c duda_queue.c \
 	duda_body_buffer.c duda_sendfile.c duda_debug.c duda_global.c \

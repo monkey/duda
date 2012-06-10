@@ -22,14 +22,4 @@
 #ifndef DUDA_EVENT_H
 #define DUDA_EVENT_H
 
-#include "duda.h"
-
-#define DUDA_EVENT_BODYFLUSH    1
-#define DUDA_EVENT_SENDFILE     2
-
-int duda_event_register_write(duda_request_t *dr);
-int duda_event_unregister_write(duda_request_t *dr);
-int duda_event_is_registered_write(duda_request_t *dr);
-int duda_event_write_callback(int sockfd);
-int __body_flush(duda_request_t *dr);
 #endif

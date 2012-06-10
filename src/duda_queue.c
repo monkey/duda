@@ -107,14 +107,14 @@ int duda_queue_flush(duda_request_t *dr)
             item->status = DUDA_QSTATUS_INACTIVE;
         }
 
-        is_registered = duda_event_is_registered_write(dr);
+        is_registered = duda_queue_event_is_registered_write(dr);
         queue_len = duda_queue_length(&dr->queue_out);
 
         if (queue_len > 0 && is_registered == MK_FALSE) {
-            duda_event_register_write(dr);
+            duda_queue_event_register_write(dr);
         }
         else if (queue_len == 0 && is_registered == MK_TRUE) {
-            duda_event_unregister_write(dr);
+            duda_queue_event_unregister_write(dr);
         }
         break;
     }
@@ -147,4 +147,83 @@ int duda_queue_free(struct mk_list *queue)
     }
 
     return 0;
+}
+
+
+int duda_queue_event_register_write(duda_request_t *dr)
+{
+    struct mk_list *list;
+
+    list = pthread_getspecific(duda_global_events_write);
+    if (!list) {
+        return -1;
+    }
+
+    mk_list_add(&dr->_head_events_write, list);
+    return 0;
+}
+
+int duda_queue_event_unregister_write(duda_request_t *dr)
+{
+    struct mk_list *list, *head, *temp;
+    duda_request_t *entry;
+
+    list = pthread_getspecific(duda_global_events_write);
+    mk_list_foreach_safe(head, temp, list) {
+        entry = mk_list_entry(head, duda_request_t, _head_events_write);
+        if (entry == dr) {
+            mk_list_del(&entry->_head_events_write);
+            pthread_setspecific(duda_global_events_write, list);
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+int duda_queue_event_is_registered_write(duda_request_t *dr)
+{
+    struct mk_list *list;
+    struct mk_list *head;
+    duda_request_t *entry;
+
+    list = pthread_getspecific(duda_global_events_write);
+    mk_list_foreach(head, list) {
+        entry = mk_list_entry(head, duda_request_t, _head_events_write);
+        if (entry == dr) {
+            return MK_TRUE;
+        }
+    }
+
+    return MK_FALSE;
+}
+
+int duda_queue_event_write_callback(int sockfd)
+{
+    int ret = MK_PLUGIN_RET_CONTINUE;
+    struct mk_list *list, *temp, *head;
+    duda_request_t *entry;
+
+    list = pthread_getspecific(duda_global_events_write);
+    mk_list_foreach_safe(head, temp, list) {
+        entry = mk_list_entry(head, duda_request_t, _head_events_write);
+        if (entry->cs->socket == sockfd) {
+            ret = duda_queue_flush(entry);
+
+            if (ret > 0) {
+                return MK_PLUGIN_RET_EVENT_OWNED;
+            }
+
+            if (duda_service_end(entry) == -1) {
+                return MK_PLUGIN_RET_EVENT_CLOSE;
+            }
+            else {
+                return MK_PLUGIN_RET_EVENT_OWNED;
+            }
+
+            break;
+        }
+    }
+
+    return MK_PLUGIN_RET_EVENT_CONTINUE;
 }
