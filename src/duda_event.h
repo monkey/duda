@@ -22,4 +22,52 @@
 #ifndef DUDA_EVENT_H
 #define DUDA_EVENT_H
 
+#include "MKPlugin.h"
+#include "duda.h"
+
+/* Thread key to map the event lists per worker */
+pthread_key_t duda_events_list;
+
+struct duda_event_handler {
+    int sockfd;
+    struct duda_request *dr;
+
+    int (*cb_on_read) (int, struct duda_request *);
+    int (*cb_on_write) (int, struct duda_request *);
+    int (*cb_on_error) (int, struct duda_request *);
+    int (*cb_on_close) (int, struct duda_request *);
+    int (*cb_on_timeout) (int, struct duda_request *);
+
+    struct mk_list _head;
+};
+
+struct duda_api_event {
+    int (*add) (int, struct duda_request *,
+                int (*cb_on_read) (int, struct duda_request *),
+                int (*cb_on_write) (int, struct duda_request *),
+                int (*cb_on_error) (int, struct duda_request *),
+                int (*cb_on_close) (int, struct duda_request *),
+                int (*cb_on_timeout) (int, struct duda_request *));
+    struct duda_event_handler *(*lookup) (int);
+    int (*delete) (int);
+};
+
+
+/* Export an API object */
+struct duda_api_event *duda_event_object();
+
+/* Register a new event into Duda events handler */
+int duda_event_add(int sockfd, struct duda_request *dr,
+                   int (*cb_on_read) (int sockfd, struct duda_request *dr),
+                   int (*cb_on_write) (int sockfd, struct duda_request *dr),
+                   int (*cb_on_error) (int sockfd, struct duda_request *dr),
+                   int (*cb_on_close) (int sockfd, struct duda_request *dr),
+                   int (*cb_on_timeout) (int sockfd, struct duda_request *dr));
+
+/* Lookup a specific event_handler through it socket descriptor */
+struct duda_event_handler *duda_event_lookup(int sockfd);
+
+/* Delete an event_handler from the thread list */
+int duda_event_delete(int sockfd);
+
 #endif

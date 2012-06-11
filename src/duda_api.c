@@ -242,6 +242,7 @@ struct duda_api_objects *duda_api_master()
     objs->response->end         = end_response;
 
     /* Assign Objects */
+    objs->event   = duda_event_object();
     objs->console = duda_console_object();
     objs->param   = duda_param_object();
     objs->session = duda_session_object();

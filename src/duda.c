@@ -183,9 +183,81 @@ void duda_mem_init()
     mk_cookie_expire_value.len = len;
 }
 
+
+/*
+ * These are the Monkey hooks for the event handler, each time an event
+ * arrives here and depending of the event type, it will perform a lookup
+ * over the thread list looking for possible event-handlers.
+ *
+ * By Monkey definition exists hooks:
+ *
+ *  _mkp_event_read(int sockfd)    -> socket is ready to read
+ *  _mkp_event_write(int sockfd)   -> socket is ready to write
+ *  _mkp_event_close(int sockfd)   -> socket has been closed
+ *  _mkp_event_error(int sockfd)   -> some error happend at socket level
+ *  _mkp_event_timeout(int sockfd) -> the socket have timed out
+ */
+
+int _mkp_event_read(int sockfd)
+{
+    struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    if (eh && eh->cb_on_read) {
+        eh->cb_on_read(eh->sockfd, eh->dr);
+        return MK_PLUGIN_RET_EVENT_OWNED;
+    }
+
+    return MK_PLUGIN_RET_EVENT_CONTINUE;
+}
+
 int _mkp_event_write(int sockfd)
 {
+    struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    if (eh && eh->cb_on_write) {
+        eh->cb_on_write(eh->sockfd, eh->dr);
+        return MK_PLUGIN_RET_EVENT_OWNED;
+    }
+
+    /*
+     * By default we always check if we have some pending data in our
+     * outgoing queue
+     */
     return duda_queue_event_write_callback(sockfd);
+}
+
+int _mkp_event_close(int sockfd)
+{
+    struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    if (eh && eh->cb_on_close) {
+        eh->cb_on_close(eh->sockfd, eh->dr);
+        duda_event_delete(sockfd);
+        return MK_PLUGIN_RET_EVENT_CLOSE;
+    }
+
+    return MK_PLUGIN_RET_EVENT_CONTINUE;
+}
+
+int _mkp_event_error(int sockfd)
+{
+    struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    if (eh && eh->cb_on_error) {
+        eh->cb_on_error(eh->sockfd, eh->dr);
+        duda_event_delete(sockfd);
+        return MK_PLUGIN_RET_EVENT_CLOSE;
+    }
+
+    return MK_PLUGIN_RET_EVENT_CONTINUE;
+}
+
+int _mkp_event_timeout(int sockfd)
+{
+    struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    if (eh && eh->cb_on_timeout) {
+        eh->cb_on_timeout(eh->sockfd, eh->dr);
+        duda_event_delete(sockfd);
+        return MK_PLUGIN_RET_EVENT_CLOSE;
+    }
+
+    return MK_PLUGIN_RET_EVENT_CONTINUE;
 }
 
 void _mkp_core_prctx(struct server_config *config)
@@ -245,6 +317,7 @@ int _mkp_init(void **api, char *confdir)
     duda_load_services();
 
     /* Global data / Thread scope */
+    pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
     return 0;
 }
