@@ -19,37 +19,26 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
+/*
+ * Duda objects are struct passed by references to third party components of the framework,
+ * like web services or packages.
+ */
 
-#include "duda_package.h"
-#include "base64.h"
+#ifndef DUDA_OBJECTS_H
+#define DUDA_OBJECTS_H
 
-struct duda_api_base64 *get_base64_api()
-{
-    struct duda_api_base64 *base64;
+/* Objects exported to the web service */
+struct plugin_api *monkey;
+struct duda_api_map *map;
+struct duda_api_msg *msg;
+struct duda_api_response *response;
+struct duda_api_debug *debug;
+struct duda_api_event *event;
+struct duda_api_console *console;
+struct duda_api_param *param;
+struct duda_api_session *session;
+struct duda_api_cookie *cookie;
+struct duda_api_global *global;
+struct duda_api_xtime *xtime;
 
-    /* Alloc object */
-    base64 = malloc(sizeof(struct duda_api_base64));
-
-    /* Map API calls */
-    base64->encode = base64_encode;
-    base64->decode = base64_decode;
-
-    return base64;
-}
-
-duda_package_t *duda_package_main(struct duda_api_objects *api)
-{
-    duda_package_t *dpkg;
-
-    /* Initialize package internals */
-    duda_package_init();
-
-    /* Package object */
-    dpkg = mk_api->mem_alloc(sizeof(duda_package_t));
-    dpkg->name = "base64";
-    dpkg->version = "0.1";
-    dpkg->api = get_base64_api();
-
-    return dpkg;
-}
+#endif

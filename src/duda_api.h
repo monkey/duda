@@ -27,7 +27,6 @@
 #include "duda_event.h"
 #include "duda_global.h"
 #include "duda_cookie.h"
-#include "duda_package.h"
 #include "duda_console.h"
 
 /* types of data */
@@ -125,7 +124,7 @@ struct plugin_api *monkey;
 
 /* MAP specific Duda calls */
 struct duda_api_main {
-    duda_package_t *(*package_load) (const char *);
+    struct duda_package *(*package_load) (const char *);
 };
 
 /* MAP object: map->x() */

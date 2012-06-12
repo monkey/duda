@@ -45,7 +45,7 @@ struct duda_api_sqlite *get_sqlite_api()
     return sqlite;
 }
 
-duda_package_t *duda_package_main(void **api)
+duda_package_t *duda_package_main(struct duda_api_objects *api)
 {
     duda_package_t *dpkg;
 
