@@ -122,11 +122,6 @@ struct duda_param {
 /* MONKEY object: monkey->x() */
 struct plugin_api *monkey;
 
-/* MAP specific Duda calls */
-struct duda_api_main {
-    struct duda_package *(*package_load) (const char *);
-};
-
 /* MAP object: map->x() */
 struct duda_api_map {
     /* interface_ */
@@ -198,6 +193,12 @@ struct duda_api_objects {
 };
 
 struct duda_api_objects *duda_api_master();
+
+/* MAP specific Duda calls */
+struct duda_api_main {
+    struct duda_package *(*package_load) (const char *, struct duda_api_objects *);
+};
+
 
 int http_status(duda_request_t *dr, int status);
 int http_header(duda_request_t *dr, char *row, int len);
