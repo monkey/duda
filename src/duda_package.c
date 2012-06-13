@@ -62,7 +62,7 @@ duda_package_t *duda_package_load(const char *pkgname, struct duda_api_objects *
         exit(EXIT_FAILURE);
     }
 
-    package_info = package_main(&api);
+    package_info = package_main(api);
     mk_api->mem_free(package);
 
     return package_info;

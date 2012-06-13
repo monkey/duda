@@ -54,7 +54,7 @@ duda_package_t *duda_package_main(struct duda_api_objects *api)
     duda_package_init();
 
     /* Package object */
-    dpkg = mk_api->mem_alloc(sizeof(duda_package_t));
+    dpkg = monkey->mem_alloc(sizeof(duda_package_t));
     dpkg->name = "sha1";
     dpkg->version = "0.1";
     dpkg->api = get_sha1_api();
