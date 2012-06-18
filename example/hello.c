@@ -237,7 +237,7 @@ int duda_main(struct duda_api_objects *api)
 {
     duda_interface_t *if_system;
     duda_method_t    *method;
-    duda_param_t *param;
+    duda_param_t *params;
 
     duda_service_init();
 
@@ -272,10 +272,10 @@ int duda_main(struct duda_api_objects *api)
      * format: formatted/unformatted
      */
     method = map->method_new("json_second", "cb_json_second", 2);
-    param = map->param_new("action", strlen("create"));
-    map->method_add_param(param, method);
-    param = map->param_new("format", strlen("unformatted"));
-    map->method_add_param(param, method);
+    params = map->param_new("action", strlen("create"));
+    map->method_add_param(params, method);
+    params = map->param_new("format", strlen("unformatted"));
+    map->method_add_param(params, method);
     map->interface_add_method(method, if_system);
 
     /* URI: /hello/examples/sendfile */
