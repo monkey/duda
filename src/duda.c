@@ -104,7 +104,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
                     entry_method->cb_webservice = duda_load_symbol(ws->handler,
                                                                    entry_method->callback);
                     if (!entry_method->cb_webservice) {
-                        mk_err("%s / callback not found '%s'", entry_method->uid, entry_method);
+                        mk_err("%s / callback not found '%s'", entry_method->uid, entry_method->uid);
                         exit(EXIT_FAILURE);
                     }
                 }
@@ -262,6 +262,7 @@ int _mkp_event_timeout(int sockfd)
 
 int _mkp_core_prctx(struct server_config *config)
 {
+    return 0;
 }
 
 /* Thread context initialization */
