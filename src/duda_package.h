@@ -55,4 +55,8 @@ typedef struct duda_package duda_package_t;
 
 /* Define package loader */
 duda_package_t *duda_package_load(const char *pkgname, struct duda_api_objects *api);
+
+/* Hook defines for packages */
+duda_package_t MK_EXPORT *duda_package_main(struct duda_api_objects *api);
+
 #endif
