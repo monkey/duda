@@ -260,7 +260,7 @@ int _mkp_event_timeout(int sockfd)
     return MK_PLUGIN_RET_EVENT_CONTINUE;
 }
 
-void _mkp_core_prctx(struct server_config *config)
+int _mkp_core_prctx(struct server_config *config)
 {
 }
 
@@ -307,7 +307,7 @@ void _mkp_core_thctx()
     }
 }
 
-int _mkp_init(void **api, char *confdir)
+int _mkp_init(struct plugin_api **api, char *confdir)
 {
     mk_api = *api;
 
