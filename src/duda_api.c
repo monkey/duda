@@ -269,8 +269,9 @@ struct duda_api_objects *duda_api_master()
 
 void duda_api_exception(duda_request_t *dr, const char *message)
 {
-    mk_err("Duda API Exception /%s/%s/%s: %s", dr->appname.data,
-                                               dr->interface.data,
-                                               dr->method.data,
-                                               message);
+    printf("Duda API Exception /%s/%s/%s: %s\n", dr->appname.data,
+                                                 dr->interface.data,
+                                                 dr->method.data,
+                                                 message);
+    fflush(stdout);
 }
