@@ -19,27 +19,27 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/*
- * Duda objects are struct passed by references to third party components of the framework,
- * like web services or packages.
- */
+#ifndef DUDA_REQUEST_H
+#define DUDA_REQUEST_H
 
-#ifndef DUDA_OBJECTS_H
-#define DUDA_OBJECTS_H
+#include "duda.h"
 
-/* Objects exported to the web service */
-struct plugin_api *monkey;
-struct duda_api_map *map;
-struct duda_api_msg *msg;
-struct duda_api_request *request;
-struct duda_api_response *response;
-struct duda_api_debug *debug;
-struct duda_api_event *event;
-struct duda_api_console *console;
-struct duda_api_param *param;
-struct duda_api_session *session;
-struct duda_api_cookie *cookie;
-struct duda_api_global *global;
-struct duda_api_xtime *xtime;
+struct duda_api_request {
+    int (*is_data)    (duda_request_t *);
+    int (*is_get)     (duda_request_t *);
+    int (*is_post)    (duda_request_t *);
+    int (*is_head)    (duda_request_t *);
+    int (*is_put)     (duda_request_t *);
+    int (*is_delete)  (duda_request_t *);
+};
+
+/* functions */
+struct duda_api_request *duda_request_object();
+int duda_request_is_data(duda_request_t *dr);
+int duda_request_is_get(duda_request_t *dr);
+int duda_request_is_post(duda_request_t *dr);
+int duda_request_is_head(duda_request_t *dr);
+int duda_request_is_put(duda_request_t *dr);
+int duda_request_is_delete(duda_request_t *dr);
 
 #endif

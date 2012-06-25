@@ -249,6 +249,7 @@ struct duda_api_objects *duda_api_master()
 
     /* Assign Objects */
     objs->event   = duda_event_object();
+    objs->request = duda_request_object();
     objs->console = duda_console_object();
     objs->param   = duda_param_object();
     objs->session = duda_session_object();
@@ -269,6 +270,7 @@ struct duda_api_objects *duda_api_master()
 
 void duda_api_exception(duda_request_t *dr, const char *message)
 {
+
     printf("Duda API Exception /%s/%s/%s: %s\n", dr->appname.data,
                                                  dr->interface.data,
                                                  dr->method.data,

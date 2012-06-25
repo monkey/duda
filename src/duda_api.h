@@ -28,6 +28,7 @@
 #include "duda_global.h"
 #include "duda_cookie.h"
 #include "duda_console.h"
+#include "duda_request.h"
 
 /* types of data */
 typedef struct duda_interface duda_interface_t;
@@ -181,6 +182,7 @@ struct duda_api_objects {
     struct plugin_api *monkey;
     struct duda_api_map *map;
     struct duda_api_msg *msg;
+    struct duda_api_request *request;
     struct duda_api_response *response;
     struct duda_api_debug *debug;
     struct duda_api_event *event;

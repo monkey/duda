@@ -54,6 +54,7 @@ duda_package_t *pkg_temp;
     monkey   = api->monkey;                                             \
     map      = api->map;                                                \
     msg      = api->msg;                                                \
+    request  = api->request;                                            \
     response = api->response;                                           \
     debug    = api->debug;                                              \
     event    = api->event;                                              \
