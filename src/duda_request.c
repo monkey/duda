@@ -34,6 +34,7 @@ struct duda_api_request *duda_request_object()
     r->is_head   = duda_request_is_head;
     r->is_put    = duda_request_is_put;
     r->is_delete = duda_request_is_delete;
+    r->is_content_type = duda_request_is_content_type;
 
     return r;
 }
@@ -103,4 +104,29 @@ int duda_request_is_delete(duda_request_t *dr)
     }
 
     return MK_FALSE;
+}
+
+/* Compare the content type of the request */
+int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
+{
+    int len;
+
+    if (!content_type) {
+        return MK_FALSE;
+    }
+
+    if (dr->sr->content_type.len <= 0) {
+        return MK_FALSE;
+    }
+
+    len = strlen(content_type);
+    if (len != dr->sr->content_type.len) {
+        return MK_FALSE;
+    }
+
+    if (strncmp(dr->sr->content_type.data, content_type, len) != 0) {
+        return MK_FALSE;
+    }
+
+    return MK_TRUE;
 }

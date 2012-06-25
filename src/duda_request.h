@@ -31,6 +31,7 @@ struct duda_api_request {
     int (*is_head)    (duda_request_t *);
     int (*is_put)     (duda_request_t *);
     int (*is_delete)  (duda_request_t *);
+    int (*is_content_type) (duda_request_t *, const char *);
 };
 
 /* functions */
@@ -41,5 +42,6 @@ int duda_request_is_post(duda_request_t *dr);
 int duda_request_is_head(duda_request_t *dr);
 int duda_request_is_put(duda_request_t *dr);
 int duda_request_is_delete(duda_request_t *dr);
+int duda_request_is_content_type(duda_request_t *dr, const char *content_type);
 
 #endif
