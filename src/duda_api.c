@@ -190,6 +190,12 @@ int end_response(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
     int ret;
 
+    /* Make sure the caller set a valid HTTP response code */
+    if (dr->sr->headers.status == 0) {
+        duda_api_exception(dr, "Callback did not set the HTTP response status");
+        exit(EXIT_FAILURE);
+    }
+
     dr->end_callback = end_cb;
     __http_send_headers_safe(dr);
     ret = duda_queue_flush(dr);
@@ -259,4 +265,12 @@ struct duda_api_objects *duda_api_master()
 #endif
 
     return objs;
+}
+
+void duda_api_exception(duda_request_t *dr, const char *message)
+{
+    mk_err("Duda API Exception /%s/%s/%s: %s", dr->appname.data,
+                                               dr->interface.data,
+                                               dr->method.data,
+                                               message);
 }

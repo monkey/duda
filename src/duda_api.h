@@ -206,5 +206,6 @@ int body_print(duda_request_t *dr, char *raw, int len);
 int body_printf(duda_request_t *dr, const char *format, ...);
 int sendfile_enqueue(duda_request_t *dr, char *path);
 int end_response(duda_request_t *dr, void (*end_cb) (duda_request_t *));
+void duda_api_exception(duda_request_t *dr, const char *message);
 
 #endif
