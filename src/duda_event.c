@@ -29,6 +29,7 @@ struct duda_api_event *duda_event_object()
     e = mk_api->mem_alloc(sizeof(struct duda_api_event));
     e->add    = duda_event_add;
     e->lookup = duda_event_lookup;
+    e->mode   = duda_event_mode;
     e->delete = duda_event_delete;
 
     return e;
@@ -36,13 +37,13 @@ struct duda_api_event *duda_event_object()
 
 /* Register a new event into Duda events handler */
 int duda_event_add(int sockfd, struct duda_request *dr,
+                   int init_mode, int behavior,
                    int (*cb_on_read) (int, struct duda_request *),
                    int (*cb_on_write) (int, struct duda_request *),
                    int (*cb_on_error) (int, struct duda_request *),
                    int (*cb_on_close) (int, struct duda_request *),
                    int (*cb_on_timeout) (int, struct duda_request *))
 {
-    int mode;
     struct mk_list *event_list;
     struct duda_event_handler *eh;
 
@@ -54,6 +55,8 @@ int duda_event_add(int sockfd, struct duda_request *dr,
     /* set node */
     eh->sockfd = sockfd;
     eh->dr = dr;
+    eh->mode = init_mode;
+    eh->behavior = behavior;
     eh->cb_on_read = cb_on_read;
     eh->cb_on_write = cb_on_write;
     eh->cb_on_error = cb_on_error;
@@ -64,23 +67,13 @@ int duda_event_add(int sockfd, struct duda_request *dr,
     event_list = pthread_getspecific(duda_events_list);
     mk_list_add(&eh->_head, event_list);
 
-    /* Register the event with Monkey API */
-    if (cb_on_read && cb_on_write) {
-        mode = MK_EPOLL_RW;
-    }
-    else if (cb_on_read) {
-        mode = MK_EPOLL_READ;
-    }
-    else if (cb_on_write) {
-        mode = MK_EPOLL_WRITE;
-    }
-    else {
+    if (init_mode < DUDA_EVENT_READ || init_mode > DUDA_EVENT_SLEEP) {
         mk_err("Duda: Invalid usage of duda_event_add()");
         exit(EXIT_FAILURE);
     }
 
-    mk_api->event_add(sockfd, mode, dr->plugin, dr->cs, dr->sr,
-                      MK_EPOLL_LEVEL_TRIGGERED);
+    mk_api->event_add(sockfd, init_mode, dr->plugin, dr->cs, dr->sr,
+                      behavior);
 
     return 0;
 }
@@ -104,6 +97,20 @@ struct duda_event_handler *duda_event_lookup(int sockfd)
     }
 
     return NULL;
+}
+
+/* Change the mode and behavior for a given file descriptor */
+int duda_event_mode(int sockfd, int mode, int behavior)
+{
+    struct duda_event_handler *eh;
+
+    /* We just put to sleep epoll events created through this event object */
+    eh = duda_event_lookup(sockfd);
+    if (!eh) {
+        return -1;
+    }
+
+    return mk_api->event_socket_change_mode(sockfd, mode, behavior);
 }
 
 /* Delete an event_handler from the thread list */
