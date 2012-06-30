@@ -155,6 +155,8 @@ struct duda_api_response {
     int (*body_print)  (duda_request_t *, char *, int);
     int (*body_printf) (duda_request_t *, const char *, ...);
     int (*sendfile)    (duda_request_t *, char *);
+    int (*wait) (duda_request_t *);
+    int (*cont) (duda_request_t *);
     int (*end) (duda_request_t *, void (*end_callback) ());
 };
 

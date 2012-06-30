@@ -185,6 +185,20 @@ int sendfile_enqueue(duda_request_t *dr, char *path)
     return 0;
 }
 
+int continue_response(duda_request_t *dr)
+{
+    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_WAKEUP, -1);
+}
+
+int wait_response(duda_request_t *dr)
+{
+    /*
+     * send the socket to sleep, the behavior is not required as the Monkey 'event
+     * states' already have the previous mode and behavior
+     */
+    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_SLEEP, -1);
+}
+
 /* Finalize the response process */
 int end_response(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
@@ -245,6 +259,8 @@ struct duda_api_objects *duda_api_master()
     objs->response->body_print  = body_print;
     objs->response->body_printf = body_printf;
     objs->response->sendfile    = sendfile_enqueue;
+    objs->response->wait        = wait_response;
+    objs->response->cont        = continue_response;
     objs->response->end         = end_response;
 
     /* Assign Objects */
