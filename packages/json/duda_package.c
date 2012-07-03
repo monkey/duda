@@ -22,6 +22,35 @@
 #include "duda_package.h"
 #include "json.h"
 
+/* Local methods */
+json_t *duda_json_parse_data(duda_request_t *dr)
+{
+    unsigned long len;
+    json_t *root;
+    char *data;
+
+    /* Check that we have a post request with some content */
+    if (!request->is_data(dr)) {
+        return NULL;
+    }
+
+    /* Generate a local copy of the data */
+    data = request->get_data(dr, &len);
+    if (!data) {
+        return NULL;
+    }
+
+    /* Parse JSON request */
+    root = cJSON_Parse(data);
+
+    /* Free the copied data */
+    monkey->mem_free(data);
+
+    /* return the JSON root tree */
+    return root;
+}
+
+/* API object */
 struct duda_api_json *get_json_api()
 {
     struct duda_api_json *json;
@@ -50,6 +79,9 @@ struct duda_api_json *get_json_api()
     json->array_item        = cJSON_GetArrayItem;
     json->object_item       = cJSON_GetObjectItem;
     json->get_error         = cJSON_GetErrorPtr;
+
+    /* Local methods */
+    json->parse_data        = duda_json_parse_data;
 
     return json;
 }

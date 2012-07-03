@@ -130,3 +130,9 @@ int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
 
     return MK_TRUE;
 }
+
+void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
+{
+
+
+}

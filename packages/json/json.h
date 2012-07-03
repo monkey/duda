@@ -49,6 +49,9 @@ struct duda_api_json {
     json_t *(*array_item) (json_t *, int);
     json_t *(*object_item) (json_t *, const char *);
     const char *(*get_error) (void);
+
+    /* Local methods */
+    json_t *(*parse_data) (duda_request_t *);
 };
 
 typedef struct duda_api_json json_object_t;
