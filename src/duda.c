@@ -333,7 +333,7 @@ int duda_request_set_method(duda_request_t *dr)
 {
     struct mk_list *head_iface, *head_method;
     struct duda_interface *entry_iface;
-    struct duda_method *entry_method;
+    struct duda_method *entry_method = NULL;
 
     /* Finds the corresponding duda_method structure */
     mk_list_foreach(head_iface, dr->ws_root->map) {
@@ -361,7 +361,12 @@ int duda_request_set_method(duda_request_t *dr)
         return -1;
     }
 
-    PLUGIN_TRACE("Method %s invoked", entry_method->uid);
+#ifdef TRACE
+    if (entry_method) {
+        PLUGIN_TRACE("Method %s invoked", entry_method->uid);
+    }
+#endif
+
     return 0;
 }
 
