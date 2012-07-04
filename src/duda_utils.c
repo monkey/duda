@@ -87,7 +87,7 @@ int duda_utils_strtol(const char *nptr, int len, long *result)
 			break;
         }
 
-		if (any < 0 || acc > cutoff || acc == cutoff && c > cutlim) {
+		if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim)) {
 			any = -1;
         }
 		else {
