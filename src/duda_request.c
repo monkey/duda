@@ -35,6 +35,7 @@ struct duda_api_request *duda_request_object()
     r->is_put    = duda_request_is_put;
     r->is_delete = duda_request_is_delete;
     r->is_content_type = duda_request_is_content_type;
+    r->get_data  = duda_request_get_data;
 
     return r;
 }
@@ -133,6 +134,21 @@ int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
 
 void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
 {
+    size_t n;
+    void *data;
 
+    /* Some silly but required validations */
+    if (!dr->cs || !dr->sr || !dr->sr->data.data) {
+        *len = 0;
+        return NULL;
+    }
 
+    n = (size_t) dr->sr->data.len;
+    data = mk_api->mem_alloc_z(n);
+    if (!data) {
+        return NULL;
+    }
+
+    memcpy(data, dr->sr->data.data, n);
+    return data;
 }
