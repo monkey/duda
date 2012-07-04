@@ -47,4 +47,9 @@ unsigned long duda_queue_length(struct mk_list *queue);
 int duda_queue_flush(duda_request_t *dr);
 int duda_queue_free(struct mk_list *queue);
 
+int duda_queue_event_write_callback(int sockfd);
+int duda_queue_event_is_registered_write(duda_request_t *dr);
+int duda_queue_event_register_write(duda_request_t *dr);
+int duda_queue_event_unregister_write(duda_request_t *dr);
+
 #endif
