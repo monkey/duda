@@ -61,8 +61,8 @@ struct duda_method {
 
     short int num_params;
     char *callback;
-    void *(*cb_webservice) (duda_request_t *);
-    void *(*cb_builtin)    (duda_request_t *);
+    void (*cb_webservice) (duda_request_t *);
+    void (*cb_builtin)    (duda_request_t *);
 
     struct mk_list params;
 
