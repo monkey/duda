@@ -40,6 +40,7 @@ struct duda_package {
     monkey   = api->monkey;                                             \
     map      = api->map;                                                \
     msg      = api->msg;                                                \
+    request  = api->request;                                            \
     response = api->response;                                           \
     debug    = api->debug;                                              \
     event    = api->event;                                              \
