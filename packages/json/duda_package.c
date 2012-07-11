@@ -75,9 +75,9 @@ struct duda_api_json *get_json_api()
     json->print             = cJSON_Print;
     json->print_unformatted = cJSON_PrintUnformatted;
     json->delete            = cJSON_Delete;
-    json->array_size        = cJSON_GetArraySize;
-    json->array_item        = cJSON_GetArrayItem;
-    json->object_item       = cJSON_GetObjectItem;
+    json->get_array_size    = cJSON_GetArraySize;
+    json->get_array_item    = cJSON_GetArrayItem;
+    json->get_object_item   = cJSON_GetObjectItem;
     json->get_error         = cJSON_GetErrorPtr;
 
     /* Local methods */

@@ -45,9 +45,9 @@ struct duda_api_json {
     char   *(*print) (json_t *);
     char   *(*print_unformatted) (json_t *);
     void    (*delete) (json_t *);
-    int     (*array_size) (json_t *);
-    json_t *(*array_item) (json_t *, int);
-    json_t *(*object_item) (json_t *, const char *);
+    int     (*get_array_size) (json_t *);
+    json_t *(*get_array_item) (json_t *, int);
+    json_t *(*get_object_item) (json_t *, const char *);
     const char *(*get_error) (void);
 
     /* Local methods */
