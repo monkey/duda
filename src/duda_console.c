@@ -43,10 +43,10 @@ struct duda_api_console *duda_console_object()
 /* callback for /app/console/debug */
 void duda_console_cb_debug(duda_request_t *dr)
 {
-    http_status(dr, 200);
-    http_header(dr, "Content-Type: text/plain", 24);
-    sendfile_enqueue(dr, "/tmp/duda.console");
-    end_response(dr, NULL);
+    duda_response_http_status(dr, 200);
+    duda_response_http_header(dr, "Content-Type: text/plain", 24);
+    duda_response_sendfile(dr, "/tmp/duda.console");
+    duda_response_end(dr, NULL);
 }
 
 /* callback for /app/console/map */
@@ -75,22 +75,22 @@ void duda_console_cb_map(duda_request_t *dr)
                    "</STYLE>\n";
     char *footer = "</body></html>\n";
 
-    http_status(dr, 200);
-    http_header(dr, "Content-Type: text/html", 23);
+    duda_response_http_status(dr, 200);
+    duda_response_http_header(dr, "Content-Type: text/html", 23);
 
     /* Header */
-    body_printf(dr, header, dr->ws_root->app_name, css);
-    body_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->app_name);
+    duda_response_printf(dr, header, dr->ws_root->app_name, css);
+    duda_response_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->app_name);
 
     /* List of interfaces */
     mk_list_foreach(head_iface, ws->map) {
         entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
-        body_printf(dr, "<h3>%s/<h3>\n<ul>\n", entry_iface->uid);
+        duda_response_printf(dr, "<h3>%s/<h3>\n<ul>\n", entry_iface->uid);
 
         /* List methods */
         mk_list_foreach(head_method, &entry_iface->methods) {
             entry_method = mk_list_entry(head_method, struct duda_method, _head);
-            body_printf(dr, "\t<li>%s()</li>\n", entry_method->uid);
+            duda_response_printf(dr, "\t<li>%s()</li>\n", entry_method->uid);
 
             /* FIXME: print parameters
             mk_list_foreach(head_param, &entry_method->params) {
@@ -100,14 +100,14 @@ void duda_console_cb_map(duda_request_t *dr)
             body_printf(dr, "\t\t</ul>\n");
             */
         }
-        body_printf(dr, "</ul>\n");
+        duda_response_printf(dr, "</ul>\n");
     }
 
-    body_printf(dr, "</ul>");
+    duda_response_printf(dr, "</ul>");
 
     /* Footer */
-    body_print(dr, footer, strlen(footer));
-    end_response(dr, NULL);
+    duda_response_print(dr, footer, strlen(footer));
+    duda_response_end(dr, NULL);
 }
 
 void duda_console_write(duda_request_t *dr, char *file, int line, char *format, ...)
