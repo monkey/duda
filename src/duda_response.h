@@ -22,6 +22,8 @@
 #ifndef DUDA_API_RESPONSE_H
 #define DUDA_API_RESPONSE_H
 
+#define end(dr, cb) _end(dr, cb); return;
+
 /* RESPONSE object: response->x() */
 struct duda_api_response {
     int (*send_headers) (duda_request_t *);
@@ -32,7 +34,7 @@ struct duda_api_response {
     int (*sendfile)    (duda_request_t *, char *);
     int (*wait) (duda_request_t *);
     int (*cont) (duda_request_t *);
-    int (*end) (duda_request_t *, void (*end_callback) ());
+    int (*_end) (duda_request_t *, void (*end_callback) ());
 };
 
 int duda_response_send_headers(duda_request_t *dr);

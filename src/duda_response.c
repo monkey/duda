@@ -73,7 +73,7 @@ int duda_response_http_header(duda_request_t *dr, char *row, int len)
 }
 
 /* Compose the body_buffer */
-static int _body_print(duda_request_t *dr, char *raw, int len, int free)
+static int _print(duda_request_t *dr, char *raw, int len, int free)
 {
     int ret;
     struct duda_body_buffer *body_buffer;
@@ -110,16 +110,16 @@ static int _body_print(duda_request_t *dr, char *raw, int len, int free)
 }
 
 /* Enqueue a constant raw buffer */
-int duda_response_body_print(duda_request_t *dr, char *raw, int len)
+int duda_response_print(duda_request_t *dr, char *raw, int len)
 {
-    return _body_print(dr, raw, len, MK_FALSE);
+    return _print(dr, raw, len, MK_FALSE);
 }
 
 /*
  * Format a new buffer and enqueue it contents, when the queue is flushed all reference
  * to the buffers created here are freed
  */
-int duda_response_body_printf(duda_request_t *dr, const char *format, ...)
+int duda_response_printf(duda_request_t *dr, const char *format, ...)
 {
     int ret;
     int n, size = 128;
@@ -135,6 +135,7 @@ int duda_response_body_printf(duda_request_t *dr, const char *format, ...)
         va_start(ap, format);
         n = vsnprintf(p, size, format, ap);
         va_end(ap);
+
         /* If that worked, return the string. */
         if (n > -1 && n < size)
             break;
@@ -148,7 +149,7 @@ int duda_response_body_printf(duda_request_t *dr, const char *format, ...)
         }
     }
 
-    ret = _body_print(dr, p, n, MK_TRUE);
+    ret = _print(dr, p, n, MK_TRUE);
     if (ret == -1) {
         mk_api->mem_free(p);
     }
@@ -223,7 +224,7 @@ struct duda_api_response *duda_response_object()
     obj->sendfile     = duda_response_sendfile;
     obj->wait         = duda_response_wait;
     obj->cont         = duda_response_continue;
-    obj->end          = duda_response_end;
+    obj->_end         = duda_response_end;
 
     return obj;
 }
