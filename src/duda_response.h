@@ -26,9 +26,10 @@
 
 /* RESPONSE object: response->x() */
 struct duda_api_response {
-    int (*send_headers) (duda_request_t *);
-    int (*http_status) (duda_request_t *, int);
-    int (*http_header) (duda_request_t *, char *, int);
+    int (*send_headers)  (duda_request_t *);
+    int (*http_status)   (duda_request_t *, int);
+    int (*http_header)   (duda_request_t *, char *);
+    int (*http_header_n) (duda_request_t *, char *, int);
     int (*print)  (duda_request_t *, char *, int);
     int (*printf) (duda_request_t *, const char *, ...);
     int (*sendfile)    (duda_request_t *, char *);
@@ -39,7 +40,8 @@ struct duda_api_response {
 
 int duda_response_send_headers(duda_request_t *dr);
 int duda_response_http_status(duda_request_t *dr, int status);
-int duda_response_http_header(duda_request_t *dr, char *row, int len);
+int duda_response_http_header(duda_request_t *dr, char *row);
+int duda_response_http_header_n(duda_request_t *dr, char *row, int len);
 int duda_response_print(duda_request_t *dr, char *raw, int len);
 int duda_response_printf(duda_request_t *dr, const char *format, ...);
 int duda_response_sendfile(duda_request_t *dr, char *path);

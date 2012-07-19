@@ -66,7 +66,14 @@ int duda_response_http_status(duda_request_t *dr, int status)
 }
 
 /* add a new HTTP response header */
-int duda_response_http_header(duda_request_t *dr, char *row, int len)
+int duda_response_http_header(duda_request_t *dr, char *row)
+{
+    mk_api->header_add(dr->sr, row, strlen(row));
+    return 0;
+}
+
+/* add a new HTTP response header */
+int duda_response_http_header_n(duda_request_t *dr, char *row, int len)
 {
     mk_api->header_add(dr->sr, row, len);
     return 0;
@@ -216,15 +223,16 @@ struct duda_api_response *duda_response_object()
     struct duda_api_response *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_response));
-    obj->send_headers = duda_response_send_headers;
-    obj->http_status  = duda_response_http_status;
-    obj->http_header  = duda_response_http_header;
-    obj->print        = duda_response_print;
-    obj->printf       = duda_response_printf;
-    obj->sendfile     = duda_response_sendfile;
-    obj->wait         = duda_response_wait;
-    obj->cont         = duda_response_continue;
-    obj->_end         = duda_response_end;
+    obj->send_headers  = duda_response_send_headers;
+    obj->http_status   = duda_response_http_status;
+    obj->http_header   = duda_response_http_header;
+    obj->http_header_n = duda_response_http_header_n;
+    obj->print         = duda_response_print;
+    obj->printf        = duda_response_printf;
+    obj->sendfile      = duda_response_sendfile;
+    obj->wait          = duda_response_wait;
+    obj->cont          = duda_response_continue;
+    obj->_end          = duda_response_end;
 
     return obj;
 }

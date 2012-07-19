@@ -1,4 +1,6 @@
-CC      = $CC
+_PATH   = $(patsubst $(monkey_root)/%, %, $(CURDIR))
+CC      = @echo "  CC   $(_PATH)/$@"; $CC
+CC_QUIET= @echo -n; $CC
 CFLAGS  = $CFLAGS
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS
@@ -8,11 +10,14 @@ SOURCES = duda_package.c sha1.c
 
 all: ../sha1.dpkg
 
+-include $(OBJECTS:.o=.d)
+
 ../sha1.dpkg: $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc
 
 .c.o: $(SOURCES)
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<
+	$(CC_QUIET) -MM -MP $(CFLAGS) $(DEFS) -I$(INCDIR) $*.c -o $*.d > /dev/null &2>&1
 
 clean:
 	rm -rf *~ *.o

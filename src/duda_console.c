@@ -44,7 +44,7 @@ struct duda_api_console *duda_console_object()
 void duda_console_cb_debug(duda_request_t *dr)
 {
     duda_response_http_status(dr, 200);
-    duda_response_http_header(dr, "Content-Type: text/plain", 24);
+    duda_response_http_header(dr, "Content-Type: text/plain");
     duda_response_sendfile(dr, "/tmp/duda.console");
     duda_response_end(dr, NULL);
 }
@@ -76,7 +76,7 @@ void duda_console_cb_map(duda_request_t *dr)
     char *footer = "</body></html>\n";
 
     duda_response_http_status(dr, 200);
-    duda_response_http_header(dr, "Content-Type: text/html", 23);
+    duda_response_http_header(dr, "Content-Type: text/html");
 
     /* Header */
     duda_response_printf(dr, header, dr->ws_root->app_name, css);
