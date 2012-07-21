@@ -52,7 +52,6 @@ struct duda_api_objects *duda_api_master()
     objs->map      = mk_api->mem_alloc(sizeof(struct duda_api_map));
     objs->msg      = mk_api->mem_alloc(sizeof(struct duda_api_msg));
     objs->debug    = mk_api->mem_alloc(sizeof(struct duda_api_debug));
-    objs->global   = mk_api->mem_alloc(sizeof(struct duda_api_global));
 
     /* MAP Duda calls */
     objs->duda->package_load = duda_package_load;
@@ -73,6 +72,7 @@ struct duda_api_objects *duda_api_master()
     objs->msg->bug   = duda_debug_bug;
 
     /* Assign Objects */
+    objs->global   = duda_global_object();
     objs->event    = duda_event_object();
     objs->request  = duda_request_object();
     objs->response = duda_response_object();
@@ -81,10 +81,6 @@ struct duda_api_objects *duda_api_master()
     objs->session  = duda_session_object();
     objs->xtime    = duda_xtime_object();
     objs->cookie   = duda_cookie_object();
-
-    /* Global data (thread scope) */
-    objs->global->set  = duda_global_set;
-    objs->global->get  = duda_global_get;
 
     /* FIXME - DEBUG object */
 #ifdef DEBUG

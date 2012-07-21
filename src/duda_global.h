@@ -40,5 +40,6 @@ struct duda_global_dist_t {
 
 int duda_global_set(duda_global_t key, const void *data);
 void *duda_global_get(duda_global_t key);
+struct duda_api_global *duda_global_object();
 
 #endif

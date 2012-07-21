@@ -33,3 +33,14 @@ void *duda_global_get(duda_global_t global)
 {
     return pthread_getspecific(global.key);
 }
+
+struct duda_api_global *duda_global_object()
+{
+    struct duda_api_global *obj;
+
+    obj = mk_api->mem_alloc(sizeof(struct duda_api_global));
+    obj->set = duda_global_set;
+    obj->get = duda_global_get;
+
+    return obj;
+}
