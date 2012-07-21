@@ -30,7 +30,19 @@
 #include "duda_body_buffer.h"
 #include "duda_response.h"
 
-/* Send HTTP response headers just once */
+/*
+ * @OBJ_NAME: response
+ * @OBJ_DESC: The response object provides a set of methods to manipulate the
+ * response to the HTTP client. It helps to compose response headers as well
+ * the body content.
+ */
+
+
+/*
+ * @METHOD_NAME: send_headers
+ * @METHOD_DESC: Send the HTTP response headers
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ */
 int duda_response_send_headers(duda_request_t *dr)
 {
     int r;
