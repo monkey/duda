@@ -23,6 +23,12 @@
 #include "duda.h"
 #include "duda_request.h"
 
+/*
+ * @OBJ_NAME: request
+ * @OBJ_DESC: The request object provides a set of methods to manipulate the
+ * incoming data set in the HTTP request.
+ */
+
 struct duda_api_request *duda_request_object()
 {
     struct duda_api_request *r;
@@ -40,9 +46,13 @@ struct duda_api_request *duda_request_object()
     return r;
 }
 
+
 /*
- * Validate if the request contains a body with content length
- * greater than zero. As well it validate the HTTP methods
+ * @METHOD_NAME: is_data
+ * @METHOD_DESC: Validate if the request contains a body with content length
+ * greater than zero. As well it validate the proper POST or PUT HTTP methods.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the request contains data it returns MK_TRUE, otherwise MK_FALSE.
  */
 int duda_request_is_data(duda_request_t *dr)
 {
@@ -57,7 +67,12 @@ int duda_request_is_data(duda_request_t *dr)
     return MK_TRUE;
 }
 
-/* Check if the request uses GET method */
+/*
+ * @METHOD_NAME: is_get
+ * @METHOD_DESC: Check if the incoming request is a GET HTTP method
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the method is GET it returns MK_TRUE, otherwise MK_FALSE.
+ */
 int duda_request_is_get(duda_request_t *dr)
 {
     if (dr->sr->method == HTTP_METHOD_GET) {
@@ -67,7 +82,12 @@ int duda_request_is_get(duda_request_t *dr)
     return MK_FALSE;
 }
 
-/* Check if the request uses POST method */
+/*
+ * @METHOD_NAME: is_post
+ * @METHOD_DESC: Check if the incoming request is a POST HTTP method
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the method is POST it returns MK_TRUE, otherwise MK_FALSE.
+ */
 int duda_request_is_post(duda_request_t *dr)
 {
     if (dr->sr->method == HTTP_METHOD_POST) {
@@ -77,7 +97,12 @@ int duda_request_is_post(duda_request_t *dr)
     return MK_FALSE;
 }
 
-/* Check if the request uses HEAD method */
+/*
+ * @METHOD_NAME: is_head
+ * @METHOD_DESC: Check if the incoming request is a HEAD HTTP method
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the method is HEAD it returns MK_TRUE, otherwise MK_FALSE.
+ */
 int duda_request_is_head(duda_request_t *dr)
 {
     if (dr->sr->method == HTTP_METHOD_HEAD) {
@@ -87,7 +112,12 @@ int duda_request_is_head(duda_request_t *dr)
     return MK_FALSE;
 }
 
-/* Check if the request uses PUT method */
+/*
+ * @METHOD_NAME: is_put
+ * @METHOD_DESC: Check if the incoming request is a PUT HTTP method
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the method is PUT it returns MK_TRUE, otherwise MK_FALSE.
+ */
 int duda_request_is_put(duda_request_t *dr)
 {
     if (dr->sr->method == HTTP_METHOD_PUT) {
@@ -97,7 +127,12 @@ int duda_request_is_put(duda_request_t *dr)
     return MK_FALSE;
 }
 
-/* Check if the request uses DELETE method */
+/*
+ * @METHOD_NAME: is_delete
+ * @METHOD_DESC: Check if the incoming request is a DELETE HTTP method
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: If the method is DELETE it returns MK_TRUE, otherwise MK_FALSE.
+ */
 int duda_request_is_delete(duda_request_t *dr)
 {
     if (dr->sr->method == HTTP_METHOD_DELETE) {
@@ -107,7 +142,13 @@ int duda_request_is_delete(duda_request_t *dr)
     return MK_FALSE;
 }
 
-/* Compare the content type of the request */
+/*
+ * @METHOD_NAME: content_type
+ * @METHOD_DESC: Compare the content-type of the request with the given string
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: content_type the comparisson string.
+ * @METHOD_RETURN: If the content-type is equal, it returns MK_TRUE, otherwise MK_FALSE
+ */
 int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
 {
     int len;
@@ -132,6 +173,16 @@ int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
     return MK_TRUE;
 }
 
+/*
+ * @METHOD_NAME: get_data
+ * @METHOD_DESC: It generate a buffer with the data sent in a POST or PUT HTTP method.
+ * The new buffer must be freed by the user once it finish their usage.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: len Upon successful completion, the length of the data is
+ * stored on this variable.
+ * @METHOD_RETURN: Upon successful completion, it returns a new allocated buffer
+ * containing the data received. On error it returns NULL.
+ */
 void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
 {
     size_t n;
