@@ -42,6 +42,7 @@
  * @METHOD_NAME: send_headers
  * @METHOD_DESC: Send the HTTP response headers
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
 int duda_response_send_headers(duda_request_t *dr)
 {
@@ -70,25 +71,43 @@ int duda_response_send_headers(duda_request_t *dr)
     return 0;
 }
 
-/* set HTTP response status */
+/*
+ * @METHOD_NAME: http_status
+ * @METHOD_DESC: It set the HTTP response status code
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: status the HTTP code status
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_http_status(duda_request_t *dr, int status)
 {
-    mk_api->header_set_http_status(dr->sr, status);
-    return 0;
+    return mk_api->header_set_http_status(dr->sr, status);
 }
 
-/* add a new HTTP response header */
+/*
+ * @METHOD_NAME: http_header
+ * @METHOD_DESC: It adds a new HTTP header to the response
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: row fixed string containing the header details, it must not include CRLF
+ * or similar break line characters.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_http_header(duda_request_t *dr, char *row)
 {
-    mk_api->header_add(dr->sr, row, strlen(row));
-    return 0;
+    return mk_api->header_add(dr->sr, row, strlen(row));
 }
 
-/* add a new HTTP response header */
+/*
+ * @METHOD_NAME: http_header_n
+ * @METHOD_DESC: It adds a new HTTP header to the response but specifying the number of bytes.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: row fixed string containing the header details, it must not include CRLF
+ * or similar break line characters.
+ * @METHOD_PARAM: len specify the number of bytes of 'row' to set as header.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_http_header_n(duda_request_t *dr, char *row, int len)
 {
-    mk_api->header_add(dr->sr, row, len);
-    return 0;
+    return mk_api->header_add(dr->sr, row, len);
 }
 
 /* Compose the body_buffer */
@@ -128,15 +147,27 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
     return 0;
 }
 
-/* Enqueue a constant raw buffer */
+/*
+ * @METHOD_NAME: print
+ * @METHOD_DESC: It enqueue a buffer of data to be send to the HTTP client as response body.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: raw Fixed buffer of data to be send to the client
+ * @METHOD_PARAM: len Number of bytes of 'raw' to be send.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_print(duda_request_t *dr, char *raw, int len)
 {
     return _print(dr, raw, len, MK_FALSE);
 }
 
+
 /*
- * Format a new buffer and enqueue it contents, when the queue is flushed all reference
- * to the buffers created here are freed
+ * @METHOD_NAME: printf
+ * @METHOD_DESC: It format and enqueue a buffer of data to be send to the HTTP client as response body.
+ * The buffer allocated is freed internally when the data is flushed completely.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: format Specifies the subsequent arguments to be formatted
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
 int duda_response_printf(duda_request_t *dr, const char *format, ...)
 {
@@ -176,6 +207,14 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
     return ret;
 }
 
+/*
+ * @METHOD_NAME: sendfile
+ * @METHOD_DESC: It enqueue a filesystem file to be send to the HTTP client as response body. Multiple
+ * files can be enqueued, all of them are send in order.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: path the absolute path of the file to be send.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_sendfile(duda_request_t *dr, char *path)
 {
     struct duda_sendfile *sf;
@@ -194,11 +233,15 @@ int duda_response_sendfile(duda_request_t *dr, char *path)
     return 0;
 }
 
-int duda_response_continue(duda_request_t *dr)
-{
-    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_WAKEUP, -1);
-}
-
+/*
+ * @METHOD_NAME: wait
+ * @METHOD_DESC: It instruct Duda to put the response in sleep mode. This call is usually
+ * needed when the response depends of a third party resource and there is not need to
+ * have the response active until some specific event ocurr. The response can be activated
+ * later with the continue() method.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
 int duda_response_wait(duda_request_t *dr)
 {
     /*
@@ -208,7 +251,28 @@ int duda_response_wait(duda_request_t *dr)
     return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_SLEEP, -1);
 }
 
-/* Finalize the response process */
+/*
+ * @METHOD_NAME: continue
+ * @METHOD_DESC: It restore the context a previous wait() call, all events are restored.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_response_continue(duda_request_t *dr)
+{
+    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_WAKEUP, -1);
+}
+
+/*
+ * @METHOD_NAME: end
+ * @METHOD_DESC: It indicate that the full response for the request has been ended. No
+ * extra calls will take place after invoke this method as it contains an implicit return
+ * for the active function.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: end_cb Defines a callback function to be invoked once the response object
+ * finish flushing the pending data and clearing up the resources used.
+ * @METHOD_RETURN: Upon successful completion it returns 0, otherwise it can generate an explicit
+ * program exit due to bad API usage.
+ */
 int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
     int ret;

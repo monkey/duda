@@ -26,4 +26,4 @@ all: ../monkey-duda.so
 
 clean:
 	@(for d in $(DIRS); do $(MAKE) -C $$d clean; done)
-	rm -rf *.o *~ *.*so*
+	rm -rf *.o *~ *.*so* *.d
