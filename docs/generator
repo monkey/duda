@@ -1,0 +1,300 @@
+#!/usr/bin/env python
+
+#  Duda Document Generator
+#  ------------------
+#  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Library General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+CSS     = "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css' />\n"
+CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap-responsive.css' />\n"
+CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/prettify.css' />\n"
+JS      = "    <script type='text/javascript' src='assets/js/bootstrap.js'></script>\n"
+JS     += "    <script type='text/javascript' src='assets/js/prettify.js'></script>\n"
+HEADER  = "<HTML>\n  <HEAD>\n%s  </HEAD>\n<BODY onload=\"prettyPrint()\">\n" % (CSS)
+HEADER += "    <div class='container'>\n"
+FOOTER  = "    </div>%s</BODY></HTML>\n" % (JS)
+
+# Left menu stuff
+L_MENU_HEADER  = "<div class='span2'><div class=\"well\" style=\"padding: 8px 0;\">\n\
+                    <!-- Left menu -->\n\
+                    <ul class='nav nav-list'>\n"
+L_MENU_FOOTER  = "</ul></div></div>"
+
+class DudaMethod:
+    F_NAME   = 0
+    F_DESC   = 1
+    F_DECL   = 2
+    F_PARAM  = 3
+    F_RETURN = 4
+
+    def __init__(self):
+        self.params    = []
+        self.name      = ''
+        self.desc      = ''
+        self.decl      = ''
+        self.mreturn   = ''
+        self.prototype = ''
+
+    def set_active(self, field):
+        self.active = field
+
+    def set(self, info):
+        if self.active == self.F_NAME:
+            self.name += info
+        elif self.active == self.F_DESC:
+            self.desc += info
+        elif self.active == self.F_DECL:
+            self.decl += info
+        elif self.active == self.F_PARAM:
+            self.params[-1]['desc'] += info
+        elif self.active == self.F_RETURN:
+            self.mreturn += info
+
+    def set_param(self, name, desc):
+        self.params.append({'name': name, 'desc': desc})
+
+
+class DudaObject:
+    COMM_START    = '/*'
+    COMM_END      = ' */'
+    COMM_LINE     = ' * '
+    OBJ_NAME      = ' * @OBJ_NAME:'
+    OBJ_DESC      = ' * @OBJ_DESC:'
+    OBJ_COMM      = ' * @OBJ_COMM:'
+    METHOD_NAME   = ' * @METHOD_NAME:'
+    METHOD_PROTO  = ' * @METHOD_PROTO:'
+    METHOD_DESC   = ' * @METHOD_DESC:'
+    METHOD_PARAM  = ' * @METHOD_PARAM:'
+    METHOD_RETURN = ' * @METHOD_RETURN:'
+    LAST_METHOD   = 'unk method'
+
+    def __init__(self):
+        self.name = ''
+        self.desc = ''
+        self.comm = ''
+        self.methods = []
+        self.method = None
+
+    def go(self, content):
+        context = False
+        buf = None
+        last = None
+
+        for line in content:
+            if line.startswith(self.COMM_START):
+                context = True
+            elif line.startswith(self.COMM_END):
+                context = False
+                last = None
+
+            # @OBJ_NAME
+            elif line.startswith(self.OBJ_NAME):
+                arr = line.split(self.OBJ_NAME)
+                self.name = arr[1].strip()
+                last = self.OBJ_NAME
+
+            # @OBJ_DESC
+            elif line.startswith(self.OBJ_DESC):
+                arr = line.split(self.OBJ_DESC)
+                self.desc = arr[1].strip() + '\n'
+                last = self.OBJ_DESC
+
+            # @OBJ_COMM
+            elif line.startswith(self.OBJ_COMM):
+                arr = line.split(self.OBJ_COMM)
+                self.comm = arr[1].strip() + '\n'
+                last = self.OBJ_COMM
+
+            # Line belonging to a previous declaration
+            elif line.startswith(self.COMM_LINE) \
+                    and line[len(self.COMM_LINE)] != '@' \
+                    and last is not None:
+                row = line[3:].rstrip() + '\n'
+                if last == self.LAST_METHOD:
+                    self.method.set(row)
+                elif last == self.OBJ_DESC:
+                    self.desc += row
+                elif last == self.OBJ_COMM:
+                    self.comm += row
+
+            # @METHOD_NAME
+            elif line.startswith(self.METHOD_NAME):
+                row = line.split(self.METHOD_NAME)[1].strip()
+                self.method = DudaMethod()
+                self.method.set_active(self.method.F_NAME)
+                self.method.set(row)
+                self.methods.append(self.method)
+
+                last = self.LAST_METHOD
+
+            # @METHOD_PROTO
+            elif line.startswith(self.METHOD_PROTO):
+                row = line.split(self.METHOD_PROTO)[1].strip()
+                self.method.prototype = row
+
+            # @METHOD_DESC
+            elif line.startswith(self.METHOD_DESC):
+                row = line.split(self.METHOD_DESC)[1].strip() + '\n'
+                self.method.set_active(self.method.F_DESC)
+                self.method.set(row)
+
+            # @METHOD_PARAM
+            elif line.startswith(self.METHOD_PARAM):
+                row = line.split(self.METHOD_PARAM)[1].strip()
+                p_name = row[0:row.find(' ')].strip()
+                p_desc = row[row.find(' '):].strip() + '\n'
+
+                self.method.set_active(self.method.F_PARAM)
+                self.method.set_param(p_name, p_desc)
+
+            # @METHOD_RETURN
+            elif line.startswith(self.METHOD_RETURN):
+                row = line.split(self.METHOD_RETURN)[1].strip() + '\n'
+                self.method.set_active(self.method.F_RETURN)
+                self.method.set(row)
+
+            # End of comments
+            elif line.startswith(self.COMM_END):
+                print "line", line
+                last = None
+
+            # Function prototype
+            elif context is False \
+                    and self.method \
+                    and len(self.method.prototype) <= 0 \
+                    and line.find('duda_' + self.name + '_') > 0 \
+                    and line.find('(') > 0 \
+                    and last != self.METHOD_PROTO:
+
+                prefix = ' duda_' + self.name + '_'
+                self.method.prototype = line.replace(prefix, ' ')
+
+                if self.method.prototype.strip()[-1] != ')':
+                    last = self.METHOD_PROTO
+
+            elif last == self.METHOD_PROTO and self.method.prototype.strip()[-1] != ')':
+                offset = len(' duda_' + self.name)
+                row = line[offset:]
+                self.method.prototype += row
+
+                if self.method.prototype.strip()[-1] == ')':
+                    last = None
+
+    def info(self):
+        print '** Object Name: %s' % (self.name)
+        print '** Description: %s' % (self.desc)
+
+
+
+
+f = open('index.doc')
+files = f.readlines()
+f.close()
+
+objects = []
+
+for source in files:
+    try:
+        f = open('../' + source.strip())
+    except:
+        continue
+
+    d = DudaObject()
+    content = f.readlines()
+    f.close()
+
+    d.go(content)
+    objects.append(d)
+
+
+# Start generating HTML content
+print "Objects parsed: %i" % len(objects)
+
+# Compose Menu
+menu  = L_MENU_HEADER
+menu += '  <li class="nav-header">API Objects</li>\n'
+for obj in objects:
+    menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name, obj.name)
+
+menu += '  <li class="nav-header">Packages</li>\n'
+menu += L_MENU_FOOTER
+
+# Generate Pages
+for obj in objects:
+    target = 'html/' + obj.name + '.html'
+    f = open(target, 'w')
+    f.write(HEADER)
+
+    # Compose the proper menu for the active object
+    obj_menu = menu.replace('<li><a href="%s.html">' % (obj.name), \
+                                '<li class="active"><a href="%s.html">' % (obj.name))
+    f.write('  ' + obj_menu)
+    f.write('  <div class="span8">')
+    f.write('  <h1>%s object</h1>\n' % (obj.name.title()))
+    f.write('  <p>%s</p>\n' % (obj.desc))
+
+    if len(obj.comm) > 1:
+        f.write('  <p><strong>Comments</strong>: %s</p>\n' % (obj.comm))
+
+    f.write('  <p><strong>Usage</strong><pre class="prettyprint lang-c">%s->method(...);</pre></p>' % (obj.name))
+    f.write('  <div class="page-header"></div>')
+    f.write('  <h2>Methods</h2>\n')
+
+    # Generate a sorted shortcut menu
+    shortcut = []
+    for m in obj.methods:
+        shortcut.append(m.name)
+    shortcut.sort()
+
+    f.write('  <div class="row">\n')
+    i = 0
+    total = 0
+    for entry in shortcut:
+        if i == 0:
+            f.write('    <div class="span2">\n    <ul>\n')
+
+        f.write('        <li><a href="#s_%s">%s</a></li>\n' % (entry, entry))
+
+        i += 1
+        total += 1
+        if i >= 4:
+            f.write('    </ul>\n   </div>\n')
+            i = 0
+
+    if (total % 4) != 0:
+        f.write('    </ul>\n   </div>\n')
+    f.write('  </div>\n')
+
+    for m in obj.methods:
+        f.write('  <div class=\"page-header\"><h3 id="s_%s">%s()</h3>\n' % (m.name, m.name))
+        f.write('  <p>%s</p>\n' % m.desc.strip())
+        f.write('  <p><strong>Prototype</strong><pre class=\"prettyprint lang-c\">%s;</pre>' % m.prototype.strip())
+        f.write('  <p><strong>Parameters</strong>')
+        if len(m.params) > 0:
+            f.write('  <dl class=\"dl-horizontal\">')
+            for p in m.params:
+                f.write('<dt>' + p['name'] + '</dt><dd>' + p['desc'] + '</dd>')
+
+            f.write('  </dl>')
+        else:
+            f.write('  None')
+
+        f.write('  </p>')
+        f.write('  <strong>Return:</strong> %s</p>' % m.mreturn)
+        f.write('  </div>')
+    f.write('  </div>') # close span8
+    f.write(FOOTER)
+    f.close()
