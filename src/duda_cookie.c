@@ -25,6 +25,11 @@
 #include "duda_cookie.h"
 #include "duda.h"
 
+/*
+ * @OBJ_NAME: cookie
+ * @OBJ_DESC: The cookie object provides a set of methods to handle HTTP cookies
+ */
+
 struct duda_api_cookie *duda_cookie_object()
 {
     struct duda_api_cookie *c;
@@ -38,6 +43,18 @@ struct duda_api_cookie *duda_cookie_object()
     return c;
 }
 
+/*
+ * @METHOD_NAME: set
+ * @METHOD_DESC: It creates a new cookie
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the cookie name
+ * @METHOD_PARAM: key_len the key string length
+ * @METHOD_PARAM: val the cookie value
+ * @METHOD_PARAM: val_len the value string length
+ * @METHOD_PARAM: expires defines the expiration time in unix time seconds. Use value 0 if
+ * you dont want to make the cookie expire
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
+ */
 int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
                     char *val, int val_len, int expires)
 {
@@ -107,12 +124,31 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
     return 0;
 }
 
+/*
+ * @METHOD_NAME: destroy
+ * @METHOD_DESC: It destroy a cookie. This method tells the HTTP client to invalidate
+ * the cookie setting up a new expire time based in a past date. The changes should take
+ * effect in the next request.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the cookie name
+ * @METHOD_PARAM: key_len the key string length
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1.
+ */
 int duda_cookie_destroy(duda_request_t *dr, char *key, int key_len)
 {
     return duda_cookie_set(dr, key, key_len, COOKIE_DELETED, sizeof(COOKIE_DELETED) -1,
                            COOKIE_EXPIRE_TIME);
 }
 
+/*
+ * @METHOD_NAME: get
+ * @METHOD_DESC: Retrieve a specific cookie value sent by the HTTP client.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the cookie name
+ * @METHOD_PARAM: val stores the cookie value
+ * @METHOD_PARAM: val_len stores the string length of the cookie value
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1.
+ */
 int duda_cookie_get(duda_request_t *dr, char *key, char **val, int *val_len)
 {
     int i, offset;
@@ -179,6 +215,15 @@ int duda_cookie_get(duda_request_t *dr, char *key, char **val, int *val_len)
     return 0;
 }
 
+/*
+ * @METHOD_NAME: cmp
+ * @METHOD_DESC: Compares a cookie value with the given string
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the cookie name
+ * @METHOD_PARAM: cmp the comparisson string
+ * @METHOD_RETURN: If the cookie value is equal to the given string, it returns 0. Otherwise
+ * it returns -1.
+ */
 int duda_cookie_cmp(duda_request_t *dr, char *key, char *cmp)
 {
     int ret;
