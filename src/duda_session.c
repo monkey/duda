@@ -32,6 +32,18 @@
 #include "webservice.h"
 #include "duda_conf.h"
 
+/*
+ * @OBJ_NAME: session
+ * @OBJ_DESC: The sessions object provides a set of methods to handle persistent data
+ * associated to a set of HTTP request coming from the same source. Sessions can be used
+ * to store any kind of information in memory.
+ *
+ * @OBJ_COMM: Duda sessions are stored into /dev/shm, yes, we know that is not expected as
+ * the main purpose of /dev/shm is for process intercommunication and we are breaking
+ * the rule. Mount a filesystem before launch the service is an extra step, do that
+ * inside Duda will generate permission issues.. so ?, we use /dev/shm.
+ */
+
 struct duda_api_session *duda_session_object()
 {
     struct duda_api_session *s;
@@ -46,12 +58,6 @@ struct duda_api_session *duda_session_object()
     return s;
 }
 
-/*
- * Duda sessions are stored into /dev/shm, yes, we know that is not expected as
- * the main purpose of /dev/shm is for process intercommunication and we are breaking
- * the rule. Mount a filesystem before launch the service is an extra step, do that
- * inside Duda will generate permission issues.. so ?, we use /dev/shm.
- */
 int _duda_session_create_store(const char *path)
 {
     int ret;
@@ -65,7 +71,14 @@ int _duda_session_create_store(const char *path)
     return 0;
 }
 
-/* Initialize a duda session for the webservice in question */
+/*
+ * @METHOD_NAME: duda_session_init
+ * @METHOD_PROTO: duda_session_init()
+ * @METHOD_DESC: Initialize the sessions object for the web service in question. This function
+ * must be invoked from duda_main(). This is not a method and belongs to a explicit function
+ * call.
+ * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns NULL.
+ */
 int duda_session_init()
 {
     int ret;
@@ -107,9 +120,18 @@ static inline int _rand(int entropy)
     return rand();
 }
 
-/* FIXME: It must check for duplicates */
+/*
+ * @METHOD_NAME: create
+ * @METHOD_DESC: It creates a new session for a given request.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: name specifies the session name
+ * @METHOD_PARAM: value the value that will be stored in the session
+ * @METHOD_PARAM: expires defines the expiration time in unix time seconds
+ * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns NULL.
+ */
 int duda_session_create(duda_request_t *dr, char *name, char *value, int expires)
 {
+    /* FIXME: It must check for duplicates */
     long e;
     int n, fd, len;
     char *uuid;
@@ -205,6 +227,13 @@ int _duda_session_get_path(duda_request_t *dr, char *name, char **buffer, int bu
     return -1;
 }
 
+/*
+ * @METHOD_NAME: destroy
+ * @METHOD_DESC: It destroy a session associated to a request context
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: name specifies the session name
+ * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns NULL.
+ */
 int duda_session_destroy(duda_request_t *dr, char *name)
 {
     int ret;
@@ -223,6 +252,14 @@ int duda_session_destroy(duda_request_t *dr, char *name)
     return ret;
 }
 
+/*
+ * @METHOD_NAME: get
+ * @METHOD_DESC: Retrieve in a new memory buffer the value of the stored session
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: name specifies the session name
+ * @METHOD_RETURN: Upon successful completion it returns the new buffer with the session
+ * value. On error it returns NULL.
+ */
 void *duda_session_get(duda_request_t *dr, char *name)
 {
     int ret;
@@ -240,6 +277,14 @@ void *duda_session_get(duda_request_t *dr, char *name)
     return raw;
 }
 
+/*
+ * @METHOD_NAME: isset
+ * @METHOD_DESC: Check if a session exist for the given context and session name
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: name specifies the session name
+ * @METHOD_RETURN: If the session is set it returns 0. On error or if the session
+ * could not be found it returns -1.
+ */
 int duda_session_isset(duda_request_t *dr, char *name)
 {
     int ret;
