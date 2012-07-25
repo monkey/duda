@@ -30,6 +30,12 @@
 #include "duda_api.h"
 #include "duda_conf.h"
 
+/*
+ * @OBJ_NAME: console
+ * @OBJ_DESC: The console object provides a set of methods to write debug information
+ * to the console URL interface of the running web service.
+ */
+
 struct duda_api_console *duda_console_object()
 {
     struct duda_api_console *c;
@@ -110,6 +116,15 @@ void duda_console_cb_map(duda_request_t *dr)
     duda_response_end(dr, NULL);
 }
 
+/*
+ * @METHOD_NAME: debug
+ * @METHOD_PROTO: void debug(duda_request_t *dr, char *format, ...)
+ * @METHOD_DESC: It format and and prints a customized message to the web service
+ * console interface
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: format Specifies the subsequent arguments to be formatted
+ * @METHOD_RETURN: Do not return anything
+ */
 void duda_console_write(duda_request_t *dr, char *file, int line, char *format, ...)
 {
     int fd;

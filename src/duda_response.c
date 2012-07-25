@@ -253,6 +253,7 @@ int duda_response_wait(duda_request_t *dr)
 
 /*
  * @METHOD_NAME: cont
+ * @METHOD_PROTO: int cont(duda_request_t *dr)
  * @METHOD_DESC: It restore and continue the context of a previous wait() call, all events
  * are restored.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
