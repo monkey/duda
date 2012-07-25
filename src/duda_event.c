@@ -21,6 +21,12 @@
 
 #include "duda_event.h"
 
+/*
+ * @OBJ_NAME: event
+ * @OBJ_DESC: The event object provides a set of methods to handle event-driven sockets
+ * over the main events loop of the server
+ */
+
 /* Event object / API */
 struct duda_api_event *duda_event_object()
 {
@@ -35,7 +41,24 @@ struct duda_api_event *duda_event_object()
     return e;
 };
 
-/* Register a new event into Duda events handler */
+/*
+ * @METHOD_NAME: add
+ * @METHOD_DESC: Register a new event into Duda events handler
+ * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: init_mode defines the initial event mode for the file descriptor in question,
+ * allowed values are: DUDA_EVENT_READ, DUDA_EVENT_WRITE, DUDA_EVENT_RW, DUDA_EVENT_SLEEP or
+ * DUDA_EVENT_WAKEUP.
+ * @METHOD_PARAM: behavior defines the events triggered mode to work on. Allowed values are
+ * DUDA_EVENT_LEVEL_TRIGGERED OR DUDA_EVENT_EDGE_TRIGGERED. For more details about the behavior
+ * refer to the manpage epoll(7).
+ * @METHOD_PARAM: cb_on_read callback function for read events or NULL
+ * @METHOD_PARAM: cb_on_write callback function for write events or NULL
+ * @METHOD_PARAM: cb_on_error callback function for error events or NULL
+ * @METHOD_PARAM: cb_on_close callback function for close events or NULL
+ * @METHOD_PARAM: cb_on_timeout callback function for timeout events or NULL
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
+ */
 int duda_event_add(int sockfd, struct duda_request *dr,
                    int init_mode, int behavior,
                    int (*cb_on_read) (int, struct duda_request *),
@@ -78,7 +101,13 @@ int duda_event_add(int sockfd, struct duda_request *dr,
     return 0;
 }
 
-/* Lookup a specific event_handler through it socket descriptor */
+/*
+ * @METHOD_NAME: lookup
+ * @METHOD_DESC: Find a specific event_handler through the given file descriptor
+ * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_RETURN: Upon successful completion it returns the event handler node, if the
+ * lookup fails it returns NULL
+ */
 struct duda_event_handler *duda_event_lookup(int sockfd)
 {
     struct mk_list *head, *event_list;
@@ -99,7 +128,19 @@ struct duda_event_handler *duda_event_lookup(int sockfd)
     return NULL;
 }
 
-/* Change the mode and behavior for a given file descriptor */
+/*
+ * @METHOD_NAME: mode
+ * @METHOD_DESC: Change the mode and behavior for a given file descriptor registered into
+ * the events handler
+ * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_PARAM: mode defines the new event mode for the file descriptor in question,
+ * allowed values are: DUDA_EVENT_READ, DUDA_EVENT_WRITE, DUDA_EVENT_RW, DUDA_EVENT_SLEEP or
+ * DUDA_EVENT_WAKEUP.
+ * @METHOD_PARAM: behavior defines the events triggered mode to work on. Allowed values are
+ * DUDA_EVENT_LEVEL_TRIGGERED OR DUDA_EVENT_EDGE_TRIGGERED. For more details about the behavior
+ * refer to the manpage epoll(7).
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
+ */
 int duda_event_mode(int sockfd, int mode, int behavior)
 {
     struct duda_event_handler *eh;
@@ -113,7 +154,12 @@ int duda_event_mode(int sockfd, int mode, int behavior)
     return mk_api->event_socket_change_mode(sockfd, mode, behavior);
 }
 
-/* Delete an event_handler from the thread list */
+/*
+ * @METHOD_NAME: delete
+ * @METHOD_DESC: Delete a registered event from the events handler
+ * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
+ */
 int duda_event_delete(int sockfd)
 {
     struct mk_list *head, *tmp, *event_list;
