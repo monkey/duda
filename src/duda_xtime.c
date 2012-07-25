@@ -22,6 +22,12 @@
 #include "MKPlugin.h"
 #include "duda_xtime.h"
 
+/*
+ * @OBJ_NAME: xtime
+ * @OBJ_DESC: The xtime object provides a set of methods to retrieve and manipulate
+ * the timing information based on unix timestamp
+ */
+
 struct duda_api_xtime *duda_xtime_object() {
     struct duda_api_xtime *t;
 
@@ -33,19 +39,32 @@ struct duda_api_xtime *duda_xtime_object() {
     return t;
 }
 
-/* Return the current time in unix time format */
+/*
+ * @METHOD_NAME: now
+ * @METHOD_DESC: Returns the current time in unix timestamp format
+ * @METHOD_RETURN: Upon successful completion it returns the unix timestamp
+ */
 time_t duda_xtime_now()
 {
     return mk_api->time_unix();
 }
 
-/* Return the unix time for the next 24 hours */
+/*
+ * @METHOD_NAME: tomorrow
+ * @METHOD_DESC: Returns the unix timestamp for the next 24 hours from now
+ * @METHOD_RETURN: Upon successful completion it returns the unix timestamp
+ */
 time_t duda_xtime_tomorrow()
 {
     return (mk_api->time_unix() + TIME_DAY);
 }
 
-/* Return the unix time in the next 'h' hours */
+/*
+ * @METHOD_NAME: next_hours
+ * @METHOD_DESC: Returns the unix timestamp for the given next hours
+ * @METHOD_PARAM: h Represent the number of hours to perform the offset
+ * @METHOD_RETURN: Upon successful completion it returns the unix timestamp
+ */
 time_t duda_xtime_next_hours(int h)
 {
     return (mk_api->time_unix() + (h * TIME_HOUR));
