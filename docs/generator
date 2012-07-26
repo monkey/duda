@@ -221,7 +221,7 @@ for source in files:
 
 
 # Start generating HTML content
-print "Objects parsed: %i" % len(objects)
+print "  DOC   Duda API Objects: %i" % len(objects)
 
 # Compose Menu
 menu  = L_MENU_HEADER
