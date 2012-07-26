@@ -80,7 +80,8 @@ int duda_response_send_headers(duda_request_t *dr)
  */
 int duda_response_http_status(duda_request_t *dr, int status)
 {
-    return mk_api->header_set_http_status(dr->sr, status);
+    mk_api->header_set_http_status(dr->sr, status);
+    return 0;
 }
 
 /*

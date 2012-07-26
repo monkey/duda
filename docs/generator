@@ -230,6 +230,11 @@ for obj in objects:
     menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name, obj.name)
 
 menu += '  <li class="nav-header">Packages</li>\n'
+menu += '  <li><a href="">base64</a></li>\n'
+menu += '  <li><a href="">json</a></li>\n'
+menu += '  <li><a href="">sha1</a></li>\n'
+menu += '  <li><a href="">sqlite</a></li>\n'
+
 menu += L_MENU_FOOTER
 
 # Generate Pages
@@ -282,7 +287,7 @@ for obj in objects:
         f.write('  <div class=\"page-header\"><h3 id="s_%s">%s()</h3>\n' % (m.name, m.name))
         f.write('  <p>%s</p>\n' % m.desc.strip())
         f.write('  <p><strong>Prototype</strong><pre class=\"prettyprint lang-c\">%s;</pre>' % m.prototype.strip())
-        f.write('  <p><strong>Parameters</strong>')
+        f.write('  <strong>Parameters</strong>')
         if len(m.params) > 0:
             f.write('  <dl class=\"dl-horizontal\">')
             for p in m.params:
@@ -292,8 +297,7 @@ for obj in objects:
         else:
             f.write('  None')
 
-        f.write('  </p>')
-        f.write('  <strong>Return:</strong> %s</p>' % m.mreturn)
+        f.write('  <strong>Return:</strong> %s' % m.mreturn)
         f.write('  </div>')
     f.write('  </div>') # close span8
     f.write(FOOTER)
