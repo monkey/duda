@@ -38,6 +38,15 @@ struct duda_global_dist_t {
     struct mk_list _head;
 };
 
+
+/* Global data (thread scope) */
+struct duda_api_global {
+    void  (*init) (duda_global_t, void *(*)());
+    int   (*set)  (duda_global_t, const void *);
+    void *(*get)  (duda_global_t);
+};
+
+void duda_global_init(duda_global_t global, void *(*callback)());
 int duda_global_set(duda_global_t key, const void *data);
 void *duda_global_get(duda_global_t key);
 struct duda_api_global *duda_global_object();

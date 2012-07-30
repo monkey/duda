@@ -95,8 +95,7 @@ int duda_event_add(int sockfd, struct duda_request *dr,
         exit(EXIT_FAILURE);
     }
 
-    mk_api->event_add(sockfd, init_mode, dr->plugin, dr->cs, dr->sr,
-                      behavior);
+    mk_api->event_add(sockfd, init_mode, dr->plugin, behavior);
 
     return 0;
 }

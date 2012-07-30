@@ -24,6 +24,20 @@
 
 #include "webservice.h"
 
+void duda_global_init(duda_global_t global, void *(*callback)())
+{
+   /* Make sure the developer has initialized variables from duda_main() */
+    if (getpid() != syscall(__NR_gettid)) {
+        /* FIXME: error handler */
+        monkey->_error(MK_ERR,
+                       "Duda: You can only define global vars inside duda_main()");
+        exit(EXIT_FAILURE);
+    }
+    pthread_key_create(&global.key, NULL);
+    global.callback = callback;
+    mk_list_add(&global._head, &_duda_global_dist);
+}
+
 int duda_global_set(duda_global_t global, const void *data)
 {
     return pthread_setspecific(global.key, data);
@@ -39,8 +53,9 @@ struct duda_api_global *duda_global_object()
     struct duda_api_global *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_global));
-    obj->set = duda_global_set;
-    obj->get = duda_global_get;
+    obj->init = duda_global_init;
+    obj->set   = duda_global_set;
+    obj->get   = duda_global_get;
 
     return obj;
 }

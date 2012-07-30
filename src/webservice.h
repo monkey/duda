@@ -67,19 +67,6 @@ duda_package_t *pkg_temp;
     mk_list_init(&_duda_interfaces);                                    \
     mk_list_init(&_duda_global_dist);
 
-#define duda_global_init(key_t, cb) do {                                \
-        /* Make sure the developer has initialized variables from duda_main() */ \
-        if (getpid() != syscall(__NR_gettid)) {                         \
-            /* FIXME: error handler */                                  \
-            monkey->_error(MK_ERR,                                      \
-                           "Duda: You can only define global vars inside duda_main()"); \
-            exit(EXIT_FAILURE);                                         \
-        }                                                               \
-        pthread_key_create(&key_t.key, NULL);                           \
-        key_t.callback = cb;                                            \
-        mk_list_add(&key_t._head, &_duda_global_dist);                  \
-    } while(0);
-
 #define duda_service_add_interface(iface) do {              \
         mk_list_add(&iface->_head,  &_duda_interfaces);     \
     } while(0);

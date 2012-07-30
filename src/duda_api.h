@@ -156,13 +156,6 @@ struct duda_api_debug {
     void (*stacktrace) (void);
 };
 
-/* Global data (thread scope) */
-struct duda_api_global {
-    int   (*init) (duda_global_t *, void *(*callback)());
-    int   (*set)  (duda_global_t, const void *);
-    void *(*get)  (duda_global_t);
-};
-
 /*
  * Group all objects in one struct so we can pass this memory space
  * to the web service when it's loaded, then the webservice.h macros

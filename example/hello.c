@@ -51,7 +51,7 @@ void cb_hello_world(duda_request_t *dr)
     msg->warn("my global key: %p", global->get(my_data_mem));
 
     response->http_status(dr, 200);
-    response->http_header(dr, "Content-Type: text/plain", 24);
+    response->http_header(dr, "Content-Type: text/plain");
 
     response->print(dr, "hello world!\n", 13);
     response->end(dr, cb_end);
@@ -60,7 +60,7 @@ void cb_hello_world(duda_request_t *dr)
 void cb_sendfile(duda_request_t *dr)
 {
     response->http_status(dr, 200);
-    response->http_header(dr, "Content-Type: text/plain", 24);
+    response->http_header(dr, "Content-Type: text/plain");
 
     response->sendfile(dr, "/etc/issue");
     response->sendfile(dr, "/etc/motd");
@@ -76,7 +76,7 @@ void cb_sha1_test(duda_request_t *dr)
     sha1->encode(toEncode, encoded, length);
 
     response->http_status(dr, 200);
-    response->http_header(dr, "Content-Type: text/html;charset=UTF-8", 37);
+    response->http_header(dr, "Content-Type: text/html;charset=UTF-8");
     response->print(dr, "Raw: hello world!<br>Encoded: ", 30);
     response->print(dr, (char *)encoded, SHA_DIGEST_LENGTH);
     response->end(dr, cb_end);
@@ -107,7 +107,7 @@ void cb_json_first(duda_request_t *dr)
     json_t *jroot,*jaddress,*jphone,*jphone1,*jphone2,*jparse;
 
     response->http_status(dr, 200);
-    response->http_header(dr, "Content-Type: text/plain", 24);
+    response->http_header(dr, "Content-Type: text/plain");
 
     jroot = json->create_object();
     json->add_to_object(jroot, "name", json->create_string("Michel Perez"));
@@ -169,7 +169,7 @@ void cb_json_second(duda_request_t *dr){
     json_t *jroot,*jaddress,*jphone,*jphone1,*jphone2,*jparse;
 
     response->http_status(dr, 200);
-    response->http_header(dr, "Content-Type: text/plain", 24);
+    response->http_header(dr, "Content-Type: text/plain");
 
     pnumber = 0;
     pvalue1 = param->get(dr, pnumber);
