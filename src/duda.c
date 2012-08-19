@@ -170,17 +170,18 @@ void duda_mem_init()
     int len;
 
     /* Init mk_pointer's */
-    mk_api->pointer_set(&mk_cookie_crlf, COOKIE_CRLF);
-    mk_api->pointer_set(&mk_cookie_equal, COOKIE_EQUAL);
-    mk_api->pointer_set(&mk_cookie_set, COOKIE_SET);
-    mk_api->pointer_set(&mk_cookie_expire, COOKIE_EXPIRE);
-    mk_api->pointer_set(&mk_cookie_path, COOKIE_PATH);
-    mk_api->pointer_set(&mk_cookie_semicolon, COOKIE_SEMICOLON);
+    mk_api->pointer_set(&dd_iov_none, "");
+    mk_api->pointer_set(&dd_cookie_crlf,      COOKIE_CRLF);
+    mk_api->pointer_set(&dd_cookie_equal,     COOKIE_EQUAL);
+    mk_api->pointer_set(&dd_cookie_set,       COOKIE_SET);
+    mk_api->pointer_set(&dd_cookie_expire,    COOKIE_EXPIRE);
+    mk_api->pointer_set(&dd_cookie_path,      COOKIE_PATH);
+    mk_api->pointer_set(&dd_cookie_semicolon, COOKIE_SEMICOLON);
 
     /* Default expire value */
-    mk_cookie_expire_value.data = mk_api->mem_alloc_z(COOKIE_MAX_DATE_LEN);
-    len = mk_api->time_to_gmt(&mk_cookie_expire_value.data, COOKIE_EXPIRE_TIME);
-    mk_cookie_expire_value.len = len;
+    dd_cookie_expire_value.data = mk_api->mem_alloc_z(COOKIE_MAX_DATE_LEN);
+    len = mk_api->time_to_gmt(&dd_cookie_expire_value.data, COOKIE_EXPIRE_TIME);
+    dd_cookie_expire_value.len = len;
 }
 
 

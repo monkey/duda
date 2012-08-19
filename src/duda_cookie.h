@@ -35,13 +35,13 @@
 #define COOKIE_EXPIRE_TIME   337606980
 #define COOKIE_MAX_DATE_LEN  32
 
-mk_pointer mk_cookie_crlf;
-mk_pointer mk_cookie_equal;
-mk_pointer mk_cookie_set;
-mk_pointer mk_cookie_expire;
-mk_pointer mk_cookie_expire_value;
-mk_pointer mk_cookie_path;
-mk_pointer mk_cookie_semicolon;
+mk_pointer dd_cookie_crlf;
+mk_pointer dd_cookie_equal;
+mk_pointer dd_cookie_set  ;
+mk_pointer dd_cookie_expire;
+mk_pointer dd_cookie_expire_value;
+mk_pointer dd_cookie_path;
+mk_pointer dd_cookie_semicolon;
 
 struct duda_api_cookie {
     int (*set) (duda_request_t *, char *, int, char *, int, int);

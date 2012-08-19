@@ -80,15 +80,15 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
 
     /* Add 'Set-Cookie: ' */
     mk_api->iov_add_entry(dr->sr->headers._extra_rows, COOKIE_SET, sizeof(COOKIE_SET) -1,
-                          mk_iov_none, MK_IOV_NOT_FREE_BUF);
+                          dd_iov_none, MK_IOV_NOT_FREE_BUF);
 
     /* Append 'KEY=' */
     mk_api->iov_add_entry(dr->sr->headers._extra_rows, key, key_len,
-                          mk_cookie_equal, MK_IOV_NOT_FREE_BUF);
+                          dd_cookie_equal, MK_IOV_NOT_FREE_BUF);
 
     /* Append 'VALUE; path=' */
     mk_api->iov_add_entry(dr->sr->headers._extra_rows, val, val_len,
-                          mk_cookie_path, MK_IOV_NOT_FREE_BUF);
+                          dd_cookie_path, MK_IOV_NOT_FREE_BUF);
 
 
     /*
@@ -98,11 +98,11 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
      */
     if (expires == COOKIE_EXPIRE_TIME) {
         mk_api->iov_add_entry(dr->sr->headers._extra_rows, dr->appname.data, dr->appname.len,
-                              mk_cookie_expire, MK_IOV_NOT_FREE_BUF);
+                              dd_cookie_expire, MK_IOV_NOT_FREE_BUF);
         mk_api->iov_add_entry(dr->sr->headers._extra_rows,
-                              mk_cookie_expire_value.data,
-                              mk_cookie_expire_value.len,
-                              mk_iov_none, MK_IOV_NOT_FREE_BUF);
+                              dd_cookie_expire_value.data,
+                              dd_cookie_expire_value.len,
+                              dd_iov_none, MK_IOV_NOT_FREE_BUF);
         return 0;
     }
 
@@ -112,15 +112,15 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
         exp.len = mk_api->time_to_gmt(&exp.data, expires);
 
         mk_api->iov_add_entry(dr->sr->headers._extra_rows, dr->appname.data, dr->appname.len,
-                              mk_cookie_expire, MK_IOV_NOT_FREE_BUF);
+                              dd_cookie_expire, MK_IOV_NOT_FREE_BUF);
         mk_api->iov_add_entry(dr->sr->headers._extra_rows,
-                              exp.data, exp.len, mk_iov_none, MK_IOV_FREE_BUF);
+                              exp.data, exp.len, dd_iov_none, MK_IOV_FREE_BUF);
 
         return 0;
     }
 
     mk_api->iov_add_entry(dr->sr->headers._extra_rows, dr->appname.data, dr->appname.len,
-                          mk_cookie_crlf, MK_IOV_NOT_FREE_BUF);
+                          dd_cookie_crlf, MK_IOV_NOT_FREE_BUF);
     return 0;
 }
 
