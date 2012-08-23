@@ -92,10 +92,28 @@ struct duda_api_objects *duda_api_master()
 
 void duda_api_exception(duda_request_t *dr, const char *message)
 {
+    /* Convert monkey pointers to fixed size buffer strings */
+    char *appname   = mk_api->pointer_to_buf(dr->appname);
+    char *interface = mk_api->pointer_to_buf(dr->interface);
+    char *method    = mk_api->pointer_to_buf(dr->method);
+    char *body      = mk_api->pointer_to_buf(dr->sr->body);
 
-    printf("Duda API Exception /%s/%s/%s: %s\n", dr->appname.data,
-                                                 dr->interface.data,
-                                                 dr->method.data,
-                                                 message);
+    /* Print out the exception */
+    printf("%sDuda API Exception%s\nURI    : /%s/%s/%s\nError  : %s\n",
+           ANSI_BOLD,
+           ANSI_RESET,
+           appname,
+           interface,
+           method,
+           message);
+    printf("%s<---- request ---->%s\n%s%s\n%s<------ end ------>%s\n",
+           ANSI_YELLOW, ANSI_RESET,
+           ANSI_CYAN, body, ANSI_YELLOW, ANSI_RESET);
     fflush(stdout);
+
+    /* Free resources */
+    mk_api->mem_free(appname);
+    mk_api->mem_free(interface);
+    mk_api->mem_free(method);
+    mk_api->mem_free(body);
 }

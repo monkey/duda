@@ -283,7 +283,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     /* Make sure the caller set a valid HTTP response code */
     if (dr->sr->headers.status == 0) {
         duda_api_exception(dr, "Callback did not set the HTTP response status");
-        exit(EXIT_FAILURE);
+        abort();
     }
 
     dr->end_callback = end_cb;

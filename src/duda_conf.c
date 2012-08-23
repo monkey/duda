@@ -134,7 +134,6 @@ int duda_conf_vhost_init()
                     ws->app_name = mk_api->str_dup(app_name);
                     ws->app_name_len = strlen(ws->app_name);
                     ws->app_enabled = app_enabled;
-
                     mk_list_add(&ws->_head, &vs->services);
                 }
                 else {

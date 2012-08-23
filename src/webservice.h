@@ -39,8 +39,6 @@
 #include "duda_objects.h"
 
 struct duda_webservice ws;
-struct mk_list _duda_interfaces;
-struct mk_list _duda_global_dist;
 duda_package_t *pkg_temp;
 
 /* Duda Macros */
@@ -48,35 +46,14 @@ duda_package_t *pkg_temp;
 
 #define duda_load_package(object, package)              \
     pkg_temp = api->duda->package_load(package, api);   \
+    mk_list_add(&pkg_temp->_head, &duda_ws_packages);     \
     object = pkg_temp->api;
 
-#define duda_service_init()                                             \
-    monkey   = api->monkey;                                             \
-    map      = api->map;                                                \
-    msg      = api->msg;                                                \
-    request  = api->request;                                            \
-    response = api->response;                                           \
-    debug    = api->debug;                                              \
-    event    = api->event;                                              \
-    console  = api->console;                                            \
-    param    = api->param;                                              \
-    session  = api->session;                                            \
-    cookie   = api->cookie;                                             \
-    global   = api->global;                                             \
-    xtime    = api->xtime;                                              \
-    mk_list_init(&_duda_interfaces);                                    \
-    mk_list_init(&_duda_global_dist);
-
 #define duda_service_add_interface(iface) do {              \
-        mk_list_add(&iface->_head,  &_duda_interfaces);     \
+        mk_list_add(&iface->_head,  &duda_interfaces);      \
     } while(0);
 
-#define duda_service_ready() do {               \
-        PLUGIN_TRACE("service ready");          \
-        return 0;                               \
-    } while(0);
-
-#define duda_map_add_interface(iface) mk_list_add(&iface->_head,  _duda_interfaces)
+#define duda_map_add_interface(iface) mk_list_add(&iface->_head,  duda_interfaces)
 
 /* Invalid object messages */
 #undef mk_info
@@ -103,5 +80,41 @@ void duda_method_add_param(duda_param_t *param, duda_method_t *method);
 
 struct duda_api_objects *duda_new_api_objects();
 
-#endif
 
+/* We declare the hidden _duda_main() function to avoid some warnings */
+int _duda_main(struct duda_api_objects *api);
+
+/*
+ * This is the tricky initialization for the web service in question,
+ * Duda core will locate the _duda_bootstrap() symbol and invoke the
+ * function to set the global API objects and perform some basic data
+ * initialization, then it invoke the end-user routine under _duda_main()
+ */
+#define duda_main()                                                     \
+    _duda_bootstrap(struct duda_api_objects *api) {                     \
+        /* API Objects */                                               \
+        monkey   = api->monkey;                                         \
+        map      = api->map;                                            \
+        msg      = api->msg;                                            \
+        request  = api->request;                                        \
+        response = api->response;                                       \
+        debug    = api->debug;                                          \
+        event    = api->event;                                          \
+        console  = api->console;                                        \
+        param    = api->param;                                          \
+        session  = api->session;                                        \
+        cookie   = api->cookie;                                         \
+        global   = api->global;                                         \
+        xtime    = api->xtime;                                          \
+                                                                        \
+        /* Initialize global linked lists */                            \
+        mk_list_init(&duda_interfaces);                                 \
+        mk_list_init(&duda_global_dist);                                \
+        mk_list_init(&duda_ws_packages);                                \
+                                                                        \
+        /* Invoke end-user main routine */                              \
+        return _duda_main(api);                                         \
+    }                                                                   \
+    int _duda_main(struct duda_api_objects *api)
+
+#endif

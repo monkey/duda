@@ -19,6 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "duda_conf.h"
+
 #ifndef DUDA_MAIN_H
 #define DUDA_MAIN_H
 
@@ -49,6 +51,7 @@ typedef struct duda_request {
     short int n_params;
 
     /* Monkey request data: plugin, client_session & session_request */
+    int socket;
     struct plugin *plugin;
     struct client_session *cs;
     struct session_request *sr;

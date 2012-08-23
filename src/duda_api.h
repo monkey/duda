@@ -22,6 +22,8 @@
 #ifndef DUDA_API_H
 #define DUDA_API_H
 
+#include <pthread.h>
+
 #include "mk_list.h"
 #include "duda.h"
 #include "duda_event.h"

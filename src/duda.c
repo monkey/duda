@@ -19,6 +19,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#define _GNU_SOURCE
 #include <dlfcn.h>
 
 #include "MKPlugin.h"
@@ -27,6 +28,7 @@
 #include "duda_event.h"
 #include "duda_queue.h"
 #include "duda_console.h"
+#include "duda_package.h"
 
 MONKEY_PLUGIN("duda",                                     /* shortname */
               "Duda Web Services Framework",              /* name */
@@ -55,6 +57,7 @@ void *duda_load_symbol(void *handle, const char *symbol)
     dlerror();
     s = dlsym(handle, symbol);
     if ((err = dlerror()) != NULL) {
+        mk_warn("Duda: %s", err);
         return NULL;
     }
 
@@ -70,7 +73,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     struct duda_method *entry_method, *cs_method;
 
     /* Load and invoke duda_main() */
-    service_init = (int (*)()) duda_load_symbol(ws->handler, "duda_main");
+    service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap");
     if (!service_init) {
         mk_err("Duda: invalid web service %s", ws->app_name);
         exit(EXIT_FAILURE);
@@ -78,8 +81,15 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 
     if (service_init(api) == 0) {
         PLUGIN_TRACE("[%s] duda_main()", ws->app_name);
-        ws->map = (struct mk_list *) duda_load_symbol(ws->handler, "_duda_interfaces");
-        ws->global = duda_load_symbol(ws->handler, "_duda_global_dist");
+        ws->map = (struct mk_list *) duda_load_symbol(ws->handler, "duda_interfaces");
+        ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
+        ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
+
+        struct mk_list *head_pkg;
+        struct duda_package *entry_pkg;
+        mk_list_foreach(head_pkg, ws->packages) {
+            entry_pkg = mk_list_entry(head_pkg, struct duda_package, _head);
+        }
 
         /* Register Duda built-in interfaces: console */
         cs_iface  = api->map->interface_new("console");
@@ -93,7 +103,6 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         api->map->interface_add_method(cs_method, cs_iface);
 
         mk_list_add(&cs_iface->_head, ws->map);
-
 
         /* Lookup callback functions for each registered method */
         mk_list_foreach(head_iface, ws->map) {
@@ -297,6 +306,7 @@ void _mkp_core_thctx()
         entry_vs = mk_list_entry(head_vs, struct vhost_services, _head);
         mk_list_foreach(head_ws, &entry_vs->services) {
             entry_ws = mk_list_entry(head_ws, struct web_service, _head);
+
             /* go around each global variable */
             mk_list_foreach(head_gl, entry_ws->global) {
                 entry_gl = mk_list_entry(head_gl, duda_global_t, _head);
@@ -309,6 +319,26 @@ void _mkp_core_thctx()
                     data = entry_gl->callback();
                 }
                 pthread_setspecific(entry_gl->key, data);
+            }
+
+            /*
+             * Now go around each package and check for thread context callbacks
+             */
+            struct mk_list *head_pkg;
+            struct mk_list *global_list;
+            struct duda_package *entry_pkg;
+            mk_list_foreach(head_pkg, entry_ws->packages) {
+                entry_pkg = mk_list_entry(head_pkg, struct duda_package, _head);
+                global_list = duda_load_symbol(entry_pkg->handler, "duda_global_dist");
+
+                mk_list_foreach(head_gl, global_list) {
+                    entry_gl = mk_list_entry(head_gl, duda_global_t, _head);
+                    data = NULL;
+                    if (entry_gl->callback) {
+                        data = entry_gl->callback();
+                    }
+                    pthread_setspecific(entry_gl->key, data);
+                }
             }
         }
     }
@@ -326,6 +356,7 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     /* Global data / Thread scope */
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
+
     return 0;
 }
 
@@ -501,6 +532,8 @@ int duda_service_run(struct plugin *plugin,
     dr->ws_root = web_service;
     dr->n_params = 0;
     dr->plugin = plugin;
+
+    dr->socket = cs->socket;
     dr->cs = cs;
     dr->sr = sr;
 

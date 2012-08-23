@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *  Copyright (C) 2001-2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,8 +24,14 @@
  * like web services or packages.
  */
 
+#include "mk_macros.h"
+
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
+
+struct mk_list MK_EXPORT duda_interfaces;
+struct mk_list MK_EXPORT duda_global_dist;
+struct mk_list MK_EXPORT duda_ws_packages;
 
 /* Objects exported to the web service */
 struct plugin_api *monkey;

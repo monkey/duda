@@ -23,16 +23,20 @@
 #define DUDA_PACKAGE_H
 
 #include <stdlib.h>
+#include <sys/syscall.h>
 
 #include "MKPlugin.h"
 #include "duda_objects.h"
+#include "duda_global.h"
 #include "duda_api.h"
 
 struct duda_package {
     char *name;
     char *version;
-
     void *api;
+    void *handler;
+
+    struct mk_list _head;
 };
 
 /* Reference and set Duda API object */
@@ -50,6 +54,8 @@ struct duda_package {
     cookie   = api->cookie;                                             \
     global   = api->global;                                             \
     xtime    = api->xtime;                                              \
+    mk_list_init(&duda_interfaces);                                     \
+    mk_list_init(&duda_global_dist);
 
 /* Data type */
 typedef struct duda_package duda_package_t;

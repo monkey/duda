@@ -35,6 +35,7 @@ struct vhost_services {
     struct mk_list _head;
 };
 
+/* Web service information */
 struct web_service {
     char *app_name;
     int  app_name_len;
@@ -46,6 +47,9 @@ struct web_service {
 
     /* global data */
     struct mk_list *global;
+
+    /* packages loaded by the web service */
+    struct mk_list *packages;
 
     /* node hook */
     struct mk_list _head;
