@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *  Copyright (C) 2001-2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,9 @@ struct duda_api_request *duda_request_object()
     r->is_put    = duda_request_is_put;
     r->is_delete = duda_request_is_delete;
     r->is_content_type = duda_request_is_content_type;
-    r->get_data  = duda_request_get_data;
+    r->get_data   = duda_request_get_data;
+    r->header_get = duda_request_header_get;
+    r->header_cmp = duda_request_header_cmp;
 
     return r;
 }
@@ -151,7 +153,7 @@ int duda_request_is_delete(duda_request_t *dr)
  */
 int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
 {
-    int len;
+    unsigned long len;
 
     if (!content_type) {
         return MK_FALSE;
@@ -203,3 +205,90 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
     memcpy(data, dr->sr->data.data, n);
     return data;
 }
+
+/*
+ * @METHOD_NAME: header_get
+ * @METHOD_DESC: It returns a new buffer string with with the value of the given
+ *               header key. The new buffer must be freed by the user once it finish
+ *               their usage.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key HTTP header key
+ * @METHOD_RETURN: Upon successful completion, it returns a new allocated buffer
+ * containing the header value. On error it returns NULL.
+ */
+char *duda_request_header_get(duda_request_t *dr, const char *key)
+{
+    int i;
+    int len;
+    char *value;
+    int  vsize;
+    struct headers_toc *toc;
+    struct header_toc_row *row;
+
+    /* Some silly but required validations */
+    if (!dr->cs || !dr->sr || !key) {
+        return NULL;
+    }
+
+    len = strlen(key);
+    toc = &dr->sr->headers_toc;
+    row = toc->rows;
+
+    /* Loop around every request header */
+    for (i = 0; i < toc->length; i++) {
+        /* Compare header key */
+        if (strncasecmp(row[i].init, key, len) == 0) {
+            /* Create new buffer */
+            vsize = (row[i].end - (len + 1)  - row[i].init);
+            value = mk_api->mem_alloc(vsize + 1);
+            strncpy(value, row[i].init + len + 1, vsize);
+            value[vsize] = '\0';
+            return value;
+        }
+    }
+
+    return NULL;
+}
+
+/*
+ * @METHOD_NAME: header_cmp
+ * @METHOD_DESC: It compares the value of a given header key.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key HTTP header key
+ * @METHOD_PARAM: val the value of the HTTP header key.
+ * @METHOD_RETURN: if the header values matches it returns 0, if they mismatch or the
+ *                 header is not found, it returns -1.
+ */
+int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val)
+{
+    int i;
+    int key_len;
+    int val_len;
+    struct headers_toc *toc;
+    struct header_toc_row *row;
+
+    /* Some silly but required validations */
+    if (!dr->cs || !dr->sr || !key) {
+        return -1;
+    }
+
+    key_len = strlen(key);
+    val_len = strlen(val);
+
+    toc = &dr->sr->headers_toc;
+    row = toc->rows;
+
+    /* Loop around every request header */
+    for (i = 0; i < toc->length; i++) {
+        /* Compare header key */
+        if (strncasecmp(row[i].init, key, key_len) == 0) {
+            /* Create new buffer */
+            if (strncmp(row[i].init + key_len + 1, val, val_len) == 0) {
+                return 0;
+            }
+        }
+    }
+
+    return -1;
+}
+

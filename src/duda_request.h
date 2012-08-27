@@ -33,6 +33,8 @@ struct duda_api_request {
     int (*is_delete)  (duda_request_t *);
     int (*is_content_type) (duda_request_t *, const char *);
     void *(*get_data) (duda_request_t *, unsigned long *);
+    char *(*header_get) (duda_request_t *dr, const char *key);
+    int (*header_cmp) (duda_request_t *dr, const char *key, const char *val);
 };
 
 /* functions */
@@ -45,5 +47,7 @@ int duda_request_is_put(duda_request_t *dr);
 int duda_request_is_delete(duda_request_t *dr);
 int duda_request_is_content_type(duda_request_t *dr, const char *content_type);
 void *duda_request_get_data(duda_request_t *dr, unsigned long *len);
+char *duda_request_header_get(duda_request_t *dr, const char *key);
+int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val);
 
 #endif
