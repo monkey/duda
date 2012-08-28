@@ -287,9 +287,12 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     }
 
     dr->end_callback = end_cb;
-    duda_response_send_headers(dr);
-    ret = duda_queue_flush(dr);
+    ret = duda_response_send_headers(dr);
+    if (ret == -1) {
+        return -1;
+    }
 
+    ret = duda_queue_flush(dr);
     if (ret == 0) {
         duda_service_end(dr);
     }
