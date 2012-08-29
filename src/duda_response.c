@@ -300,6 +300,22 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     return 0;
 }
 
+/*
+ * @METHOD_NAME: finalize
+ * @METHOD_DESC: This is a virtual function which wraps the end() method. The only difference
+ * is that invoking finalize() will not perform an explicit return. This function is useful
+ * inside a package context.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: end_cb Defines a callback function to be invoked once the response object
+ * finish flushing the pending data and clearing up the resources used.
+ * @METHOD_RETURN: Upon successful completion it returns 0, otherwise it can generate an explicit
+ * program exit due to bad API usage.
+ */
+int duda_response_finalize(duda_request_t *dr, void (*end_cb) (duda_request_t *))
+{
+    return 0;
+}
+
 struct duda_api_response *duda_response_object()
 {
     struct duda_api_response *obj;

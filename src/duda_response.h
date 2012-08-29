@@ -22,7 +22,8 @@
 #ifndef DUDA_API_RESPONSE_H
 #define DUDA_API_RESPONSE_H
 
-#define end(dr, cb) _end(dr, cb); return;
+#define end(dr, cb)       _end(dr, cb); return;
+#define finalize(dr, cb)  _end(dr, cb);
 
 /* RESPONSE object: response->x() */
 struct duda_api_response {
