@@ -37,6 +37,8 @@ struct duda_api_response {
     int (*wait) (duda_request_t *);
     int (*cont) (duda_request_t *);
     int (*_end) (duda_request_t *, void (*end_callback) ());
+    int (*flush)(duda_request_t *dr);
+
 };
 
 int duda_response_send_headers(duda_request_t *dr);
@@ -49,6 +51,7 @@ int duda_response_sendfile(duda_request_t *dr, char *path);
 int duda_response_continue(duda_request_t *dr);
 int duda_response_wait(duda_request_t *dr);
 int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *));
+int duda_response_flush(duda_request_t *dr);
 
 struct duda_api_response *duda_response_object();
 

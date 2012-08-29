@@ -269,7 +269,12 @@ int duda_response_continue(duda_request_t *dr)
  * @METHOD_NAME: end
  * @METHOD_DESC: It indicate that the full response for the request has been ended. No
  * extra calls will take place after invoke this method as it contains an implicit return
- * for the active function.
+ * for the active callback.
+ *
+ * Internally, this function send the HTTP response headers, flush the enqueued body content
+ * and release the resources used by the service. The connection could keep open depending
+ * of the HTTP transaction.
+ *
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: end_cb Defines a callback function to be invoked once the response object
  * finish flushing the pending data and clearing up the resources used.
@@ -303,7 +308,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 /*
  * @METHOD_NAME: finalize
  * @METHOD_DESC: This is a virtual function which wraps the end() method. The only difference
- * is that invoking finalize() will not perform an explicit return. This function is useful
+ * is that invoking finalize() will not perform an explicit return. This function could be useful
  * inside a package context.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: end_cb Defines a callback function to be invoked once the response object
@@ -314,6 +319,20 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 int duda_response_finalize(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
     return 0;
+}
+
+/*
+ * @METHOD_NAME: flush
+ * @METHOD_DESC: It flush the enqueued body content, this cover any data enqueued through
+ * print(), printf() or sendfile() methods. This method should not be used inside the middle
+ * of a callback routine, it's expected to be used at the end of a callback as the content
+ * is flushed in asynchronous mode.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_response_flush(duda_request_t *dr)
+{
+    return duda_queue_flush(dr);
 }
 
 struct duda_api_response *duda_response_object()
@@ -331,6 +350,7 @@ struct duda_api_response *duda_response_object()
     obj->wait          = duda_response_wait;
     obj->cont          = duda_response_continue;
     obj->_end          = duda_response_end;
+    obj->flush         = duda_response_flush;
 
     return obj;
 }
