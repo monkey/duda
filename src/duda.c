@@ -210,10 +210,19 @@ void duda_mem_init()
 
 int _mkp_event_read(int sockfd)
 {
+    int ret;
+
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     if (eh && eh->cb_on_read) {
-        eh->cb_on_read(eh->sockfd, eh->dr);
-        return MK_PLUGIN_RET_EVENT_OWNED;
+        ret = eh->cb_on_read(eh->sockfd, eh->dr);
+
+        /* we dont want a bad API usage.. */
+        if (mk_unlikely(ret != DUDA_EVENT_OWNED && ret != DUDA_EVENT_CLOSE &&
+                        ret != DUDA_EVENT_CONTINUE)) {
+            mk_err("Bad return value on read event callback");
+            exit(EXIT_FAILURE);
+        }
+        return ret;
     }
 
     return MK_PLUGIN_RET_EVENT_CONTINUE;

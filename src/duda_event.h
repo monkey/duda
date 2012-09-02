@@ -33,6 +33,11 @@
 #define DUDA_EVENT_LEVEL_TRIGGERED  MK_EPOLL_LEVEL_TRIGGERED
 #define DUDA_EVENT_EDGE_TRIGGERED   MK_EPOLL_EDGE_TRIGGERED
 
+/* Return values for a given callback through events interface */
+#define DUDA_EVENT_OWNED            MK_PLUGIN_RET_EVENT_OWNED
+#define DUDA_EVENT_CLOSE            MK_PLUGIN_RET_EVENT_CLOSE
+#define DUDA_EVENT_CONTINUE         MK_PLUGIN_RET_EVENT_CONTINUE
+
 /* Thread key to map the event lists per worker */
 pthread_key_t duda_events_list;
 
