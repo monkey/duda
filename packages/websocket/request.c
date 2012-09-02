@@ -1,0 +1,135 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
+/*  Monkey HTTP Daemon
+ *  ------------------
+ *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#include <pthread.h>
+#include <stdio.h>
+
+#include "duda_package.h"
+#include "request.h"
+#include "websocket.h"
+
+/* Create a ws_request node */
+struct ws_request *ws_request_create(int socket_fd,
+                                     struct duda_request *dr,
+                                     void (*cb_read)   (duda_request_t *, struct ws_request *),
+                                     void (*cb_write)  (duda_request_t *, struct ws_request *),
+                                     void (*cb_error)  (duda_request_t *, struct ws_request *),
+                                     void (*cb_close)  (duda_request_t *, struct ws_request *),
+                                     void (*cb_timeout) (duda_request_t *, struct ws_request *))
+{
+    struct ws_request *new;
+
+    new = monkey->mem_alloc(sizeof(struct ws_request));
+    new->socket = socket_fd;
+    new->dr = dr;
+    new->cb_read  = cb_read;
+    new->cb_write = cb_write;
+    new->cb_error = cb_error;
+    new->cb_close = cb_close;
+    new->cb_timeout = cb_timeout;
+    new->payload = NULL;
+    new->payload_len = 0;
+
+    return new;
+}
+
+void ws_request_add(struct ws_request *wr)
+{
+    /* websocket request list (thread context) */
+    struct mk_list *wr_list;
+
+    /* Get thread data */
+    wr_list = global->get(ws_request_list);
+
+    /* Add node to list */
+    mk_list_add(&wr->_head, wr_list);
+
+    /* Update thread key */
+    pthread_setspecific(_mkp_data, wr_list);
+}
+
+/*
+ * It register the request and connection data, if it doesn't
+ * exists it will be create it, otherwise will return the pointer
+ * to the ws_request struct node
+ */
+struct ws_request *ws_request_get(int socket_fd)
+{
+    struct ws_request *wr_node;
+    struct mk_list *wr_list, *wr_head;
+
+    /* Get thread data */
+    wr_list = global->get(ws_request_list);
+
+    /* No connection previously was found */
+    if (mk_list_is_empty(wr_list) == 0) {
+        return NULL;
+    }
+
+    mk_list_foreach(wr_head, wr_list) {
+        wr_node = mk_list_entry(wr_head, struct ws_request, _head);
+        if(wr_node->socket == socket_fd){
+            return wr_node;
+        }
+    }
+
+    return NULL;
+}
+
+/*
+ * Remove a ws_request from the main list, return 0 on success or -1
+ * when for some reason the request was not found
+ */
+int ws_request_delete(int socket)
+{
+    struct ws_request *wr_node;
+    struct mk_list *wr_list, *wr_temp, *wr_head;
+
+    PLUGIN_TRACE("[FD %i] remove request from list", socket);
+
+    wr_list = pthread_getspecific(_mkp_data);
+    if (mk_list_is_empty(wr_list) == 0) {
+        return -1;
+    }
+
+    mk_list_foreach_safe(wr_head, wr_temp, wr_list) {
+        wr_node = mk_list_entry(wr_head, struct ws_request, _head);
+
+        if (wr_node->socket == socket) {
+            mk_list_del(wr_head);
+            monkey->mem_free(wr_node->payload);
+            monkey->mem_free(wr_node);
+            return 0;
+        }
+    }
+
+    return -1;
+}
+
+void *cb_request_list_init()
+{
+    struct mk_list *list;
+
+    list = monkey->mem_alloc_z(sizeof(struct mk_list));
+    mk_list_init(list);
+
+    return list;
+}
