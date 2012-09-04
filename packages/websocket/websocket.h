@@ -25,6 +25,10 @@
 #include "duda_api.h"
 #include "request.h"
 
+struct ws_config_t {
+    int is_broadcast;
+};
+
 struct duda_api_websockets {
     int (*handshake) (duda_request_t *,
                       void (*cb_read)   (duda_request_t *, ws_request_t *),
@@ -33,14 +37,16 @@ struct duda_api_websockets {
                       void (*cb_close)  (duda_request_t *, ws_request_t *),
                       void (*cb_timeout)(duda_request_t *, ws_request_t *));
     int (*write) (struct ws_request *, unsigned int, unsigned char *, uint64_t);
+    int (*broadcast) (ws_request_t *, unsigned char *, uint64_t, int);
+    int (*broadcaster) ();
 };
 
 int ws_handshake(duda_request_t *dr,
-                 void (*cb_read)   (duda_request_t *, struct ws_request *),
-                 void (*cb_write)  (duda_request_t *, struct ws_request *),
-                 void (*cb_error)  (duda_request_t *, struct ws_request *),
-                 void (*cb_close)  (duda_request_t *, struct ws_request *),
-                 void (*cb_timeout)(duda_request_t *, struct ws_request *));
+                 void (*cb_read)   (duda_request_t *, ws_request_t *),
+                 void (*cb_write)  (duda_request_t *, ws_request_t *),
+                 void (*cb_error)  (duda_request_t *, ws_request_t *),
+                 void (*cb_close)  (duda_request_t *, ws_request_t *),
+                 void (*cb_timeout)(duda_request_t *, ws_request_t *));
 
 int ws_send_data(int sockfd,
                 unsigned int fin,
@@ -55,6 +61,8 @@ int ws_write(struct ws_request *wr, unsigned int code, unsigned char *data, uint
 
 /* API Object */
 struct duda_api_websockets *websocket;
+
+struct ws_config_t *ws_config;
 
 #endif
 

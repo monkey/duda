@@ -22,8 +22,10 @@
 #include <pthread.h>
 #include <stdio.h>
 
+#include "mk_scheduler.h"
 #include "duda_package.h"
 #include "request.h"
+#include "broadcast.h"
 #include "websocket.h"
 
 /* Create a ws_request node */
@@ -105,7 +107,7 @@ int ws_request_delete(int socket)
 
     PLUGIN_TRACE("[FD %i] remove request from list", socket);
 
-    wr_list = pthread_getspecific(_mkp_data);
+    wr_list = global->get(ws_request_list);
     if (mk_list_is_empty(wr_list) == 0) {
         return -1;
     }
@@ -127,9 +129,41 @@ int ws_request_delete(int socket)
 void *cb_request_list_init()
 {
     struct mk_list *list;
+    struct ws_broadcast_worker *bw;
+    struct sched_list_node *thinfo = NULL;
 
+    /* Initialize the list for each request based in a handshake */
     list = monkey->mem_alloc_z(sizeof(struct mk_list));
     mk_list_init(list);
+
+    /*
+     * Before to return the data to setup the global key, we will
+     * use this same interface to launch a new thread if the brodcaster have been
+     * initiallized from the web service.
+     *
+     * The technical objective of this routine is to create a new thread
+     * per Monkey thread. If Monkey was launched with 5 workers, we aim to launch
+     * 5 extra threads here to handle the broadcast buffers in a separate context.
+     */
+    if (ws_config->is_broadcast == MK_TRUE) {
+        /* Critical section */
+        pthread_mutex_lock(&ws_spawn_mutex);
+
+        thinfo = monkey->sched_worker_info();
+
+        /* Broadcast worker info */
+        bw = monkey->mem_alloc(sizeof(struct ws_broadcast_worker));
+        bw->pid = thinfo->tid;
+        bw->conn_list = list;
+        bw->channel = ws_broadcast_count;
+
+        ws_broadcast_count++;
+
+        /* Unlock mutex */
+        pthread_mutex_unlock(&ws_spawn_mutex);
+
+        monkey->worker_spawn(ws_broadcast_worker, bw);
+    }
 
     return list;
 }

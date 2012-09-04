@@ -1,0 +1,204 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
+/*  Monkey HTTP Daemon
+ *  ------------------
+ *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#include <unistd.h>
+#include <sys/ioctl.h>
+
+#include "websocket.h"
+#include "broadcast.h"
+
+/*
+ * Brodcast interface
+ * ------------------
+ * We work on top of a threaded HTTP stack, hopefully is lock-free and we don't
+ * want to use mutual exclusion to synchronize the access to the global data at
+ * thread scope to send the message to each client balanced among different
+ * workers.
+ *
+ * We use a proxy-interface based on kernel pipes to distribute the message to
+ * each broadcast worker which later distribute the message to all worker
+ * clients. After the message have been sent through the pipe the caller returns
+ * pretty quickly, in the meanwhile the broadcast workers are distributing the
+ * messages to each client.
+ *
+ *                       +-------------------------+
+ *                       | websocket->broadcast(); |
+ *                       +-------------------------+
+ *                                   |
+ *                         +--------------------+
+ *                         |  broadcaster proxy |
+ *                         +--------------------+
+ *                                   |
+ *                                   |  <-- dispatch the message to each pipe
+ *                                   |
+ *             +---------------------+-----------------------+
+ *             |                     |                       |
+ *        +---------+           +---------+             +---------+
+ *        | pipe #1 |           | pipe #2 |             | pipe #N |
+ *        +---------+           +---------+             +---------+
+ *             |                     |                       |
+ *   +--------------------+  +--------------------+  +--------------------+
+ *   | broadcast worker 1 |  | broadcast worker 2 |  | broadcast worker N |
+ *   +--------------------+  +--------------------+  +--------------------+
+ *             |                     |                       |
+ *     +-----------------+     +-----------------+     +-----------------+
+ *     |  |  |  |  |  |  |     |  |  |  |  |  |  |     |  |  |  |  |  |  |
+ *     C  C  C  C  C  C  C     C  C  C  C  C  C  C     C  C  C  C  C  C  C
+ *
+ * Each end-point named 'C' represents a websocket client session.
+ *
+ */
+
+/* Initialize the websocket broadcaster interface */
+int ws_broadcaster()
+{
+    int i;
+    int ret;
+    struct ws_broadcast_t *br;
+
+    /* Initialize mutex */
+    pthread_mutex_init(&ws_spawn_mutex, NULL);
+
+    /* generic counter */
+    ws_broadcast_count = 0;
+
+    /* enable broadcast flag */
+    ws_config->is_broadcast = MK_TRUE;
+
+    /* Initiallize list of channels */
+    mk_list_init(&ws_broadcast_channels);
+
+    /* For each Monkey worker, register a broadcast node */
+    for (i = 0; i < monkey->config->workers; i++) {
+        br = monkey->mem_alloc(sizeof(struct ws_broadcast_t));
+        br->wid = i;
+        ret = pipe(br->pipe);
+
+        if (ret != 0) {
+            printf("WebSocket: Could not create broadcast pipe on wid %i\n", i);
+            exit(EXIT_FAILURE);
+        }
+        mk_list_add(&br->_head, &ws_broadcast_channels);
+    }
+    return 0;
+}
+
+/* send the broadcast message */
+int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type)
+{
+    int n;
+    struct mk_list *head;
+    struct ws_broadcast_t *entry;
+    struct ws_broadcast_frame br;
+
+    /* internal broadcast frame */
+    br.len    = len;
+    br.type   = msg_type;
+    br.source = wr->socket;
+
+    memset(br.data, '\0', sizeof(br.data));
+    memcpy(br.data, data, len);
+
+    mk_list_foreach(head, &ws_broadcast_channels) {
+        entry = mk_list_entry(head, struct ws_broadcast_t, _head);
+
+        /* write the fixed size frame */
+        n = write(entry->pipe[1], &br, sizeof(br));
+        if (n < 0) {
+            printf("Duda/WS: error broadcasting message\n");
+        }
+    }
+    return 0;
+}
+
+
+void ws_broadcast_worker(void *args)
+{
+    int i, n, fd;
+    int n_events = 50;
+    int efd;
+    int bytes;
+    int num_fds;
+    char drop[sizeof(struct ws_broadcast_frame)];
+    struct epoll_event event = {0, {0}};
+    struct epoll_event *events;
+    struct ws_request *wr;
+    struct ws_broadcast_t *br = NULL;
+    struct ws_broadcast_frame brf;
+    struct ws_broadcast_worker *brw = (struct ws_broadcast_worker *) args;
+    struct mk_list *head;
+
+    monkey->worker_rename("duda: ws bc/N\n");
+
+    /* Lookup our file descriptor based in the channel number */
+    i = 0;
+    mk_list_foreach(head, &ws_broadcast_channels) {
+        if (i == brw->channel) {
+            br = mk_list_entry(head, struct ws_broadcast_t, _head);
+            break;
+        }
+        i++;
+    }
+
+    /* Initialize epoll queue and register the file descriptor */
+    efd = epoll_create(100);
+    event.data.fd = br->pipe[0];
+    event.events = EPOLLERR | EPOLLHUP | EPOLLIN;
+    events = malloc(n_events * sizeof(struct epoll_event));
+    epoll_ctl(efd, EPOLL_CTL_ADD, br->pipe[0], &event);
+
+    /* loop! */
+    while (1) {
+        num_fds = epoll_wait(efd, events, n_events, -1);
+        for (i = 0; i< num_fds; i++) {
+            if (events[i].events & EPOLLIN) {
+                fd = events[i].data.fd;
+
+                /* Check the data size */
+                ioctl(fd, FIONREAD, &bytes);
+
+                /* If we have an invalid frame size, just drop it */
+                if (bytes != sizeof(struct ws_broadcast_frame)) {
+                    n = read(fd, drop, bytes);
+                    continue;
+                }
+
+                n = read(fd, &brf, bytes);
+                if (n != bytes) {
+                    printf("Error reading broadcast buffer size: %i/%i\n", n, bytes);
+                    continue;
+                }
+
+                /*
+                 * For each websocket request registered in the thread list, send the
+                 * websocket message. This is the real broadcast
+                 */
+                mk_list_foreach(head, brw->conn_list) {
+                    wr = mk_list_entry(head, struct ws_request, _head);
+                    if (brf.source == wr->socket) {
+                        continue;
+                    }
+                    ws_write(wr, brf.type, brf.data, brf.len);
+                }
+            }
+        }
+    }
+}

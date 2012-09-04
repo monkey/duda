@@ -57,7 +57,8 @@
 /*
  * Internal websocket package callback functions
  *
- * FIXME: This function is only handling messages of one frame
+ * FIXME: This function is only handling messages of one frame size. It should be
+ * able to get multiple frames and assemble them
  */
 
 int cb_ws_read(int sockfd, struct duda_request *dr)
@@ -168,7 +169,7 @@ int cb_ws_read(int sockfd, struct duda_request *dr)
          * endpoint that has already sent a Close frame will continue to process
          * data.
          */
-        ws_send_data(sockfd, 1, 0, 0, 0, WS_OPCODE_CLOSE, 0, "");
+        ws_send_data(sockfd, 1, 0, 0, 0, WS_OPCODE_CLOSE, 0, NULL);
         return DUDA_EVENT_CLOSE;
     }
 
