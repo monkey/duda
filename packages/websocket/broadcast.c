@@ -189,13 +189,16 @@ void ws_broadcast_worker(void *args)
 
                 /*
                  * For each websocket request registered in the thread list, send the
-                 * websocket message. This is the real broadcast
+                 * websocket message. This is the real broadcast.
                  */
                 mk_list_foreach(head, brw->conn_list) {
                     wr = mk_list_entry(head, struct ws_request, _head);
+                    /* Do not send the message to our selfs (origin) */
                     if (brf.source == wr->socket) {
                         continue;
                     }
+
+                    /* Send message */
                     ws_write(wr, brf.type, brf.data, brf.len);
                 }
             }

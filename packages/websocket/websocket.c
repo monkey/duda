@@ -46,6 +46,7 @@
 #include "base64.h"
 #include "websocket.h"
 #include "protocol.h"
+#include "callbacks.h"
 
 #define ws_invalid_upgrade(dr) response->http_status(dr, 400); return -1;
 
@@ -145,13 +146,13 @@ int cb_ws_read(int sockfd, struct duda_request *dr)
 
     if (wr->opcode == WS_OPCODE_CONTINUE || wr->opcode == WS_OPCODE_TEXT ||
         wr->opcode == WS_OPCODE_BINARY) {
-        if (wr->cb_read) {
-            wr->cb_read(dr, wr);
+        if (wr->cb_on_message) {
+            wr->cb_on_message(dr, wr);
         }
     }
     else if (wr->opcode == WS_OPCODE_CLOSE) {
-        if (wr->cb_close) {
-            wr->cb_close(dr, wr);
+        if (wr->cb_on_close) {
+            wr->cb_on_close(dr, wr);
         }
         /*
          * Per protocol spec:
@@ -176,19 +177,6 @@ int cb_ws_read(int sockfd, struct duda_request *dr)
     return DUDA_EVENT_OWNED;
 }
 
-int cb_ws_write(int sockfd, struct duda_request *dr)
-{
-    ws_request_t *wr;
-
-    wr = ws_request_get(sockfd);
-    if (!wr){
-        PLUGIN_TRACE("[FD %i] this FD is not a WebSocket Frame", sockfd);
-        return DUDA_EVENT_CLOSE;
-    }
-
-    return DUDA_EVENT_CONTINUE;
-}
-
 int cb_ws_error(int sockfd, struct duda_request *dr)
 {
     ws_request_t *wr;
@@ -199,7 +187,8 @@ int cb_ws_error(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-    return DUDA_EVENT_CONTINUE;
+    wr->cb_on_error(dr, wr);
+    return DUDA_EVENT_OWNED;
 }
 
 int cb_ws_close(int sockfd, struct duda_request *dr)
@@ -212,7 +201,9 @@ int cb_ws_close(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-    return DUDA_EVENT_CONTINUE;
+
+    wr->cb_on_close(dr, wr);
+    return DUDA_EVENT_CLOSE;
 }
 
 int cb_ws_timeout(int sockfd, struct duda_request *dr)
@@ -225,17 +216,13 @@ int cb_ws_timeout(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-    return 0;
+    wr->cb_on_timeout(dr, wr);
+    return DUDA_EVENT_OWNED;
 }
 
 
 /* Initialiaze a websocket request */
-int ws_handshake(duda_request_t *dr,
-                 void (*cb_read)   (duda_request_t *, struct ws_request *),
-                 void (*cb_write)  (duda_request_t *, struct ws_request *),
-                 void (*cb_error)  (duda_request_t *, struct ws_request *),
-                 void (*cb_close)  (duda_request_t *, struct ws_request *),
-                 void (*cb_timeout)(duda_request_t *, struct ws_request *))
+int ws_handshake(duda_request_t *dr)
 {
     int len;
     size_t out_len;
@@ -336,12 +323,16 @@ int ws_handshake(duda_request_t *dr,
 
         /* Register node in main list */
         wr_node = ws_request_create(dr->socket, dr,
-                                    cb_read, cb_write, cb_error, cb_close, cb_timeout);
+                                    ws_callbacks->on_open,
+                                    ws_callbacks->on_message,
+                                    ws_callbacks->on_error,
+                                    ws_callbacks->on_close,
+                                    ws_callbacks->on_timeout);
         ws_request_add(wr_node);
 
         /* Register socket with plugin events interface */
         event->add(dr->socket, dr, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
-                   cb_ws_read, cb_ws_write, cb_ws_error, cb_ws_close, cb_ws_timeout);
+                   cb_ws_read, NULL, cb_ws_error, cb_ws_close, cb_ws_timeout);
         return 0;
     }
 

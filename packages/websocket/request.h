@@ -19,25 +19,24 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef WEBSOCKETS_REQUEST_H
-#define WEBSOCKETS_REQUEST_H
+#ifndef WEBSOCKET_REQUEST_H
+#define WEBSOCKET_REQUEST_H
 
 #include <stdint.h>
 #include "duda_api.h"
 #include "mk_macros.h"
 #include "mk_list.h"
-
 #include "protocol.h"
 
 struct ws_request
 {
     int socket;
     struct duda_request *dr;
-    void (*cb_read)    (duda_request_t *, struct ws_request *);
-    void (*cb_write)   (duda_request_t *, struct ws_request *);
-    void (*cb_error)   (duda_request_t *, struct ws_request *);
-    void (*cb_close)   (duda_request_t *, struct ws_request *);
-    void (*cb_timeout) (duda_request_t *, struct ws_request *);
+    void (*cb_on_open)    (duda_request_t *, struct ws_request *);
+    void (*cb_on_message) (duda_request_t *, struct ws_request *);
+    void (*cb_on_error)   (duda_request_t *, struct ws_request *);
+    void (*cb_on_close)   (duda_request_t *, struct ws_request *);
+    void (*cb_on_timeout) (duda_request_t *, struct ws_request *);
 
     /* Protocol specifics */
     unsigned int  opcode;
@@ -64,13 +63,12 @@ duda_global_t ws_request_list;
 /* Functions */
 void *cb_request_list_init();
 void ws_request_init();
-struct ws_request *ws_request_create(int socket_fd,
-                                     struct duda_request *dr,
-                                     void (*cb_read)   (duda_request_t *, ws_request_t *),
-                                     void (*cb_write)  (duda_request_t *, ws_request_t *),
-                                     void (*cb_error)  (duda_request_t *, ws_request_t *),
-                                     void (*cb_close)  (duda_request_t *, ws_request_t *),
-                                     void (*cb_timeout) (duda_request_t *,ws_request_t *));
+struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
+                                     void (*on_open)   (duda_request_t *, ws_request_t *),
+                                     void (*on_message)(duda_request_t *, ws_request_t *),
+                                     void (*on_error)  (duda_request_t *, ws_request_t *),
+                                     void (*on_close)  (duda_request_t *, ws_request_t *),
+                                     void (*on_timeout)(duda_request_t *, ws_request_t *));
 void ws_request_add(ws_request_t *pr);
 ws_request_t *ws_request_get(int socket);
 void ws_request_update(int socket, ws_request_t *wr);

@@ -26,6 +26,7 @@
 #include "websocket.h"
 #include "broadcast.h"
 #include "request.h"
+#include "callbacks.h"
 
 /* API object */
 struct duda_api_websockets *get_websockets_api()
@@ -34,10 +35,11 @@ struct duda_api_websockets *get_websockets_api()
 
     /* Alloc object */
     ws = malloc(sizeof(struct duda_api_websockets));
-    ws->handshake   = ws_handshake;
-    ws->write       = ws_write;
-    ws->broadcast   = ws_broadcast;
-    ws->broadcaster = ws_broadcaster;
+    ws->handshake    = ws_handshake;
+    ws->write        = ws_write;
+    ws->broadcast    = ws_broadcast;
+    ws->broadcaster  = ws_broadcaster;
+    ws->set_callback = ws_set_callback;
 
     return ws;
 }
@@ -49,8 +51,13 @@ duda_package_t *duda_package_main(struct duda_api_objects *api)
     /* Initialize package internals */
     duda_package_init();
 
+    /* Package default configuration */
     ws_config = monkey->mem_alloc(sizeof(struct ws_config_t));
     ws_config->is_broadcast = MK_FALSE;
+
+    /* Initialize callbacks */
+    ws_callbacks = monkey->mem_alloc(sizeof(struct ws_callbacks_t));
+    memset(ws_callbacks, '\0', sizeof(struct ws_callbacks_t));
 
     /* Package internals */
     duda_global_init(ws_request_list , cb_request_list_init);

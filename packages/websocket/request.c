@@ -29,24 +29,23 @@
 #include "websocket.h"
 
 /* Create a ws_request node */
-struct ws_request *ws_request_create(int socket_fd,
-                                     struct duda_request *dr,
-                                     void (*cb_read)   (duda_request_t *, struct ws_request *),
-                                     void (*cb_write)  (duda_request_t *, struct ws_request *),
-                                     void (*cb_error)  (duda_request_t *, struct ws_request *),
-                                     void (*cb_close)  (duda_request_t *, struct ws_request *),
-                                     void (*cb_timeout) (duda_request_t *, struct ws_request *))
+struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
+                                     void (*on_open)   (duda_request_t *, ws_request_t *),
+                                     void (*on_message)(duda_request_t *, ws_request_t *),
+                                     void (*on_error)  (duda_request_t *, ws_request_t *),
+                                     void (*on_close)  (duda_request_t *, ws_request_t *),
+                                     void (*on_timeout)(duda_request_t *, ws_request_t *))
 {
     struct ws_request *new;
 
     new = monkey->mem_alloc(sizeof(struct ws_request));
     new->socket = socket_fd;
     new->dr = dr;
-    new->cb_read  = cb_read;
-    new->cb_write = cb_write;
-    new->cb_error = cb_error;
-    new->cb_close = cb_close;
-    new->cb_timeout = cb_timeout;
+    new->cb_on_open    = on_open;
+    new->cb_on_message = on_message;
+    new->cb_on_error   = on_error;
+    new->cb_on_close   = on_close;
+    new->cb_on_timeout = on_timeout;
     new->payload = NULL;
     new->payload_len = 0;
 
