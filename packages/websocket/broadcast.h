@@ -54,6 +54,8 @@ struct mk_list ws_broadcast_channels;
 
 void ws_broadcast_worker(void *args);
 int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type);
+int ws_broadcast_all(unsigned char *data, uint64_t len, int msg_type);
+
 int ws_broadcaster();
 
 #endif

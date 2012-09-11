@@ -112,7 +112,12 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_ty
     /* internal broadcast frame */
     br.len    = len;
     br.type   = msg_type;
-    br.source = wr->socket;
+    if (wr) {
+        br.source = wr->socket;
+    }
+    else {
+        br.source = 0;
+    }
 
     memset(br.data, '\0', sizeof(br.data));
     memcpy(br.data, data, len);
@@ -127,6 +132,11 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_ty
         }
     }
     return 0;
+}
+
+int ws_broadcast_all(unsigned char *data, uint64_t len, int msg_type)
+{
+    return ws_broadcast(NULL, data, len, msg_type);
 }
 
 

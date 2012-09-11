@@ -35,11 +35,12 @@ struct duda_api_websockets *get_websockets_api()
 
     /* Alloc object */
     ws = malloc(sizeof(struct duda_api_websockets));
-    ws->handshake    = ws_handshake;
-    ws->write        = ws_write;
-    ws->broadcast    = ws_broadcast;
-    ws->broadcaster  = ws_broadcaster;
-    ws->set_callback = ws_set_callback;
+    ws->handshake     = ws_handshake;
+    ws->write         = ws_write;
+    ws->broadcast     = ws_broadcast;
+    ws->broadcast_all = ws_broadcast_all;
+    ws->broadcaster   = ws_broadcaster;
+    ws->set_callback  = ws_set_callback;
 
     return ws;
 }
