@@ -18,12 +18,14 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+import os
+
 CSS     = "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css' />\n"
 CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap-responsive.css' />\n"
 CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/prettify.css' />\n"
-JS      = "    <script type='text/javascript' src='assets/js/bootstrap.js'></script>\n"
-JS     += "    <script type='text/javascript' src='assets/js/prettify.js'></script>\n"
-HEADER  = "<HTML>\n  <HEAD>\n%s  </HEAD>\n<BODY onload=\"prettyPrint()\">\n" % (CSS)
+JS      = "    <script type='text/javascript' src='../assets/js/bootstrap.js'></script>\n"
+JS     += "    <script type='text/javascript' src='../assets/js/prettify.js'></script>\n"
+HEADER  = "<HTML>\n  <HEAD>\n[TITLE]\n%s  </HEAD>\n<BODY onload=\"prettyPrint()\">\n" % (CSS)
 HEADER += "    <div class='container'>\n"
 FOOTER  = "    </div>%s</BODY></HTML>\n" % (JS)
 
@@ -74,6 +76,8 @@ class DudaObject:
     OBJ_NAME      = ' * @OBJ_NAME:'
     OBJ_DESC      = ' * @OBJ_DESC:'
     OBJ_COMM      = ' * @OBJ_COMM:'
+    PKG_HEADER    = ' * @PKG_HEADER:'
+    PKG_INIT      = ' * @PKG_INIT:'
     METHOD_NAME   = ' * @METHOD_NAME:'
     METHOD_PROTO  = ' * @METHOD_PROTO:'
     METHOD_DESC   = ' * @METHOD_DESC:'
@@ -85,6 +89,8 @@ class DudaObject:
         self.name = ''
         self.desc = ''
         self.comm = ''
+        self.pkg_header = ''
+        self.pkg_init = ''
         self.methods = []
         self.method = None
 
@@ -118,6 +124,18 @@ class DudaObject:
                 self.comm = arr[1].strip() + '\n'
                 last = self.OBJ_COMM
 
+            # @PKG_HEADER
+            elif line.startswith(self.PKG_HEADER):
+                arr = line.split(self.PKG_HEADER)
+                self.pkg_header = arr[1].strip() + '\n'
+                last = self.PKG_HEADER
+
+            # @PKG_INIT
+            elif line.startswith(self.PKG_INIT):
+                arr = line.split(self.PKG_INIT)
+                self.pkg_init = arr[1].strip() + '\n'
+                last = self.PKG_INIT
+
             # Line belonging to a previous declaration
             elif line.startswith(self.COMM_LINE) \
                     and line[len(self.COMM_LINE)] != '@' \
@@ -129,6 +147,10 @@ class DudaObject:
                     self.desc += row
                 elif last == self.OBJ_COMM:
                     self.comm += row
+                elif last == self.PKG_HEADER:
+                    self.pkg_header += row
+                elif last == self.PKG_INIT:
+                    self.pkg_init += row
 
             # @METHOD_NAME
             elif line.startswith(self.METHOD_NAME):
@@ -199,29 +221,71 @@ class DudaObject:
 
 
 
+# A package is an object implemented through a shared library and for hence
+# it can be composed by multiple source files, we define an index.doc per
+# package to list which files must be analized when generating the
+# documentation.
+class DudaPackage(DudaObject):
+    def __init__(self, name, path):
+        DudaObject.__init__(self)
+
+        self.name = name
+        self.pkg_path = path
+        self.read()
+
+    def read(self):
+        # open the package documentation index
+        index = self.pkg_path + '/index.doc'
+        f = open(index)
+        rows = f.readlines()
+        f.close()
+
+        # For listed file, merge each line in the
+        # content array
+        content = []
+        for entry in rows:
+            source = entry.split()[0]
+            e = open(self.pkg_path + '/' + source)
+            lines = e.readlines()
+            e.close()
+
+            content.extend(lines)
+
+        self.go(content)
+
 
 f = open('index.doc')
 files = f.readlines()
 f.close()
 
-objects = []
+objects  = []
+packages = []
 
 for source in files:
-    try:
-        f = open('../' + source.strip())
-    except:
-        continue
+    p = os.path.abspath("../%s" % source.strip())
+    pkg_index = p + '/index.doc'
 
-    d = DudaObject()
-    content = f.readlines()
-    f.close()
+    # Check if the source is a package
+    if os.path.isdir(p) and source.startswith('packages/') and os.path.isfile(pkg_index):
+        name = source.split()[0].split('/')[-1]
+        pkg = DudaPackage(name, p)
+        packages.append(pkg)
+    else:
+        try:
+            f = open(p)
+        except:
+            continue
 
-    d.go(content)
-    objects.append(d)
+        d = DudaObject()
+        content = f.readlines()
+        f.close()
 
+        d.go(content)
+        objects.append(d)
 
 # Start generating HTML content
-print "  DOC   Duda API Objects: %i" % len(objects)
+print "  DOC   Duda API Objects : %i" % len(objects)
+print "  DOC   Duda API Packages: %i" % len(packages)
 
 # Compose Menu
 menu  = L_MENU_HEADER
@@ -230,75 +294,130 @@ for obj in objects:
     menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name, obj.name)
 
 menu += '  <li class="nav-header">Packages</li>\n'
-menu += '  <li><a href="">base64</a></li>\n'
-menu += '  <li><a href="">json</a></li>\n'
-menu += '  <li><a href="">sha1</a></li>\n'
-menu += '  <li><a href="">sqlite</a></li>\n'
+for pkg in packages:
+    menu += '  <li><a href="packages/%s.html">%s</a></li>\n' % (pkg.name, pkg.name)
 
 menu += L_MENU_FOOTER
 
+class WriteObject:
+    subdir = False
+
+    def __init__(self, obj, path='html/'):
+        if os.path.exists(path) is False:
+            os.makedirs(path)
+
+        target = path + obj.name + '.html'
+
+        if len(path.split('/')) > 2:
+            self.subdir = True
+
+        if self.subdir:
+            header = HEADER.replace('assets/', '../assets/')
+        else:
+            header = HEADER
+
+        if self.subdir:
+            title = "<title>Duda Framework API: %s package object</title>" % (obj.name.title())
+        else:
+            title = "<title>Duda Framework API: %s object</title>" % (obj.name.title())
+
+        header = header.replace("[TITLE]", title)
+
+        f = open(target, 'w')
+        f.write(header)
+
+        # Compose the proper menu for the active object
+        obj_menu = menu.replace('<li><a href="%s.html">' % (obj.name), \
+                                '<li class="active"><a href="%s.html">' % (obj.name))
+
+        if self.subdir:
+            obj_menu = obj_menu.replace('a href="', 'a href="../')
+
+        #if self.backward:
+
+        f.write('  ' + obj_menu)
+        f.write('  <div class="span8">')
+
+        if self.subdir:
+            f.write('  <h1>%s package object</h1>\n' % (obj.name.title()))
+        else:
+            f.write('  <h1>%s object</h1>\n' % (obj.name.title()))
+
+        f.write('  <p>%s</p>\n' % (obj.desc))
+
+        if len(obj.comm) > 1:
+            f.write('  <p><strong>Comments</strong>: %s</p>\n' % (obj.comm))
+
+        if (len(obj.pkg_header) > 0):
+            f.write('  <p><strong>Initialization</strong></p>')
+            f.write('  <p>In order to make use of %s package, two simple steps are required: the ' \
+                    'first one is to include the package header file on top of your code, then '   \
+                    'perform an explicit package inside duda_main() function.' % (obj.name))
+            f.write('<p>Example:</p>')
+            f.write('<pre class="prettyprint lang-c">')
+            f.write('/* Include package header */\n%s\n' % (obj.pkg_header))
+            f.write('int duda_main()\n{\n    ...\n    %s' %(obj.pkg_init))
+            f.write('    ...\n    return 0;\n}')
+            f.write('</pre>')
+            f.write('<p>Once the package is loaded, you can use any methods from your callbacks ' \
+                    'in the following way:</pre>')
+            f.write('<pre class="prettyprint lang-c">%s->method(...)</pre>' % obj.name)
+        else:
+            f.write('  <p><strong>Usage</strong>')
+            f.write('     <pre class="prettyprint lang-c">%s->method(...);</pre></p>' % (obj.name))
+        f.write('  <div class="page-header"></div>')
+        f.write('  <h2>Methods</h2>\n')
+
+        # Generate a sorted shortcut menu
+        shortcut = []
+        for m in obj.methods:
+            shortcut.append(m.name)
+        shortcut.sort()
+
+        f.write('  <div class="row">\n')
+        i = 0
+        total = 0
+        for entry in shortcut:
+            if i == 0:
+                f.write('    <div class="span2">\n    <ul>\n')
+
+            f.write('        <li><a href="#s_%s">%s</a></li>\n' % (entry, entry))
+
+            i += 1
+            total += 1
+            if i >= 4:
+                f.write('    </ul>\n   </div>\n')
+                i = 0
+
+        if (total % 4) != 0:
+            f.write('    </ul>\n   </div>\n')
+
+        f.write('  </div>\n')
+
+        for m in obj.methods:
+            f.write('  <div class=\"page-header\"><h3 id="s_%s">%s()</h3>\n' % (m.name, m.name))
+            f.write('  <p>%s</p>\n' % m.desc.strip())
+            f.write('  <p><strong>Prototype</strong><pre class=\"prettyprint lang-c\">%s;</pre>' % m.prototype.strip())
+            f.write('  <strong>Parameters</strong>')
+            if len(m.params) > 0:
+                f.write('  <dl class=\"dl-horizontal\">')
+                for p in m.params:
+                    f.write('<dt>' + p['name'] + '</dt><dd>' + p['desc'] + '</dd>')
+
+                f.write('  </dl>')
+            else:
+                f.write('  None')
+
+            f.write('  <strong>Return:</strong> %s' % m.mreturn)
+            f.write('  </div>')
+
+        f.write('  </div>') # close span8
+        f.write(FOOTER)
+        f.close()
+
 # Generate Pages
 for obj in objects:
-    target = 'html/' + obj.name + '.html'
-    f = open(target, 'w')
-    f.write(HEADER)
+    WriteObject(obj)
 
-    # Compose the proper menu for the active object
-    obj_menu = menu.replace('<li><a href="%s.html">' % (obj.name), \
-                                '<li class="active"><a href="%s.html">' % (obj.name))
-    f.write('  ' + obj_menu)
-    f.write('  <div class="span8">')
-    f.write('  <h1>%s object</h1>\n' % (obj.name.title()))
-    f.write('  <p>%s</p>\n' % (obj.desc))
-
-    if len(obj.comm) > 1:
-        f.write('  <p><strong>Comments</strong>: %s</p>\n' % (obj.comm))
-
-    f.write('  <p><strong>Usage</strong><pre class="prettyprint lang-c">%s->method(...);</pre></p>' % (obj.name))
-    f.write('  <div class="page-header"></div>')
-    f.write('  <h2>Methods</h2>\n')
-
-    # Generate a sorted shortcut menu
-    shortcut = []
-    for m in obj.methods:
-        shortcut.append(m.name)
-    shortcut.sort()
-
-    f.write('  <div class="row">\n')
-    i = 0
-    total = 0
-    for entry in shortcut:
-        if i == 0:
-            f.write('    <div class="span2">\n    <ul>\n')
-
-        f.write('        <li><a href="#s_%s">%s</a></li>\n' % (entry, entry))
-
-        i += 1
-        total += 1
-        if i >= 4:
-            f.write('    </ul>\n   </div>\n')
-            i = 0
-
-    if (total % 4) != 0:
-        f.write('    </ul>\n   </div>\n')
-    f.write('  </div>\n')
-
-    for m in obj.methods:
-        f.write('  <div class=\"page-header\"><h3 id="s_%s">%s()</h3>\n' % (m.name, m.name))
-        f.write('  <p>%s</p>\n' % m.desc.strip())
-        f.write('  <p><strong>Prototype</strong><pre class=\"prettyprint lang-c\">%s;</pre>' % m.prototype.strip())
-        f.write('  <strong>Parameters</strong>')
-        if len(m.params) > 0:
-            f.write('  <dl class=\"dl-horizontal\">')
-            for p in m.params:
-                f.write('<dt>' + p['name'] + '</dt><dd>' + p['desc'] + '</dd>')
-
-            f.write('  </dl>')
-        else:
-            f.write('  None')
-
-        f.write('  <strong>Return:</strong> %s' % m.mreturn)
-        f.write('  </div>')
-    f.write('  </div>') # close span8
-    f.write(FOOTER)
-    f.close()
+for pkg in packages:
+    WriteObject(pkg, 'html/packages/')

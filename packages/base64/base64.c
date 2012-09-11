@@ -14,6 +14,14 @@
  * See README and COPYING for more details.
  */
 
+/*
+ * @OBJ_NAME: base64
+ * @OBJ_DESC: The base64 package allows you to encode or decode text using
+ * the Base64 algorithm.
+ * @PKG_HEADER: #include "packages/base64/base64.h"
+ * @PKG_INIT: duda_load_package(base64, "base64");
+ */
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -33,6 +41,16 @@ static const unsigned char base64_table[64] =
  * Caller is responsible for freeing the returned buffer. Returned buffer is
  * nul terminated to make it easier to use as a C string. The nul terminator is
  * not included in out_len.
+ */
+
+/*
+ * @METHOD_NAME: encode
+ * @METHOD_DESC: Encode data into Base64 format
+ * @METHOD_PROTO: unsigned char *encode(const unsigned char *src, size_t len, size_t *out_len)
+ * @METHOD_PARAM: src The data to be encoded
+ * @METHOD_PARAM: len Length of the data to be encoded
+ * @METHOD_PARAM: out_len Pointer to output length variable, or NULL if not used
+ * @METHOD_RETURN: Returns a new allocated buffer containing the data encoded in Base64 format.
  */
 unsigned char *base64_encode(const unsigned char *src, size_t len,
                              size_t *out_len)
@@ -96,6 +114,17 @@ unsigned char *base64_encode(const unsigned char *src, size_t len,
  * or %NULL on failure
  *
  * Caller is responsible for freeing the returned buffer.
+ */
+
+/*
+ * @METHOD_NAME: decode
+ * @METHOD_DESC: Decode Base64 data
+ * @METHOD_PROTO: unsigned char *decode(const unsigned char *src, size_t len, size_t *out_len)
+ * @METHOD_PARAM: src The data to be decoded
+ * @METHOD_PARAM: len Length of the data to be decoded
+ * @METHOD_PARAM: out_len Pointer to output length variable.
+ * @METHOD_RETURN: Returns a new allocated buffer of out_len bytes of decoded data, or NULL on
+ * failure
  */
 unsigned char *base64_decode(const unsigned char *src, size_t len,
                               size_t *out_len)
