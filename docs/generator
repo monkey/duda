@@ -23,8 +23,8 @@ import os
 CSS     = "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap.css' />\n"
 CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/bootstrap-responsive.css' />\n"
 CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/prettify.css' />\n"
-JS      = "    <script type='text/javascript' src='../assets/js/bootstrap.js'></script>\n"
-JS     += "    <script type='text/javascript' src='../assets/js/prettify.js'></script>\n"
+JS      = "    <script type='text/javascript' src='assets/js/bootstrap.js'></script>\n"
+JS     += "    <script type='text/javascript' src='assets/js/prettify.js'></script>\n"
 HEADER  = "<HTML>\n  <HEAD>\n[TITLE]\n%s  </HEAD>\n<BODY onload=\"prettyPrint()\">\n" % (CSS)
 HEADER += "    <div class='container'>\n"
 FOOTER  = "    </div>%s</BODY></HTML>\n" % (JS)
@@ -333,8 +333,6 @@ class WriteObject:
         if self.subdir:
             obj_menu = obj_menu.replace('a href="', 'a href="../')
 
-        #if self.backward:
-
         f.write('  ' + obj_menu)
         f.write('  <div class="span8">')
 
@@ -413,7 +411,13 @@ class WriteObject:
             f.write('  </div>')
 
         f.write('  </div>') # close span8
-        f.write(FOOTER)
+
+        if self.subdir:
+            footer = FOOTER.replace('assets/', '../assets/')
+        else:
+            footer = FOOTER
+
+        f.write(footer)
         f.close()
 
 # Generate Pages
