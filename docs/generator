@@ -394,6 +394,7 @@ class WriteObject:
 
         f.write('  </div>\n')
 
+        obj.methods.sort(key=lambda x: x.name, reverse=False)
         for m in obj.methods:
             f.write('  <div class=\"page-header\"><h3 id="s_%s">%s()</h3>\n' % (m.name, m.name))
             f.write('  <p>%s</p>\n' % m.desc.strip())
@@ -406,7 +407,7 @@ class WriteObject:
 
                 f.write('  </dl>')
             else:
-                f.write('  None')
+                f.write('  None<p></p>')
 
             f.write('  <strong>Return:</strong> %s' % m.mreturn)
             f.write('  </div>')
