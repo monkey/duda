@@ -100,6 +100,9 @@ class DudaObject:
         last = None
 
         for line in content:
+            line = line.replace('||*', '/*')
+            line = line.replace('*||', '*/')
+
             if line.startswith(self.COMM_START):
                 context = True
             elif line.startswith(self.COMM_END):

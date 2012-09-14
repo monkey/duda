@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
+/*  Duda Framework
+ *  --------------
  *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/*
+ * @OBJ_NAME: Websocket
+ * @OBJ_DESC: This package implements the Websocket protocol as described in
+ * the RFC 6455. It allow to define callbacks on specifics events and also implements
+ * a broadcaster service to make easier distribute message among different active
+ * connections.
+ * @PKG_HEADER: #include "packages/websocket/websocket.h"
+ * @PKG_INIT: duda_load_package(websocket, "websocket");
+ *     ...
+ *     ||*
+ *      * In case you want to use the websocket broadcast feature you must enable the
+ *      * broadcaster service:
+ *      *||
+ *     websocket->broadcaster();
+ *
  */
 
 #define _GNU_SOURCE
@@ -221,7 +238,15 @@ int cb_ws_timeout(int sockfd, struct duda_request *dr)
 }
 
 
-/* Initialiaze a websocket request */
+/*
+ * @METHOD_NAME: handshake
+ * @METHOD_DESC: It perform the websocket handshake and connection upgrade. This must be
+ * used inside a normal HTTP callback function. It will take care of the handshake details
+ * and response data.
+ * @METHOD_PROTO: int handshake(duda_request_t *dr)
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN:  Upon successful completion it returns 0, on error returns -1.
+ */
 int ws_handshake(duda_request_t *dr)
 {
     int len;
@@ -400,6 +425,16 @@ int ws_send_data(int sockfd,
     return n;
 }
 
+/*
+ * @METHOD_NAME: write
+ * @METHOD_DESC: It writes a message frame to a specified websocket connection.
+ * @METHOD_PROTO: int write(struct ws_request *wr, unsigned int code, unsigned char *data, uint64_t len)
+ * @METHOD_PARAM: wr the target websocket connection
+ * @METHOD_PARAM: code the message code, can be one of: WS_OPCODE_CONTINUE, WS_OPCODE_TEXT, WS_OPCODE_BINARY, WS_OPCODE_CLOSE, WS_OPCODE_PING or WS_OPCODE_PONG.
+ * @METHOD_PARAM: data the data to be send
+ * @METHOD_PARAM: len the length of the data to be send
+ * @METHOD_RETURN:  Upon successful completion it returns 0, on error returns -1.
+ */
 int ws_write(struct ws_request *wr, unsigned int code, unsigned char *data, uint64_t len)
 {
     return ws_send_data(wr->socket, 1, 0, 0, 0, code, len, data);

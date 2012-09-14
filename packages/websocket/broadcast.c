@@ -67,6 +67,14 @@
  *
  */
 
+/*
+ * @METHOD_NAME: broadcaster
+ * @METHOD_DESC: Initialize the websocket broadcaster service and interfaces. This method
+ * must be invoked inside duda_main().
+ * @METHOD_PROTO: int broadcaster()
+ * @METHOD_RETURN: On success it returns 0, on error this method perform an explicit exit.
+ */
+
 /* Initialize the websocket broadcaster interface */
 int ws_broadcaster()
 {
@@ -101,7 +109,17 @@ int ws_broadcaster()
     return 0;
 }
 
-/* send the broadcast message */
+/*
+ * @METHOD_NAME: broadcast
+ * @METHOD_DESC: It sends a message in broadcast mode to all other active connections.
+ * This method is intended to be used inside a websocket callback. If you look for a method
+ * to broadcast all connection from a worker please review the method broadcast_all().
+ * @METHOD_PROTO: int broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type)
+ * @METHOD_PARAM: wr the websocket request context struct
+ * @METHOD_PARAM: data the data to be send
+ * @METHOD_PARAM: msg_type define the message type, it can be WS_OPCODE_TEXT or WS_OPCODE_BINARY.
+ * @METHOD_RETURN: This method always returns 0.
+ */
 int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type)
 {
     int n;
@@ -134,6 +152,15 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_ty
     return 0;
 }
 
+/*
+ * @METHOD_NAME: broadcast_all
+ * @METHOD_DESC: It sends a message in broadcast mode to all active connections. This method
+ * is intended to be used from a worker.
+ * @METHOD_PROTO: int broadcast(unsigned char *data, uint64_t len, int msg_type)
+ * @METHOD_PARAM: data the data to be send
+ * @METHOD_PARAM: msg_type define the message type, it can be WS_OPCODE_TEXT or WS_OPCODE_BINARY.
+ * @METHOD_RETURN: This method always returns 0.
+ */
 int ws_broadcast_all(unsigned char *data, uint64_t len, int msg_type)
 {
     return ws_broadcast(NULL, data, len, msg_type);
