@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,8 +59,19 @@ int sql_dump(sqlite3 *db, const char *query, sqlite3_stmt **handle);
 int sql_exec(duda_request_t *dr, sqlite3 *db, const char *query,
              int (*callback) (void *, int, char **, char **), void *data);
 int sql_step(sqlite3_stmt *handle);
+int sql_done(sqlite3_stmt *handle);
 int sql_close(sqlite3 *db);
 
 #define SQLITE_FOREACH(handle) while (sqlite->step(handle) == SQLITE_ROW)
 
+/*
+ * @METHOD_NAME: sqlite_foreach
+ * @METHOD_DESC: This is a helper macro which allow to walk through a result
+ * set of a handler.
+ * @METHOD_PROTO: sqlite_foreach(sqlite3_stmt *handle) {...}
+ * @METHOD_PARAM: handler the result sets handler
+ * @METHOD_RETURN: This is not a function who return some value, its a loop-like
+ * macro.
+ */
+#define sqlite_foreach(handle) SQLITE_FOREACH(handle)
 #endif

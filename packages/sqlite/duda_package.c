@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * @OBJ_NAME: SQLite
+ * @OBJ_DESC: The SQLite package expose a set of wrapper methods to use the
+ * SQLite database.
+ * @PKG_HEADER: #include "packages/sqlite/sqlite.h"
+ * @PKG_INIT: duda_load_package(sqlite, "sqlite");
  */
 
 #include "duda_api.h"
@@ -38,7 +46,7 @@ struct duda_api_sqlite *get_sqlite_api()
     sqlite->get_double = sqlite3_column_double;
     sqlite->get_text   = sqlite3_column_text;
 
-    sqlite->done       = sqlite3_finalize;
+    sqlite->done       = sql_done;
     sqlite->exec       = sql_exec;
     sqlite->close      = sql_close;
 

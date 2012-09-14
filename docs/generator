@@ -143,6 +143,10 @@ class DudaObject:
                 row = line[3:].rstrip() + '\n'
                 if last == self.LAST_METHOD:
                     self.method.set(row)
+                elif last == self.METHOD_PROTO:
+                    self.method.prototype += '\n' + row
+                elif last == self.METHOD_RETURN:
+                    self.method.mreturn += row
                 elif last == self.OBJ_DESC:
                     self.desc += row
                 elif last == self.OBJ_COMM:
@@ -166,6 +170,7 @@ class DudaObject:
             elif line.startswith(self.METHOD_PROTO):
                 row = line.split(self.METHOD_PROTO)[1].strip()
                 self.method.prototype = row
+                last = self.METHOD_PROTO
 
             # @METHOD_DESC
             elif line.startswith(self.METHOD_DESC):
@@ -187,6 +192,7 @@ class DudaObject:
                 row = line.split(self.METHOD_RETURN)[1].strip() + '\n'
                 self.method.set_active(self.method.F_RETURN)
                 self.method.set(row)
+                last = self.METHOD_RETURN
 
             # End of comments
             elif line.startswith(self.COMM_END):
@@ -291,11 +297,11 @@ print "  DOC   Duda API Packages: %i" % len(packages)
 menu  = L_MENU_HEADER
 menu += '  <li class="nav-header">API Objects</li>\n'
 for obj in objects:
-    menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name, obj.name)
+    menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name.lower(), obj.name.lower())
 
 menu += '  <li class="nav-header">Packages</li>\n'
 for pkg in packages:
-    menu += '  <li><a href="packages/%s.html">%s</a></li>\n' % (pkg.name, pkg.name)
+    menu += '  <li><a href="packages/%s.html">%s</a></li>\n' % (pkg.name.lower(), pkg.name.lower())
 
 menu += L_MENU_FOOTER
 
@@ -306,7 +312,7 @@ class WriteObject:
         if os.path.exists(path) is False:
             os.makedirs(path)
 
-        target = path + obj.name + '.html'
+        target = path + obj.name.lower() + '.html'
 
         if len(path.split('/')) > 2:
             self.subdir = True
@@ -337,9 +343,9 @@ class WriteObject:
         f.write('  <div class="span8">')
 
         if self.subdir:
-            f.write('  <h1>%s package object</h1>\n' % (obj.name.title()))
+            f.write('  <h1>%s package object</h1>\n' % (obj.name))
         else:
-            f.write('  <h1>%s object</h1>\n' % (obj.name.title()))
+            f.write('  <h1>%s object</h1>\n' % (obj.name))
 
         f.write('  <p>%s</p>\n' % (obj.desc))
 
@@ -359,10 +365,10 @@ class WriteObject:
             f.write('</pre>')
             f.write('<p>Once the package is loaded, you can use any methods from your callbacks ' \
                     'in the following way:</pre>')
-            f.write('<pre class="prettyprint lang-c">%s->method(...)</pre>' % obj.name)
+            f.write('<pre class="prettyprint lang-c">%s->method(...)</pre>' % obj.name.lower())
         else:
             f.write('  <p><strong>Usage</strong>')
-            f.write('     <pre class="prettyprint lang-c">%s->method(...);</pre></p>' % (obj.name))
+            f.write('     <pre class="prettyprint lang-c">%s->method(...);</pre></p>' % (obj.name.lower()))
         f.write('  <div class="page-header"></div>')
         f.write('  <h2>Methods</h2>\n')
 

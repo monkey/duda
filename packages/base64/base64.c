@@ -15,7 +15,7 @@
  */
 
 /*
- * @OBJ_NAME: base64
+ * @OBJ_NAME: Base64
  * @OBJ_DESC: The base64 package allows you to encode or decode text using
  * the Base64 algorithm.
  * @PKG_HEADER: #include "packages/base64/base64.h"
@@ -123,8 +123,7 @@ unsigned char *base64_encode(const unsigned char *src, size_t len,
  * @METHOD_PARAM: src The data to be decoded
  * @METHOD_PARAM: len Length of the data to be decoded
  * @METHOD_PARAM: out_len Pointer to output length variable.
- * @METHOD_RETURN: Returns a new allocated buffer of out_len bytes of decoded data, or NULL on
- * failure
+ * @METHOD_RETURN: Returns a new allocated buffer of out_len bytes of decoded data, or NULL on failure
  */
 unsigned char *base64_decode(const unsigned char *src, size_t len,
                               size_t *out_len)

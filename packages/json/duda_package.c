@@ -20,8 +20,8 @@
  */
 
 /*
- * @OBJ_NAME: json
- * @OBJ_DESC: The json package expose differnet methods to compose or parse
+ * @OBJ_NAME: JSON
+ * @OBJ_DESC: The JSON package expose differnet methods to compose or parse
  * JSON data.
  * @PKG_HEADER: #include "packages/json/json.h"
  * @PKG_INIT: duda_load_package(json, "json");
