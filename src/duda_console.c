@@ -85,8 +85,8 @@ void duda_console_cb_map(duda_request_t *dr)
     duda_response_http_header(dr, "Content-Type: text/html");
 
     /* Header */
-    duda_response_printf(dr, header, dr->ws_root->app_name, css);
-    duda_response_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->app_name);
+    duda_response_printf(dr, header, dr->ws_root->name.data, css);
+    duda_response_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->name.data);
 
     /* List of interfaces */
     mk_list_foreach(head_iface, ws->map) {

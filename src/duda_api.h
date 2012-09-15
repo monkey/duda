@@ -24,6 +24,7 @@
 
 #include <pthread.h>
 
+#include "MKPlugin.h"
 #include "mk_list.h"
 #include "duda.h"
 #include "duda_event.h"

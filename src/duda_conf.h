@@ -37,9 +37,9 @@ struct vhost_services {
 
 /* Web service information */
 struct web_service {
-    char *app_name;
-    int  app_name_len;
-    int  app_enabled;
+    mk_pointer name;
+    mk_pointer docroot;
+    int  enabled;
     void *handler;
 
     /* Specifics data when registering the service */

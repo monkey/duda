@@ -75,21 +75,15 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     /* Load and invoke duda_main() */
     service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap");
     if (!service_init) {
-        mk_err("Duda: invalid web service %s", ws->app_name);
+        mk_err("Duda: invalid web service %s", ws->name.data);
         exit(EXIT_FAILURE);
     }
 
     if (service_init(api) == 0) {
-        PLUGIN_TRACE("[%s] duda_main()", ws->app_name);
+        PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
         ws->map = (struct mk_list *) duda_load_symbol(ws->handler, "duda_interfaces");
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
-
-        struct mk_list *head_pkg;
-        struct duda_package *entry_pkg;
-        mk_list_foreach(head_pkg, ws->packages) {
-            entry_pkg = mk_list_entry(head_pkg, struct duda_package, _head);
-        }
 
         /* Register Duda built-in interfaces: console */
         cs_iface  = api->map->interface_new("console");
@@ -146,23 +140,23 @@ int duda_load_services()
 
             service_path = NULL;
             mk_api->str_build(&service_path, &len,
-                              "%s/%s.duda", services_root, entry_ws->app_name);
+                              "%s/%s.duda", services_root, entry_ws->name.data);
 
             /* Validate path, file and library load */
             if (mk_api->file_get_info(service_path, &finfo) != 0 ||
                 finfo.is_file != MK_TRUE ||
                 !(entry_ws->handler = duda_load_library(service_path))) {
 
-                entry_ws->app_enabled = 0;
+                entry_ws->enabled = 0;
                 mk_api->mem_free(service_path);
-                mk_warn("Duda: service '%s' not found", entry_ws->app_name);
+                mk_warn("Duda: service '%s' not found", entry_ws->name.data);
                 mk_list_del(head_ws);
                 mk_api->mem_free(entry_ws);
                 continue;
             }
 
             /* Success */
-            mk_info("Duda: loading service '%s'", entry_ws->app_name);
+            mk_info("Duda: loading service '%s'", entry_ws->name.data);
             mk_api->mem_free(service_path);
 
             /* Register service */
@@ -524,6 +518,54 @@ int duda_service_end(duda_request_t *dr)
     return ret;
 }
 
+int duda_service_html(duda_request_t *dr)
+{
+    int n_copy;
+    int new_path_len;
+    char *tmp;
+    struct session_request *sr = dr->sr;
+
+    /* Check if we have a local DocumentRoot for this web service */
+    if (!dr->ws_root->docroot.data) {
+        return -1;
+    }
+
+    new_path_len = (sr->uri_processed.len - dr->ws_root->name.len - 1);
+    new_path_len += dr->ws_root->docroot.len;
+
+    /*
+     * Is the new path length minor than MK_PATH_BASE ?, sr->real_path_static have a length
+     * of MK_PATH_BASE
+     */
+    if (new_path_len < MK_PATH_BASE) {
+        if (sr->real_path.data != sr->real_path_static) {
+            mk_api->mem_free(sr->real_path.data);
+            sr->real_path.data = sr->real_path_static;
+        }
+    }
+    else {
+        if (new_path_len >= sr->real_path.len) {
+            tmp = mk_api->mem_realloc(sr->real_path.data, new_path_len + 1);
+            if (tmp) {
+                sr->real_path.data = tmp;
+            }
+        }
+    }
+
+    n_copy = sr->uri_processed.len - dr->ws_root->name.len;
+
+    /* Compose new file path */
+    strncpy(sr->real_path.data, dr->ws_root->docroot.data, dr->ws_root->docroot.len);
+    strncpy(sr->real_path.data + dr->ws_root->docroot.len,
+            sr->uri_processed.data + dr->ws_root->name.len + 2,
+            n_copy - 1);
+    sr->real_path.data[dr->ws_root->docroot.len + n_copy - 2] = '\0';
+
+    PLUGIN_TRACE("New path is '%s'", sr->real_path.data);
+
+    return 0;
+}
+
 int duda_service_run(struct plugin *plugin,
                      struct client_session *cs,
                      struct session_request *sr,
@@ -560,13 +602,12 @@ int duda_service_run(struct plugin *plugin,
     dr->_st_body_writes = 0;
 
     /* Parse request */
-    if (duda_request_parse(sr, dr) != 0) {
+    if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
+        if (duda_service_html(dr) == 0) {
+            mk_api->file_get_info(dr->sr->real_path.data, &dr->sr->file_info);
+            dr->sr->stage30_blocked = MK_TRUE;
+        }
         mk_api->mem_free(dr);
-        return -1;
-    }
-
-    if (!dr->_method) {
-        PLUGIN_TRACE("method not found");
         return -1;
     }
 
@@ -605,10 +646,10 @@ struct web_service *duda_get_service_from_uri(struct session_request *sr,
     /* match services */
     mk_list_foreach(head, &vs_host->services) {
         ws_entry = mk_list_entry(head, struct web_service, _head);
-        if (strncmp(ws_entry->app_name,
+        if (strncmp(ws_entry->name.data,
                     sr->uri_processed.data + 1,
                     pos - 1) == 0) {
-            PLUGIN_TRACE("WebService match: %s", ws_entry->app_name);
+            PLUGIN_TRACE("WebService match: %s", ws_entry->name.data);
             return ws_entry;
         }
     }

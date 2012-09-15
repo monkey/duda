@@ -84,6 +84,7 @@ int duda_conf_vhost_init()
 {
     /* Section data */
     char *app_name;
+    char *app_docroot;
     int   app_enabled;
 
     /* vhost services list */
@@ -120,6 +121,7 @@ int duda_conf_vhost_init()
             if (strcasecmp(section->name, "WEB_SERVICE") == 0) {
                 app_name = NULL;
                 app_enabled = MK_FALSE;
+                app_docroot = NULL;
 
                 /* Get section keys */
                 app_name = mk_api->config_section_getval(section,
@@ -129,11 +131,25 @@ int duda_conf_vhost_init()
                                                                      "Enabled",
                                                                      MK_CONFIG_VAL_BOOL);
 
+                app_docroot = mk_api->config_section_getval(section,
+                                                            "DocumentRoot",
+                                                            MK_CONFIG_VAL_STR);
+
                 if (app_name && mk_is_bool(app_enabled)) {
                     ws = mk_api->mem_alloc_z(sizeof(struct web_service));
-                    ws->app_name = mk_api->str_dup(app_name);
-                    ws->app_name_len = strlen(ws->app_name);
-                    ws->app_enabled = app_enabled;
+
+                    /* name */
+                    ws->name.data = mk_api->str_dup(app_name);
+                    ws->name.len  = strlen(app_name);
+
+                    /* enable */
+                    ws->enabled = app_enabled;
+
+                    /* document root */
+                    if (app_docroot) {
+                        ws->docroot.data = mk_api->str_dup(app_docroot);
+                        ws->docroot.len  = strlen(app_docroot);
+                    }
                     mk_list_add(&ws->_head, &vs->services);
                 }
                 else {
@@ -158,8 +174,8 @@ int duda_conf_vhost_init()
         mk_list_foreach(service_head, &service_entry->services) {
             ws_entry = mk_list_entry(service_head, struct web_service, _head);
             PLUGIN_TRACE("---");
-            PLUGIN_TRACE(" app_name    : %s", ws_entry->app_name);
-            PLUGIN_TRACE(" app_enabled : %i", ws_entry->app_enabled);
+            PLUGIN_TRACE(" app_name    : %s", ws_entry->name.data);
+            PLUGIN_TRACE(" app_enabled : %i", ws_entry->enabled);
         }
     }
 #endif
