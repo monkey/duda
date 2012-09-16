@@ -350,6 +350,7 @@ struct duda_api_response *duda_response_object()
     obj->wait          = duda_response_wait;
     obj->cont          = duda_response_continue;
     obj->_end          = duda_response_end;
+    obj->_finalize     = duda_response_finalize;
     obj->flush         = duda_response_flush;
 
     return obj;

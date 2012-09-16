@@ -28,6 +28,11 @@
 #include "broadcast.h"
 #include "websocket.h"
 
+#ifdef PLUGIN_TRACE
+#undef PLUGIN_TRACE
+#define PLUGIN_TRACE   printf
+#endif
+
 /* Create a ws_request node */
 struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
                                      void (*on_open)   (duda_request_t *, ws_request_t *),

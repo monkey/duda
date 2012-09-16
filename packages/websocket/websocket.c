@@ -65,7 +65,9 @@
 #include "protocol.h"
 #include "callbacks.h"
 
-#define ws_invalid_upgrade(dr) response->http_status(dr, 400); return -1;
+#define ws_invalid_upgrade(dr) response->http_status(dr, 400);  \
+    response->finalize(dr, NULL);                               \
+    return -1;
 
 #ifdef PLUGIN_TRACE
 #undef PLUGIN_TRACE
@@ -264,14 +266,19 @@ int ws_handshake(duda_request_t *dr)
     SHA_CTX sha; /* defined in sha1/sha1.h */
 
     wr_node = ws_request_get(dr->socket);
+    if (wr_node) {
+        ws_request_delete(dr->socket);
+        wr_node = NULL;
+    }
 
     /*
      * We only accept a new request who have specified a connection
      * upgrade to talk in Websocket protocol
      */
     if (!wr_node && dr->sr->connection.data) {
-        if (strncasecmp(dr->sr->connection.data,
-                        WS_CONN_UPGRADE, sizeof(WS_CONN_UPGRADE) - 1) != 0) {
+        if (monkey->str_search_n(dr->sr->connection.data,
+                                 WS_CONN_UPGRADE,
+                                 MK_STR_INSENSITIVE, dr->sr->connection.len) < 0) {
             ws_invalid_upgrade(dr);
         }
 
@@ -280,8 +287,7 @@ int ws_handshake(duda_request_t *dr)
         /* Get upgrade type */
         row = request->header_get(dr, WS_HEADER_UPGRADE);
         if (strncasecmp(row, WS_UPGRADE_WS, sizeof(WS_UPGRADE_WS) - 1) != 0) {
-            response->http_status(dr, 400);
-            return -1;
+            ws_invalid_upgrade(dr);
         }
 
         PLUGIN_TRACE("[FD %i] WebSockets Upgrade to 'websocket'\n", dr->socket);
@@ -291,8 +297,7 @@ int ws_handshake(duda_request_t *dr)
 
         if (!ws_key) {
             PLUGIN_TRACE("[FD %i] WebSockets missing key\n", dr->socket);
-            response->http_status(dr, 400);
-            return -1;
+            ws_invalid_upgrade(dr);
         }
 
         monkey->event_socket_change_mode(dr->socket, MK_EPOLL_RW, MK_EPOLL_LEVEL_TRIGGERED);

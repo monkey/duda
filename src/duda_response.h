@@ -37,6 +37,7 @@ struct duda_api_response {
     int (*wait) (duda_request_t *);
     int (*cont) (duda_request_t *);
     int (*_end) (duda_request_t *, void (*end_callback) ());
+    int (*_finalize) (duda_request_t *, void (*end_callback) ());
     int (*flush)(duda_request_t *dr);
 
 };
