@@ -82,10 +82,14 @@ int duda_conf_main_init(const char *confdir)
 
 int duda_conf_vhost_init()
 {
+    int ret;
+    int len;
+
     /* Section data */
     char *app_name;
     char *app_docroot;
     int   app_enabled;
+    struct file_info finfo;
 
     /* vhost services list */
     struct vhost_services *vs;
@@ -147,13 +151,29 @@ int duda_conf_vhost_init()
 
                     /* document root */
                     if (app_docroot) {
-                        ws->docroot.data = mk_api->str_dup(app_docroot);
-                        ws->docroot.len  = strlen(app_docroot);
+                        ret = mk_api->file_get_info(app_docroot, &finfo);
+                        if (ret != 0 || finfo.is_directory != MK_TRUE) {
+                            mk_err("Duda: invalid DocumentRoot, it must be a directory");
+                            exit(EXIT_FAILURE);
+                        }
+
+                        len = strlen(app_docroot);
+                        if (app_docroot[len - 1] != '/') {
+                            ws->docroot.data = mk_api->mem_alloc(len + 2);
+                            strncpy(ws->docroot.data, app_docroot, len);
+                            ws->docroot.data[len]    = '/';
+                            ws->docroot.data[len + 1]= '\0';
+                            ws->docroot.len  = len + 2;
+                        }
+                        else {
+                            ws->docroot.data = mk_api->str_dup(app_docroot);
+                            ws->docroot.len  = len;
+                        }
                     }
                     mk_list_add(&ws->_head, &vs->services);
                 }
                 else {
-                    mk_warn("Invalid web service, skipping");
+                    mk_warn("Duda: Invalid web service, skipping");
                 }
             }
         }
