@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
+/*  Duda I/O
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+ *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,17 +66,6 @@ duda_package_t *pkg_temp;
 #define mk_err(a, ...)    msg->err("mk_err()" _invalid_call)
 #define mk_bug(a, ...)    msg->err("mk_bug()" _invalid_call)
 
-
-/* API functions */
-duda_interface_t *duda_interface_new(char *uid);
-duda_method_t *duda_method_new(char *uid, char *callback, int n_params);
-duda_method_t *duda_method_builtin_new(char *uid,
-                                       void (*cb_builtin) (duda_request_t *),
-                                       int n_params);
-duda_param_t *duda_param_new(char *uid, short int max_len);
-
-void duda_interface_add_method(duda_method_t *method, duda_interface_t *iface);
-void duda_method_add_param(duda_param_t *param, duda_method_t *method);
 
 struct duda_api_objects *duda_new_api_objects();
 

@@ -28,6 +28,7 @@
 #include "duda_console.h"
 #include "duda.h"
 #include "duda_api.h"
+#include "duda_map.h"
 #include "duda_param.h"
 #include "duda_session.h"
 #include "duda_xtime.h"
@@ -49,21 +50,11 @@ struct duda_api_objects *duda_api_master()
     objs = mk_api->mem_alloc(sizeof(struct duda_api_objects));
     objs->duda     = mk_api->mem_alloc(sizeof(struct duda_api_main));
     objs->monkey   = mk_api;
-    objs->map      = mk_api->mem_alloc(sizeof(struct duda_api_map));
     objs->msg      = mk_api->mem_alloc(sizeof(struct duda_api_msg));
     objs->debug    = mk_api->mem_alloc(sizeof(struct duda_api_debug));
 
     /* MAP Duda calls */
     objs->duda->package_load = duda_package_load;
-
-    /* MAP object */
-    objs->map->interface_new = duda_interface_new;
-    objs->map->interface_add_method = duda_interface_add_method;
-    objs->map->method_new = duda_method_new;
-    objs->map->method_builtin_new = duda_method_builtin_new;
-
-    objs->map->method_add_param = duda_method_add_param;
-    objs->map->param_new = duda_param_new;
 
     /* MSG object */
     objs->msg->info  = duda_debug_info;
@@ -73,6 +64,7 @@ struct duda_api_objects *duda_api_master()
 
     /* Assign Objects */
     objs->global   = duda_global_object();
+    objs->map      = duda_map_object();
     objs->event    = duda_event_object();
     objs->request  = duda_request_object();
     objs->response = duda_response_object();

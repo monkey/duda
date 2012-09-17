@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,34 +19,34 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "MKPlugin.h"
-#include "webservice.h"
+#include "duda.h"
+#include "duda_map.h"
 
 /* Creates a new interface */
-duda_interface_t *duda_interface_new(char *uid)
+duda_interface_t *duda_map_interface_new(char *uid)
 {
-  duda_interface_t *iface;
+    duda_interface_t *iface;
 
-  iface = mk_api->mem_alloc(sizeof(duda_interface_t));
-  iface->uid     = uid;
-  iface->uid_len = strlen(uid);
-  mk_list_init(&iface->methods);
+    iface = mk_api->mem_alloc(sizeof(duda_interface_t));
+    iface->uid     = uid;
+    iface->uid_len = strlen(uid);
+    mk_list_init(&iface->methods);
 
-  return iface;
+    return iface;
 }
 
 /* Add a method to an interface */
-void duda_interface_add_method(duda_method_t *method,
-                               duda_interface_t *iface)
+void duda_map_interface_add_method(duda_method_t *method,
+                                   duda_interface_t *iface)
 {
     mk_list_add(&method->_head, &iface->methods);
 }
 
 
 /* Creates a new method */
-duda_method_t *_duda_method_new(char *uid, char *cb_webservice,
-                                void (*cb_builtin)(duda_request_t *),
-                                int n_params)
+duda_method_t *_duda_map_method_new(char *uid, char *cb_webservice,
+                                    void (*cb_builtin)(duda_request_t *),
+                                    int n_params)
 {
     duda_method_t *method;
 
@@ -70,27 +70,27 @@ duda_method_t *_duda_method_new(char *uid, char *cb_webservice,
     return method;
 }
 
-duda_method_t *duda_method_new(char *uid, char *callback, int n_params)
+duda_method_t *duda_map_method_new(char *uid, char *callback, int n_params)
 {
-    return _duda_method_new(uid, callback, NULL, n_params);
+    return _duda_map_method_new(uid, callback, NULL, n_params);
 }
 
 /* Creates a new method */
-duda_method_t *duda_method_builtin_new(char *uid,
-                                       void (*cb_builtin) (duda_request_t *),
-                                       int n_params)
+duda_method_t *duda_map_method_builtin_new(char *uid,
+                                           void (*cb_builtin) (duda_request_t *),
+                                           int n_params)
 {
-    return _duda_method_new(uid, NULL, cb_builtin, n_params);
+    return _duda_map_method_new(uid, NULL, cb_builtin, n_params);
 }
 
 /* Add a parameter to a method */
-void duda_method_add_param(duda_param_t *param, duda_method_t *method)
+void duda_map_method_add_param(duda_param_t *param, duda_method_t *method)
 {
     mk_list_add(&param->_head, &method->params);
 }
 
 /* Creates a new parameter */
-duda_param_t *duda_param_new(char *uid, short int max_len)
+duda_param_t *duda_map_param_new(char *uid, short int max_len)
 {
     duda_param_t *param;
 
@@ -101,3 +101,17 @@ duda_param_t *duda_param_new(char *uid, short int max_len)
     return param;
 }
 
+struct duda_api_map *duda_map_object()
+{
+    struct duda_api_map *obj;
+
+    obj = mk_api->mem_alloc(sizeof(struct duda_api_map));
+    obj->interface_new = duda_map_interface_new;
+    obj->interface_add_method = duda_map_interface_add_method;
+    obj->method_new = duda_map_method_new;
+    obj->method_builtin_new = duda_map_method_builtin_new;
+    obj->method_add_param = duda_map_method_add_param;
+    obj->param_new = duda_map_param_new;
+
+    return obj;
+}

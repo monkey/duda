@@ -27,6 +27,7 @@
 #include "MKPlugin.h"
 #include "mk_list.h"
 #include "duda.h"
+#include "duda_map.h"
 #include "duda_event.h"
 #include "duda_global.h"
 #include "duda_cookie.h"
@@ -34,53 +35,13 @@
 #include "duda_request.h"
 #include "duda_response.h"
 
-/* types of data */
-typedef struct duda_interface duda_interface_t;
-typedef struct duda_method duda_method_t;
-typedef struct duda_param duda_param_t;
+/* data types */
 typedef void * duda_callback_t;
 
 /* The basic web service information */
 struct duda_webservice {
     char *app_name;
     char *app_path;
-};
-
-/* Interfaces of the web service */
-struct duda_interface {
-    char *uid;
-    int   uid_len;
-
-    /* interface methods */
-    struct mk_list methods;
-
-    /* mk_list */
-    struct mk_list _head;
-};
-
-/* Methods associated to an interface */
-struct duda_method {
-    char *uid;
-    int   uid_len;
-
-    short int num_params;
-    char *callback;
-    void (*cb_webservice) (duda_request_t *);
-    void (*cb_builtin)    (duda_request_t *);
-
-    struct mk_list params;
-
-    /* mk_list */
-    struct mk_list _head;
-};
-
-/* Parameters: each method supports N parameters */
-struct duda_param {
-    char *name;
-    short int max_len;
-
-    /* mk_list */
-    struct mk_list _head;
 };
 
 /*
@@ -95,54 +56,10 @@ struct duda_param {
  * Object pointing to the original parent API which expose the Monkey
  * internal, here we have many useful functions to manage strings, memory,
  * configuration files, etc.
- *
- *
- * Map
- * ---
- * An object which provide methods to create the service map based on
- * interfaces, methods and parameters.
- *
- *
- * Message
- * -------
- * Provide methods to print different informative messages.
- *
- *
- * Response
- * --------
- * Methods to generate response data to the clien
- *
- *
- * Debug
- * -----
- * A set of methods to debug the web service
- *
- *
- * Params
- * ------
- * A set of methods to retrieve web service parameters
- *
  */
 
 /* MONKEY object: monkey->x() */
 struct plugin_api *monkey;
-
-/* MAP object: map->x() */
-struct duda_api_map {
-    /* interface_ */
-    duda_interface_t *(*interface_new) (char *);
-    void (*interface_add_method) (duda_method_t *, duda_interface_t *);
-
-    /* method_ */
-    duda_method_t *(*method_new) (char *, char *, int);
-    duda_method_t *(*method_builtin_new) (char *, void (*cb_builtin) (duda_request_t *),
-                                          int n_params);
-
-    void (*method_add_param) (duda_param_t *, duda_method_t *);
-
-    /* param_ */
-    duda_param_t *(*param_new) (char *, short int);
-};
 
 /* MSG object: msg->x() */
 struct duda_api_msg {

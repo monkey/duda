@@ -27,6 +27,7 @@
 
 #include "MKPlugin.h"
 #include "duda.h"
+#include "duda_map.h"
 #include "duda_api.h"
 #include "duda_conf.h"
 

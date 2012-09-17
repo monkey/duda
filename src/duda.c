@@ -24,6 +24,7 @@
 
 #include "MKPlugin.h"
 #include "duda.h"
+#include "duda_map.h"
 #include "duda_conf.h"
 #include "duda_event.h"
 #include "duda_queue.h"
@@ -271,11 +272,6 @@ int _mkp_event_timeout(int sockfd)
     }
 
     return MK_PLUGIN_RET_EVENT_CONTINUE;
-}
-
-int _mkp_core_prctx(struct server_config *config)
-{
-    return 0;
 }
 
 /* Thread context initialization */
