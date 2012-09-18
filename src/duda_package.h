@@ -54,7 +54,8 @@ struct duda_package {
     cookie   = api->cookie;                                             \
     global   = api->global;                                             \
     xtime    = api->xtime;                                              \
-    mk_list_init(&duda_interfaces);                                     \
+    mk_list_init(&duda_map_interfaces);                                 \
+    mk_list_init(&duda_map_urls);                                       \
     mk_list_init(&duda_global_dist);
 
 /* Data type */

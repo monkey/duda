@@ -29,6 +29,7 @@
 /* Monkey specifics */
 #include "MKPlugin.h"
 #include "duda_api.h"
+#include "duda_map.h"
 #include "duda_global.h"
 #include "duda_package.h"
 #include "duda_param.h"
@@ -44,16 +45,17 @@ duda_package_t *pkg_temp;
 /* Duda Macros */
 #define DUDA_REGISTER(app_name, app_path) struct duda_webservice ws = {app_name, app_path}
 
-#define duda_load_package(object, package)              \
-    pkg_temp = api->duda->package_load(package, api);   \
+#define duda_load_package(object, package)                \
+    pkg_temp = api->duda->package_load(package, api);     \
     mk_list_add(&pkg_temp->_head, &duda_ws_packages);     \
     object = pkg_temp->api;
 
 #define duda_service_add_interface(iface) do {              \
-        mk_list_add(&iface->_head,  &duda_interfaces);      \
+        mk_list_add(&iface->_head,  &duda_map_interfaces);  \
     } while(0);
 
-#define duda_map_add_interface(iface) mk_list_add(&iface->_head,  duda_interfaces)
+
+#define duda_map_add_interface(iface) mk_list_add(&iface->_head,  duda_map_interfaces)
 
 /* Invalid object messages */
 #undef mk_info
@@ -97,7 +99,8 @@ int _duda_main(struct duda_api_objects *api);
         xtime    = api->xtime;                                          \
                                                                         \
         /* Initialize global linked lists */                            \
-        mk_list_init(&duda_interfaces);                                 \
+        mk_list_init(&duda_map_interfaces);                             \
+        mk_list_init(&duda_map_urls);                                   \
         mk_list_init(&duda_global_dist);                                \
         mk_list_init(&duda_ws_packages);                                \
                                                                         \

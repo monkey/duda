@@ -56,6 +56,8 @@ typedef struct duda_request {
     struct client_session *cs;
     struct session_request *sr;
 
+    /* Static map */
+
     /* Method structure */
     struct duda_method *_method;
 

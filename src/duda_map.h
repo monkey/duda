@@ -23,6 +23,21 @@
 #define DUDA_API_MAP_H
 
 #include "duda.h"
+#include "duda_objects.h"
+
+/*
+ * A static map entry, it allows to maps static URLs with
+ * callbacks.
+ */
+struct duda_map_static_cb {
+    char *path;
+    int  path_len;
+
+    char *cb_name;
+    void (*callback) (duda_request_t *);
+
+    struct mk_list _head;
+};
 
 /* Interfaces of the web service */
 struct duda_interface {
@@ -63,7 +78,11 @@ struct duda_param {
 
 
 struct duda_api_map {
+    /* Static stuff */
+    int (*_static_add) (const char *, const char *, struct mk_list *);
+
     /* interface_ */
+    void (*_add_interface) (struct duda_interface *, struct mk_list *);
     struct duda_interface *(*interface_new) (char *);
     void (*interface_add_method) (struct duda_method *, struct duda_interface *);
 
@@ -93,6 +112,12 @@ duda_param_t *duda_map_param_new(char *uid, short int max_len);
 
 void duda_map_interface_add_method(duda_method_t *method, duda_interface_t *iface);
 void duda_map_method_add_param(duda_param_t *param, duda_method_t *method);
+int duda_map_static_check(duda_request_t *dr);
+
 struct duda_api_map *duda_map_object();
+
+/* Object macros */
+#define static_add(p, cb) _static_add(p, cb, &duda_map_urls)
+#define add_interface(i)  _add_interface(i, &duda_map_interfaces)
 
 #endif

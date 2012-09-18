@@ -69,9 +69,10 @@ void *duda_load_symbol(void *handle, const char *symbol)
 int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 {
     int (*service_init) (struct duda_api_objects *);
-    struct mk_list *head_iface, *head_method;
+    struct mk_list *head_iface, *head_method, *head_urls;
     struct duda_interface *entry_iface, *cs_iface;
     struct duda_method *entry_method, *cs_method;
+    struct duda_map_static_cb *static_cb;
 
     /* Load and invoke duda_main() */
     service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap");
@@ -82,9 +83,15 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 
     if (service_init(api) == 0) {
         PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
-        ws->map = (struct mk_list *) duda_load_symbol(ws->handler, "duda_interfaces");
+        ws->map_interfaces = duda_load_symbol(ws->handler, "duda_map_interfaces");
+        ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
+
+        mk_list_foreach(head_urls, ws->map_urls) {
+            static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
+            static_cb->callback = duda_load_symbol(ws->handler, static_cb->cb_name);
+        }
 
         /* Register Duda built-in interfaces: console */
         cs_iface  = api->map->interface_new("console");
@@ -97,10 +104,10 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         cs_method = api->map->method_builtin_new("map", duda_console_cb_map, 0);
         api->map->interface_add_method(cs_method, cs_iface);
 
-        mk_list_add(&cs_iface->_head, ws->map);
+        mk_list_add(&cs_iface->_head, ws->map_interfaces);
 
         /* Lookup callback functions for each registered method */
-        mk_list_foreach(head_iface, ws->map) {
+        mk_list_foreach(head_iface, ws->map_interfaces) {
             entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
             mk_list_foreach(head_method, &entry_iface->methods) {
                 entry_method = mk_list_entry(head_method, struct duda_method, _head);
@@ -367,7 +374,7 @@ int duda_request_set_method(duda_request_t *dr)
     struct duda_method *entry_method = NULL;
 
     /* Finds the corresponding duda_method structure */
-    mk_list_foreach(head_iface, dr->ws_root->map) {
+    mk_list_foreach(head_iface, dr->ws_root->map_interfaces) {
         entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
 
         if (entry_iface->uid_len == dr->interface.len &&
@@ -514,6 +521,10 @@ int duda_service_end(duda_request_t *dr)
     return ret;
 }
 
+/*
+ * Check if the requested path belongs to a static content owned by
+ * the web service
+ */
 int duda_service_html(duda_request_t *dr)
 {
     int n_copy;
@@ -597,7 +608,12 @@ int duda_service_run(struct plugin *plugin,
     dr->_st_http_headers_sent = MK_FALSE;
     dr->_st_body_writes = 0;
 
-    /* Parse request */
+    /* Parse request for Duda static maps */
+    if (duda_map_static_check(dr) == 0) {
+        return 0;
+    }
+
+    /* Parse request for Duda map format */
     if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
         if (duda_service_html(dr) == 0) {
             mk_api->file_get_info(dr->sr->real_path.data, &dr->sr->file_info);
@@ -610,6 +626,7 @@ int duda_service_run(struct plugin *plugin,
     if (dr->_method->cb_webservice) {
         PLUGIN_TRACE("CB %s()", dr->_method->callback);
         dr->_method->cb_webservice(dr);
+        return 0;
     }
     else if (dr->_method->cb_builtin) {
         dr->_method->cb_builtin(dr);

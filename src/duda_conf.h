@@ -43,7 +43,8 @@ struct web_service {
     void *handler;
 
     /* Specifics data when registering the service */
-    struct mk_list *map;
+    struct mk_list *map_interfaces;
+    struct mk_list *map_urls;
 
     /* global data */
     struct mk_list *global;

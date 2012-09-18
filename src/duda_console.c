@@ -90,7 +90,7 @@ void duda_console_cb_map(duda_request_t *dr)
     duda_response_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->name.data);
 
     /* List of interfaces */
-    mk_list_foreach(head_iface, ws->map) {
+    mk_list_foreach(head_iface, ws->map_interfaces) {
         entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
         duda_response_printf(dr, "<h3>%s/<h3>\n<ul>\n", entry_iface->uid);
 
