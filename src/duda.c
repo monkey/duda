@@ -537,6 +537,13 @@ int duda_service_html(duda_request_t *dr)
         return -1;
     }
 
+    /* Check the web service name in the URI */
+    if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
+                dr->ws_root->name.len) != 0) {
+        return -1;
+    }
+
+
     new_path_len = (sr->uri_processed.len - dr->ws_root->name.len - 1);
     new_path_len += dr->ws_root->docroot.len;
 
