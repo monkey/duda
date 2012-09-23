@@ -567,6 +567,7 @@ int duda_service_html(duda_request_t *dr)
             sr->uri_processed.data + dr->ws_root->name.len + 2,
             n_copy - 1);
     sr->real_path.data[dr->ws_root->docroot.len + n_copy - 2] = '\0';
+    sr->real_path.len = dr->ws_root->docroot.len + n_copy - 2;
 
     PLUGIN_TRACE("New path is '%s'", sr->real_path.data);
 
