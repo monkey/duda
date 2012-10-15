@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Sourabh Chandak<sourabh3934@gmail.com>
+ *  Copyright (C) 2012, Sourabh Chandak <sourabh3934@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,14 +35,14 @@ struct duda_api_redis *get_redis_api()
 
     /* Map API calls */
     redis->connect               = redis_connect;
-    redis->disconnect            = redis_disconnect;  
+    redis->disconnect            = redis_disconnect;
     redis->attach                = redis_attach;
     redis->setConnectCallback    = redisAsyncSetConnectCallback;
     redis->setDisconnectCallback = redisAsyncSetDisconnectCallback;
     redis->command               = redisAsyncCommand;
     redis->getDudarequest        = redis_request_map;
     redis->free                  = redis_free;
-    
+
     return redis;
 }
 
@@ -56,7 +56,7 @@ duda_package_t *duda_package_main(struct duda_api_objects *api)
     /* Init redis*/
     redis_init();
 
-    /* Package object */    
+    /* Package object */
     dpkg = monkey->mem_alloc(sizeof(duda_package_t));
     dpkg->name    = "redis";
     dpkg->version = "0.1";

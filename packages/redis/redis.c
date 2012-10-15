@@ -2,7 +2,7 @@
 
 /*  Monkey HTTP Daemon
  *  ------------------
- *  Copyright (C) 2001-2012, Sourabh Chandak<sourabh3934@gmail.com>
+ *  Copyright (C) 2012, Sourabh Chandak <sourabh3934@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 
 int redis_read(int fd, struct duda_request *dr)
 {
+    (void) *dr;
+
     printf("[FD %i] Redis Handler / read\n", fd);
     struct mk_list *list_redis_fd,*head;
     duda_redis_t *dr_entry;
@@ -48,6 +50,8 @@ int redis_read(int fd, struct duda_request *dr)
 
 int redis_write(int fd, struct duda_request *dr)
 {
+    (void) *dr;
+
     printf("[FD %i] Redis Handler / write\n", fd);
     struct mk_list *list_redis_fd,*head;
     duda_redis_t *dr_entry;
@@ -70,6 +74,8 @@ int redis_write(int fd, struct duda_request *dr)
 
 int redis_error(int fd, struct duda_request *dr)
 {
+    (void) *dr;
+
     printf("[FD %i] Redis Handler / error\n", fd);
     struct mk_list *list_redis_fd,*head;
     duda_redis_t *dr_entry;
@@ -92,6 +98,8 @@ int redis_error(int fd, struct duda_request *dr)
 
 int redis_close(int fd, struct duda_request *dr)
 {
+    (void) *dr;
+
     printf("[FD %i] Redis Handler / close\n", fd);
     struct mk_list *list_redis_fd,*head, *tmp;
     duda_redis_t *dr_entry;
@@ -110,13 +118,15 @@ int redis_close(int fd, struct duda_request *dr)
 
 int redis_timeout(int fd, struct duda_request *dr)
 {
+    (void) *dr;
+
     printf("[FD %i] Redis Handler / timeout\n", fd);
-    
+
     return 1;
 
 }
 
-redisAsyncContext * redis_connect(const char *ip, int port, 
+redisAsyncContext * redis_connect(const char *ip, int port,
                                   duda_request_t *dr_web)
 {
     struct mk_list *list_redis_fd;
@@ -134,7 +144,7 @@ redisAsyncContext * redis_connect(const char *ip, int port,
     {
         list_redis_fd = malloc(sizeof(struct mk_list));
         mk_list_init(list_redis_fd);
-        pthread_setspecific(redis_key, (void *) list_redis_fd);    
+        pthread_setspecific(redis_key, (void *) list_redis_fd);
     }
 
     mk_list_add(&dr->_head_redis_fd, list_redis_fd);
@@ -164,7 +174,7 @@ int redis_attach(redisAsyncContext *ac, duda_request_t *dr)
 int redis_init()
 {
     pthread_key_create(&redis_key, NULL);
-    
+
     return 1;
 }
 
