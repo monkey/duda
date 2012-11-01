@@ -42,7 +42,7 @@ struct duda_map_static_cb {
 /* Interfaces of the web service */
 struct duda_interface {
     char *uid;
-    int   uid_len;
+    unsigned int   uid_len;
 
     /* interface methods */
     struct mk_list methods;

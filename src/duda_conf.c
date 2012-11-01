@@ -230,4 +230,3 @@ struct duda_api_conf *duda_conf_object()
     c->_force_redirect = duda_conf_force_redirect;
     return c;
 }
-

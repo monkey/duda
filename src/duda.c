@@ -657,7 +657,6 @@ int duda_service_run(struct plugin *plugin,
 struct web_service *duda_get_service_from_uri(struct session_request *sr,
                                               struct vhost_services *vs_host)
 {
-    int pos;
     struct mk_list *head;
     struct web_service *ws_entry;
 

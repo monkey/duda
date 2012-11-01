@@ -71,4 +71,6 @@ struct duda_api_conf {
 
 #define force_redirect()  _force_redirect(self)
 
+struct duda_api_conf *duda_conf_object();
+
 #endif
