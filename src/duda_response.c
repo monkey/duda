@@ -318,6 +318,9 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
  */
 int duda_response_finalize(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
+    (void) dr;
+    (void) end_cb;
+
     return 0;
 }
 

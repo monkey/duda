@@ -20,6 +20,7 @@
  */
 
 #include "duda_conf.h"
+#include "duda_gc_map.h"
 
 #ifndef DUDA_MAIN_H
 #define DUDA_MAIN_H
@@ -67,6 +68,9 @@ typedef struct duda_request {
     /* Internal statuses */
     unsigned int _st_http_headers_sent;  /* HTTP headers sent? */
     unsigned int _st_body_writes;        /* Number of body_writes invoked */
+
+    /* Gargabe collector */
+    struct duda_gc_map gc;
 
     /* Data queues */
     struct mk_list queue_out;

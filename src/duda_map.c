@@ -25,19 +25,76 @@
  * and callbacks associated.
  */
 
-#include "duda_api.h"
 #include "duda_map.h"
+#include "duda_gc.h"
+
+#define DUDA_MAP_REDIR_SIZE  64
 
 int duda_map_static_check(duda_request_t *dr)
 {
+    char *buf;
+    char *host;
+    char *location = 0;
+    int port_redirect = 0;
+    int len;
     struct mk_list *head;
     struct session_request *sr = dr->sr;
     struct duda_map_static_cb *st;
 
     mk_list_foreach(head, dr->ws_root->map_urls) {
         st = mk_list_entry(head, struct duda_map_static_cb, _head);
+
         if (strncmp(sr->uri_processed.data + dr->ws_root->name.len + 1,
-                    st->path, st->path_len) == 0) {
+                    st->path, st->path_len - 1) == 0) {
+
+            /*
+             * Check if the web service request force redirection for
+             * URLs not ending with a slash
+             */
+            if (!sr->query_string.data &&
+                sr->uri_processed.data[sr->uri_processed.len - 1] != '/' &&
+                dr->ws_root->url_force_redirect) {
+
+                duda_response_http_status(dr, 301);
+
+                if (dr->sr->host.data && sr->port > 0) {
+                    if (dr->sr->port != mk_api->config->standard_port) {
+                        port_redirect = dr->sr->port;
+                    }
+                }
+
+                buf = duda_gc_alloc(dr, DUDA_MAP_REDIR_SIZE);
+                host = mk_api->pointer_to_buf(dr->sr->host);
+                duda_gc_add(dr, host);
+
+                /*
+                 * Add ending slash to the location string
+                 */
+                location = (char *) duda_gc_alloc(dr, dr->sr->uri_processed.len + 2);
+                if (!location) {
+                    /* FIXME: Need to raise memory problem message somewhere */
+                    exit(EXIT_FAILURE);
+                }
+
+                memcpy(location, dr->sr->uri_processed.data, dr->sr->uri_processed.len);
+                location[dr->sr->uri_processed.len]     = '/';
+                location[dr->sr->uri_processed.len + 1] = '\0';
+
+                if (port_redirect > 0) {
+                    len = snprintf(buf, DUDA_MAP_REDIR_SIZE,
+                                   "Location: %s://%s:%i%s",
+                                   mk_api->config->transport, host, port_redirect, location);
+                }
+                else {
+                    len = snprintf(buf, DUDA_MAP_REDIR_SIZE,
+                                   "Location: %s://%s%s",
+                                   mk_api->config->transport, host, location);
+                }
+
+                duda_response_http_header_n(dr, buf, len);
+                duda_response_end(dr, NULL);
+                return 0;
+            }
             st->callback(dr);
             return 0;
         }

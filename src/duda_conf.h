@@ -24,6 +24,8 @@
 
 #include "duda_api.h"
 
+#define WS_ROOT_URI_LEN   64
+
 char *services_root;
 char *packages_root;
 
@@ -39,7 +41,9 @@ struct vhost_services {
 struct web_service {
     mk_pointer name;
     mk_pointer docroot;
+
     int  enabled;
+    int  url_force_redirect;
     void *handler;
 
     /* Specifics data when registering the service */
@@ -58,5 +62,13 @@ struct web_service {
 
 int duda_conf_main_init(const char *confdir);
 int duda_conf_vhost_init();
+
+/* Object API */
+
+struct duda_api_conf {
+    void (*_force_redirect) (struct web_service *);
+};
+
+#define force_redirect()  _force_redirect(self)
 
 #endif

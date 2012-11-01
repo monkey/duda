@@ -35,6 +35,7 @@
 #include "duda_param.h"
 #include "duda_session.h"
 #include "duda_cookie.h"
+#include "duda_conf.h"
 #include "duda_xtime.h"
 #include "duda_console.h"
 #include "duda_objects.h"
@@ -73,7 +74,7 @@ struct duda_api_objects *duda_new_api_objects();
 
 
 /* We declare the hidden _duda_main() function to avoid some warnings */
-int _duda_main(struct duda_api_objects *api);
+int _duda_main(struct duda_api_objects *api, struct web_service *self);
 
 /*
  * This is the tricky initialization for the web service in question,
@@ -82,7 +83,8 @@ int _duda_main(struct duda_api_objects *api);
  * initialization, then it invoke the end-user routine under _duda_main()
  */
 #define duda_main()                                                     \
-    _duda_bootstrap(struct duda_api_objects *api) {                     \
+    _duda_bootstrap(struct duda_api_objects *api,                       \
+                    struct web_service *ws) {                           \
         /* API Objects */                                               \
         monkey   = api->monkey;                                         \
         map      = api->map;                                            \
@@ -96,6 +98,7 @@ int _duda_main(struct duda_api_objects *api);
         session  = api->session;                                        \
         cookie   = api->cookie;                                         \
         global   = api->global;                                         \
+        conf     = api->conf;                                           \
         xtime    = api->xtime;                                          \
                                                                         \
         /* Initialize global linked lists */                            \
@@ -105,8 +108,8 @@ int _duda_main(struct duda_api_objects *api);
         mk_list_init(&duda_ws_packages);                                \
                                                                         \
         /* Invoke end-user main routine */                              \
-        return _duda_main(api);                                         \
+        return _duda_main(api, ws);                                     \
     }                                                                   \
-    int _duda_main(struct duda_api_objects *api)
+    int _duda_main(struct duda_api_objects *api, struct web_service *self)
 
 #endif

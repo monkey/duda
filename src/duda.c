@@ -24,6 +24,7 @@
 
 #include "MKPlugin.h"
 #include "duda.h"
+#include "duda_gc.h"
 #include "duda_map.h"
 #include "duda_conf.h"
 #include "duda_event.h"
@@ -68,7 +69,7 @@ void *duda_load_symbol(void *handle, const char *symbol)
 /* Register the service interfaces into the main list of web services */
 int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 {
-    int (*service_init) (struct duda_api_objects *);
+    int (*service_init) (struct duda_api_objects *, struct web_service *);
     struct mk_list *head_iface, *head_method, *head_urls;
     struct duda_interface *entry_iface, *cs_iface;
     struct duda_method *entry_method, *cs_method;
@@ -81,7 +82,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         exit(EXIT_FAILURE);
     }
 
-    if (service_init(api) == 0) {
+    if (service_init(api, ws) == 0) {
         PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
         ws->map_interfaces = duda_load_symbol(ws->handler, "duda_map_interfaces");
         ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
@@ -516,6 +517,7 @@ int duda_service_end(duda_request_t *dr)
 
     /* free queue resources... */
     duda_queue_free(&dr->queue_out);
+    duda_gc_free(dr);
     mk_api->mem_free(dr);
 
     return ret;
@@ -616,6 +618,9 @@ int duda_service_run(struct plugin *plugin,
     dr->_st_http_headers_sent = MK_FALSE;
     dr->_st_body_writes = 0;
 
+    /* Initialize garbage collector */
+    duda_gc_init(dr);
+
     /* Parse request for Duda static maps */
     if (duda_map_static_check(dr) == 0) {
         return 0;
@@ -656,20 +661,12 @@ struct web_service *duda_get_service_from_uri(struct session_request *sr,
     struct mk_list *head;
     struct web_service *ws_entry;
 
-    /* get web service name limit */
-    pos = mk_api->str_search_n(sr->uri_processed.data + 1, "/",
-                               MK_STR_SENSITIVE,
-                               sr->uri_processed.len - 1);
-    if (pos <= 1) {
-        return NULL;
-    }
-
     /* match services */
     mk_list_foreach(head, &vs_host->services) {
         ws_entry = mk_list_entry(head, struct web_service, _head);
         if (strncmp(ws_entry->name.data,
                     sr->uri_processed.data + 1,
-                    pos - 1) == 0) {
+                    ws_entry->name.len) == 0) {
             PLUGIN_TRACE("WebService match: %s", ws_entry->name.data);
             return ws_entry;
         }

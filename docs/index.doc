@@ -1,5 +1,6 @@
 src/duda_console.c
 src/duda_cookie.c
+src/duda_conf.c
 src/duda_event.c
 src/duda_map.c
 src/duda_param.c

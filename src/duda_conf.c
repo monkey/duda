@@ -202,3 +202,32 @@ int duda_conf_vhost_init()
 
     return 0;
 }
+
+
+/*
+ * Methods available for web services through the Object API
+ * =========================================================
+ */
+
+/*
+ * @OBJ_NAME: conf
+ * @OBJ_DESC: The config object provides a set of methods to perform a hard
+ * configuration of the web service.
+ */
+
+
+void duda_conf_force_redirect(struct web_service *ws)
+{
+    ws->url_force_redirect = MK_TRUE;
+};
+
+
+struct duda_api_conf *duda_conf_object()
+{
+    struct duda_api_conf *c;
+
+    c = mk_api->mem_alloc(sizeof(struct duda_api_conf));
+    c->_force_redirect = duda_conf_force_redirect;
+    return c;
+}
+
