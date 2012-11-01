@@ -13,7 +13,7 @@ all: ../websocket.dpkg
 -include $(OBJECTS:.o=.d)
 
 ../websocket.dpkg: $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -o $@ $^ -lc -lm
 
 .c.o:
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<

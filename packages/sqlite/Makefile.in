@@ -12,7 +12,7 @@ all: ../sqlite.dpkg
 -include $(OBJECTS:.o=.d)
 
 ../sqlite.dpkg: $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc -lsqlite3
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -o $@ $^ -lc -lsqlite3
 
 .c.o:
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<

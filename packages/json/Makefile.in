@@ -13,7 +13,7 @@ all: ../json.dpkg
 -include $(OBJECTS:.o=.d)
 
 ../json.dpkg: $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -o $@ $^ -lc -lm
 
 .c.o:
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<
