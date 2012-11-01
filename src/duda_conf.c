@@ -211,11 +211,19 @@ int duda_conf_vhost_init()
 
 /*
  * @OBJ_NAME: conf
- * @OBJ_DESC: The config object provides a set of methods to perform a hard
- * configuration of the web service.
+ * @OBJ_DESC: The configuration object provides a set of methods to perform a hard
+ * setup of the web service. All methods available must be invoked from inside
+ * duda_main().
  */
 
 
+/*
+ * @METHOD_NAME: force_redirect
+ * @METHOD_DESC: Instruct the web service to perform an HTTP redirection
+ * over the requested URIs who do not contain an ending slash.
+ * @METHOD_PROTO: void foce_redirect()
+ * @METHOD_RETURN: This method do not return any value.
+ */
 void duda_conf_force_redirect(struct web_service *ws)
 {
     ws->url_force_redirect = MK_TRUE;

@@ -119,9 +119,9 @@ void duda_console_cb_map(duda_request_t *dr)
 
 /*
  * @METHOD_NAME: debug
- * @METHOD_PROTO: void debug(duda_request_t *dr, char *format, ...)
  * @METHOD_DESC: It format and and prints a customized message to the web service
  * console interface
+ * @METHOD_PROTO: void debug(duda_request_t *dr, char *format, ...)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: format Specifies the subsequent arguments to be formatted
  * @METHOD_RETURN: Do not return anything
