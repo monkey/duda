@@ -21,6 +21,7 @@
 
 #include "MKPlugin.h"
 #include "duda.h"
+#include "duda_gc.h"
 #include "duda_qs.h"
 #include "duda_qs_map.h"
 
@@ -52,6 +53,40 @@ int duda_qs_count(duda_request_t *dr)
     return dr->qs.count;
 }
 
+/*
+ * @METHOD_NAME: get
+ * @METHOD_DESC: Return a new buffer with the value of the given key from the
+ * query string. The new buffer is automatically freed once the service finish it
+ * works.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the name of the key
+ * @METHOD_RETURN: Upon successful completion it returns the new memory buffer
+ * with the value of the key specified, on error returns NULL.
+ */
+char *duda_qs_get(duda_request_t *dr, const char *key)
+{
+    int i;
+    char *value = NULL;
+
+    if (dr->qs.count <= 0) {
+        return NULL;
+    }
+
+    for (i=0 ; i < dr->qs.count; i++) {
+        if (strncmp(dr->qs.entries[i].key.data, key,
+                    dr->qs.entries[i].key.len) == 0) {
+            value = mk_api->str_copy_substr(dr->qs.entries[i].value.data, 0,
+                                            (int) dr->qs.entries[i].value.len);
+
+            /* Register the new memory buffer into the garbage collector */
+            duda_gc_add(dr, value);
+
+            return value;
+        }
+    }
+
+    return NULL;
+}
 
 /*
  * Query string parser, if the query string section exists, it will parse the
