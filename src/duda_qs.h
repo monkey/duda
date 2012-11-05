@@ -24,10 +24,14 @@
 
 struct duda_api_qs {
     int (*count) (duda_request_t *);
+    char *(*get) (duda_request_t *, const char *);
+    int (*cmp) (duda_request_t *, const char *, const char *);
 };
 
 
 int duda_qs_parse(duda_request_t *dr);
 int duda_qs_count(duda_request_t *dr);
+char *duda_qs_get(duda_request_t *dr, const char *key);
+int duda_qs_cmp(duda_request_t *dr, const char *key, const char *value);
 
 #endif

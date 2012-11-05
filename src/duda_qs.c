@@ -37,6 +37,9 @@ struct duda_api_qs *duda_qs_object()
 
     qs = mk_api->mem_alloc(sizeof(struct duda_api_qs));
     qs->count = duda_qs_count;
+    qs->get   = duda_qs_get;
+    qs->cmp   = duda_qs_cmp;
+
     return qs;
 };
 
@@ -86,6 +89,40 @@ char *duda_qs_get(duda_request_t *dr, const char *key)
     }
 
     return NULL;
+}
+
+/*
+ * @METHOD_NAME: cmp
+ * @METHOD_DESC: It lookup and compares a given key and value string with the
+ * incoming parameters from the query string.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the name of the key
+ * @METHOD_PARAM: value the value of the key to compare
+ * @METHOD_RETURN: If the key exists and the value matches, it returns 0,
+ * on error it returns -1.
+ */
+int duda_qs_cmp(duda_request_t *dr, const char *key, const char *value)
+{
+    int i;
+    struct duda_qs_map *qs = &dr->qs;
+
+    if (dr->qs.count <= 0) {
+        return -1;
+    }
+
+    for (i=0 ; i < dr->qs.count; i++) {
+        if (strncmp(qs->entries[i].key.data, key,
+                    qs->entries[i].key.len) == 0) {
+
+            /* Compare the key value */
+            if (strncmp(qs->entries[i].value.data, value,
+                        qs->entries[i].value.len) == 0) {
+                return 0;
+            }
+        }
+    }
+
+    return -1;
 }
 
 /*
