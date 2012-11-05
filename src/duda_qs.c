@@ -35,8 +35,22 @@ struct duda_api_qs *duda_qs_object()
     struct duda_api_qs *qs;
 
     qs = mk_api->mem_alloc(sizeof(struct duda_api_qs));
+    qs->count = duda_qs_count;
     return qs;
 };
+
+
+/*
+ * @METHOD_NAME: count
+ * @METHOD_DESC: It returns the number of valid parameters given in the query
+ * string. A valid parameter is composed by a key and a value.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: The number of valid parameters.
+ */
+int duda_qs_count(duda_request_t *dr)
+{
+    return dr->qs.count;
+}
 
 
 /*

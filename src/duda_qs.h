@@ -26,6 +26,8 @@ struct duda_api_qs {
     int (*count) (duda_request_t *);
 };
 
+
 int duda_qs_parse(duda_request_t *dr);
+int duda_qs_count(duda_request_t *dr);
 
 #endif
