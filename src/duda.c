@@ -618,8 +618,14 @@ int duda_service_run(struct plugin *plugin,
     dr->_st_http_headers_sent = MK_FALSE;
     dr->_st_body_writes = 0;
 
+    /* Query string */
+    dr->qs.count = 0;
+
     /* Initialize garbage collector */
     duda_gc_init(dr);
+
+    /* Parse the query string */
+    duda_qs_parse(dr);
 
     /* Parse request for Duda static maps */
     if (duda_map_static_check(dr) == 0) {
