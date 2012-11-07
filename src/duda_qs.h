@@ -34,4 +34,6 @@ int duda_qs_count(duda_request_t *dr);
 char *duda_qs_get(duda_request_t *dr, const char *key);
 int duda_qs_cmp(duda_request_t *dr, const char *key, const char *value);
 
+struct duda_api_qs *duda_qs_object();
+
 #endif
