@@ -73,6 +73,7 @@ struct duda_api_objects *duda_api_master()
     objs->session  = duda_session_object();
     objs->xtime    = duda_xtime_object();
     objs->cookie   = duda_cookie_object();
+    objs->qs       = duda_query_string_object();
     objs->conf     = duda_conf_object();
 
     /* FIXME - DEBUG object */

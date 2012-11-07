@@ -98,6 +98,7 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         session  = api->session;                                        \
         cookie   = api->cookie;                                         \
         global   = api->global;                                         \
+        qs       = api->qs;                                             \
         conf     = api->conf;                                           \
         xtime    = api->xtime;                                          \
                                                                         \

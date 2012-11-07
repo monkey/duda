@@ -95,6 +95,7 @@ struct duda_api_objects {
     struct duda_api_param *param;
     struct duda_api_session *session;
     struct duda_api_cookie *cookie;
+    struct duda_api_qs *qs;
     struct duda_api_conf *conf;
     struct duda_api_xtime *xtime;
 };
