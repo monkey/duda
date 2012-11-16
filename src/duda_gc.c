@@ -99,6 +99,7 @@ int duda_gc_free(duda_request_t *dr)
             mk_api->mem_free(dr->gc.cells[i].p);
             dr->gc.used--;
             freed++;
+            dr->gc.cells[i].p = NULL;
         }
     }
 

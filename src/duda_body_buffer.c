@@ -28,7 +28,7 @@ struct duda_body_buffer *duda_body_buffer_new()
 {
     struct duda_body_buffer *bb;
 
-    bb = mk_api->mem_alloc(sizeof(struct duda_body_buffer));
+    bb = mk_api->mem_alloc_z(sizeof(struct duda_body_buffer));
     bb->buf = mk_api->iov_create(BODY_BUFFER_SIZE, 0);
     bb->size = BODY_BUFFER_SIZE;
     bb->sent = 0;

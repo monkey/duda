@@ -39,6 +39,7 @@
 #include "duda_xtime.h"
 #include "duda_console.h"
 #include "duda_objects.h"
+#include "duda_qs.h"
 
 struct duda_webservice ws;
 duda_package_t *pkg_temp;

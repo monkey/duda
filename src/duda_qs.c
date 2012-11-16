@@ -171,7 +171,9 @@ int duda_qs_parse(duda_request_t *dr)
                 qs->entries[count].key.len  = len;
 
                 /* set the value start */
-                val = sr->query_string.data + i;
+                if (sr->query_string.data + i != ' ') {
+                    val = sr->query_string.data + i;
+                }
             }
             break;
         default:
@@ -182,7 +184,7 @@ int duda_qs_parse(duda_request_t *dr)
         };
     }
 
-    if (key) {
+    if (key && val) {
         len = (i - (val - sr->query_string.data));
         qs->entries[count].value.data = val + 1;
         qs->entries[count].value.len  = len - 1;
