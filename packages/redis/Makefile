@@ -13,7 +13,7 @@ all: ../redis.dpkg
 -include $(OBJECTS:.o=.d)
 
 ../redis.dpkg: $(OBJECTS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -Wl -o $@ $^ -lc
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -o $@ $^ -lc
 
 .c.o: $(SOURCES)
 	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<
