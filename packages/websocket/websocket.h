@@ -31,15 +31,15 @@ struct ws_config_t {
 };
 
 struct duda_api_websockets {
-    int (*handshake) (duda_request_t *);
+    int (*handshake) (duda_request_t *, int);
     int (*write) (struct ws_request *, unsigned int, unsigned char *, uint64_t);
-    int (*broadcast)     (ws_request_t *, unsigned char *, uint64_t, int);
-    int (*broadcast_all) (unsigned char *, uint64_t, int);
+    int (*broadcast)     (ws_request_t *, unsigned char *, uint64_t, int, int);
+    int (*broadcast_all) (unsigned char *, uint64_t, int, int);
     int (*broadcaster) ();
     int (*set_callback) (int type, void (*callback) (duda_request_t *, ws_request_t *));
 };
 
-int ws_handshake(duda_request_t *dr);
+int ws_handshake(duda_request_t *dr, int channel);
 
 int ws_send_data(int sockfd,
                 unsigned int fin,

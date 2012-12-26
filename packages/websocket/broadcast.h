@@ -47,14 +47,17 @@ struct ws_broadcast_frame {
     int source;                            /* origin                 */
     uint64_t len;                          /* data length            */
     int type;                              /* opcode TEXT or BINARY  */
+    int channel;                           /* channel                */
     unsigned char data[BROADCAST_BUFFER];  /* data to be broadcasted */
 };
 
 struct mk_list ws_broadcast_channels;
 
 void ws_broadcast_worker(void *args);
-int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type);
-int ws_broadcast_all(unsigned char *data, uint64_t len, int msg_type);
+int ws_broadcast(ws_request_t *wr, unsigned char *data,
+                 uint64_t len, int msg_type, int channel);
+int ws_broadcast_all(unsigned char *data, uint64_t len,
+                     int msg_type, int channel);
 
 int ws_broadcaster();
 

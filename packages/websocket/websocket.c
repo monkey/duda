@@ -245,11 +245,12 @@ int cb_ws_timeout(int sockfd, struct duda_request *dr)
  * @METHOD_DESC: It perform the websocket handshake and connection upgrade. This must be
  * used inside a normal HTTP callback function. It will take care of the handshake details
  * and response data.
- * @METHOD_PROTO: int handshake(duda_request_t *dr)
+ * @METHOD_PROTO: int handshake(duda_request_t *dr, int channel)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: channel specify the channel number where the connection will be associated. Use -1 to specify all channels.
  * @METHOD_RETURN:  Upon successful completion it returns 0, on error returns -1.
  */
-int ws_handshake(duda_request_t *dr)
+int ws_handshake(duda_request_t *dr, int channel)
 {
     int len;
     size_t out_len;
@@ -352,7 +353,9 @@ int ws_handshake(duda_request_t *dr)
         monkey->mem_free(encoded_accept);
 
         /* Register node in main list */
-        wr_node = ws_request_create(dr->socket, dr,
+        wr_node = ws_request_create(dr->socket,
+                                    channel,
+                                    dr,
                                     ws_callbacks->on_open,
                                     ws_callbacks->on_message,
                                     ws_callbacks->on_error,

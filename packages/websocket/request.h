@@ -31,7 +31,10 @@
 struct ws_request
 {
     int socket;
+    int channel;
     struct duda_request *dr;
+
+    /* callbacks */
     void (*cb_on_open)    (duda_request_t *, struct ws_request *);
     void (*cb_on_message) (duda_request_t *, struct ws_request *);
     void (*cb_on_error)   (duda_request_t *, struct ws_request *);
@@ -63,7 +66,9 @@ duda_global_t ws_request_list;
 /* Functions */
 void *cb_request_list_init();
 void ws_request_init();
-struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
+struct ws_request *ws_request_create(int socket_fd,
+                                     int channel,
+                                     struct duda_request *dr,
                                      void (*on_open)   (duda_request_t *, ws_request_t *),
                                      void (*on_message)(duda_request_t *, ws_request_t *),
                                      void (*on_error)  (duda_request_t *, ws_request_t *),

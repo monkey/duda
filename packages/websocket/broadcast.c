@@ -111,16 +111,18 @@ int ws_broadcaster()
 
 /*
  * @METHOD_NAME: broadcast
- * @METHOD_DESC: It sends a message in broadcast mode to all other active connections.
+ * @METHOD_DESC: It sends a message in broadcast mode to all active connections registered under a specific channel.
  * This method is intended to be used inside a websocket callback. If you look for a method
  * to broadcast all connection from a worker please review the method broadcast_all().
- * @METHOD_PROTO: int broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type)
+ * @METHOD_PROTO: int broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type, int channel)
  * @METHOD_PARAM: wr the websocket request context struct
  * @METHOD_PARAM: data the data to be send
  * @METHOD_PARAM: msg_type define the message type, it can be WS_OPCODE_TEXT or WS_OPCODE_BINARY.
+ * @METHOD_PARAM: channel specify the channel number, use -1 for all.
  * @METHOD_RETURN: This method always returns 0.
  */
-int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_type)
+int ws_broadcast(ws_request_t *wr, unsigned char *data,
+                 uint64_t len, int msg_type, int channel)
 {
     int n;
     struct mk_list *head;
@@ -128,8 +130,10 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_ty
     struct ws_broadcast_frame br;
 
     /* internal broadcast frame */
-    br.len    = len;
-    br.type   = msg_type;
+    br.len     = len;
+    br.type    = msg_type;
+    br.channel = channel;
+
     if (wr) {
         br.source = wr->socket;
     }
@@ -154,16 +158,18 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data, uint64_t len, int msg_ty
 
 /*
  * @METHOD_NAME: broadcast_all
- * @METHOD_DESC: It sends a message in broadcast mode to all active connections. This method
+ * @METHOD_DESC: It sends a message in broadcast mode to all active connections registered under a specific channel number. This method
  * is intended to be used from a worker.
- * @METHOD_PROTO: int broadcast(unsigned char *data, uint64_t len, int msg_type)
+ * @METHOD_PROTO: int broadcast_all(unsigned char *data, uint64_t len, int msg_type, int channel)
  * @METHOD_PARAM: data the data to be send
  * @METHOD_PARAM: msg_type define the message type, it can be WS_OPCODE_TEXT or WS_OPCODE_BINARY.
+ * @METHOD_PARAM: channel specify a specific channel number, use -1 for all.
  * @METHOD_RETURN: This method always returns 0.
  */
-int ws_broadcast_all(unsigned char *data, uint64_t len, int msg_type)
+int ws_broadcast_all(unsigned char *data, uint64_t len,
+                     int msg_type, int channel)
 {
-    return ws_broadcast(NULL, data, len, msg_type);
+    return ws_broadcast(NULL, data, len, msg_type, channel);
 }
 
 
@@ -220,16 +226,26 @@ void ws_broadcast_worker(void *args)
 
                 n = read(fd, &brf, bytes);
                 if (n != bytes) {
-                    printf("Error reading broadcast buffer size: %i/%i\n", n, bytes);
+                    printf("Error reading broadcast buffer size: %i/%i\n",
+                           n, bytes);
                     continue;
                 }
 
                 /*
-                 * For each websocket request registered in the thread list, send the
-                 * websocket message. This is the real broadcast.
+                 * For each websocket request registered in the thread list,
+                 * send the websocket message. This is the real broadcast.
                  */
                 mk_list_foreach(head, brw->conn_list) {
                     wr = mk_list_entry(head, struct ws_request, _head);
+
+                    /*
+                     * Check if the message is destinated to some specific
+                     * channel.
+                     */
+                    if (brf.channel >=0 && wr->channel != brf.channel) {
+                        continue;
+                    }
+
                     /* Do not send the message to our selfs (origin) */
                     if (brf.source == wr->socket) {
                         continue;

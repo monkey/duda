@@ -34,7 +34,9 @@
 #endif
 
 /* Create a ws_request node */
-struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
+struct ws_request *ws_request_create(int socket_fd,
+                                     int channel,
+                                     struct duda_request *dr,
                                      void (*on_open)   (duda_request_t *, ws_request_t *),
                                      void (*on_message)(duda_request_t *, ws_request_t *),
                                      void (*on_error)  (duda_request_t *, ws_request_t *),
@@ -45,6 +47,7 @@ struct ws_request *ws_request_create(int socket_fd, struct duda_request *dr,
 
     new = monkey->mem_alloc(sizeof(struct ws_request));
     new->socket = socket_fd;
+    new->channel = channel;
     new->dr = dr;
     new->cb_on_open    = on_open;
     new->cb_on_message = on_message;
