@@ -615,6 +615,7 @@ int duda_service_run(struct plugin *plugin,
     mk_list_init(&dr->queue_out);
 
     /* statuses */
+    dr->_st_http_content_length = -2;      /* not set */
     dr->_st_http_headers_sent = MK_FALSE;
     dr->_st_body_writes = 0;
 

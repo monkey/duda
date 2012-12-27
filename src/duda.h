@@ -67,8 +67,9 @@ typedef struct duda_request {
     void (*end_callback) (struct duda_request *);
 
     /* Internal statuses */
-    unsigned int _st_http_headers_sent;  /* HTTP headers sent? */
-    unsigned int _st_body_writes;        /* Number of body_writes invoked */
+    long _st_http_content_length;         /* Fixed content length size */
+    unsigned int _st_http_headers_sent;   /* HTTP headers sent? */
+    unsigned int _st_body_writes;         /* Number of body_writes invoked */
 
     /* Query string */
     struct duda_qs_map qs;

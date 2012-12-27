@@ -58,7 +58,12 @@ int duda_response_send_headers(duda_request_t *dr)
     }
 
     /* Calculate body length */
-    dr->sr->headers.content_length = duda_queue_length(&dr->queue_out);
+    if (dr->_st_http_content_length == -2) {
+        dr->sr->headers.content_length = duda_queue_length(&dr->queue_out);
+    }
+    else if (dr->_st_http_content_length >= 0) {
+        dr->sr->headers.content_length = dr->_st_http_content_length;
+    }
 
     r = mk_api->header_send(dr->cs->socket, dr->cs, dr->sr);
     if (r != 0) {
@@ -109,6 +114,19 @@ int duda_response_http_header(duda_request_t *dr, char *row)
 int duda_response_http_header_n(duda_request_t *dr, char *row, int len)
 {
     return mk_api->header_add(dr->sr, row, len);
+}
+
+/*
+ * @METHOD_NAME: http_content_length
+ * @METHOD_DESC: It sets a fixed content length header value. If you set the value -1 the Content-Length header will not be send.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: length the body length.
+ * @METHOD_RETURN: This method always returns zero
+ */
+int duda_response_http_content_length(duda_request_t *dr, long length)
+{
+    dr->_st_http_content_length = length;
+    return 0;
 }
 
 /* Compose the body_buffer */
@@ -343,18 +361,19 @@ struct duda_api_response *duda_response_object()
     struct duda_api_response *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_response));
-    obj->send_headers  = duda_response_send_headers;
-    obj->http_status   = duda_response_http_status;
-    obj->http_header   = duda_response_http_header;
-    obj->http_header_n = duda_response_http_header_n;
-    obj->print         = duda_response_print;
-    obj->printf        = duda_response_printf;
-    obj->sendfile      = duda_response_sendfile;
-    obj->wait          = duda_response_wait;
-    obj->cont          = duda_response_continue;
-    obj->_end          = duda_response_end;
-    obj->_finalize     = duda_response_finalize;
-    obj->flush         = duda_response_flush;
+    obj->send_headers        = duda_response_send_headers;
+    obj->http_status         = duda_response_http_status;
+    obj->http_header         = duda_response_http_header;
+    obj->http_header_n       = duda_response_http_header_n;
+    obj->http_content_length = duda_response_http_content_length;
+    obj->print               = duda_response_print;
+    obj->printf              = duda_response_printf;
+    obj->sendfile            = duda_response_sendfile;
+    obj->wait                = duda_response_wait;
+    obj->cont                = duda_response_continue;
+    obj->_end                = duda_response_end;
+    obj->_finalize           = duda_response_finalize;
+    obj->flush               = duda_response_flush;
 
     return obj;
 }
