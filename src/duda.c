@@ -719,7 +719,7 @@ int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
         }
 
         if (duda_service_run(plugin, cs, sr, web_service) == 0) {
-            return MK_PLUGIN_RET_END;
+            return MK_PLUGIN_RET_CONTINUE;
         }
     }
 
