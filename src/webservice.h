@@ -39,6 +39,7 @@
 #include "duda_xtime.h"
 #include "duda_console.h"
 #include "duda_objects.h"
+#include "duda_fconf.h"
 #include "duda_qs.h"
 
 struct duda_webservice ws;
@@ -101,6 +102,7 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         global   = api->global;                                         \
         qs       = api->qs;                                             \
         conf     = api->conf;                                           \
+        fconf    = api->fconf;                                          \
         xtime    = api->xtime;                                          \
                                                                         \
         /* Initialize global linked lists */                            \

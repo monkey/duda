@@ -39,6 +39,7 @@
 #include "duda_global.h"
 #include "duda_sendfile.h"
 #include "duda_body_buffer.h"
+#include "duda_fconf.h"
 #include "duda_qs.h"
 
 #include "webservice.h"
@@ -76,6 +77,7 @@ struct duda_api_objects *duda_api_master()
     objs->cookie   = duda_cookie_object();
     objs->qs       = duda_qs_object();
     objs->conf     = duda_conf_object();
+    objs->fconf    = duda_fconf_object();
 
     /* FIXME - DEBUG object */
 #ifdef DEBUG

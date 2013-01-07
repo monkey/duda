@@ -1,8 +1,8 @@
- /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P. <edsiper@gmail.com>
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,37 @@
 
 #include "duda_conf.h"
 
+int duda_conf_set_confdir(struct web_service *ws, const char *dir)
+{
+    int ret;
+    int len;
+    struct file_info finfo;
+
+    ret = mk_api->file_get_info(dir, &finfo);
+    if (ret != 0 || finfo.is_directory != MK_TRUE) {
+        return -1;
+    }
+
+    if (ws->confdir.data) {
+        free(ws->confdir.data);
+    }
+
+    len = strlen(dir);
+    if (dir[len - 1] != '/') {
+        ws->confdir.data = mk_api->mem_alloc(len + 2);
+        strncpy(ws->confdir.data, dir, len);
+        ws->confdir.data[len]     = '/';
+        ws->confdir.data[len + 1] = '\0';
+        ws->confdir.len           = len + 2;
+    }
+    else {
+        ws->confdir.data = mk_api->str_dup(dir);
+        ws->confdir.len  = len;
+    }
+
+    return 0;
+}
+
 int duda_conf_main_init(const char *confdir)
 {
     int ret = 0;
@@ -34,7 +65,7 @@ int duda_conf_main_init(const char *confdir)
     struct file_info finfo;
     struct mk_list *head;
 
-    /* Read palm configuration file */
+    /* Read Duda configuration file */
     mk_api->str_build(&conf_path, &len, "%s/duda.conf", confdir);
     conf = mk_api->config_create(conf_path);
 
@@ -88,6 +119,7 @@ int duda_conf_vhost_init()
     /* Section data */
     char *app_name;
     char *app_docroot;
+    char *app_confdir;
     int   app_enabled;
     struct file_info finfo;
 
@@ -126,6 +158,7 @@ int duda_conf_vhost_init()
                 app_name = NULL;
                 app_enabled = MK_FALSE;
                 app_docroot = NULL;
+                app_confdir = NULL;
 
                 /* Get section keys */
                 app_name = mk_api->config_section_getval(section,
@@ -137,6 +170,10 @@ int duda_conf_vhost_init()
 
                 app_docroot = mk_api->config_section_getval(section,
                                                             "DocumentRoot",
+                                                            MK_CONFIG_VAL_STR);
+
+                app_confdir = mk_api->config_section_getval(section,
+                                                            "ConfDir",
                                                             MK_CONFIG_VAL_STR);
 
                 if (app_name && mk_is_bool(app_enabled)) {
@@ -170,6 +207,15 @@ int duda_conf_vhost_init()
                             ws->docroot.len  = len;
                         }
                     }
+
+                    if (app_confdir) {
+                        ret = duda_conf_set_confdir(ws, app_confdir);
+                        if (ret != 0 || finfo.is_directory != MK_TRUE) {
+                            mk_err("Duda: invalid ConfDir, it must be a directory");
+                            exit(EXIT_FAILURE);
+                        }
+                    }
+
                     mk_list_add(&ws->_head, &vs->services);
                 }
                 else {
@@ -212,8 +258,8 @@ int duda_conf_vhost_init()
 /*
  * @OBJ_NAME: conf
  * @OBJ_DESC: The configuration object provides a set of methods to perform a hard
- * setup of the web service. All methods available must be invoked from inside
- * duda_main().
+ * setup of the web services or change the framework behavior. All methods
+ * available must be invoked from inside duda_main().
  */
 
 

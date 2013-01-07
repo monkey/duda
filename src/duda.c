@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

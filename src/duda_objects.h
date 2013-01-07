@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
+/*  Duda I/O
  *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P. <edsiper@gmail.com>
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
  */
 
 /*
- * Duda objects are struct passed by references to third party components of the framework,
- * like web services or packages.
+ * Duda objects are struct passed by references to third party components of
+ * the framework, like web services or packages.
  */
 
 #include "mk_macros.h"
@@ -48,6 +48,7 @@ struct duda_api_session *session;
 struct duda_api_cookie *cookie;
 struct duda_api_qs *qs;
 struct duda_api_conf *conf;
+struct duda_api_fconf *fconf;
 struct duda_api_global *global;
 struct duda_api_xtime *xtime;
 
