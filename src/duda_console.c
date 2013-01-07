@@ -47,12 +47,19 @@ struct duda_api_console *duda_console_object()
     return c;
 }
 
-/* callback for /app/console/debug */
-void duda_console_cb_debug(duda_request_t *dr)
+/* callback for /app/console/messages */
+void duda_console_cb_messages(duda_request_t *dr)
 {
+    int size = 1024;
+    char buf[size];
+
+    /* Create new path */
+    snprintf(buf, size, "/tmp/%s.duda.messages", dr->ws_root->name.data);
+
+    /* response */
     duda_response_http_status(dr, 200);
     duda_response_http_header(dr, "Content-Type: text/plain");
-    duda_response_sendfile(dr, "/tmp/duda.console");
+    duda_response_sendfile(dr, buf);
     duda_response_end(dr, NULL);
 }
 
@@ -126,11 +133,14 @@ void duda_console_cb_map(duda_request_t *dr)
  * @METHOD_PARAM: format Specifies the subsequent arguments to be formatted
  * @METHOD_RETURN: Do not return anything
  */
-void duda_console_write(duda_request_t *dr, char *file, int line, char *format, ...)
+void duda_console_write(duda_request_t *dr,
+                        char *file, int line,
+                        char *format, ...)
 {
     int fd;
     int buf_size = 1024;
     char buf[buf_size];
+    char path[buf_size];
     mk_pointer *now;
 
     /* Guess we need no more than 128 bytes. */
@@ -160,15 +170,16 @@ void duda_console_write(duda_request_t *dr, char *file, int line, char *format, 
         }
     }
 
-
-    fd = open("/tmp/duda.console", O_WRONLY | O_APPEND | O_CREAT, 0644);
+    snprintf(path, buf_size, "/tmp/%s.duda.messages",
+             dr->ws_root->name.data);
+    fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
     if (fd == -1) {
         perror("open");
     }
 
     now = mk_api->time_human();
-    n = snprintf(buf, buf_size, "%s [fd=%i req=%p] [%s:%i] %s\n", now->data, dr->cs->socket,
-                 dr, file, line, p);
+    n = snprintf(buf, buf_size, "%s [fd=%i] [%s:%i] %s\n",
+                 now->data, dr->cs->socket, file, line, p);
     n = write(fd, buf, n);
     close(fd);
 

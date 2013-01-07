@@ -97,8 +97,9 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         /* Register Duda built-in interfaces: console */
         cs_iface  = api->map->interface_new("console");
 
-        /* app/console/debug */
-        cs_method = api->map->method_builtin_new("debug", duda_console_cb_debug, 0);
+        /* app/console/messages */
+        cs_method = api->map->method_builtin_new("messages",
+                                                 duda_console_cb_messages, 0);
         api->map->interface_add_method(cs_method, cs_iface);
 
         /* app/console/map */
