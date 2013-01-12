@@ -206,7 +206,10 @@ int cb_ws_error(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-    wr->cb_on_error(dr, wr);
+    if (wr->cb_on_error) {
+        wr->cb_on_error(dr, wr);
+    }
+
     return DUDA_EVENT_OWNED;
 }
 
@@ -220,8 +223,9 @@ int cb_ws_close(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-
-    wr->cb_on_close(dr, wr);
+    if (wr->cb_on_close) {
+        wr->cb_on_close(dr, wr);
+    }
     return DUDA_EVENT_CLOSE;
 }
 
@@ -235,7 +239,9 @@ int cb_ws_timeout(int sockfd, struct duda_request *dr)
         return DUDA_EVENT_CLOSE;
     }
 
-    wr->cb_on_timeout(dr, wr);
+    if (wr->cb_on_timeout) {
+        wr->cb_on_timeout(dr, wr);
+    }
     return DUDA_EVENT_OWNED;
 }
 
