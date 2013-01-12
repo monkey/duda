@@ -171,7 +171,7 @@ int duda_qs_parse(duda_request_t *dr)
                 qs->entries[count].key.len  = len;
 
                 /* set the value start */
-                if (sr->query_string.data + i != ' ') {
+                if (sr->query_string.data[i] != ' ') {
                     val = sr->query_string.data + i;
                 }
             }
