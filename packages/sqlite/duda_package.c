@@ -64,7 +64,7 @@ duda_package_t *duda_package_main(struct duda_api_objects *api)
     sql_init();
 
     /* Package object */
-    dpkg = mk_api->mem_alloc(sizeof(duda_package_t));
+    dpkg = malloc(sizeof(duda_package_t));
     dpkg->name    = "sqlite";
     dpkg->version = "0.1";
     dpkg->api     = get_sqlite_api();
