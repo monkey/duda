@@ -294,9 +294,6 @@ void _mkp_core_thctx()
     duda_global_t *entry_gl;
     void *data;
 
-    /* Initialize some pointers */
-    duda_mem_init();
-
     list_events_write = mk_api->mem_alloc(sizeof(struct mk_list));
     mk_list_init(list_events_write);
     pthread_setspecific(duda_global_events_write, (void *) list_events_write);
@@ -360,6 +357,9 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     duda_conf_main_init(confdir);
     duda_conf_vhost_init();
     duda_load_services();
+
+    /* Initialize some pointers */
+    duda_mem_init();
 
     /* Global data / Thread scope */
     pthread_key_create(&duda_events_list, NULL);
