@@ -210,7 +210,7 @@ int duda_conf_vhost_init()
 
                     if (app_confdir) {
                         ret = duda_conf_set_confdir(ws, app_confdir);
-                        if (ret != 0 || finfo.is_directory != MK_TRUE) {
+                        if (ret != 0) {
                             mk_err("Duda: invalid ConfDir, it must be a directory");
                             exit(EXIT_FAILURE);
                         }
