@@ -349,6 +349,13 @@ void _mkp_core_thctx()
     }
 }
 
+int _mkp_prctx()
+{
+    /* Initialize some pointers */
+    duda_mem_init();
+    return 0;
+}
+
 int _mkp_init(struct plugin_api **api, char *confdir)
 {
     mk_api = *api;
@@ -357,9 +364,6 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     duda_conf_main_init(confdir);
     duda_conf_vhost_init();
     duda_load_services();
-
-    /* Initialize some pointers */
-    duda_mem_init();
 
     /* Global data / Thread scope */
     pthread_key_create(&duda_events_list, NULL);
