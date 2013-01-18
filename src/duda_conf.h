@@ -54,6 +54,9 @@ struct web_service {
     /* global data */
     struct mk_list *global;
 
+    /* workers list */
+    struct mk_list *workers;
+
     /* packages loaded by the web service */
     struct mk_list *packages;
 

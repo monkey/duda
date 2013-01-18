@@ -34,6 +34,7 @@
 #include "duda_console.h"
 #include "duda_request.h"
 #include "duda_response.h"
+#include "duda_worker.h"
 
 /* data types */
 typedef void * duda_callback_t;
@@ -98,6 +99,7 @@ struct duda_api_objects {
     struct duda_api_qs *qs;
     struct duda_api_conf *conf;
     struct duda_api_fconf *fconf;
+    struct duda_api_worker *worker;
     struct duda_api_xtime *xtime;
 };
 

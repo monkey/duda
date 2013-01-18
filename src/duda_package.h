@@ -53,10 +53,12 @@ struct duda_package {
     session  = api->session;                                            \
     cookie   = api->cookie;                                             \
     global   = api->global;                                             \
+    worker   = api->worker;                                             \
     xtime    = api->xtime;                                              \
     mk_list_init(&duda_map_interfaces);                                 \
     mk_list_init(&duda_map_urls);                                       \
-    mk_list_init(&duda_global_dist);
+    mk_list_init(&duda_global_dist);                                    \
+    mk_list_init(&duda_worker_list);
 
 /* Data type */
 typedef struct duda_package duda_package_t;

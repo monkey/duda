@@ -10,6 +10,7 @@ src/duda_qs.c
 src/duda_response.c
 src/duda_request.c
 src/duda_session.c
+src/duda_worker.c
 src/duda_xtime.c
 packages/base64
 packages/json

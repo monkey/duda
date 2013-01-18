@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /*  Duda I/O
- *  ------------------
+ *  --------
  *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@ struct mk_list MK_EXPORT duda_map_interfaces;
 struct mk_list MK_EXPORT duda_map_urls;
 struct mk_list MK_EXPORT duda_global_dist;
 struct mk_list MK_EXPORT duda_ws_packages;
+struct mk_list MK_EXPORT duda_worker_list;
 
 /* Objects exported to the web service */
 struct plugin_api *monkey;
@@ -50,6 +51,7 @@ struct duda_api_qs *qs;
 struct duda_api_conf *conf;
 struct duda_api_fconf *fconf;
 struct duda_api_global *global;
+struct duda_api_worker *worker;
 struct duda_api_xtime *xtime;
 
 #endif

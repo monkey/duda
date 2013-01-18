@@ -88,6 +88,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
+        ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
 
         mk_list_foreach(head_urls, ws->map_urls) {
             static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
@@ -123,6 +124,9 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
                 }
             }
         }
+
+        /* Spawn all workers set in duda_main() */
+        duda_worker_spawn_all(ws->workers);
     }
 
     return 0;

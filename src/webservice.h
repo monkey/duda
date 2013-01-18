@@ -103,6 +103,7 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         qs       = api->qs;                                             \
         conf     = api->conf;                                           \
         fconf    = api->fconf;                                          \
+        worker   = api->worker;                                         \
         xtime    = api->xtime;                                          \
                                                                         \
         /* Initialize global linked lists */                            \
@@ -110,6 +111,7 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         mk_list_init(&duda_map_urls);                                   \
         mk_list_init(&duda_global_dist);                                \
         mk_list_init(&duda_ws_packages);                                \
+        mk_list_init(&duda_worker_list);                                \
                                                                         \
         /* Invoke end-user main routine */                              \
         return _duda_main(api, ws);                                     \
