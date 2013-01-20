@@ -1,8 +1,8 @@
  /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P. <edsiper@gmail.com>
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,18 +67,19 @@ const char *duda_fconf_get_path(struct web_service *ws)
 };
 
 /*
- * @METHOD_NAME: read_file
+ * @METHOD_NAME: read_conf
  * @METHOD_DESC: Locate a named file under the web service configuration directory , read it and return a buffer with it contents.
- * @METHOD_PROTO: char *read_file()
- * @METHOD_RETURN: Upon successful completion it returns the buffered file content,
+ * @METHOD_PROTO: struct duda_config *read_conf(const char *path)
+ * @METHOD_RETURN: Upon successful completion it returns the duda_config context,
  * on error it returns NULL.
  */
-char *duda_fconf_read_file(struct web_service *ws, const char *path)
+struct duda_config *duda_fconf_read_conf(struct web_service *ws, const char *path)
 {
     unsigned long len;
     char *buf;
-    char *tmp;
+    char *tmp = NULL;
     struct file_info finfo;
+    struct duda_config *cnf;
 
     /* Compose full path */
     mk_api->str_build(&tmp, &len, "%s/%s", ws->confdir.data, path);
@@ -89,24 +90,67 @@ char *duda_fconf_read_file(struct web_service *ws, const char *path)
         return NULL;
     }
 
-    buf = mk_api->file_to_buffer(tmp);
+    cnf = (struct duda_config *) mk_api->config_create(tmp);
     mk_api->mem_free(tmp);
 
-    /* FIXME: we need to register this buf pointer into the Garbage Collector,
-     * as well add a GC trigger after duda_main() is ran, so the buffer is
-     * not longer available. Wondering if developers would like to keep
-     * this content in memory.
-     */
-    return buf;
+    return cnf;
 }
 
 /*
- * @METHOD_NAME: read_file_path
+ * @METHOD_NAME: free_conf
+ * @METHOD_DESC: It release the memory resources used by a duda_config context
+ * @METHOD_PROTO: void free_config(struct duda_config *cnf)
+ * @METHOD_PARAM: cnf the duda_config context
+ * @METHOD_RETURN: this method do not return any value.
+ */
+void duda_fconf_free_conf(struct duda_config *cnf)
+{
+    mk_api->config_free((struct mk_config *) cnf);
+}
+
+/*
+ * @METHOD_NAME: section_get
+ * @METHOD_DESC: Retrieve a specific section definition from the configuration
+ * context. A section in a duda configuration file is defined within square
+ * brackets, e.g: [Section Name].
+ * @METHOD_PROTO: struct duda_config_section *section_get(struct duda_config *cnf, const char *name)
+ * @METHOD_PARAM: cnf the duda_config context
+ * @METHOD_PARAM: name section name
+ * @METHOD_RETURN: Uppon successful completion it returns the section context, on error it returns NULL.
+ */
+struct duda_config_section *duda_fconf_section_get(struct duda_config *cnf, const char *name)
+{
+    struct duda_config_section *s;
+
+    s = (struct duda_config_section *) mk_api->config_section_get((struct mk_config *) cnf,
+                                                                  name);
+    return s;
+}
+
+/*
+ * @METHOD_NAME: section_key
+ * @METHOD_DESC: Lookup a specific key inside the section and returns its value
+ * @METHOD_PROTO: void *section_key(struct duda_config_section *s, const char *name, int type)
+ * @METHOD_PARAM: section section context
+ * @METHOD_PARAM: name the name of the key to perform the lookup
+ * @METHOD_PARAM: type specify the type of value to return, the available options are: DUDA_CONFIG_STR, DUDA_CONFIG_NUM, DUDA_CONFIG_BOOL and DUDA_CONFIG_LIST.
+ * @METHOD_RETURN: Uppon successful completion it returns the section context, on error it returns NULL.
+ */
+void *duda_fconf_section_key(struct duda_config_section *section,
+                             char *name, int type)
+{
+    return mk_api->config_section_getval((struct mk_config_section *) section,
+                                         name, type);
+}
+
+
+/*
+ * @METHOD_NAME: read_file
  * @METHOD_DESC: Locate a named file under the file system, read it and return a buffer with it contents.
- * @METHOD_PROTO: char *read_file_path(const char *path)
+ * @METHOD_PROTO: char *read_file(const char *path)
  * @METHOD_RETURN: Upon successful completion it returns the buffered file content, on error it returns NULL.
  */
-char *duda_fconf_read_file_path(const char *path)
+char *duda_fconf_read_file(const char *path)
 {
     char *buf;
 
@@ -138,9 +182,13 @@ struct duda_api_fconf *duda_fconf_object()
     c->_get_path = duda_fconf_get_path;
     c->_set_path = duda_fconf_set_path;
 
-    /* read files */
-    c->_read_file = duda_fconf_read_file;
-    c->read_file_path = duda_fconf_read_file_path;
+    c->read_file = duda_fconf_read_file;
+
+    /* handlers for duda_config */
+    c->_read_conf  = duda_fconf_read_conf;
+    c->free_conf   = duda_fconf_free_conf;
+    c->section_get = duda_fconf_section_get;
+    c->section_key = duda_fconf_section_key;
 
     return c;
 }

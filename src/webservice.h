@@ -76,7 +76,7 @@ struct duda_api_objects *duda_new_api_objects();
 
 
 /* We declare the hidden _duda_main() function to avoid some warnings */
-int _duda_main(struct duda_api_objects *api, struct web_service *self);
+int _duda_main(struct duda_api_objects *api);
 
 /*
  * This is the tricky initialization for the web service in question,
@@ -106,6 +106,9 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         worker   = api->worker;                                         \
         xtime    = api->xtime;                                          \
                                                                         \
+        /* Reference to this web service */                             \
+        self = ws;                                                      \
+                                                                        \
         /* Initialize global linked lists */                            \
         mk_list_init(&duda_map_interfaces);                             \
         mk_list_init(&duda_map_urls);                                   \
@@ -114,8 +117,8 @@ int _duda_main(struct duda_api_objects *api, struct web_service *self);
         mk_list_init(&duda_worker_list);                                \
                                                                         \
         /* Invoke end-user main routine */                              \
-        return _duda_main(api, ws);                                     \
+        return _duda_main(api);                                         \
     }                                                                   \
-    int _duda_main(struct duda_api_objects *api, struct web_service *self)
+    int _duda_main(struct duda_api_objects *api)
 
 #endif

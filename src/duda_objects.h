@@ -53,5 +53,6 @@ struct duda_api_fconf *fconf;
 struct duda_api_global *global;
 struct duda_api_worker *worker;
 struct duda_api_xtime *xtime;
+struct web_service *self;
 
 #endif

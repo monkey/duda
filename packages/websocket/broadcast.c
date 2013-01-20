@@ -21,7 +21,6 @@
 
 #include <unistd.h>
 #include <sys/ioctl.h>
-
 #include "websocket.h"
 #include "broadcast.h"
 
