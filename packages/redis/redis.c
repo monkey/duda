@@ -45,7 +45,8 @@ int redis_read(int fd, struct duda_request *dr)
         printf("Error\n");
     else
         redisAsyncHandleRead(rc);
-    return 1;
+
+    return DUDA_EVENT_OWNED;
 }
 
 int redis_write(int fd, struct duda_request *dr)
