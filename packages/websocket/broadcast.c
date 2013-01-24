@@ -179,7 +179,6 @@ void ws_broadcast_worker(void *args)
     int efd;
     int bytes;
     int num_fds;
-    char drop[sizeof(struct ws_broadcast_frame)];
     struct epoll_event event = {0, {0}};
     struct epoll_event *events;
     struct ws_request *wr;
@@ -214,21 +213,8 @@ void ws_broadcast_worker(void *args)
             if (events[i].events & EPOLLIN) {
                 fd = events[i].data.fd;
 
-                /* Check the data size */
-                ioctl(fd, FIONREAD, &bytes);
-
-                /* If we have an invalid frame size, just drop it */
-                if (bytes != sizeof(struct ws_broadcast_frame)) {
-                    n = read(fd, drop, bytes);
-                    continue;
-                }
-
-                n = read(fd, &brf, bytes);
-                if (n != bytes) {
-                    printf("Error reading broadcast buffer size: %i/%i\n",
-                           n, bytes);
-                    continue;
-                }
+                /* Just read our capacity */
+                n = read(fd, &brf, sizeof(brf));
 
                 /*
                  * For each websocket request registered in the thread list,
