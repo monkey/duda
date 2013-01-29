@@ -201,9 +201,8 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
     }
 
     /* Try to print in the allocated space. */
-    va_start(ap, format);
-
     while (1) {
+        va_start(ap, format);
         n = vsnprintf(p, size, format, ap);
 
         /* If that worked, return the string. */
