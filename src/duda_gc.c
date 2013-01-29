@@ -2,7 +2,7 @@
 
 /*  Duda I/O
  *  --------
- *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -93,13 +93,14 @@ int duda_gc_free(duda_request_t *dr)
     int i;
     int freed = 0;
 
-    /* register new entry */
+    /* free all registered entries in the GC array */
     for (i = 0; i < dr->gc.size && dr->gc.used > 0; i++) {
         if (dr->gc.cells[i].status == 1) {
             mk_api->mem_free(dr->gc.cells[i].p);
             dr->gc.used--;
-            freed++;
             dr->gc.cells[i].p = NULL;
+            dr->gc.cells[i].status = 0;
+            freed++;
         }
     }
 

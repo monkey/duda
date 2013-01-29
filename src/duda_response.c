@@ -145,6 +145,7 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
     }
     else {
         body_buffer = item->data;
+
     }
 
     /* perform realloc if body_write() is called more than body_buffer_size */
@@ -199,11 +200,11 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
         return -1;
     }
 
+    /* Try to print in the allocated space. */
+    va_start(ap, format);
+
     while (1) {
-        /* Try to print in the allocated space. */
-        va_start(ap, format);
         n = vsnprintf(p, size, format, ap);
-        va_end(ap);
 
         /* If that worked, return the string. */
         if (n > -1 && n < size)
@@ -217,6 +218,7 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
             p = np;
         }
     }
+    va_end(ap);
 
     ret = _print(dr, p, n, MK_TRUE);
     if (ret == -1) {
