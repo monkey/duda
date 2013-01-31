@@ -177,7 +177,6 @@ void ws_broadcast_worker(void *args)
     int i, n, fd;
     int n_events = 50;
     int efd;
-    int bytes;
     int num_fds;
     struct epoll_event event = {0, {0}};
     struct epoll_event *events;
@@ -215,6 +214,9 @@ void ws_broadcast_worker(void *args)
 
                 /* Just read our capacity */
                 n = read(fd, &brf, sizeof(brf));
+                if (n <= 0) {
+                    continue;
+                }
 
                 /*
                  * For each websocket request registered in the thread list,
