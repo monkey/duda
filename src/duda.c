@@ -35,6 +35,7 @@
 MONKEY_PLUGIN("duda",                                     /* shortname */
               "Duda Web Services Framework",              /* name */
               VERSION,                                    /* version */
+              MK_PLUGIN_CORE_PRCTX |
               MK_PLUGIN_CORE_THCTX | MK_PLUGIN_STAGE_30); /* hooks */
 
 
@@ -90,6 +91,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
         ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
 
+        /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
             static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
             static_cb->callback = duda_load_symbol(ws->handler, static_cb->cb_name);
@@ -185,6 +187,8 @@ int duda_load_services()
 void duda_mem_init()
 {
     int len;
+    time_t expire = COOKIE_EXPIRE_TIME;
+    struct tm *gmt;
 
     /* Init mk_pointer's */
     mk_api->pointer_set(&dd_iov_none, "");
@@ -197,7 +201,12 @@ void duda_mem_init()
 
     /* Default expire value */
     dd_cookie_expire_value.data = mk_api->mem_alloc_z(COOKIE_MAX_DATE_LEN);
-    len = mk_api->time_to_gmt(&dd_cookie_expire_value.data, COOKIE_EXPIRE_TIME);
+
+    gmt = gmtime(&expire);
+    len = strftime(dd_cookie_expire_value.data,
+                   COOKIE_MAX_DATE_LEN,
+                   "%a, %d %b %Y %H:%M:%S GMT\r\n",
+                   gmt);
     dd_cookie_expire_value.len = len;
 }
 
@@ -353,10 +362,26 @@ void _mkp_core_thctx()
     }
 }
 
-int _mkp_prctx()
+int _mkp_core_prctx(struct server_config *config)
 {
+    (void) config;
+    struct mk_list *head;
+    struct web_service *ws;
+
     /* Initialize some pointers */
     duda_mem_init();
+
+    /*
+     * Go around each registered web service and check some
+     * specific configuration requests
+     */
+    mk_list_foreach(head, &services_loaded) {
+        ws = mk_list_entry(head, struct web_service, _head_loaded);
+        if (ws->bind_messages == MK_TRUE) {
+            duda_conf_messages_to(ws);
+        }
+    }
+
     return 0;
 }
 

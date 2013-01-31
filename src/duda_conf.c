@@ -137,6 +137,7 @@ int duda_conf_vhost_init()
     struct mk_config_section *section;
 
     mk_list_init(&services_list);
+    mk_list_init(&services_loaded);
 
     PLUGIN_TRACE("Loading applications");
     mk_list_foreach(head_host, hosts) {
@@ -217,6 +218,7 @@ int duda_conf_vhost_init()
                     }
 
                     mk_list_add(&ws->_head, &vs->services);
+                    mk_list_add(&ws->_head_loaded, &services_loaded);
                 }
                 else {
                     mk_warn("Duda: Invalid web service, skipping");
@@ -249,6 +251,36 @@ int duda_conf_vhost_init()
     return 0;
 }
 
+void duda_conf_messages_to(struct web_service *ws)
+{
+    int buf_size = 1024;
+    char path[buf_size];
+
+    time_t now;
+    struct tm *current;
+
+    snprintf(path, buf_size, "/tmp/%s.duda.messages",
+             ws->name.data);
+
+    freopen(path, "a+", stdout);
+    freopen(path, "a+", stderr);
+
+    now = time(NULL);
+    current = localtime(&now);
+    printf("[%i/%02i/%02i %02i:%02i:%02i] Duda I/O > '%s' Started\n",
+           current->tm_year + 1900,
+           current->tm_mon,
+           current->tm_mday,
+           current->tm_hour,
+           current->tm_min,
+           current->tm_sec,
+           ws->name.data);
+    printf("   version          : %s\n", VERSION);
+    printf("   server port      : %i\n", mk_api->config->serverport);
+    printf("   number of workers: %i\n", mk_api->config->workers);
+    fflush(stdout);
+
+}
 
 /*
  * Methods available for web services through the Object API
@@ -275,6 +307,20 @@ void duda_conf_force_redirect(struct web_service *ws)
     ws->url_force_redirect = MK_TRUE;
 };
 
+/*
+ * @METHOD_NAME: bind_messages
+ * @METHOD_DESC: Every time the HTTP stack prints out some text messages, these are
+ * sent by default to STDOUT. But if the service is running in background mode those
+ * messages will be lost. When invoking this method, it instruct Duda core to redirect
+ * all STDOUT messages to the service console file.
+ * @METHOD_PROTO: void bind_messages()
+ * @METHOD_RETURN: This method do not return any value.
+ */
+
+void duda_conf_bind_messages(struct web_service *ws)
+{
+    ws->bind_messages = MK_TRUE;
+}
 
 struct duda_api_conf *duda_conf_object()
 {
@@ -282,5 +328,7 @@ struct duda_api_conf *duda_conf_object()
 
     c = mk_api->mem_alloc(sizeof(struct duda_api_conf));
     c->_force_redirect = duda_conf_force_redirect;
+    c->_bind_messages   = duda_conf_bind_messages;
+
     return c;
 }
