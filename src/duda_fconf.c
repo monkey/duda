@@ -76,7 +76,6 @@ const char *duda_fconf_get_path(struct web_service *ws)
 struct duda_config *duda_fconf_read_conf(struct web_service *ws, const char *path)
 {
     unsigned long len;
-    char *buf;
     char *tmp = NULL;
     struct file_info finfo;
     struct duda_config *cnf;

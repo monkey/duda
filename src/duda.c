@@ -25,6 +25,7 @@
 #include "MKPlugin.h"
 #include "duda.h"
 #include "duda_gc.h"
+#include "duda_qs.h"
 #include "duda_map.h"
 #include "duda_conf.h"
 #include "duda_event.h"
@@ -448,7 +449,7 @@ int duda_request_parse(struct session_request *sr,
                        struct duda_request *dr)
 {
     short int last_field = MAP_WS_APP_NAME;
-    unsigned int i = 0, len, val_len;
+    int i = 0, len, val_len;
     int end;
     short int allowed_params = 0;
     struct mk_list *head_param = NULL;
@@ -564,7 +565,7 @@ int duda_service_end(duda_request_t *dr)
 int duda_service_html(duda_request_t *dr)
 {
     int n_copy;
-    int new_path_len;
+    unsigned int new_path_len;
     char *tmp;
     struct session_request *sr = dr->sr;
 

@@ -54,7 +54,7 @@ struct duda_interface {
 /* Methods associated to an interface */
 struct duda_method {
     char *uid;
-    int   uid_len;
+    unsigned int uid_len;
 
     short int num_params;
     char *callback;

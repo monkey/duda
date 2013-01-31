@@ -52,7 +52,7 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
 {
     int i;
     int count = 0;
-    int bytes_sent, bytes_to;
+    unsigned int bytes_sent, bytes_to;
     int reset_to = -1;
     struct mk_iov *buf = bb->buf;
 
