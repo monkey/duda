@@ -316,7 +316,19 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
         return -1;
     }
 
+    /* flush some enqueued content */
     ret = duda_queue_flush(dr);
+
+
+    /*
+     * The lesson of the day Feb 2, 2013: I must NEVER forget that when sending the HTTP
+     * headers, Monkey sets the TCP_CORK flag ON in the socket in case the caller wanted to send
+     * more data so we let know the Kernel to buffer a little more bytes. If we do not
+     * set TCP_CORK to OFF we will face some delays in the response. KeepAlive was very slow
+     * due to this bug. More than 4 hours to found this silly bug.
+     */
+    mk_api->socket_cork_flag(dr->cs->socket, TCP_CORK_OFF);
+
     if (ret == 0) {
         duda_service_end(dr);
     }
