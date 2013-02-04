@@ -212,6 +212,34 @@ void duda_mem_init()
 }
 
 
+static duda_request_t *recycle_get(int sockfd)
+{
+    struct mk_list *head, *tmp;
+    struct mk_list *list = pthread_getspecific(duda_global_ka_recycle);
+    duda_request_t *dr;
+
+    mk_list_foreach_safe(head, tmp, list) {
+        dr = mk_list_entry(head, duda_request_t, ka_recycle);
+        if (dr->socket == sockfd) {
+            return dr;
+        }
+    }
+
+    return NULL;
+}
+
+static int recycle_free(int sockfd)
+{
+    duda_request_t *dr = recycle_get(sockfd);
+
+    if (dr) {
+        mk_list_del(&dr->ka_recycle);
+        return 0;
+    }
+
+    return -1;
+}
+
 /*
  * These are the Monkey hooks for the event handler, each time an event
  * arrives here and depending of the event type, it will perform a lookup
@@ -264,6 +292,15 @@ int _mkp_event_write(int sockfd)
 int _mkp_event_close(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
+    duda_request_t *dr = NULL;
+
+    dr = recycle_get(sockfd);
+    if (dr) {
+        mk_list_del(&dr->ka_recycle);
+        duda_gc_free(dr);
+        mk_api->mem_free(dr);
+    }
+
     if (eh && eh->cb_on_close) {
         eh->cb_on_close(eh->sockfd, eh->dr);
         duda_event_delete(sockfd);
@@ -276,6 +313,9 @@ int _mkp_event_close(int sockfd)
 int _mkp_event_error(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
+
+    recycle_free(sockfd);
+
     if (eh && eh->cb_on_error) {
         eh->cb_on_error(eh->sockfd, eh->dr);
         duda_event_delete(sockfd);
@@ -288,6 +328,9 @@ int _mkp_event_error(int sockfd)
 int _mkp_event_timeout(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
+
+    recycle_free(sockfd);
+
     if (eh && eh->cb_on_timeout) {
         eh->cb_on_timeout(eh->sockfd, eh->dr);
         duda_event_delete(sockfd);
@@ -303,10 +346,15 @@ void _mkp_core_thctx()
     struct mk_list *head_vs, *head_ws, *head_gl;
     struct mk_list *list_events_write;
     struct mk_list *events_list;
+    struct mk_list *ka_recycle;
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
     duda_global_t *entry_gl;
     void *data;
+
+    ka_recycle = mk_api->mem_alloc(sizeof(struct mk_list));
+    mk_list_init(ka_recycle);
+    pthread_setspecific(duda_global_ka_recycle, (void *) ka_recycle);
 
     list_events_write = mk_api->mem_alloc(sizeof(struct mk_list));
     mk_list_init(list_events_write);
@@ -398,6 +446,7 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     /* Global data / Thread scope */
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
+    pthread_key_create(&duda_global_ka_recycle, NULL);
 
     return 0;
 }
@@ -541,6 +590,8 @@ int duda_request_parse(struct session_request *sr,
 int duda_service_end(duda_request_t *dr)
 {
     int ret;
+    struct mk_list *ka_recycle;
+    duda_request_t *recycled;
 
     /* call service end_callback() */
     if (dr->end_callback) {
@@ -548,12 +599,23 @@ int duda_service_end(duda_request_t *dr)
     }
 
     /* Finalize HTTP stuff with Monkey core */
-    ret = mk_api->http_request_end(dr->cs->socket);
+    ret = mk_api->http_request_end(dr->socket);
 
     /* free queue resources... */
     duda_queue_free(&dr->queue_out);
-    duda_gc_free(dr);
-    mk_api->mem_free(dr);
+    duda_gc_free_content(dr);
+
+    recycled = recycle_get(dr->socket);
+    if (ret == 0 && !recycled) {
+        ka_recycle = pthread_getspecific(duda_global_ka_recycle);
+        mk_list_add(&dr->ka_recycle, ka_recycle);
+        mk_list_init(&dr->queue_out);
+        return ret;
+    }
+
+    //if (ret == -1) {
+    //    mk_api->mem_free(dr);
+    // }
 
     return ret;
 }
@@ -625,23 +687,30 @@ int duda_service_run(struct plugin *plugin,
 {
     struct duda_request *dr;
 
-    dr = mk_api->mem_alloc(sizeof(duda_request_t));
-    if (!dr) {
-        PLUGIN_TRACE("could not allocate enough memory");
-        return -1;
+    if (cs->counter_connections >= 1) {
+        dr = recycle_get(cs->socket);
     }
+    else {
+        dr = mk_api->mem_alloc(sizeof(duda_request_t));
+        if (!dr) {
+            PLUGIN_TRACE("could not allocate enough memory");
+            return -1;
+        }
+        /* Initialize garbage collector */
+        duda_gc_init(dr);
 
-    /* service details */
-    dr->ws_root = web_service;
-    dr->n_params = 0;
-    dr->plugin = plugin;
+        /* service details */
+        dr->ws_root = web_service;
+        dr->plugin = plugin;
 
-    dr->socket = cs->socket;
-    dr->cs = cs;
-    dr->sr = sr;
+        dr->socket = cs->socket;
+        dr->cs = cs;
+        dr->sr = sr;
+    }
 
     /* method invoked */
     dr->_method = NULL;
+    dr->n_params = 0;
 
     /* callbacks */
     dr->end_callback = NULL;
@@ -656,9 +725,6 @@ int duda_service_run(struct plugin *plugin,
 
     /* Query string */
     dr->qs.count = 0;
-
-    /* Initialize garbage collector */
-    duda_gc_init(dr);
 
     /* Parse the query string */
     duda_qs_parse(dr);

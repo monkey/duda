@@ -319,7 +319,6 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     /* flush some enqueued content */
     ret = duda_queue_flush(dr);
 
-
     /*
      * The lesson of the day Feb 2, 2013: I must NEVER forget that when sending the HTTP
      * headers, Monkey sets the TCP_CORK flag ON in the socket in case the caller wanted to send

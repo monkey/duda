@@ -82,9 +82,14 @@ typedef struct duda_request {
 
     /* Lists linked to (events)*/
     struct mk_list _head_events_write;
+
+    /* Keep-Alive recycle */
+    struct mk_list ka_recycle;
+
 } duda_request_t;
 
 pthread_key_t duda_global_events_write;
+pthread_key_t duda_global_ka_recycle;
 
 mk_pointer dd_iov_none;
 

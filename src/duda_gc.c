@@ -88,7 +88,7 @@ void *duda_gc_alloc(duda_request_t *dr, const size_t size)
     return p;
 }
 
-int duda_gc_free(duda_request_t *dr)
+int duda_gc_free_content(duda_request_t *dr)
 {
     int i;
     int freed = 0;
@@ -104,6 +104,11 @@ int duda_gc_free(duda_request_t *dr)
         }
     }
 
-    mk_api->mem_free(dr->gc.cells);
     return freed;
+}
+
+int duda_gc_free(duda_request_t *dr)
+{
+    mk_api->mem_free(dr->gc.cells);
+    return 0;
 }
