@@ -201,7 +201,7 @@ int duda_conf_vhost_init()
                             strncpy(ws->docroot.data, app_docroot, len);
                             ws->docroot.data[len]    = '/';
                             ws->docroot.data[len + 1]= '\0';
-                            ws->docroot.len  = len + 2;
+                            ws->docroot.len  = len + 1;
                         }
                         else {
                             ws->docroot.data = mk_api->str_dup(app_docroot);

@@ -685,12 +685,9 @@ int duda_service_run(struct plugin *plugin,
                      struct session_request *sr,
                      struct web_service *web_service)
 {
-    struct duda_request *dr;
+    struct duda_request *dr = recycle_get(cs->socket);
 
-    if (cs->counter_connections >= 1) {
-        dr = recycle_get(cs->socket);
-    }
-    else {
+    if (!dr) {
         dr = mk_api->mem_alloc(sizeof(duda_request_t));
         if (!dr) {
             PLUGIN_TRACE("could not allocate enough memory");
@@ -740,7 +737,7 @@ int duda_service_run(struct plugin *plugin,
             mk_api->file_get_info(dr->sr->real_path.data, &dr->sr->file_info);
             dr->sr->stage30_blocked = MK_TRUE;
         }
-        mk_api->mem_free(dr);
+        /* FIXME: should i free dr ? */
         return -1;
     }
 
