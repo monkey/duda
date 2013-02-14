@@ -85,6 +85,7 @@ int cb_ws_read(int sockfd, struct duda_request *dr)
 {
     uint64_t i;
     int n;
+    int paysize = 256;
     unsigned char buf[256];
     unsigned int frame_size = 0;
     unsigned int frame_opcode = 0;
@@ -141,8 +142,7 @@ int cb_ws_read(int sockfd, struct duda_request *dr)
 
     wr->opcode      = frame_opcode;
     wr->payload_len = payload_length;
-    wr->payload     = monkey->mem_alloc(256);
-    memset(wr->payload, '\0', sizeof(wr->payload));
+    wr->payload     = monkey->mem_alloc_z(paysize);
 
     if (frame_mask) {
         memcpy(frame_masking_key, buf + masking_key_offset, WS_FRAME_MASK_LEN);
