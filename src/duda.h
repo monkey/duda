@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2001-2012, Eduardo Silva P.
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -83,13 +83,13 @@ typedef struct duda_request {
     /* Lists linked to (events)*/
     struct mk_list _head_events_write;
 
-    /* Keep-Alive recycle */
-    struct mk_list ka_recycle;
+    /* Head to red-black tree list that holds all DRs */
+    struct rb_node _rb_head;
 
 } duda_request_t;
 
 pthread_key_t duda_global_events_write;
-pthread_key_t duda_global_ka_recycle;
+pthread_key_t duda_global_dr_list;
 
 mk_pointer dd_iov_none;
 
