@@ -636,17 +636,12 @@ int duda_service_end(duda_request_t *dr)
         dr->end_callback(dr);
     }
 
-    /* Finalize HTTP stuff with Monkey core */
-    ret = mk_api->http_request_end(dr->socket);
-
     /* free queue resources... */
     duda_queue_free(&dr->queue_out);
     duda_gc_free_content(dr);
 
-    if (ret == 0) {
-        mk_list_init(&dr->queue_out);
-        return ret;
-    }
+    /* Finalize HTTP stuff with Monkey core */
+    ret = mk_api->http_request_end(dr->socket);
 
     return ret;
 }
