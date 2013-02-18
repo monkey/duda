@@ -756,31 +756,35 @@ int duda_service_run(struct plugin *plugin,
     /* Parse the query string */
     duda_qs_parse(dr);
 
-    /* Parse request for Duda static maps */
-    if (duda_map_static_check(dr) == 0) {
-        return 0;
-    }
-
-    /* Parse request for Duda map format */
+    /* Parse request for 'Duda Map' format */
     if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
+        /* Static Map */
+        if (duda_map_static_check(dr) == 0) {
+            return 0;
+        }
+
+        /* Static Content file */
         if (duda_service_html(dr) == 0) {
             mk_api->file_get_info(dr->sr->real_path.data, &dr->sr->file_info);
             dr->sr->stage30_blocked = MK_TRUE;
+            return -1;
         }
-        /* FIXME: should i free dr ? */
-        return -1;
     }
-
-    if (dr->_method->cb_webservice) {
-        PLUGIN_TRACE("CB %s()", dr->_method->callback);
-        dr->_method->cb_webservice(dr);
+    else {
+        if (dr->_method->cb_webservice) {
+            PLUGIN_TRACE("CB %s()", dr->_method->callback);
+            dr->_method->cb_webservice(dr);
+        }
+        else if (dr->_method->cb_builtin) {
+            dr->_method->cb_builtin(dr);
+        }
+        else {
+            return -1;
+        }
         return 0;
     }
-    else if (dr->_method->cb_builtin) {
-        dr->_method->cb_builtin(dr);
-    }
 
-    return 0;
+    return -1;
 }
 
 /*
