@@ -74,7 +74,7 @@ struct duda_api_worker *duda_worker_object()
  * @METHOD_NAME: spawn
  * @METHOD_DESC: It spawn a new worker thread. This method must be invoked from
  * duda_main().
- * @METHOD_PROTO: int new(void *(start_routine) (void *), void *arg)
+ * @METHOD_PROTO: int spawn(void *(start_routine) (void *), void *arg)
  * @METHOD_PARAM: start_routine the routine or function that will be triggered under a thread context.
  * @METHOD_PARAM: arg a reference to the argument that will be passed to the function
  * @METHOD_RETURN: Upon successful completion it returns the worker id, on error
