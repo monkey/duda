@@ -53,11 +53,16 @@ struct duda_package {
     session  = api->session;                                            \
     cookie   = api->cookie;                                             \
     global   = api->global;                                             \
+    qs       = api->qs;                                                 \
+    fconf    = api->fconf;                                              \
+    conf     = api->conf;                                               \
+    data     = api->data;                                               \
     worker   = api->worker;                                             \
     xtime    = api->xtime;                                              \
     mk_list_init(&duda_map_interfaces);                                 \
     mk_list_init(&duda_map_urls);                                       \
     mk_list_init(&duda_global_dist);                                    \
+    mk_list_init(&duda_ws_packages);                                    \
     mk_list_init(&duda_worker_list);
 
 /* Data type */

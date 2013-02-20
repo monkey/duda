@@ -52,6 +52,7 @@ struct web_service {
     mk_pointer name;
     mk_pointer docroot;
     mk_pointer confdir;
+    mk_pointer datadir;
 
     int  enabled;
     int  url_force_redirect;
@@ -80,6 +81,8 @@ struct web_service {
 };
 
 int duda_conf_set_confdir(struct web_service *ws, const char *dir);
+int duda_conf_set_datadir(struct web_service *ws, const char *dir);
+
 int duda_conf_main_init(const char *confdir);
 int duda_conf_vhost_init();
 void duda_conf_messages_to(struct web_service *ws);

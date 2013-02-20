@@ -55,6 +55,37 @@ int duda_conf_set_confdir(struct web_service *ws, const char *dir)
     return 0;
 }
 
+int duda_conf_set_datadir(struct web_service *ws, const char *dir)
+{
+    int ret;
+    int len;
+    struct file_info finfo;
+
+    ret = mk_api->file_get_info(dir, &finfo);
+    if (ret != 0 || finfo.is_directory != MK_TRUE) {
+        return -1;
+    }
+
+    if (ws->datadir.data) {
+        free(ws->datadir.data);
+    }
+
+    len = strlen(dir);
+    if (dir[len - 1] != '/') {
+        ws->datadir.data = mk_api->mem_alloc(len + 2);
+        strncpy(ws->datadir.data, dir, len);
+        ws->datadir.data[len]     = '/';
+        ws->datadir.data[len + 1] = '\0';
+        ws->datadir.len           = len + 2;
+    }
+    else {
+        ws->datadir.data = mk_api->str_dup(dir);
+        ws->datadir.len  = len;
+    }
+
+    return 0;
+}
+
 int duda_conf_main_init(const char *confdir)
 {
     int ret = 0;
@@ -120,6 +151,7 @@ int duda_conf_vhost_init()
     char *app_name;
     char *app_docroot;
     char *app_confdir;
+    char *app_datadir;
     int   app_enabled;
     struct file_info finfo;
 
@@ -177,6 +209,10 @@ int duda_conf_vhost_init()
                                                             "ConfDir",
                                                             MK_CONFIG_VAL_STR);
 
+                app_datadir = mk_api->config_section_getval(section,
+                                                            "DataDir",
+                                                            MK_CONFIG_VAL_STR);
+
                 if (app_name && mk_is_bool(app_enabled)) {
                     ws = mk_api->mem_alloc_z(sizeof(struct web_service));
 
@@ -209,6 +245,7 @@ int duda_conf_vhost_init()
                         }
                     }
 
+                    /* ConfDir */
                     if (app_confdir) {
                         ret = duda_conf_set_confdir(ws, app_confdir);
                         if (ret != 0) {
@@ -217,6 +254,16 @@ int duda_conf_vhost_init()
                         }
                     }
 
+                    /* DataDir */
+                    if (app_datadir) {
+                        ret = duda_conf_set_datadir(ws, app_datadir);
+                        if (ret != 0) {
+                            mk_err("Duda: invalid DataDir, it must be a directory");
+                            exit(EXIT_FAILURE);
+                        }
+                    }
+
+                    /* link data to the web services list */
                     mk_list_add(&ws->_head, &vs->services);
                     mk_list_add(&ws->_head_loaded, &services_loaded);
                 }

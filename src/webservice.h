@@ -35,6 +35,7 @@
 #include "duda_param.h"
 #include "duda_session.h"
 #include "duda_cookie.h"
+#include "duda_data.h"
 #include "duda_conf.h"
 #include "duda_xtime.h"
 #include "duda_console.h"
@@ -101,6 +102,7 @@ int _duda_main(struct duda_api_objects *api);
         cookie   = api->cookie;                                         \
         global   = api->global;                                         \
         qs       = api->qs;                                             \
+        data     = api->data;                                           \
         conf     = api->conf;                                           \
         fconf    = api->fconf;                                          \
         worker   = api->worker;                                         \
