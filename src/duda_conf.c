@@ -133,6 +133,19 @@ int duda_conf_main_init(const char *confdir)
             exit(EXIT_FAILURE);
         }
 
+        /* Duda Document Root (aka '/ddr') */
+        document_root = mk_api->config_section_getval(section, "DocumentRoot",
+                                                      MK_CONFIG_VAL_STR);
+        if (mk_api->file_get_info(packages_root, &finfo) != 0) {
+            mk_err("Duda: Invalid document root path");
+            exit(EXIT_FAILURE);
+        }
+
+        if (finfo.is_directory == MK_FALSE) {
+            mk_err("Duda: DocumentRoot must be a valid directory");
+            exit(EXIT_FAILURE);
+        }
+
         PLUGIN_TRACE("Services Root '%s'", services_root);
         PLUGIN_TRACE("Packages Root '%s'", packages_root);
     }

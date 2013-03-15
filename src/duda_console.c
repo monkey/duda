@@ -67,26 +67,14 @@ void duda_console_cb_messages(duda_request_t *dr)
 void duda_console_cb_map(duda_request_t *dr)
 {
     struct web_service *ws = dr->ws_root;
-    struct mk_list *head_iface, *head_method;
-    struct duda_interface *entry_iface;
-    struct duda_method *entry_method;
+    struct mk_list *head;
 
-    char *header = "<html><head><title>Duda Map: %s</title>%s</head><body>\n";
-    char *css    = "<STYLE type=\"text/css\">\n"
-                   "body {\n"
-                   "      font-family: trebuchet, Arial, Verdana, Helvetica, sans-serif;\n"
-		           "      letter-spacing: 0.015em;\n"
-                   " 	  word-spacing: 0.080em;\n"
-		           "      font-style:normal;\n"
-                   "	  font-weight:normal;\n"
-                   "      font-size: 0.75em;\n"
-                   "	  color: #073a61;\n"
-                   "  	  border-width: 6px 0 0 0;\n"
-                   "      border-style: solid;\n"
-                   "      margin: 0;\n"
-                   "      padding-left: 10px;\n"
-                   "}\n"
-                   "</STYLE>\n";
+    char *header = "<html><head>"
+                          "<title>Duda Map: %s</title>"
+                          " %s"
+                          "</head>"
+                    "<body>\n";
+    char *css    =  "<link href=\"/ddr/bootstrap/css/bootstrap.css\" rel=\"stylesheet\">";
     char *footer = "</body></html>\n";
 
     duda_response_http_status(dr, 200);
@@ -94,30 +82,103 @@ void duda_console_cb_map(duda_request_t *dr)
 
     /* Header */
     duda_response_printf(dr, header, dr->ws_root->name.data, css);
-    duda_response_printf(dr, "<h2>%s/</h2>\n<ul>", dr->ws_root->name.data);
+    duda_response_printf(dr, "<div class=\"container\">"
+                             "  <div class=\"row\">"
+                                   "<h1>%s/</h1>\n"
+                                       "<address>\n"
+                                       "  Routing and URL map for <strong>%s</strong> web service<br>\n"
+                                       "</address>\n",
+                         dr->ws_root->name.data, dr->ws_root->name.data);
 
-    /* List of interfaces */
-    mk_list_foreach(head_iface, ws->map_interfaces) {
-        entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
-        duda_response_printf(dr, "<h3>%s/<h3>\n<ul>\n", entry_iface->uid);
 
-        /* List methods */
-        mk_list_foreach(head_method, &entry_iface->methods) {
-            entry_method = mk_list_entry(head_method, struct duda_method, _head);
-            duda_response_printf(dr, "\t<li>%s()</li>\n", entry_method->uid);
+    /* <ul> */
 
-            /* FIXME: print parameters
-            mk_list_foreach(head_param, &entry_method->params) {
-                entry_param = mk_list_entry(head_param, struct duda_param, _head);
-                body_printf(dr, "\t\t<li>%s</li>\n", entry_param->name);
-            }
-            body_printf(dr, "\t\t</ul>\n");
-            */
-        }
-        duda_response_printf(dr, "</ul>\n");
+    duda_response_printf(dr, "<hr>\n");
+    duda_response_printf(dr, "<h2>Routing</h2>");
+    duda_response_printf(dr, "<p class=\"muted\">"
+                             "   the following section list the static URL maps and "
+                             "   the interfaces/methods defined through the API."
+                             "</p>");
+
+    /*
+     * List the service defined based on static map routes
+     */
+    struct duda_map_static_cb *st;
+
+    duda_response_printf(dr, "<h3>Static maps</h3>");
+    duda_response_printf(dr, "<table class=\"table table-bordered table-hover table-condensed\">"
+                         "<thead>"
+                         "<tr>"
+                         "  <th>Route</th>"
+                         "  <th>Callback</th>"
+                         "</tr>"
+                         "</thead>"
+                         "<tbody>");
+
+    mk_list_foreach(head, dr->ws_root->map_urls) {
+        st = mk_list_entry(head, struct duda_map_static_cb, _head);
+        duda_response_printf(dr,
+                             "<tr>"
+                             "<td>%s</td>"
+                             "<td>%s</td>"
+                             "</tr>",
+                             st->path, st->cb_name
+                             );
     }
+    duda_response_printf(dr, "</tbody></table>");
 
-    duda_response_printf(dr, "</ul>");
+    /*
+     * List service defined Map-Interfaces
+     */
+    struct duda_interface *iface;
+    struct duda_method *method;
+    struct mk_list *head_method;
+    duda_response_printf(dr, "<h3>Interfaces and methods</h3>");
+    duda_response_printf(dr, "<table class=\"table table-bordered table-hover table-condensed\">"
+                         "<thead>"
+                         "<tr>"
+                         "  <th>Interface</th>"
+                         "  <th>Method</th>"
+                         "  <th>Callback</th>"
+                         "</tr>"
+                         "</thead>"
+                         "<tbody>");
+    mk_list_foreach(head, ws->map_interfaces) {
+        iface = mk_list_entry(head, struct duda_interface, _head);
+
+        /* Print the interface */
+        duda_response_printf(dr,
+                             "<tr class=\"success\">"
+                             "<td>%s/</td>"
+                             "<td></td>"
+                             "<td></td>"
+                             "</tr>",
+                             iface->uid);
+
+        /* Print the methods associated */
+        mk_list_foreach(head_method, &iface->methods) {
+            method = mk_list_entry(head_method, struct duda_method, _head);
+
+            if (method->callback) {
+                duda_response_printf(dr,
+                                     "<tr>"
+                                     "<td></td>"
+                                     "<td>%s</td>"
+                                     "<td>%s</td>"
+                                     "</tr>",
+                                     method->uid, method->callback);
+            }
+            else {
+                duda_response_printf(dr,
+                                     "<tr>"
+                                     "<td></td>"
+                                     "<td>%s</td>"
+                                     "<td></td>"
+                                     "</tr>",
+                                     method->uid, method->callback);
+            }
+        }
+    }
 
     /* Footer */
     duda_response_print(dr, footer, strlen(footer));

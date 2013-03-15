@@ -647,30 +647,15 @@ int duda_service_end(duda_request_t *dr)
 }
 
 /*
- * Check if the requested path belongs to a static content owned by
- * the web service
+ * It override the initial session_request real path set by the virtual
+ * host document root path.
  */
-int duda_service_html(duda_request_t *dr)
+int duda_override_docroot(struct session_request *sr, int uri_offset, char *path, int len)
 {
-    int n_copy;
     unsigned int new_path_len;
     char *tmp;
-    struct session_request *sr = dr->sr;
 
-    /* Check if we have a local DocumentRoot for this web service */
-    if (!dr->ws_root->docroot.data) {
-        return -1;
-    }
-
-    /* Check the web service name in the URI */
-    if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
-                dr->ws_root->name.len) != 0) {
-        return -1;
-    }
-
-
-    new_path_len = (sr->uri_processed.len - dr->ws_root->name.len - 1);
-    new_path_len += dr->ws_root->docroot.len;
+    new_path_len = (sr->uri_processed.len + len);
 
     /*
      * Is the new path length minor than MK_PATH_BASE ?, sr->real_path_static have a length
@@ -691,17 +676,46 @@ int duda_service_html(duda_request_t *dr)
         }
     }
 
-    n_copy = sr->uri_processed.len - dr->ws_root->name.len;
-
     /* Compose new file path */
-    strncpy(sr->real_path.data, dr->ws_root->docroot.data, dr->ws_root->docroot.len);
-    strncpy(sr->real_path.data + dr->ws_root->docroot.len,
-            sr->uri_processed.data + dr->ws_root->name.len + 2,
-            n_copy - 1);
-    sr->real_path.data[dr->ws_root->docroot.len + n_copy - 2] = '\0';
-    sr->real_path.len = dr->ws_root->docroot.len + n_copy - 2;
+    memcpy(sr->real_path.data, path, len);
+    strncpy(sr->real_path.data + len,
+            sr->uri_processed.data + uri_offset, sr->uri_processed.len - uri_offset);
+    sr->real_path.len = abs(len + sr->uri_processed.len - uri_offset);
 
-    PLUGIN_TRACE("New path is '%s'", sr->real_path.data);
+    printf("Path override to: '%s'", sr->real_path.data);
+
+    mk_api->file_get_info(sr->real_path.data, &sr->file_info);
+    sr->stage30_blocked = MK_TRUE;
+
+    return 0;
+}
+
+/*
+ * Check if the requested path belongs to a static content owned by
+ * the web service
+ */
+int duda_service_html(duda_request_t *dr)
+{
+    struct session_request *sr = dr->sr;
+
+    /* Check if we have a local DocumentRoot for this web service */
+    if (!dr->ws_root->docroot.data) {
+        return -1;
+    }
+
+    /* Check the web service name in the URI */
+    if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
+                dr->ws_root->name.len) != 0) {
+        return -1;
+    }
+
+    /*
+     * We need to override the document root set by the virtual host
+     * logic in the session_request struct by the web service document root
+     */
+    duda_override_docroot(sr, dr->ws_root->name.len + 1,
+                          dr->ws_root->docroot.data,
+                          dr->ws_root->docroot.len);
 
     return 0;
 }
@@ -765,8 +779,6 @@ int duda_service_run(struct plugin *plugin,
 
         /* Static Content file */
         if (duda_service_html(dr) == 0) {
-            mk_api->file_get_info(dr->sr->real_path.data, &dr->sr->file_info);
-            dr->sr->stage30_blocked = MK_TRUE;
             return -1;
         }
     }
@@ -831,6 +843,13 @@ int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
 
     /* we don't care about '/' request */
     if (sr->uri_processed.len > 1) {
+
+        /* Check for a DDR request */
+        if (document_root && strncmp(sr->uri_processed.data, "/ddr", 4) == 0) {
+            duda_override_docroot(sr, 4, document_root, strlen(document_root));
+            return MK_PLUGIN_RET_NOT_ME;
+        }
+
         /* Match virtual host */
         mk_list_foreach(head, &services_list) {
             vs_entry = mk_list_entry(head, struct vhost_services, _head);
