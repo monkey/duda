@@ -69,21 +69,22 @@ int duda_qs_count(duda_request_t *dr)
 char *duda_qs_get(duda_request_t *dr, const char *key)
 {
     int i;
+    int len;
     char *value = NULL;
 
     if (dr->qs.count <= 0) {
         return NULL;
     }
 
+    len = strlen(key);
     for (i=0 ; i < dr->qs.count; i++) {
-        if (strncmp(dr->qs.entries[i].key.data, key,
-                    dr->qs.entries[i].key.len) == 0) {
+        if (dr->qs.entries[i].key.len == len &&
+            strncmp(dr->qs.entries[i].key.data, key, len) == 0) {
             value = mk_api->str_copy_substr(dr->qs.entries[i].value.data, 0,
                                             (int) dr->qs.entries[i].value.len);
 
             /* Register the new memory buffer into the garbage collector */
             duda_gc_add(dr, value);
-
             return value;
         }
     }
