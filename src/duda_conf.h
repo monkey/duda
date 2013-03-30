@@ -91,12 +91,12 @@ void duda_conf_messages_to(struct web_service *ws);
 /* Object API */
 
 struct duda_api_conf {
+    #define force_redirect()  _force_redirect(self)
     void (*_force_redirect) (struct web_service *);
+
+    #define bind_messages() _bind_messages(self)
     void (*_bind_messages) (struct web_service *);
 };
-
-#define force_redirect()  _force_redirect(self)
-#define bind_messages()   _bind_messages(self)
 
 struct duda_api_conf *duda_conf_object();
 

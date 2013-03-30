@@ -27,15 +27,15 @@
 /* Object API */
 
 struct duda_api_data {
+    #define set_path(dir) _set_path(self, dir)
     int (*_set_path) (struct web_service *, const char *);
+
+    #define get_path() _get_path(self)
     const char *(*_get_path) (struct web_service *);
+
+    #define locate(f)      _locate(dr, f)
     char *(*_locate) (duda_request_t *, const char *);
 };
-
-
-#define get_path()     _get_path(self)
-#define set_path(dir)  _set_path(self, dir)
-#define locate(f)      _locate(dr, f)
 
 struct duda_api_data *duda_data_object();
 

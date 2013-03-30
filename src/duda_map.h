@@ -79,10 +79,13 @@ struct duda_param {
 
 struct duda_api_map {
     /* Static stuff */
+    #define static_add(p, cb) _static_add(p, cb, &duda_map_urls)
     int (*_static_add) (const char *, const char *, struct mk_list *);
 
     /* interface_ */
+    #define add_interface(i)  _add_interface(i, &duda_map_interfaces)
     void (*_add_interface) (struct duda_interface *, struct mk_list *);
+
     struct duda_interface *(*interface_new) (char *);
     void (*interface_add_method) (struct duda_method *, struct duda_interface *);
 
@@ -115,9 +118,5 @@ void duda_map_method_add_param(duda_param_t *param, duda_method_t *method);
 int duda_map_static_check(duda_request_t *dr);
 
 struct duda_api_map *duda_map_object();
-
-/* Object macros */
-#define static_add(p, cb) _static_add(p, cb, &duda_map_urls)
-#define add_interface(i)  _add_interface(i, &duda_map_interfaces)
 
 #endif

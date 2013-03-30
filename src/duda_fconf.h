@@ -60,23 +60,24 @@ struct duda_config_entry
 /* Object API */
 
 struct duda_api_fconf {
+    #define get_path() _get_path(self)
     const char *(*_get_path) (struct web_service *);
+
+    #define set_path(dir)  _set_path(self, dir)
     int (*_set_path) (struct web_service *, const char *);
+
+    #define read_file(f) _read_file(self, f)
     char *(*read_file) (const char *);
 
     /* --- specific handlers for struct duda_config --- */
+    #define read_conf(f)   _read_conf(self, f)
     struct duda_config *(*_read_conf) (struct web_service *, const char *);
+
     void (*free_conf) (struct duda_config *);
     struct duda_config_section *(*section_get) (struct duda_config *,
                                                 const char *);
     void *(*section_key) (struct duda_config_section *, char *, int);
 };
-
-
-#define get_path()     _get_path(self)
-#define set_path(dir)  _set_path(self, dir)
-#define read_file(f)   _read_file(self, f)
-#define read_conf(f)   _read_conf(self, f)
 
 struct duda_api_fconf *duda_fconf_object();
 
