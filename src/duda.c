@@ -682,11 +682,15 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
             sr->uri_processed.data + uri_offset, sr->uri_processed.len - uri_offset);
     sr->real_path.len = abs(len + sr->uri_processed.len - uri_offset);
 
-    printf("Path override to: '%s'", sr->real_path.data);
+    int ret;
+    ret = mk_api->file_get_info(sr->real_path.data, &sr->file_info);
+    if (ret == -1) {
+        return -1;
+    }
 
-    mk_api->file_get_info(sr->real_path.data, &sr->file_info);
     sr->stage30_blocked = MK_TRUE;
 
+    //printf("new path: '%s'\n", sr->real_path.data);
     return 0;
 }
 
@@ -696,6 +700,7 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
  */
 int duda_service_html(duda_request_t *dr)
 {
+    int ret;
     struct session_request *sr = dr->sr;
 
     /* Check if we have a local DocumentRoot for this web service */
@@ -713,11 +718,11 @@ int duda_service_html(duda_request_t *dr)
      * We need to override the document root set by the virtual host
      * logic in the session_request struct by the web service document root
      */
-    duda_override_docroot(sr, dr->ws_root->name.len + 1,
-                          dr->ws_root->docroot.data,
-                          dr->ws_root->docroot.len);
+    ret = duda_override_docroot(sr, dr->ws_root->name.len + 1,
+                                dr->ws_root->docroot.data,
+                                dr->ws_root->docroot.len);
 
-    return 0;
+    return ret;
 }
 
 int duda_service_run(struct plugin *plugin,
@@ -772,14 +777,14 @@ int duda_service_run(struct plugin *plugin,
 
     /* Parse request for 'Duda Map' format */
     if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
-        /* Static Map */
-        if (duda_map_static_check(dr) == 0) {
-            return 0;
-        }
-
         /* Static Content file */
         if (duda_service_html(dr) == 0) {
             return -1;
+        }
+
+        /* Static Map */
+        if (duda_map_static_check(dr) == 0) {
+            return 0;
         }
     }
     else {
