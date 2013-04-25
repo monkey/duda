@@ -22,9 +22,9 @@
 #include "MKPlugin.h"
 #include "webservice.h"
 
-#include "stdio.h"
-#include "stdarg.h"
-#include "time.h"
+#include <stdio.h>
+#include <stdarg.h>
+#include <time.h>
 
 void _duda_debug_header(int type)
 {
