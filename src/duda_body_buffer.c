@@ -69,7 +69,7 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
         /* Go around each buffer entry and check where the offset took place */
         for (i = 0; i < buf->iov_idx; i++) {
             if (count + buf->io[i].iov_len == bytes_sent) {
-                reset_to = 1;
+                reset_to = i;
                 break;
             }
             else if (bytes_sent < (count + buf->io[i].iov_len)) {
