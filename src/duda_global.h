@@ -23,7 +23,7 @@
 #define DUDA_GLOBAL_H
 
 #include "MKPlugin.h"
-#include "pthread.h"
+#include <pthread.h>
 
 typedef struct {
     pthread_key_t key;    /* Pthread key unique identifier */
