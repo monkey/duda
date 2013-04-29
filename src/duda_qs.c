@@ -69,7 +69,7 @@ int duda_qs_count(duda_request_t *dr)
 char *duda_qs_get(duda_request_t *dr, const char *key)
 {
     int i;
-    int len;
+    unsigned int len;
     char *value = NULL;
 
     if (dr->qs.count <= 0) {
