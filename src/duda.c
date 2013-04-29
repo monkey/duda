@@ -681,6 +681,7 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
     strncpy(sr->real_path.data + len,
             sr->uri_processed.data + uri_offset, sr->uri_processed.len - uri_offset);
     sr->real_path.len = abs(len + sr->uri_processed.len - uri_offset);
+    sr->real_path.data[sr->real_path.len] = '\0';
 
     int ret;
     ret = mk_api->file_get_info(sr->real_path.data, &sr->file_info);
