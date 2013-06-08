@@ -28,6 +28,7 @@
 
 /*
  * @OBJ_NAME: data
+ * @OBJ_MENU: Data
  * @OBJ_DESC: It provides a set of methods to handle the web service data directory.
  * A data directory aims to provide a local storage point for specific files and directories
  * handled by the web services. A data directory can be set manually in the virtual host

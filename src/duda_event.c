@@ -23,6 +23,7 @@
 
 /*
  * @OBJ_NAME: event
+ * @OBJ_MENU: Events
  * @OBJ_DESC: The event object provides a set of methods to handle event-driven sockets
  * over the main events loop of the server
  */

@@ -32,6 +32,7 @@
 
 /*
  * @OBJ_NAME: response
+ * @OBJ_MENU: Response
  * @OBJ_DESC: The response object provides a set of methods to manipulate the
  * response to the HTTP client. It helps to compose response headers as well
  * the body content.

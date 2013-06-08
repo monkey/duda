@@ -28,6 +28,7 @@
 
 /*
  * @OBJ_NAME: fconf
+ * @OBJ_MENU: File Configuration
  * @OBJ_DESC: It provides a set of methods to handle specific configuration files
  * for the web service in question. Its mandatory that the configuration key
  * 'ConfDir' exists under the [WEB_SERVICE] section for the virtual host where

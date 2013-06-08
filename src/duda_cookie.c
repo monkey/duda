@@ -26,7 +26,8 @@
 #include "duda.h"
 
 /*
- * @OBJ_NAME: Cookie
+ * @OBJ_NAME: cookie
+ * @OBJ_MENU: Cookies
  * @OBJ_DESC: The cookie object provides a set of methods to handle HTTP cookies
  */
 

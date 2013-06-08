@@ -55,6 +55,7 @@ int duda_worker_spawn_all(struct mk_list *list)
 
 /*
  * @OBJ_NAME: worker
+ * @OBJ_MENU: Workers
  * @OBJ_DESC: This object export different methods to spawn and manage
  * workers (posix threads).
  */

@@ -38,26 +38,25 @@ struct duda_global_dist_t {
     struct mk_list _head;
 };
 
+#define DUDA_GLOBAL_EXCEPTION "You can only define globals inside duda_init() or duda_package_main()"
 
 /* Global data (thread scope) */
 struct duda_api_global {
     int   (*set)  (duda_global_t, const void *);
     void *(*get)  (duda_global_t);
+
+    #define init(key_t, cb) do {                                            \
+            /* Make sure the developer has initialized variables from duda_init() */ \
+            if (getpid() != syscall(__NR_gettid)) {                     \
+                /* FIXME: error handler */                              \
+                monkey->_error(MK_ERR, DUDA_GLOBAL_EXCEPTION);          \
+                exit(EXIT_FAILURE);                                     \
+            }                                                           \
+            pthread_key_create(&key_t.key, NULL);                       \
+            key_t.callback = cb;                                        \
+            mk_list_add(&key_t._head, &duda_global_dist);               \
+        } while(0);
 };
-
-#define DUDA_GLOBAL_EXCEPTION "You can only define globals inside duda_init() or duda_package_main()"
-
-#define duda_global_init(key_t, cb) do {                                \
-        /* Make sure the developer has initialized variables from duda_init() */ \
-        if (getpid() != syscall(__NR_gettid)) {                         \
-            /* FIXME: error handler */                                  \
-            monkey->_error(MK_ERR, DUDA_GLOBAL_EXCEPTION);              \
-            exit(EXIT_FAILURE);                                         \
-        }                                                               \
-        pthread_key_create(&key_t.key, NULL);                           \
-        key_t.callback = cb;                                            \
-        mk_list_add(&key_t._head, &duda_global_dist);                   \
-    } while(0);
 
 /* This list FIXME! */
 struct mk_list duda_global_pkg;

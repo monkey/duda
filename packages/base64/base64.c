@@ -15,7 +15,8 @@
  */
 
 /*
- * @OBJ_NAME: Base64
+ * @OBJ_NAME: base64
+ * @OBJ_MENU: Base64
  * @OBJ_DESC: The base64 package allows you to encode or decode text using
  * the Base64 algorithm.
  * @PKG_HEADER: #include "packages/base64/base64.h"

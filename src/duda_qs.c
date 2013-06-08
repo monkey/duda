@@ -27,6 +27,7 @@
 
 /*
  * @OBJ_NAME: qs
+ * @OBJ_MENU: Query String
  * @OBJ_DESC: The query string object provides a set of methods to manipulate the
  * incoming information from the query string URL section.
  */

@@ -25,6 +25,7 @@
 
 /*
  * @OBJ_NAME: request
+ * @OBJ_MENU: Request
  * @OBJ_DESC: The request object provides a set of methods to manipulate the
  * incoming data set in the HTTP request.
  */

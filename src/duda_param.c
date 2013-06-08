@@ -27,6 +27,7 @@
 
 /*
  * @OBJ_NAME: param
+ * @OBJ_MENU: Parameters
  * @OBJ_DESC: The param object provides a set of methods to manipulate parameters
  * that comes in the URI per the webservice spec
  */

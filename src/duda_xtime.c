@@ -24,6 +24,7 @@
 
 /*
  * @OBJ_NAME: xtime
+ * @OBJ_MENU: Time Handling
  * @OBJ_DESC: The xtime object provides a set of methods to retrieve and manipulate
  * the timing information based on unix timestamp
  */

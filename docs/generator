@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 #  Duda Document Generator
-#  ------------------
-#  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+#  -----------------------
+#  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -26,8 +26,31 @@ CSS    += "    <link rel='stylesheet' type='text/css' href='assets/css/prettify.
 JS      = "    <script type='text/javascript' src='assets/js/bootstrap.js'></script>\n"
 JS     += "    <script type='text/javascript' src='assets/js/prettify.js'></script>\n"
 HEADER  = "<HTML>\n  <HEAD>\n[TITLE]\n%s  </HEAD>\n<BODY onload=\"prettyPrint()\">\n" % (CSS)
-HEADER += "    <div class='container'>\n"
-FOOTER  = "    </div>%s</BODY></HTML>\n" % (JS)
+HEADER += (""
+"<div class=\"navbar navbar-inner\">"
+"  <div class=\"navbar-inner\">"
+"    <div class=\"container\">"
+"      <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-collapse\">"
+"        <span class=\"icon-bar\"></span>"
+"        <span class=\"icon-bar\"></span>"
+"        <span class=\"icon-bar\"></span>"
+"      </a>"
+""
+"      <div class=\"row-fluid\">"
+"          <div class=\"span8\">"
+"           <a href=\"http://duda.io/api/\" class=\"brand\" style=\"color:#eae8d2\">"
+"                Duda I/O: API Documentation"
+"           </a>"
+"          <div class=\"nav-collapse collapse\">"
+"          </div>"
+"        </div>"
+"      </div>"
+"    </div>"
+"  </div>"
+"</div>")
+
+HEADER += "    <div class='container'><div class='row-fluid'><div class='span10'>\n"
+FOOTER  = "    </div></div>%s</BODY></HTML>\n" % (JS)
 
 # Left menu stuff
 L_MENU_HEADER  = "<div class='span2'><div class=\"well\" style=\"padding: 8px 0;\">\n\
@@ -74,6 +97,7 @@ class DudaObject:
     COMM_END      = ' */'
     COMM_LINE     = ' * '
     OBJ_NAME      = ' * @OBJ_NAME:'
+    OBJ_MENU      = ' * @OBJ_MENU:'
     OBJ_DESC      = ' * @OBJ_DESC:'
     OBJ_COMM      = ' * @OBJ_COMM:'
     PKG_HEADER    = ' * @PKG_HEADER:'
@@ -83,16 +107,20 @@ class DudaObject:
     METHOD_DESC   = ' * @METHOD_DESC:'
     METHOD_PARAM  = ' * @METHOD_PARAM:'
     METHOD_RETURN = ' * @METHOD_RETURN:'
-    LAST_METHOD   = 'unk method'
+    LAST_METHOD   = 'unknown method'
 
     def __init__(self):
         self.name = ''
         self.desc = ''
+        self.menu = ''
         self.comm = ''
         self.pkg_header = ''
         self.pkg_init = ''
         self.methods = []
         self.method = None
+
+    def real_name(self):
+        return self.name
 
     def go(self, content):
         context = False
@@ -114,6 +142,12 @@ class DudaObject:
                 arr = line.split(self.OBJ_NAME)
                 self.name = arr[1].strip()
                 last = self.OBJ_NAME
+
+            # @OBJ_MENU
+            elif line.startswith(self.OBJ_MENU):
+                arr = line.split(self.OBJ_MENU)
+                self.menu = arr[1].strip()
+                last = self.OBJ_MENU
 
             # @OBJ_DESC
             elif line.startswith(self.OBJ_DESC):
@@ -146,6 +180,8 @@ class DudaObject:
                 row = line[3:].rstrip() + '\n'
                 if last == self.LAST_METHOD:
                     self.method.set(row)
+                elif last == self.METHOD_PARAM:
+                    self.method.params[-1]['desc'] += row
                 elif last == self.METHOD_PROTO:
                     self.method.prototype += '\n' + row
                 elif last == self.METHOD_RETURN:
@@ -189,6 +225,9 @@ class DudaObject:
 
                 self.method.set_active(self.method.F_PARAM)
                 self.method.set_param(p_name, p_desc)
+                last = self.METHOD_PARAM
+                last_pname = p_name
+                last_pdesc = p_desc
 
             # @METHOD_RETURN
             elif line.startswith(self.METHOD_RETURN):
@@ -223,6 +262,9 @@ class DudaObject:
 
                 if self.method.prototype.strip()[-1] == ')':
                     last = None
+
+        if len(self.menu) == 0:
+            self.menu = self.name
 
     def info(self):
         print '** Object Name: %s' % (self.name)
@@ -262,21 +304,52 @@ class DudaPackage(DudaObject):
 
         self.go(content)
 
+class DudaIntro(DudaObject):
+    INTRO_MENU = '@INTRO_MENU: '
+
+    def __init__(self, name, path):
+        DudaObject.__init__(self)
+        self.name = name
+        self.real_name = name[:-5]
+        self.path = path
+        self.content = ""
+        self.parse_static()
+
+    def parse_static(self):
+        f = open(self.path)
+        lines = f.readlines()
+        f.close()
+
+        for l in lines:
+            if l.startswith(self.INTRO_MENU):
+                title = l[len(self.INTRO_MENU):]
+                self.real_name = title.title().strip()
+            else:
+                self.content += l
+
+    def flush(self):
+        return self.content
 
 f = open('index.doc')
 files = f.readlines()
 f.close()
 
+intro    = []
 objects  = []
 packages = []
 
 for source in files:
     p = os.path.abspath("../%s" % source.strip())
     pkg_index = p + '/index.doc'
+    name = source.split()[0].split('/')[-1]
 
     # Check if the source is a package
-    if os.path.isdir(p) and source.startswith('packages/') and os.path.isfile(pkg_index):
-        name = source.split()[0].split('/')[-1]
+    #print p, source
+    if os.path.exists(p) and source.startswith('docs/intro/'):
+        i = DudaIntro(name, p)
+        intro.append(i)
+    elif os.path.isdir(p) and source.startswith('packages/') and \
+            os.path.isfile(pkg_index):
         pkg = DudaPackage(name, p)
         packages.append(pkg)
     else:
@@ -293,29 +366,40 @@ for source in files:
         objects.append(d)
 
 # Start generating HTML content
+print "  DOC   Duda API Intro   : %i" % len(intro)
 print "  DOC   Duda API Objects : %i" % len(objects)
 print "  DOC   Duda API Packages: %i" % len(packages)
 
 # Compose Menu
 menu  = L_MENU_HEADER
-menu += '  <li class="nav-header">API Objects</li>\n'
+
+menu += '  <li class="nav-header">Documentation</li>\n'
+for entry in intro:
+    menu += '    <li><a href="%s">%s</a></li>\n' % (entry.name.lower(), entry.real_name)
+
+menu += '  <li class="nav-header">Core Objects</li>\n'
 for obj in objects:
-    menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name.lower(), obj.name.lower())
+    menu += '    <li><a href="%s.html">%s</a></li>\n' % (obj.name.lower(), obj.menu)
 
 menu += '  <li class="nav-header">Packages</li>\n'
 for pkg in packages:
-    menu += '  <li><a href="packages/%s.html">%s</a></li>\n' % (pkg.name.lower(), pkg.name.lower())
+    menu += '  <li><a href="packages/%s.html">%s</a></li>\n' % (pkg.name.lower(), pkg.menu)
 
 menu += L_MENU_FOOTER
 
 class WriteObject:
     subdir = False
+    static = False
 
     def __init__(self, obj, path='html/'):
         if os.path.exists(path) is False:
             os.makedirs(path)
 
-        target = path + obj.name.lower() + '.html'
+        target = path + obj.name.lower()
+        if not target.endswith('.html'):
+            target += '.html'
+        else:
+            self.static = True
 
         if len(path.split('/')) > 2:
             self.subdir = True
@@ -326,9 +410,12 @@ class WriteObject:
             header = HEADER
 
         if self.subdir:
-            title = "<title>Duda Framework API: %s package object</title>" % (obj.name.title())
+            title = "<title>Duda Framework API: %s package object</title>" % (obj.menu)
+        elif self.static is False:
+            title = "<title>Duda Framework API: %s object</title>" % (obj.menu)
         else:
-            title = "<title>Duda Framework API: %s object</title>" % (obj.name.title())
+
+            title = "<title>Duda Framework API: %s</title>" % (obj.real_name.title())
 
         header = header.replace("[TITLE]", title)
 
@@ -336,8 +423,17 @@ class WriteObject:
         f.write(header)
 
         # Compose the proper menu for the active object
-        obj_menu = menu.replace('<li><a href="%s.html">' % (obj.name), \
-                                '<li class="active"><a href="%s.html">' % (obj.name))
+        if self.subdir:
+            obj_menu = menu.replace('<li><a href="packages/%s.html">' % (obj.name), \
+                                    '<li class="active"><a href="packages/%s.html">' % (obj.name))
+        elif self.static is False:
+            obj_menu = menu.replace('<li><a href="%s.html">' % (obj.name), \
+                                    '<li class="active"><a href="%s.html">' % (obj.name))
+        else:
+            obj_menu = menu.replace('<li><a href="%s">' % (obj.name), \
+                                    '<li class="active"><a href="%s">' % (obj.name))
+
+        #print obj.name, obj_menu
 
         if self.subdir:
             obj_menu = obj_menu.replace('a href="', 'a href="../')
@@ -345,10 +441,18 @@ class WriteObject:
         f.write('  ' + obj_menu)
         f.write('  <div class="span8">')
 
+        # If we are processing a static content just stop here
+        if self.static is True:
+            data = obj.flush()
+            f.write(data)
+            f.write(FOOTER)
+            f.close()
+            return
+
         if self.subdir:
-            f.write('  <h1>%s package object</h1>\n' % (obj.name))
+            f.write('  <h1>%s package object</h1>\n' % (obj.menu))
         else:
-            f.write('  <h1>%s object</h1>\n' % (obj.name))
+            f.write('  <h1>%s object</h1>\n' % (obj.menu))
 
         f.write('  <p>%s</p>\n' % (obj.desc))
 
@@ -381,7 +485,7 @@ class WriteObject:
             shortcut.append(m.name)
         shortcut.sort()
 
-        f.write('  <div class="row">\n')
+        f.write('  <div class="row-fluid">\n')
         i = 0
         total = 0
         for entry in shortcut:
@@ -430,6 +534,9 @@ class WriteObject:
         f.close()
 
 # Generate Pages
+for entry in intro:
+    WriteObject(entry)
+
 for obj in objects:
     WriteObject(obj)
 

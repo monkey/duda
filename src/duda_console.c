@@ -32,7 +32,8 @@
 #include "duda_conf.h"
 
 /*
- * @OBJ_NAME: Console
+ * @OBJ_NAME: console
+ * @OBJ_MENU: Console
  * @OBJ_DESC: The console object provides a set of methods to write debug information
  * to the console URL interface of the running web service.
  */

@@ -21,6 +21,7 @@
 
 /*
  * @OBJ_NAME: sha1
+ * @OBJ_MENU: SHA1
  * @OBJ_DESC: The SHA1 package provides the cryptographic hash function to encode
  * any data with the SHA1 algorithm.
  * @PKG_HEADER: #include "packages/sha1/sha1.h"

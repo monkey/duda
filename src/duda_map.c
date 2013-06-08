@@ -21,6 +21,7 @@
 
 /*
  * @OBJ_NAME: map
+ * @OBJ_MENU: Map Routing
  * @OBJ_DESC: The map object provides a set of methods to specify the URL's map
  * and callbacks associated.
  */

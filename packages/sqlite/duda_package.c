@@ -20,7 +20,8 @@
  */
 
 /*
- * @OBJ_NAME: SQLite
+ * @OBJ_NAME: sqlite
+ * @OBJ_MENU: SQLite
  * @OBJ_DESC: The SQLite package expose a set of wrapper methods to use the
  * SQLite database.
  * @PKG_HEADER: #include "packages/sqlite/sqlite.h"

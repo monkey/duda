@@ -34,6 +34,7 @@
 
 /*
  * @OBJ_NAME: session
+ * @OBJ_MENU: Sessions
  * @OBJ_DESC: The sessions object provides a set of methods to handle persistent data
  * associated to a set of HTTP request coming from the same source. Sessions can be used
  * to store any kind of information in memory.

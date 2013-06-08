@@ -24,10 +24,54 @@
 
 #include "webservice.h"
 
+
+/*
+ * @OBJ_NAME: global
+ * @OBJ_MENU: Global Worker
+ * @OBJ_DESC: Duda stack works in threaded mode depending of the number of workers
+ * spawn when started. The global object aims to provide interfaces to save references
+ * for data which must be in the scope of the worker. The most common example
+ * would be a database connection context.
+ */
+
+/*
+ * @METHOD_NAME: init
+ * @METHOD_DESC: Initialize a specific global key that will be used later in the
+ * callbacks. This call MUST be used ONLY inside duda_main().
+ * @METHOD_PROTO: void init(duda_global_t key, const void *callback(void) )
+ * @METHOD_PARAM: key the global key variable that must be declared globally.
+ * @METHOD_PARAM: callback this optional parameter points to a callback function
+ * that will be invoked once duda_main() returns and before to enter the main
+ * server loop. This callback is useful if you want to initialize some data in the
+ * global key before the events start arriving.
+ * @METHOD_RETURN: Do not return anything
+ */
+
+
+/*
+ * @METHOD_NAME: set
+ * @METHOD_DESC: Add a new value to the global key.
+ * @METHOD_PROTO: int set(duda_global_t key, const void *data)
+ * @METHOD_PARAM: key the global key previously initialized by the init() method.
+ * @METHOD_PARAM: data the data you want to associate
+ * @METHOD_RETURN: Upon successful completion, it returns zero. On error it returns
+ * a negative number.
+ */
+
 int duda_global_set(duda_global_t global, const void *data)
 {
     return pthread_setspecific(global.key, data);
 }
+
+
+/*
+ * @METHOD_NAME: get
+ * @METHOD_DESC: Retrieve the memory reference associated to the global key
+ * @METHOD_PROTO: void *get(duda_global_t key)
+ * @METHOD_PARAM: key the global key previously initialized by the init() method.
+ * @METHOD_RETURN: Upon successful completion, it returns the memory address associated
+ * with the global key. On error it returns NULL.
+ */
 
 void *duda_global_get(duda_global_t global)
 {

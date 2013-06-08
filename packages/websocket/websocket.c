@@ -20,7 +20,8 @@
  */
 
 /*
- * @OBJ_NAME: Websocket
+ * @OBJ_NAME: websocket
+ * @OBJ_MENU: Web Sockets
  * @OBJ_DESC: This package implements the Websocket protocol as described in
  * the RFC 6455. It allow to define callbacks on specifics events and also implements
  * a broadcaster service to make easier distribute message among different active

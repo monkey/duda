@@ -349,6 +349,7 @@ void duda_conf_messages_to(struct web_service *ws)
 
 /*
  * @OBJ_NAME: conf
+ * @OBJ_MENU: Configuration
  * @OBJ_DESC: The configuration object provides a set of methods to perform a hard
  * setup of the web services or change the framework behavior. All methods
  * available must be invoked from inside duda_main().

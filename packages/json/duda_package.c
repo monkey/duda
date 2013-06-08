@@ -20,7 +20,8 @@
  */
 
 /*
- * @OBJ_NAME: JSON
+ * @OBJ_NAME: json
+ * @OBJ_MENU: JSON
  * @OBJ_DESC: The JSON package expose differnet methods to compose or parse
  * JSON data.
  * @PKG_HEADER: #include "packages/json/json.h"
