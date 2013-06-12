@@ -450,7 +450,7 @@ class WriteObject:
             obj_menu = obj_menu.replace('a href="', 'a href="../')
 
         f.write('  ' + obj_menu)
-        f.write('  <div class="span8">')
+        f.write('  <div class="span10">')
 
         # If we are processing a static content just stop here
         if self.static is True:
