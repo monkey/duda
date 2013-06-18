@@ -247,10 +247,10 @@ int duda_main(struct duda_api_objects *api)
     duda_load_package(sha1, "sha1");
 
     /* An empty global variable */
-    duda_global_init(my_data_empty, NULL);
+    global->init(my_data_empty, NULL);
 
     /* A global variable with the value returned by the callback */
-    duda_global_init(my_data_mem, cb_global_mem);
+    global->init(my_data_mem, cb_global_mem);
 
     /* archive interface */
     if_system = map->interface_new("examples");
