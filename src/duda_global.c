@@ -38,7 +38,7 @@
  * @METHOD_NAME: init
  * @METHOD_DESC: Initialize a specific global key that will be used later in the
  * callbacks. This call MUST be used ONLY inside duda_main().
- * @METHOD_PROTO: void init(duda_global_t key, const void *callback(void) )
+ * @METHOD_PROTO: void init(duda_global_t *key, void *callback(void) )
  * @METHOD_PARAM: key the global key variable that must be declared globally.
  * @METHOD_PARAM: callback this optional parameter points to a callback function
  * that will be invoked once duda_main() returns and before to enter the main
@@ -46,6 +46,13 @@
  * global key before the events start arriving.
  * @METHOD_RETURN: Do not return anything
  */
+void duda_global_init(duda_global_t *global, void *(*callback)(),
+                      struct mk_list *dist)
+{
+    pthread_key_create(&global->key, NULL);
+    global->callback = callback;
+    mk_list_add(&global->_head, dist);
+}
 
 
 /*
@@ -83,6 +90,7 @@ struct duda_api_global *duda_global_object()
     struct duda_api_global *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_global));
+    obj->_init = duda_global_init;
     obj->set   = duda_global_set;
     obj->get   = duda_global_get;
 
