@@ -2,7 +2,7 @@
 
 /*  Duda I/O
  *  --------
- *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ int duda_map_static_check(duda_request_t *dr)
         st = mk_list_entry(head, struct duda_map_static_cb, _head);
 
         if (strncmp(sr->uri_processed.data + dr->ws_root->name.len + 1,
-                    st->path, st->path_len - 1) == 0) {
+                    st->path, st->path_len) == 0) {
 
             /*
              * Check if the web service request force redirection for

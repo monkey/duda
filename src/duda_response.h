@@ -49,6 +49,7 @@ int duda_response_send_headers(duda_request_t *dr);
 int duda_response_http_status(duda_request_t *dr, int status);
 int duda_response_http_header(duda_request_t *dr, char *row);
 int duda_response_http_header_n(duda_request_t *dr, char *row, int len);
+int duda_response_http_content_length(duda_request_t *dr, long length);
 int duda_response_print(duda_request_t *dr, char *raw, int len);
 int duda_response_printf(duda_request_t *dr, const char *format, ...);
 int duda_response_sendfile(duda_request_t *dr, char *path);
