@@ -1,8 +1,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
- *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+/*  Duda I/O
+ *  --------
+ *  Copyright (C) 2012-2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -162,7 +162,10 @@ json_t *json_parse(const char *data)
 
 /*
  * @METHOD_NAME: print
- * @METHOD_DESC: Render a JSON item, entity or structure to formatted text
+ * @METHOD_DESC: Render a JSON item, entity or structure to formatted text. The
+ * memory allocated for the buffer must be released with an explicit free(2). If
+ * the buffer will be send as a response we suggest you use print_gc() version
+ * instead.
  * @METHOD_PROTO: char *print(json_t *item)
  * @METHOD_PARAM: item the JSON item to be rendered
  * @METHOD_RETURN: Returns the rendered text string (formatted)
@@ -173,15 +176,62 @@ char *json_print(json_t *item)
 }
 
 /*
+ * @METHOD_NAME: print_gc
+ * @METHOD_DESC: Render a JSON item, entity or structure to formatted text, the
+ * memory allocated for the text is released later by the Garbage Collector.
+ * @METHOD_PROTO: char *print_gc(duda_request_t *dr, json_t *item)
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: item the JSON item to be rendered
+ * @METHOD_RETURN: Returns the rendered text string (formatted)
+ */
+
+char *json_print_gc(duda_request_t *dr, json_t *item)
+{
+    char *buf = NULL;
+
+    buf = cJSON_Print(item);
+    if (buf) {
+        gc->add(dr, buf);
+    }
+
+    return buf;
+}
+
+/*
  * @METHOD_NAME: print_unformatted
- * @METHOD_DESC: Render a JSON item, entity or structure to unformatted text
+ * @METHOD_DESC: Render a JSON item, entity or structure to unformatted text. The
+ * memory allocated for the buffer must be released with an explicit free(2). If
+ * the buffer will be send as a response we suggest you use print_unformatted_gc() version
+ * instead.
  * @METHOD_PROTO: char *print_unformatted(json_t *item)
  * @METHOD_PARAM: item the JSON item to be rendered
  * @METHOD_RETURN: Returns the rendered text string (un-formatted)
  */
+
 char *json_print_unformatted(json_t *item)
 {
     return cJSON_PrintUnformatted(item);
+}
+
+/*
+ * @METHOD_NAME: print_unformatted_gc
+ * @METHOD_DESC: Render a JSON item, entity or structure to unformatted text. The
+ * memory allocated for the text is released later by the Garbage Collector.
+ * @METHOD_PROTO: char *print_unformatted(duda_request_t *dr, json_t *item)
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: item the JSON item to be rendered
+ * @METHOD_RETURN: Returns the rendered text string (un-formatted)
+ */
+char *json_print_unformatted_gc(duda_request_t *dr, json_t *item)
+{
+    char *buf = NULL;
+
+    buf = cJSON_PrintUnformatted(item);
+    if (buf) {
+        gc->add(dr, buf);
+    }
+
+    return buf;
 }
 
 /*
@@ -291,29 +341,31 @@ struct duda_api_json *get_json_api()
     json = malloc(sizeof(struct duda_api_json));
 
     /* Map API calls */
-    json->create_null       = json_create_null;
-    json->create_true       = json_create_true;
-    json->create_false      = json_create_false;
-    json->create_bool       = json_create_bool;
-    json->create_number     = json_create_number;
-    json->create_string     = json_create_string;
-    json->create_array      = json_create_array;
-    json->create_object     = json_create_object;
+    json->create_null          = json_create_null;
+    json->create_true          = json_create_true;
+    json->create_false         = json_create_false;
+    json->create_bool          = json_create_bool;
+    json->create_number        = json_create_number;
+    json->create_string        = json_create_string;
+    json->create_array         = json_create_array;
+    json->create_object        = json_create_object;
 
-    json->add_to_array      = json_add_to_array;
-    json->add_to_object     = json_add_to_object;
+    json->add_to_array         = json_add_to_array;
+    json->add_to_object        = json_add_to_object;
 
-    json->parse             = json_parse;
-    json->print             = json_print;
-    json->print_unformatted = json_print_unformatted;
-    json->delete            = json_delete;
-    json->get_array_size    = json_get_array_size;
-    json->get_array_item    = json_get_array_item;
-    json->get_object_item   = json_get_object_item;
-    json->get_error         = json_get_error;
+    json->parse                = json_parse;
+    json->print                = json_print;
+    json->print_gc             = json_print_gc;
+    json->print_unformatted    = json_print_unformatted;
+    json->print_unformatted_gc = json_print_unformatted_gc;
+    json->delete               = json_delete;
+    json->get_array_size       = json_get_array_size;
+    json->get_array_item       = json_get_array_item;
+    json->get_object_item      = json_get_object_item;
+    json->get_error            = json_get_error;
 
     /* Local methods */
-    json->parse_data        = json_parse_data;
+    json->parse_data           = json_parse_data;
 
     return json;
 }

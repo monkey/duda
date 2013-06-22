@@ -48,6 +48,7 @@ struct duda_package {
     response = api->response;                                           \
     debug    = api->debug;                                              \
     event    = api->event;                                              \
+    gc       = api->gc;                                                 \
     console  = api->console;                                            \
     param    = api->param;                                              \
     session  = api->session;                                            \

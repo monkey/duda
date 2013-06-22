@@ -22,6 +22,7 @@
 #ifndef DUDA_PACKAGE_JSON_H
 #define DUDA_PACKAGE_JSON_H
 
+#include "duda_package.h"
 #include "cJSON.h"
 
 typedef cJSON json_t;
@@ -43,7 +44,9 @@ struct duda_api_json {
 
     json_t *(*parse) (const char *);
     char   *(*print) (json_t *);
+    char   *(*print_gc) (duda_request_t *, json_t *);
     char   *(*print_unformatted) (json_t *);
+    char   *(*print_unformatted_gc) (duda_request_t *, json_t *);
     void    (*delete) (json_t *);
     int     (*get_array_size) (json_t *);
     json_t *(*get_array_item) (json_t *, int);
