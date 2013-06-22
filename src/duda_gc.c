@@ -23,6 +23,17 @@
 #include "duda_api.h"
 #include "duda_gc.h"
 
+/*
+ * @OBJ_NAME: gc
+ * @OBJ_MENU: Garbage Collector
+ * @OBJ_DESC: The Garbage Collector is an internal interface to register and free
+ * allocated chunks of memory that needs to be released once a specific request
+ * context has ended. Due to the nature of callbacks in the events handler, a request
+ * can finalize on any moment, if some memory was allocated in a callback and the
+ * response depends of this memory, the Garbage Collector must take care of it to avoid
+ * memory leaks.
+ */
+
 int duda_gc_init(duda_request_t *dr)
 {
     size_t size = (sizeof(struct duda_gc_entry) * DUDA_GC_ENTRIES);
@@ -37,6 +48,15 @@ int duda_gc_init(duda_request_t *dr)
 
     return 0;
 }
+
+/*
+ * @METHOD_NAME: add
+ * @METHOD_DESC: It register a reference of a memory address that the Garbage Collector
+ * must free once the main request context ends.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: p  pointer to the target memory reference
+ * @METHOD_RETURN: On success it returns zero, on error -1.
+ */
 
 int duda_gc_add(duda_request_t *dr, void *p)
 {
@@ -111,4 +131,14 @@ int duda_gc_free(duda_request_t *dr)
 {
     mk_api->mem_free(dr->gc.cells);
     return 0;
+}
+
+struct duda_api_gc *duda_gc_object()
+{
+    struct duda_api_gc *obj;
+
+    obj = mk_api->mem_alloc(sizeof(struct duda_api_gc));
+    obj->add = duda_gc_add;
+
+    return obj;
 }

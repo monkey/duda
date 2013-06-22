@@ -24,11 +24,17 @@
 #ifndef DUDA_GC_H
 #define DUDA_GC_H
 
+/* Garbage Collector object: gc->x() */
+struct duda_api_gc {
+    int (*add) (duda_request_t *dr, void *p);
+};
+
 /* Exported functions */
 int duda_gc_init(duda_request_t *dr);
 int duda_gc_add(duda_request_t *dr, void *p);
 void *duda_gc_alloc(duda_request_t *dr, const size_t size);
 int duda_gc_free_content(duda_request_t *dr);
 int duda_gc_free(duda_request_t *dr);
+struct duda_api_gc *duda_gc_object();
 
 #endif

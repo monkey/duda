@@ -91,6 +91,7 @@ struct duda_api_objects {
     struct duda_api_response *response;
     struct duda_api_debug *debug;
     struct duda_api_event *event;
+    struct duda_api_gc *gc;
     struct duda_api_console *console;
     struct duda_api_global *global;
     struct duda_api_param *param;

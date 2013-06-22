@@ -39,6 +39,7 @@
 #include "duda_conf.h"
 #include "duda_xtime.h"
 #include "duda_console.h"
+#include "duda_gc.h"
 #include "duda_objects.h"
 #include "duda_fconf.h"
 #include "duda_qs.h"
@@ -97,6 +98,7 @@ int _duda_main(struct duda_api_objects *api);
         debug    = api->debug;                                          \
         event    = api->event;                                          \
         console  = api->console;                                        \
+        gc       = api->gc;                                             \
         param    = api->param;                                          \
         session  = api->session;                                        \
         cookie   = api->cookie;                                         \

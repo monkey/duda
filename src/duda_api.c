@@ -69,6 +69,7 @@ struct duda_api_objects *duda_api_master()
     objs->global   = duda_global_object();
     objs->map      = duda_map_object();
     objs->event    = duda_event_object();
+    objs->gc       = duda_gc_object();
     objs->request  = duda_request_object();
     objs->response = duda_response_object();
     objs->console  = duda_console_object();
