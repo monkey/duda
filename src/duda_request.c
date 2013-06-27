@@ -205,6 +205,8 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
     }
 
     memcpy(data, dr->sr->data.data, n);
+    *len = n;
+
     return data;
 }
 
