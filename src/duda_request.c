@@ -43,6 +43,7 @@ struct duda_api_request *duda_request_object()
     r->is_delete = duda_request_is_delete;
     r->is_content_type = duda_request_is_content_type;
     r->get_data   = duda_request_get_data;
+    r->content_length = duda_request_content_length;
     r->header_get = duda_request_header_get;
     r->header_cmp = duda_request_header_cmp;
 
@@ -205,6 +206,22 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
 
     memcpy(data, dr->sr->data.data, n);
     return data;
+}
+
+/*
+ * @METHOD_NAME: content_length
+ * @METHOD_DESC: Get the body length for the request in question.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: Upon successful completion, it returns the body content length.
+ */
+long duda_request_content_length(duda_request_t *dr)
+{
+    /* Some silly but required validations */
+    if (!dr->cs || !dr->sr || !dr->sr->data.data) {
+        return -1;
+    }
+
+    return dr->sr->content_length;
 }
 
 /*
