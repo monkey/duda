@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
-/*  Monkey HTTP Daemon
- *  ------------------
+/*  Duda I/O
+ *  --------
  *  Copyright (C) 2012, Sourabh Chandak <sourabh3934@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
