@@ -373,6 +373,12 @@ int ws_handshake(duda_request_t *dr, int channel)
         /* Register socket with plugin events interface */
         event->add(dr->socket, dr, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
                    cb_ws_read, NULL, cb_ws_error, cb_ws_close, cb_ws_timeout);
+
+        /* provide request handle by calling on_open */
+        if (wr_node->cb_on_open) {
+            wr_node->cb_on_open(dr, wr_node);
+        }
+
         return 0;
     }
 
