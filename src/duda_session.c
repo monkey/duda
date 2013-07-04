@@ -73,24 +73,19 @@ int _duda_session_create_store(const char *path)
 }
 
 /*
- * @METHOD_NAME: duda_session_init
- * @METHOD_PROTO: duda_session_init()
+ * @METHOD_NAME: init
  * @METHOD_DESC: Initialize the sessions object for the web service in question. This function
- * must be invoked from duda_main(). This is not a method and belongs to a explicit function
- * call.
+ * must be invoked from duda_main().
+ * @METHOD_PROTO: int init(char *store_name)
+ * @METHOD_PARAM: store_name directory name to identify the session files under /dev/shm/duda_sessions/
  * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns NULL.
  */
-int duda_session_init()
+int duda_session_init(char *store_name)
 {
     int ret;
     char *path = NULL;
     unsigned long len;
     struct file_info finfo;
-    /*
-     * FIXME: we are using a fixed store_name, the name must be equal to the
-     * webservice in question
-     */
-    char *store_name = "fixme";
 
     ret = mk_api->file_get_info(SESSION_STORE_PATH, &finfo);
     if (ret != 0) {

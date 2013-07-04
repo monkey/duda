@@ -32,7 +32,7 @@
 struct mk_list session_list;
 
 struct duda_api_session {
-    int (*init)     ();
+    int (*init)     (char *);
     int (*create)   (duda_request_t *, char *, char *, int);
     int (*destroy)  (duda_request_t *, char *);
     void *(*get)    (duda_request_t *, char *);
@@ -40,7 +40,7 @@ struct duda_api_session {
 };
 
 struct duda_api_session *duda_session_object();
-int duda_session_init();
+int duda_session_init(char *store_name);
 int duda_session_create(duda_request_t *dr, char *name, char *value, int expires);
 int duda_session_destroy(duda_request_t *dr, char *name);
 void *duda_session_get(duda_request_t *dr, char *name);
