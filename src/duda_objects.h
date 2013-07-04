@@ -25,6 +25,7 @@
  */
 
 #include "mk_macros.h"
+#include "duda_global.h"
 
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
@@ -56,5 +57,13 @@ struct duda_api_global *global;
 struct duda_api_worker *worker;
 struct duda_api_xtime *xtime;
 struct web_service *self;
+
+/* function that depends on webservice or package specific data */
+static inline void duda_global_init(duda_global_t *global, void *(*callback)())
+{
+    pthread_key_create(&global->key, NULL);
+    global->callback = callback;
+    mk_list_add(&global->_head, &duda_global_dist);
+}
 
 #endif

@@ -44,16 +44,10 @@
  * that will be invoked once duda_main() returns and before to enter the main
  * server loop. This callback is useful if you want to initialize some data in the
  * global key before the events start arriving.
- * @METHOD_RETURN: Do not return anything
+ * @METHOD_RETURN: Do not return anything.
  */
-void duda_global_init(duda_global_t *global, void *(*callback)(),
-                      struct mk_list *dist)
-{
-    pthread_key_create(&global->key, NULL);
-    global->callback = callback;
-    mk_list_add(&global->_head, dist);
-}
 
+/* REF: duda_global_init() is defined inside duda_object.h */
 
 /*
  * @METHOD_NAME: set
@@ -90,7 +84,7 @@ struct duda_api_global *duda_global_object()
     struct duda_api_global *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_global));
-    obj->_init = duda_global_init;
+    obj->init  = duda_global_init;
     obj->set   = duda_global_set;
     obj->get   = duda_global_get;
 

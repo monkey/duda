@@ -120,6 +120,12 @@ int _duda_main(struct duda_api_objects *api);
         mk_list_init(&duda_ws_packages);                                \
         mk_list_init(&duda_worker_list);                                \
                                                                         \
+        /*                                                              \
+         * re-map functions that depends on webservice or               \
+         * package definitions (local data)                             \
+         */                                                             \
+        global->init = duda_global_init;                                \
+                                                                        \
         /* Invoke end-user main routine */                              \
         return _duda_main(api);                                         \
     }                                                                   \

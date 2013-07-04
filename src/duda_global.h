@@ -42,9 +42,7 @@ struct duda_global_dist_t {
 
 /* Global data (thread scope) */
 struct duda_api_global {
-    #define init(key_t, cb) _init(key_t, cb, &duda_global_dist)
-
-    void  (*_init) (duda_global_t *, void *(*callback)(), struct mk_list *);
+    void  (*init) (duda_global_t *, void *(*callback)());
     int   (*set)   (duda_global_t, const void *);
     void *(*get)   (duda_global_t);
 };
