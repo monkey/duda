@@ -1,4 +1,4 @@
-DIRS    = base64 json sha1 sqlite websocket
+DIRS    = base64 json sha1 sha256 sqlite websocket
 
 all:
 	@(for d in $(DIRS); do $(MAKE) -C $$d; done)

@@ -18,5 +18,6 @@ src/duda_xtime.c
 packages/base64
 packages/json
 packages/sha1
+packages/sha256
 packages/sqlite
 packages/websocket

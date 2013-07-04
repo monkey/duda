@@ -19,32 +19,36 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef DUDA_PACKAGE_SHA1_H
-#define DUDA_PACKAGE_SHA1_H
-#include <stddef.h>
+#ifndef DUDA_PACKAGE_SHA256_H
+#define DUDA_PACKAGE_SHA256_H
 
-#define SHA_DIGEST_LENGTH 20
-
-struct duda_api_sha1 {
-    void (*encode) (const void *, unsigned char *, unsigned long);
+struct duda_api_sha256 {
+  void (*encode) (unsigned char *, unsigned char *, int);
 };
 
-typedef struct duda_api_sha1 sha1_object_t;
-sha1_object_t *sha1;
+typedef struct duda_api_sha256 sha256_object_t;
+sha256_object_t *sha256;
 
-typedef struct {
-	unsigned long long size;
-	unsigned int H[5];
-	unsigned int W[16];
-} blk_SHA_CTX;
+#ifndef uint8
+#define uint8  unsigned char
+#endif
 
-void blk_SHA1_Init(blk_SHA_CTX *ctx);
-void blk_SHA1_Update(blk_SHA_CTX *ctx, const void *dataIn, unsigned long len);
-void blk_SHA1_Final(unsigned char hashout[20], blk_SHA_CTX *ctx);
+#ifndef uint32
+#define uint32 unsigned long int
+#endif
 
-#define SHA_CTX	    blk_SHA_CTX
-#define SHA1_Init	blk_SHA1_Init
-#define SHA1_Update	blk_SHA1_Update
-#define SHA1_Final	blk_SHA1_Final
+typedef struct
+{
+    uint32 total[2];
+    uint32 state[8];
+    uint8 buffer[64];
+}
+sha256_context;
 
-#endif // DUDA_PACKAGE_SHA1_H
+void sha256_starts(sha256_context *ctx);
+void sha256_update(sha256_context *ctx, uint8 *input, uint32 length);
+void sha256_finish(sha256_context *ctx, uint8 digest[32]);
+
+#endif
+
+
