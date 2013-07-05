@@ -88,6 +88,9 @@ typedef struct duda_request {
 
 } duda_request_t;
 
+/* self identifier for the plugin context inside Monkey internals */
+struct plugin *duda_plugin;
+
 pthread_key_t duda_global_events_write;
 pthread_key_t duda_global_dr_list;
 
@@ -96,5 +99,7 @@ mk_pointer dd_iov_none;
 void *duda_load_library(const char *path);
 void *duda_load_symbol(void *handle, const char *symbol);
 int duda_service_end(duda_request_t *dr);
+
+duda_request_t *duda_dr_list_get(int socket);
 
 #endif

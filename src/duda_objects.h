@@ -58,6 +58,11 @@ struct duda_api_worker *worker;
 struct duda_api_xtime *xtime;
 struct web_service *self;
 
+/* system headers */
+#define _GNU_SOURCE         /* See feature_test_macros(7) */
+#include <unistd.h>
+#include <sys/syscall.h>   /* For SYS_xxx definitions */
+
 /* function that depends on webservice or package specific data */
 static inline void duda_global_init(duda_global_t *global, void *(*callback)())
 {

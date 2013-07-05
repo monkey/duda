@@ -60,16 +60,18 @@ struct duda_api_event *duda_event_object()
  * @METHOD_PARAM: cb_on_timeout callback function for timeout events or NULL
  * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
  */
-int duda_event_add(int sockfd, struct duda_request *dr,
+int duda_event_add(int sockfd,
                    int init_mode, int behavior,
-                   int (*cb_on_read) (int, struct duda_request *),
-                   int (*cb_on_write) (int, struct duda_request *),
-                   int (*cb_on_error) (int, struct duda_request *),
-                   int (*cb_on_close) (int, struct duda_request *),
-                   int (*cb_on_timeout) (int, struct duda_request *))
+                   int (*cb_on_read) (int,  void *),
+                   int (*cb_on_write) (int, void *),
+                   int (*cb_on_error) (int, void *),
+                   int (*cb_on_close) (int, void *),
+                   int (*cb_on_timeout) (int, void *),
+                   void *data)
 {
     struct mk_list *event_list;
     struct duda_event_handler *eh;
+    static duda_request_t *dr;
 
     eh = mk_api->mem_alloc_z(sizeof(struct duda_event_handler));
     if (!eh) {
@@ -78,7 +80,6 @@ int duda_event_add(int sockfd, struct duda_request *dr,
 
     /* set node */
     eh->sockfd = sockfd;
-    eh->dr = dr;
     eh->mode = init_mode;
     eh->behavior = behavior;
     eh->cb_on_read = cb_on_read;
@@ -86,6 +87,7 @@ int duda_event_add(int sockfd, struct duda_request *dr,
     eh->cb_on_error = cb_on_error;
     eh->cb_on_close = cb_on_close;
     eh->cb_on_timeout = cb_on_timeout;
+    eh->cb_data = data;
 
     /* Link to thread list */
     event_list = pthread_getspecific(duda_events_list);
@@ -96,11 +98,18 @@ int duda_event_add(int sockfd, struct duda_request *dr,
         exit(EXIT_FAILURE);
     }
 
-    if (sockfd != dr->socket) {
-        mk_api->event_add(sockfd, init_mode, dr->plugin, behavior);
+    /* Check if the event socket belongs to an active duda_request_t */
+    dr = duda_dr_list_get(sockfd);
+    if (dr) {
+        if (sockfd != dr->socket) {
+            mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
+        }
+        else {
+            mk_api->event_socket_change_mode(sockfd, init_mode, behavior);
+        }
     }
     else {
-        mk_api->event_socket_change_mode(sockfd, init_mode, behavior);
+        mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
     }
 
     return 0;

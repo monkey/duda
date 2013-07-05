@@ -68,7 +68,7 @@ static void duda_dr_list_add(duda_request_t *dr)
     mk_api->rb_insert_color(&dr->_rb_head, root);
 }
 
-static duda_request_t *duda_dr_list_get(int socket)
+duda_request_t *duda_dr_list_get(int socket)
 {
     struct rb_root *root;
     duda_request_t *dr;
@@ -302,7 +302,7 @@ int _mkp_event_read(int sockfd)
 
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     if (eh && eh->cb_on_read) {
-        ret = eh->cb_on_read(eh->sockfd, eh->dr);
+        ret = eh->cb_on_read(eh->sockfd, eh->cb_data);
 
         /* we dont want a bad API usage.. */
         if (mk_unlikely(ret != DUDA_EVENT_OWNED && ret != DUDA_EVENT_CLOSE &&
@@ -321,7 +321,7 @@ int _mkp_event_write(int sockfd)
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
 
     if (eh && eh->cb_on_write) {
-        eh->cb_on_write(eh->sockfd, eh->dr);
+        eh->cb_on_write(eh->sockfd, eh->cb_data);
         return MK_PLUGIN_RET_EVENT_OWNED;
     }
 
@@ -338,7 +338,7 @@ int _mkp_event_close(int sockfd)
     duda_request_t *dr = NULL;
 
     if (eh && eh->cb_on_close) {
-        eh->cb_on_close(eh->sockfd, eh->dr);
+        eh->cb_on_close(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
         return MK_PLUGIN_RET_EVENT_OWNED;
     }
@@ -357,7 +357,7 @@ int _mkp_event_error(int sockfd)
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
 
     if (eh && eh->cb_on_error) {
-        eh->cb_on_error(eh->sockfd, eh->dr);
+        eh->cb_on_error(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
         return MK_PLUGIN_RET_EVENT_CLOSE;
     }
@@ -370,7 +370,7 @@ int _mkp_event_timeout(int sockfd)
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
 
     if (eh && eh->cb_on_timeout) {
-        eh->cb_on_timeout(eh->sockfd, eh->dr);
+        eh->cb_on_timeout(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
         return MK_PLUGIN_RET_EVENT_CLOSE;
     }
@@ -453,9 +453,23 @@ void _mkp_core_thctx()
 
 int _mkp_core_prctx(struct server_config *config)
 {
-    (void) config;
     struct mk_list *head;
     struct web_service *ws;
+    struct plugin *mk_plugin;
+
+    /*
+     * lookup this plugin instance in Monkey internals and create a
+     * assign the reference to the global reference 'duda_plugin'.
+     */
+    duda_plugin = NULL;
+    mk_list_foreach(head, config->plugins) {
+        mk_plugin = mk_list_entry(head, struct plugin, _head);
+        if (strcmp(mk_plugin->shortname, "duda") == 0) {
+            duda_plugin = mk_plugin;
+            break;
+        }
+    }
+    mk_bug(!duda_plugin);
 
     /* Initialize some pointers */
     duda_mem_init();

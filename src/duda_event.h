@@ -45,25 +45,26 @@ struct duda_event_handler {
     int sockfd;
     int mode;
     int behavior;
-    struct duda_request *dr;
 
-    int (*cb_on_read) (int, struct duda_request *);
-    int (*cb_on_write) (int, struct duda_request *);
-    int (*cb_on_error) (int, struct duda_request *);
-    int (*cb_on_close) (int, struct duda_request *);
-    int (*cb_on_timeout) (int, struct duda_request *);
+    int (*cb_on_read) (int, void *);
+    int (*cb_on_write) (int, void *);
+    int (*cb_on_error) (int, void *);
+    int (*cb_on_close) (int, void *);
+    int (*cb_on_timeout) (int, void *);
 
+    void *cb_data;
     struct mk_list _head;
 };
 
 struct duda_api_event {
-    int (*add) (int, struct duda_request *,
+    int (*add) (int,
                 int, int,
-                int (*cb_on_read) (int, struct duda_request *),
-                int (*cb_on_write) (int, struct duda_request *),
-                int (*cb_on_error) (int, struct duda_request *),
-                int (*cb_on_close) (int, struct duda_request *),
-                int (*cb_on_timeout) (int, struct duda_request *));
+                int (*cb_on_read) (int, void *),
+                int (*cb_on_write) (int, void *),
+                int (*cb_on_error) (int, void *),
+                int (*cb_on_close) (int, void *),
+                int (*cb_on_timeout) (int, void *),
+                void *);
     struct duda_event_handler *(*lookup) (int);
     int (*mode) (int, int, int);
     int (*delete) (int);
@@ -74,13 +75,14 @@ struct duda_api_event {
 struct duda_api_event *duda_event_object();
 
 /* Register a new event into Duda events handler */
-int duda_event_add(int sockfd, struct duda_request *dr,
+int duda_event_add(int sockfd,
                    int mode, int behavior,
-                   int (*cb_on_read) (int sockfd, struct duda_request *dr),
-                   int (*cb_on_write) (int sockfd, struct duda_request *dr),
-                   int (*cb_on_error) (int sockfd, struct duda_request *dr),
-                   int (*cb_on_close) (int sockfd, struct duda_request *dr),
-                   int (*cb_on_timeout) (int sockfd, struct duda_request *dr));
+                   int (*cb_on_read) (int sockfd,  void *data),
+                   int (*cb_on_write) (int sockfd, void *data),
+                   int (*cb_on_error) (int sockfd, void *data),
+                   int (*cb_on_close) (int sockfd, void *data),
+                   int (*cb_on_timeout) (int sockfd, void *data),
+                   void *cb_data);
 
 /* Lookup a specific event_handler through it socket descriptor */
 struct duda_event_handler *duda_event_lookup(int sockfd);
