@@ -81,6 +81,7 @@ struct duda_api_ssls {
     int (*event_add) (int, int);
     int (*event_del) (int, int);
     int (*load_cert) (ssls_ctx_t *, char *);
+    int (*load_key)  (ssls_ctx_t *, char *);
     int (*socket_server)  (int, char *);
     void (*set_callbacks) (ssls_ctx_t *,
                            void (*cb_read)    (int, char *, int),
@@ -96,6 +97,7 @@ int ssls_event_mod(int efd, int fd, int mode);
 int ssls_event_add(int efd, int fd);
 int ssls_event_del(int efd, int fd);
 int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file);
+int ssls_load_key(ssls_ctx_t *ctx, char *key_file);
 int ssls_socket_server(int port, char *listen_addr);
 void ssls_set_callbacks(ssls_ctx_t *ctx,
                         void (*cb_read)    (int, char *, int),

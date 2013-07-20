@@ -103,13 +103,32 @@ int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file)
     ret = x509parse_crtfile(&ctx->srvcert, cert_file);
     if (ret) {
         error_strerror(ret, err_buf, sizeof(err_buf));
-        mk_warn("[polarssl] Load cert chain '%s' failed: %s",
-                conf->cert_chain_file,
-                err_buf);
+        msg->warn("[ssls] Load cert chain '%s' failed: %s",
+                  cert_file,
+                  err_buf);
+        return -1;
     }
 
     return 0;
 }
+
+int ssls_load_key(ssls_ctx_t *ctx, char *key_file)
+{
+    char err_buf[72];
+    int ret;
+
+    ret = x509parse_keyfile(&ctx->rsa, key_file, NULL);
+    if (ret < 0) {
+        error_strerror(ret, err_buf, sizeof(err_buf));
+        msg->warn("[ssls] Load key '%s' failed: %s",
+                  key_file,
+                  err_buf);
+        return -1;
+    }
+
+    return 0;
+}
+
 
 static void ssls_ssl_debug(void *ctx, int level, const char *str)
 {
