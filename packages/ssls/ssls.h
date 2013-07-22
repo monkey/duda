@@ -43,10 +43,14 @@
 #define POLAR_DEBUG_LEVEL 0
 #endif
 
+
 /* Represents a SSL connection into the server */
 typedef struct {
     int fd;
     ssl_context ssl_ctx;
+#if (POLARSSL_VERSION_NUMBER < 0x01020000)
+    ssl_session session;
+#endif
 
     struct mk_list _head;
 } ssls_conn_t;
@@ -58,7 +62,9 @@ typedef struct {
     struct mk_list conns;     /* active connections */
 
     /* SSL specific data */
+    x509_cert cacert;
     x509_cert srvcert;
+    dhm_context dhm;
     rsa_context rsa;
 
 #ifdef POLARSSL_SSL_CACHE_C
@@ -80,6 +86,8 @@ struct duda_api_ssls {
     int (*event_mod) (int, int, int);
     int (*event_add) (int, int);
     int (*event_del) (int, int);
+    int (*load_dh_param) (ssls_ctx_t *, char *);
+    int (*load_ca_root_cert) (ssls_ctx_t *, char *);
     int (*load_cert) (ssls_ctx_t *, char *);
     int (*load_key)  (ssls_ctx_t *, char *);
     int (*socket_server)  (int, char *);
@@ -96,6 +104,8 @@ struct duda_api_ssls {
 int ssls_event_mod(int efd, int fd, int mode);
 int ssls_event_add(int efd, int fd);
 int ssls_event_del(int efd, int fd);
+int ssls_load_dh_param(ssls_ctx_t *ctx, char *dh_file);
+int ssls_load_ca_root_cert(ssls_ctx_t *ctx, char *cert_file);
 int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file);
 int ssls_load_key(ssls_ctx_t *ctx, char *key_file);
 int ssls_socket_server(int port, char *listen_addr);

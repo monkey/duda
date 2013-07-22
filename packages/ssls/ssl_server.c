@@ -29,8 +29,33 @@
 #include "duda_api.h"
 #include "duda_package.h"
 
-
 #include "ssls.h"
+
+#if (POLARSSL_VERSION_NUMBER < 0x01020000)
+static int ssls_ciphersuites[] =
+{
+    SSL_EDH_RSA_AES_256_SHA,
+    SSL_EDH_RSA_CAMELLIA_256_SHA,
+    SSL_EDH_RSA_AES_128_SHA,
+    SSL_EDH_RSA_CAMELLIA_128_SHA,
+    SSL_RSA_AES_256_SHA,
+    SSL_RSA_CAMELLIA_256_SHA,
+    SSL_RSA_AES_128_SHA,
+    SSL_RSA_CAMELLIA_128_SHA,
+    SSL_RSA_RC4_128_SHA,
+    SSL_RSA_RC4_128_MD5,
+    0
+};
+#endif
+
+static void ssls_error(int c)
+{
+    char err_buf[72];
+
+    error_strerror(c, err_buf, sizeof(err_buf));
+    msg->warn("[ssls] %s", err_buf);
+}
+
 
 /* Modify the events flags for a registered file descriptor */
 static int ssls_event_handler(int efd, int fd, int ctrl, int mode)
@@ -95,6 +120,39 @@ static int ssls_socket_bind(int socket_fd, const struct sockaddr *addr,
     return ret;
 }
 
+int ssls_load_dh_param(ssls_ctx_t *ctx, char *dh_file)
+{
+    char err_buf[72];
+    int ret;
+
+    ret = x509parse_dhmfile(&ctx->dhm, dh_file);
+    if (ret < 0) {
+        error_strerror(ret, err_buf, sizeof(err_buf));
+        msg->warn("[ssls] Load DH param file  '%s' failed: %s",
+                  dh_file,
+                  err_buf);
+        return -1;
+    }
+    return 0;
+}
+
+int ssls_load_ca_root_cert(ssls_ctx_t *ctx, char *cert_file)
+{
+    char err_buf[72];
+    int ret;
+
+    ret = x509parse_crtfile(&ctx->cacert, cert_file);
+    if (ret) {
+        error_strerror(ret, err_buf, sizeof(err_buf));
+        msg->warn("[ssls] Load CA root '%s' failed: %s",
+                  cert_file,
+                  err_buf);
+        return -1;
+    }
+
+    return 0;
+}
+
 int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file)
 {
     char err_buf[72];
@@ -103,7 +161,7 @@ int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file)
     ret = x509parse_crtfile(&ctx->srvcert, cert_file);
     if (ret) {
         error_strerror(ret, err_buf, sizeof(err_buf));
-        msg->warn("[ssls] Load cert chain '%s' failed: %s",
+        msg->warn("[ssls] Load certificated '%s' failed: %s",
                   cert_file,
                   err_buf);
         return -1;
@@ -133,17 +191,18 @@ int ssls_load_key(ssls_ctx_t *ctx, char *key_file)
 static void ssls_ssl_debug(void *ctx, int level, const char *str)
 {
     (void) ctx;
+    (void) level;
 
-    if (level < POLAR_DEBUG_LEVEL) {
-        msg->warn("%s", str);
-    }
+    //if (level < POLAR_DEBUG_LEVEL) {
+    printf("[SSL] %s", str);
+        //}
 }
 
 /* Register and initialize new connection into the server context */
 static ssls_conn_t *ssls_register_connection(ssls_ctx_t *ctx, int fd)
 {
     ssl_context *ssl;
-    ssls_conn_t *conn;
+    ssls_conn_t *conn = NULL;
 
     conn = monkey->mem_alloc(sizeof(ssls_conn_t));
     if (!conn) {
@@ -160,14 +219,54 @@ static ssls_conn_t *ssls_register_connection(ssls_ctx_t *ctx, int fd)
     ssl_set_authmode(ssl, SSL_VERIFY_NONE);
     ssl_set_rng(ssl, ctr_drbg_random, &ctx->ctr_drbg);
     ssl_set_dbg(ssl, ssls_ssl_debug, 0);
-    ssl_set_ca_chain(ssl, ctx->srvcert.next, NULL, NULL);
+
+#if (POLARSSL_VERSION_NUMBER < 0x01020000)
+        ssl_set_ciphersuites(ssl, ssls_ciphersuites);
+        ssl_set_session(ssl, 0, 0, &conn->session);
+        memset(&conn->session, 0, sizeof(&conn->session));
+#endif
+
+#ifdef POLARSSL_SSL_CACHE_C
+    ssl_set_session_cache(ssl,
+                          ssl_cache_get, &ctx->cache,
+                          ssl_cache_set, &ctx->cache);
+#endif
+
+    ssl_set_ca_chain(ssl, &ctx->cacert, NULL, NULL);
     ssl_set_own_cert(ssl, &ctx->srvcert, &ctx->rsa);
-    ssl_set_bio(ssl, net_recv, &ctx->fd, net_send, &ctx->fd);
+#if defined(POLARSSL_DHM_C)
+    /*
+     * Use different group than default DHM group
+     */
+    ssl_set_dh_param( ssl, POLARSSL_DHM_RFC5114_MODP_2048_P,
+                            POLARSSL_DHM_RFC5114_MODP_2048_G );
+    ssl_set_dh_param_ctx(ssl, &ctx->dhm);
+#endif
+
+
+    ssl_set_bio(ssl, net_recv, &conn->fd, net_send, &conn->fd);
 
     mk_list_add(&conn->_head, &ctx->conns);
     return conn;
 }
 
+/* Lookup an active SSL connection */
+static ssls_conn_t *ssls_get_connection(ssls_ctx_t *ctx, int fd)
+{
+    ssls_conn_t *conn = NULL;
+    struct mk_list *head;
+
+    mk_list_foreach(head, &ctx->conns) {
+        conn = mk_list_entry(head, ssls_conn_t, _head);
+        if (conn->fd == fd) {
+            return conn;
+        }
+    }
+
+    return NULL;
+}
+
+/* Remove a SSL connection */
 static int ssls_remove_connection(ssls_ctx_t *ctx, int fd)
 {
     ssls_conn_t *conn;
@@ -288,7 +387,7 @@ void ssls_server_loop(ssls_ctx_t *ctx)
 
     while (1) {
         /* wait for events */
-        num_fds = epoll_wait(ctx->fd, events, max_events, -1);
+        num_fds = epoll_wait(ctx->efd, events, max_events, -1);
 
         for (i = 0; i < num_fds; i++) {
             fd = events[i].data.fd;
@@ -308,26 +407,34 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                     }
 
                     /* set the socket to non-blocking mode */
+                    conn = ssls_register_connection(ctx, remote_fd);
                     monkey->socket_set_nonblocking(remote_fd);
-
+                    ssls_event_add(ctx->efd, remote_fd);
+                    printf("NEW: %i %p\n", remote_fd, conn);
+                }
+                else {
                     /*
                      * When a new connection arrives, we need to register this
                      * connection in our context, initialize some SSL stuff
                      * and as we are in a "ready for read" mode (EPOLLIN), means
                      * that we should start making the SSL handshake.
                      */
-                    conn = ssls_register_connection(ctx, remote_fd);
+                    conn = ssls_get_connection(ctx, fd);
                     ret = ssl_read(&conn->ssl_ctx, buf, buf_size);
-                    if (ret < 0) {
-                        switch (ret) {
-                        case POLARSSL_ERR_NET_WANT_READ:
-                        case POLARSSL_ERR_NET_WANT_WRITE:
-                            errno = EAGAIN;
-                        case POLARSSL_ERR_SSL_CONN_EOF:
-                            ret = 0;
-                        }
+
+                    if (ret == POLARSSL_ERR_NET_WANT_READ ||
+                        ret == POLARSSL_ERR_NET_WANT_WRITE) {
+                        printf("continue\n");
+                        continue;
                     }
-                    else {
+                    else if (ret == POLARSSL_ERR_SSL_CONN_EOF) {
+                        printf("FIXME: exit\n");
+                        exit(1);
+                    }
+
+                    if (ret >= 0) {
+                        printf("READ=%i\n", ret);
+                        exit(1);
                         /*
                          * This is an unacceptable condition as every new connection
                          * must initiate a handshake and the PolarSSL API must write
@@ -336,14 +443,20 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                         ssls_remove_connection(ctx, remote_fd);
                         close(remote_fd);
                     }
-                }
-                else {
-                    /* FIXME: handle existent connnection, read data */
+                    else {
+                        ssls_error(ret);
+                        ssls_remove_connection(ctx, remote_fd);
+                        close(remote_fd);
+                        continue;
+                    }
 
                 }
             }
             else if (events[i].events & EPOLLOUT) {
-
+                printf("pollout");
+            }
+            else {
+                printf("pther\n");
             }
         }
     }
@@ -363,7 +476,10 @@ ssls_ctx_t *ssls_init(int port, char *listen_addr)
         msg->err("[SSLS] Memory allocation failed. Aborting");
         exit(EXIT_FAILURE);
     }
+    memset(&ctx->cacert, 0, sizeof(x509_cert));
     memset(&ctx->srvcert, 0, sizeof(x509_cert));
+    memset(&ctx->rsa, 0, sizeof(rsa_context));
+    memset(&ctx->dhm, 0, sizeof(dhm_context));
 
     /* create a listener socket and bind the given address */
     fd = ssls_socket_server(port, listen_addr);

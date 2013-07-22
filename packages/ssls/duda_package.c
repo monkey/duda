@@ -47,8 +47,10 @@ struct duda_api_ssls *get_ssls_api()
     s->event_mod = ssls_event_mod;
     s->event_add = ssls_event_add;
     s->event_del = ssls_event_del;
+    s->load_dh_param = ssls_load_dh_param;
+    s->load_ca_root_cert = ssls_load_ca_root_cert;
     s->load_cert = ssls_load_cert;
-    s->load_key  = ssls_load_key;
+    s->load_key = ssls_load_key;
     s->socket_server = ssls_socket_server;
     s->set_callbacks = ssls_set_callbacks;
     s->server_loop = ssls_server_loop;
