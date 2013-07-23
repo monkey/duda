@@ -52,8 +52,8 @@ static void ssls_error(int c)
 {
     char err_buf[72];
 
-    error_strerror(c, err_buf, sizeof(err_buf));
-    msg->warn("[ssls] %s", err_buf);
+    //error_strerror(c, err_buf, sizeof(err_buf));
+    //msg->warn("[ssls] %s", err_buf);
 }
 
 
@@ -77,10 +77,18 @@ static int ssls_event_handler(int efd, int fd, int ctrl, int mode)
 	return 0;
 }
 
+int ssls_write(ssls_conn_t *conn, unsigned char *buf, int size)
+{
+    return ssl_write(&conn->ssl_ctx, buf, size);
+}
+
 /* Change a file descriptor mode */
 int ssls_event_mod(int efd, int fd, int mode)
 {
-    return ssls_event_handler(efd, fd, EPOLL_CTL_MOD, mode);
+    int r;
+    r = ssls_event_handler(efd, fd, EPOLL_CTL_MOD, mode);
+    printf("event mod %i\n", r);
+    return r;
 }
 
 /* Register a given file descriptor into the epoll queue */
@@ -341,15 +349,22 @@ int ssls_socket_server(int port, char *listen_addr)
 }
 
 void ssls_set_callbacks(ssls_ctx_t *ctx,
-                        void (*cb_read)    (int, char *, int),
-                        void (*cb_write)   (int),
-                        void (*cb_close)   (int),
-                        void (*cb_timeout) (int))
+                        void (*cb_accepted)(struct ssls_ctx *, ssls_conn_t *,
+                                            int),
+
+                        void (*cb_read)    (struct ssls_ctx *, ssls_conn_t *,
+                                            int, unsigned char *, int),
+                        void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
+                        void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
+                                            int, int),
+                        void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
+                                            int, int))
 {
-    ctx->cb_read    = cb_read;
-    ctx->cb_write   = cb_write;
-    ctx->cb_close   = cb_close;
-    ctx->cb_timeout = cb_timeout;
+    ctx->cb_accepted = cb_accepted;
+    ctx->cb_read     = cb_read;
+    ctx->cb_write    = cb_write;
+    ctx->cb_close    = cb_close;
+    ctx->cb_timeout  = cb_timeout;
 }
 
 
@@ -411,6 +426,11 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                     monkey->socket_set_nonblocking(remote_fd);
                     ssls_event_add(ctx->efd, remote_fd);
                     printf("NEW: %i %p\n", remote_fd, conn);
+
+                    /* Report the new connection through accepted callback */
+                    if (ctx->cb_accepted) {
+                        ctx->cb_accepted(ctx, conn, remote_fd);
+                    }
                 }
                 else {
                     /*
@@ -420,11 +440,30 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                      * that we should start making the SSL handshake.
                      */
                     conn = ssls_get_connection(ctx, fd);
+
+                    /* if no connection node exists, means this file descriptor belongs
+                     * to something else (someone is using our polling queue to hook
+                     * events, so we just invoke the proper callback with the data
+                     * that we have
+                     */
+                    if (!conn) {
+                        if (ctx->cb_read) {
+                            ctx->cb_read(ctx, NULL, fd, NULL, -1);
+                        }
+                        continue;
+                    }
+
                     ret = ssl_read(&conn->ssl_ctx, buf, buf_size);
 
                     if (ret == POLARSSL_ERR_NET_WANT_READ ||
                         ret == POLARSSL_ERR_NET_WANT_WRITE) {
                         printf("continue\n");
+                        if (ret == POLARSSL_ERR_NET_WANT_READ){
+                            printf("WANT read\n");
+                        }
+                        else if (ret == POLARSSL_ERR_NET_WANT_WRITE) {
+                            printf("WANT write\n");
+                        }
                         continue;
                     }
                     else if (ret == POLARSSL_ERR_SSL_CONN_EOF) {
@@ -432,31 +471,32 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                         exit(1);
                     }
 
-                    if (ret >= 0) {
-                        printf("READ=%i\n", ret);
-                        exit(1);
+                    if (ret > 0) {
                         /*
-                         * This is an unacceptable condition as every new connection
-                         * must initiate a handshake and the PolarSSL API must write
-                         * back with the ServerHello.
+                         * we got some data in our buffer, lets invoke the
+                         * READ callback and pass the data to it
                          */
-                        ssls_remove_connection(ctx, remote_fd);
-                        close(remote_fd);
+                        if (ctx->cb_read) {
+                            ctx->cb_read(ctx, conn, fd, buf, buf_size);
+                        }
                     }
                     else {
                         ssls_error(ret);
-                        ssls_remove_connection(ctx, remote_fd);
-                        close(remote_fd);
-                        continue;
+                        ssls_remove_connection(ctx, fd);
+                        close(fd);
                     }
-
                 }
             }
             else if (events[i].events & EPOLLOUT) {
-                printf("pollout");
+                printf("POLLOUT!\n");
+
+                if (ctx->cb_write) {
+                    conn = ssls_get_connection(ctx, fd);
+                    ctx->cb_write(ctx, conn, fd);
+                }
             }
             else {
-                printf("pther\n");
+                printf("EOG!\n");
             }
         }
     }

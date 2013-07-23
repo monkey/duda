@@ -56,7 +56,7 @@ typedef struct {
 } ssls_conn_t;
 
 /* A SSL-Server context */
-typedef struct {
+struct ssls_ctx {
     int fd;                   /* socket server listening from incoming connections */
     int efd;                  /* epoll file descriptor */
     struct mk_list conns;     /* active connections */
@@ -74,15 +74,18 @@ typedef struct {
     ctr_drbg_context ctr_drbg;
 
     /* callback hooks */
-    void (*cb_read)    (int, char *, int);
-    void (*cb_write)   (int);
-    void (*cb_close)   (int);
-    void (*cb_timeout) (int);
+    void (*cb_accepted)(struct ssls_ctx *, ssls_conn_t *, int);
+    void (*cb_read)    (struct ssls_ctx *, ssls_conn_t *, int, unsigned char *, int);
+    void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int);
+    void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *, int, int);
+    void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *, int, int);
+};
 
-} ssls_ctx_t;
+typedef struct ssls_ctx ssls_ctx_t;
 
 /* API structure */
 struct duda_api_ssls {
+    int (*write) (ssls_conn_t *, unsigned char *, int);
     int (*event_mod) (int, int, int);
     int (*event_add) (int, int);
     int (*event_del) (int, int);
@@ -92,15 +95,20 @@ struct duda_api_ssls {
     int (*load_key)  (ssls_ctx_t *, char *);
     int (*socket_server)  (int, char *);
     void (*set_callbacks) (ssls_ctx_t *,
-                           void (*cb_read)    (int, char *, int),
-                           void (*cb_write)   (int),
-                           void (*cb_close)   (int),
-                           void (*cb_timeout) (int));
+                           void (*cb_accepted)(struct ssls_ctx *, ssls_conn_t *, int),
+                           void (*cb_read)    (struct ssls_ctx *, ssls_conn_t *,
+                                               int, unsigned char *, int),
+                           void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
+                           void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
+                                               int, int),
+                           void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
+                                               int, int));
     void (*server_loop) (ssls_ctx_t *);
     ssls_ctx_t *(*init) (int, char *);
 };
 
 /* functions */
+int ssls_write(ssls_conn_t *conn, unsigned char *buf, int size);
 int ssls_event_mod(int efd, int fd, int mode);
 int ssls_event_add(int efd, int fd);
 int ssls_event_del(int efd, int fd);
@@ -110,10 +118,14 @@ int ssls_load_cert(ssls_ctx_t *ctx, char *cert_file);
 int ssls_load_key(ssls_ctx_t *ctx, char *key_file);
 int ssls_socket_server(int port, char *listen_addr);
 void ssls_set_callbacks(ssls_ctx_t *ctx,
-                        void (*cb_read)    (int, char *, int),
-                        void (*cb_write)   (int),
-                        void (*cb_close)   (int),
-                        void (*cb_timeout) (int));
+                        void (*cb_accepted)(struct ssls_ctx *, ssls_conn_t *, int),
+                        void (*cb_read)    (struct ssls_ctx *, ssls_conn_t *,
+                                            int, unsigned char *, int),
+                        void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
+                        void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
+                                            int, int),
+                        void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
+                                            int, int));
 void ssls_server_loop(ssls_ctx_t *ctx);
 ssls_ctx_t *ssls_init(int port, char *listen_addr);
 

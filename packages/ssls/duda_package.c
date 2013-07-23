@@ -44,6 +44,7 @@ struct duda_api_ssls *get_ssls_api()
 
     /* Alloc object */
     s = malloc(sizeof(struct duda_api_ssls));
+    s->write     = ssls_write;
     s->event_mod = ssls_event_mod;
     s->event_add = ssls_event_add;
     s->event_del = ssls_event_del;
