@@ -54,6 +54,7 @@ struct web_service {
     mk_pointer docroot;
     mk_pointer confdir;
     mk_pointer datadir;
+    mk_pointer logdir;
 
     int  enabled;
     int  url_force_redirect;
@@ -70,6 +71,9 @@ struct web_service {
 
     /* workers list */
     struct mk_list *workers;
+
+    /* loggers list */
+    struct mk_list *loggers;
 
     /* packages loaded by the web service */
     struct mk_list *packages;

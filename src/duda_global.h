@@ -26,8 +26,9 @@
 #include <pthread.h>
 
 typedef struct {
-    pthread_key_t key;    /* Pthread key unique identifier */
-    void *(*callback) (); /* Return the value assigned to the global scope variable */
+    pthread_key_t key;          /* Pthread key unique identifier */
+    void *(*callback) (void *); /* Return the value assigned to the global variable */
+    void *data;                 /* the optional data passed to the callback */
     struct mk_list _head;
 } duda_global_t;
 
@@ -42,7 +43,7 @@ struct duda_global_dist_t {
 
 /* Global data (thread scope) */
 struct duda_api_global {
-    void  (*init) (duda_global_t *, void *(*callback)());
+    void  (*init) (duda_global_t *, void *(*callback)(void *), void *data);
     int   (*set)   (duda_global_t, const void *);
     void *(*get)   (duda_global_t);
 };

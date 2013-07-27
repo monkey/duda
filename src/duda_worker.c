@@ -27,6 +27,23 @@
 
 /* --- Local functions --- */
 
+/*
+ * This function is a middle step before to invoke the target function, the
+ * goal is to be able to initialize some data in the worker before to release
+ * the control of it. Originally created to create Logger instances per customs
+ * workers that are not related to the main server workers.
+ */
+static void *duda_worker_step(void *arg)
+{
+    struct duda_worker *wk = (struct duda_worker *) arg;
+
+    /* initialize same data as done for server workers */
+    _mkp_core_thctx();
+
+    /* call the target function */
+    return wk->func(wk->arg);
+}
+
 /* Spawn each registered worker */
 int duda_worker_spawn_all(struct mk_list *list)
 {
@@ -42,7 +59,7 @@ int duda_worker_spawn_all(struct mk_list *list)
     mk_list_foreach(head, list) {
         wk = mk_list_entry(head, struct duda_worker, _head);
 
-        if (pthread_create(&tid, &thread_attr, (void *) wk->func, wk->arg) < 0) {
+        if (pthread_create(&tid, &thread_attr, duda_worker_step, (void *) wk) < 0) {
             perror("pthread_create");
             exit(EXIT_FAILURE);
         }

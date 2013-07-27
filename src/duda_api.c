@@ -73,6 +73,7 @@ struct duda_api_objects *duda_api_master()
     objs->request  = duda_request_object();
     objs->response = duda_response_object();
     objs->console  = duda_console_object();
+    objs->logger   = duda_logger_object();
     objs->param    = duda_param_object();
     objs->session  = duda_session_object();
     objs->xtime    = duda_xtime_object();

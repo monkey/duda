@@ -39,6 +39,7 @@
 #include "duda_conf.h"
 #include "duda_xtime.h"
 #include "duda_console.h"
+#include "duda_log.h"
 #include "duda_gc.h"
 #include "duda_objects.h"
 #include "duda_fconf.h"
@@ -98,6 +99,7 @@ int _duda_main(struct duda_api_objects *api);
         debug    = api->debug;                                          \
         event    = api->event;                                          \
         console  = api->console;                                        \
+        logger   = api->logger;                                         \
         gc       = api->gc;                                             \
         param    = api->param;                                          \
         session  = api->session;                                        \
@@ -119,6 +121,12 @@ int _duda_main(struct duda_api_objects *api);
         mk_list_init(&duda_global_dist);                                \
         mk_list_init(&duda_ws_packages);                                \
         mk_list_init(&duda_worker_list);                                \
+                                                                        \
+        /* logger main list: logger keys defined in duda_main() */      \
+        mk_list_init(&duda_logger_main_list);                           \
+                                                                        \
+        /* logger worker: logger keys initialized through worker CBs */ \
+        mk_list_init(&duda_logger_worker_list);                         \
                                                                         \
         /*                                                              \
          * re-map functions that depends on webservice or               \

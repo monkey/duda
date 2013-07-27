@@ -33,6 +33,7 @@
 #include "duda_global.h"
 #include "duda_cookie.h"
 #include "duda_console.h"
+#include "duda_log.h"
 #include "duda_request.h"
 #include "duda_response.h"
 #include "duda_worker.h"
@@ -94,6 +95,7 @@ struct duda_api_objects {
     struct duda_api_event *event;
     struct duda_api_gc *gc;
     struct duda_api_console *console;
+    struct duda_api_logger *logger;
     struct duda_api_global *global;
     struct duda_api_param *param;
     struct duda_api_session *session;

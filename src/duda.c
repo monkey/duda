@@ -31,6 +31,7 @@
 #include "duda_event.h"
 #include "duda_queue.h"
 #include "duda_console.h"
+#include "duda_log.h"
 #include "duda_package.h"
 
 MONKEY_PLUGIN("duda",                                     /* shortname */
@@ -156,6 +157,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
         ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
+        ws->loggers  = duda_load_symbol(ws->handler, "duda_logger_main_list");
 
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
@@ -411,6 +413,7 @@ void _mkp_core_thctx()
      */
     mk_list_foreach(head_vs, &services_list) {
         entry_vs = mk_list_entry(head_vs, struct vhost_services, _head);
+
         mk_list_foreach(head_ws, &entry_vs->services) {
             entry_ws = mk_list_entry(head_ws, struct web_service, _head);
 
@@ -423,7 +426,7 @@ void _mkp_core_thctx()
                  */
                 data = NULL;
                 if (entry_gl->callback) {
-                    data = entry_gl->callback();
+                    data = entry_gl->callback(entry_gl->data);
                 }
                 pthread_setspecific(entry_gl->key, data);
             }
@@ -442,7 +445,7 @@ void _mkp_core_thctx()
                     entry_gl = mk_list_entry(head_gl, duda_global_t, _head);
                     data = NULL;
                     if (entry_gl->callback) {
-                        data = entry_gl->callback();
+                        data = entry_gl->callback(entry_gl->data);
                     }
                     pthread_setspecific(entry_gl->key, data);
                 }
@@ -501,6 +504,9 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
     pthread_key_create(&duda_global_dr_list, NULL);
+
+    /* Initialize Logger internals */
+    duda_logger_init();
 
     return 0;
 }

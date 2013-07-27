@@ -86,6 +86,37 @@ int duda_conf_set_datadir(struct web_service *ws, const char *dir)
     return 0;
 }
 
+int duda_conf_set_logdir(struct web_service *ws, const char *dir)
+{
+    int ret;
+    int len;
+    struct file_info finfo;
+
+    ret = mk_api->file_get_info(dir, &finfo);
+    if (ret != 0 || finfo.is_directory != MK_TRUE) {
+        return -1;
+    }
+
+    if (ws->logdir.data) {
+        free(ws->logdir.data);
+    }
+
+    len = strlen(dir);
+    if (dir[len - 1] != '/') {
+        ws->logdir.data = mk_api->mem_alloc(len + 2);
+        strncpy(ws->logdir.data, dir, len);
+        ws->logdir.data[len]     = '/';
+        ws->logdir.data[len + 1] = '\0';
+        ws->logdir.len           = len + 2;
+    }
+    else {
+        ws->logdir.data = mk_api->str_dup(dir);
+        ws->logdir.len  = len;
+    }
+
+    return 0;
+}
+
 int duda_conf_main_init(const char *confdir)
 {
     int ret = 0;
@@ -165,6 +196,7 @@ int duda_conf_vhost_init()
     char *app_docroot;
     char *app_confdir;
     char *app_datadir;
+    char *app_logdir;
     int   app_enabled;
     struct file_info finfo;
 
@@ -205,6 +237,7 @@ int duda_conf_vhost_init()
                 app_enabled = MK_FALSE;
                 app_docroot = NULL;
                 app_confdir = NULL;
+                app_logdir  = NULL;
 
                 /* Get section keys */
                 app_name = mk_api->config_section_getval(section,
@@ -225,6 +258,10 @@ int duda_conf_vhost_init()
                 app_datadir = mk_api->config_section_getval(section,
                                                             "DataDir",
                                                             MK_CONFIG_VAL_STR);
+
+                app_logdir = mk_api->config_section_getval(section,
+                                                           "LogDir",
+                                                           MK_CONFIG_VAL_STR);
 
                 if (app_name && mk_is_bool(app_enabled)) {
                     ws = mk_api->mem_alloc_z(sizeof(struct web_service));
@@ -272,6 +309,15 @@ int duda_conf_vhost_init()
                         ret = duda_conf_set_datadir(ws, app_datadir);
                         if (ret != 0) {
                             mk_err("Duda: invalid DataDir, it must be a directory");
+                            exit(EXIT_FAILURE);
+                        }
+                    }
+
+                    /* LogDir */
+                    if (app_logdir) {
+                        ret = duda_conf_set_logdir(ws, app_logdir);
+                        if (ret != 0) {
+                            mk_err("Duda: invalid LogDir, it must be a directory");
                             exit(EXIT_FAILURE);
                         }
                     }

@@ -35,6 +35,8 @@ struct mk_list MK_EXPORT duda_map_urls;
 struct mk_list MK_EXPORT duda_global_dist;
 struct mk_list MK_EXPORT duda_ws_packages;
 struct mk_list MK_EXPORT duda_worker_list;
+struct mk_list MK_EXPORT duda_logger_main_list;
+struct mk_list MK_EXPORT duda_logger_worker_list;
 
 /* Objects exported to the web service */
 struct plugin_api *monkey;
@@ -45,6 +47,7 @@ struct duda_api_response *response;
 struct duda_api_debug *debug;
 struct duda_api_event *event;
 struct duda_api_console *console;
+struct duda_api_logger *logger;
 struct duda_api_gc *gc;
 struct duda_api_param *param;
 struct duda_api_session *session;
@@ -64,10 +67,13 @@ struct web_service *self;
 #include <sys/syscall.h>   /* For SYS_xxx definitions */
 
 /* function that depends on webservice or package specific data */
-static inline void duda_global_init(duda_global_t *global, void *(*callback)())
+static inline void duda_global_init(duda_global_t *global,
+                                    void *(*callback)(void *),
+                                    void *data)
 {
     pthread_key_create(&global->key, NULL);
     global->callback = callback;
+    global->data     = data;
     mk_list_add(&global->_head, &duda_global_dist);
 }
 

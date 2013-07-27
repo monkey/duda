@@ -28,6 +28,7 @@
 #include "MKPlugin.h"
 #include "duda_objects.h"
 #include "duda_global.h"
+#include "duda_log.h"
 #include "duda_api.h"
 
 struct duda_package {
@@ -50,6 +51,7 @@ struct duda_package {
     event    = api->event;                                              \
     gc       = api->gc;                                                 \
     console  = api->console;                                            \
+    logger   = api->logger;                                             \
     param    = api->param;                                              \
     session  = api->session;                                            \
     cookie   = api->cookie;                                             \
@@ -64,7 +66,8 @@ struct duda_package {
     mk_list_init(&duda_map_urls);                                       \
     mk_list_init(&duda_global_dist);                                    \
     mk_list_init(&duda_ws_packages);                                    \
-    mk_list_init(&duda_worker_list);
+    mk_list_init(&duda_worker_list);                                    \
+    mk_list_init(&duda_log_list);
 
 /* Data type */
 typedef struct duda_package duda_package_t;
