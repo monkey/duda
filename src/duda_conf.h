@@ -19,10 +19,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "duda_api.h"
+
+
 #ifndef MK_DUDA_CONF_H
 #define MK_DUDA_CONF_H
-
-#include "duda_api.h"
 
 #define WS_ROOT_URI_LEN   64
 
@@ -46,43 +47,6 @@ struct vhost_services {
     struct host *host;
     struct mk_list services;
     struct mk_list _head;
-};
-
-/* Web service information */
-struct web_service {
-    mk_pointer name;
-    mk_pointer docroot;
-    mk_pointer confdir;
-    mk_pointer datadir;
-    mk_pointer logdir;
-
-    int  enabled;
-    int  url_force_redirect;
-    int  bind_messages;
-
-    void *handler;
-
-    /* Specifics data when registering the service */
-    struct mk_list *map_interfaces;
-    struct mk_list *map_urls;
-
-    /* global data */
-    struct mk_list *global;
-
-    /* workers list */
-    struct mk_list *workers;
-
-    /* loggers list */
-    struct mk_list *loggers;
-
-    /* packages loaded by the web service */
-    struct mk_list *packages;
-
-    /* node entry associated with services_list */
-    struct mk_list _head;
-
-    /* node entry associated with services_loaded */
-    struct mk_list _head_loaded;
 };
 
 int duda_conf_set_confdir(struct web_service *ws, const char *dir);

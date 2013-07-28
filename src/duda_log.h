@@ -22,10 +22,11 @@
 #ifndef DUDA_LOG_H
 #define DUDA_LOG_H
 
+#include "duda_conf.h"
 #include "duda.h"
-#include "duda_api.h"
 #include "duda_global.h"
 #include "duda_objects.h"
+#include "mk_memory.h"
 
 typedef struct {
     duda_global_t global_key;
@@ -79,13 +80,12 @@ static inline int duda_logger_create(duda_logger_t *log, char *name)
      * create a struct to hold the data for the callback when the threads
      * start creating their loggers scope
      */
-
     ctx = malloc(sizeof(duda_logger_context_t));
 
     /* fill the fields */
     ctx->name     = name;
     ctx->log_path = NULL;
-    monkey->str_build(&ctx->log_path, &len, "%s/%s", "/tmp/", name);
+    monkey->str_build(&ctx->log_path, &len, "%s/%s", self->logdir.data, name);
     ctx->ws       = self;
     ctx->key      = log;
     if (pipe(ctx->pipe_fd) == -1) {
