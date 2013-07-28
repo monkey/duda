@@ -42,7 +42,7 @@
  * This struct represent the web service request, as well it contains detailed
  * information about the response type and buffers associated
  */
-struct duda_request {
+typedef struct duda_request {
 
     /* web service details */
     struct web_service *ws_root;
@@ -87,9 +87,9 @@ struct duda_request {
     /* Head to red-black tree list that holds all DRs */
     struct rb_node _rb_head;
 
-};
+} duda_request_t;
 
-typedef struct duda_request duda_request_t;
+//typedef struct duda_request duda_request_t;
 
 /* self identifier for the plugin context inside Monkey internals */
 struct plugin *duda_plugin;
