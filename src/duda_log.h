@@ -47,6 +47,7 @@ typedef struct {
 } duda_logger_context_t;
 
 pthread_mutex_t duda_logger_mutex;
+pthread_key_t duda_logger_fmt_cache;
 
 static inline void *_duda_logger_cb_create(void *data)
 {

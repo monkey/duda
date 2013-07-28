@@ -383,6 +383,7 @@ int _mkp_event_timeout(int sockfd)
 /* Thread context initialization */
 void _mkp_core_thctx()
 {
+    char *logger_fmt_cache;
     struct mk_list *head_vs, *head_ws, *head_gl;
     struct mk_list *list_events_write;
     struct mk_list *events_list;
@@ -405,6 +406,10 @@ void _mkp_core_thctx()
     /* List of all duda_request_t alive */
     dr_list = mk_api->mem_alloc_z(sizeof(struct rb_root));
     pthread_setspecific(duda_global_dr_list, (void *) dr_list);
+
+    /* Logger FMT cache */
+    logger_fmt_cache = mk_api->mem_alloc(512);
+    pthread_setspecific(duda_logger_fmt_cache, (void *) logger_fmt_cache);
 
     /*
      * Load global data if applies, this is toooo recursive, we need to go through

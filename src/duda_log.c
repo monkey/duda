@@ -208,6 +208,8 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
     int ret;
     int n, size = 128;
     char *p, *np;
+    char *time_fmt;
+    mk_pointer *time_human;
     va_list ap;
     duda_global_t *gl = &key->global_key;
     duda_logger_context_t *ctx;
@@ -221,6 +223,14 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
     if ((p = mk_api->mem_alloc(size)) == NULL) {
         return -1;
     }
+
+    time_fmt = pthread_getspecific(duda_logger_fmt_cache);
+    memset(time_fmt, 0, 512);
+    time_human = mk_api->time_human();
+    strncpy(time_fmt, time_human->data, time_human->len);
+    time_fmt[time_human->len] = ' ';
+    strcpy(time_fmt + time_human->len + 1, fmt);
+    fmt = time_fmt;
 
     while (1) {
         /* Try to print in the allocated space. */
