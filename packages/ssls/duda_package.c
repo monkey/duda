@@ -24,11 +24,9 @@
 
 #include "ssls.h"
 
-/*
 #include <polarssl/version.h>
 #include <polarssl/error.h>
 #include <polarssl/net.h>
-*/
 #include <polarssl/ssl.h>
 #include <polarssl/bignum.h>
 #include <polarssl/entropy.h>

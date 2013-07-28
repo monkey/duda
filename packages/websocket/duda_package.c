@@ -61,7 +61,7 @@ duda_package_t *duda_package_main(struct duda_api_objects *api)
     memset(ws_callbacks, '\0', sizeof(struct ws_callbacks_t));
 
     /* Package internals */
-    global->init(&ws_request_list, cb_request_list_init);
+    global->init(&ws_request_list, cb_request_list_init, NULL);
 
     /* Package object */
     dpkg = monkey->mem_alloc(sizeof(duda_package_t));

@@ -50,7 +50,8 @@ static int ssls_ciphersuites[] =
 
 static void ssls_error(int c)
 {
-    char err_buf[72];
+    (void) c;
+    //char err_buf[72];
 
     //error_strerror(c, err_buf, sizeof(err_buf));
     //msg->warn("[ssls] %s", err_buf);
@@ -356,9 +357,9 @@ void ssls_set_callbacks(ssls_ctx_t *ctx,
                                             int, unsigned char *, int),
                         void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
                         void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
-                                            int, int),
+                                            int),
                         void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
-                                            int, int))
+                                            int))
 {
     ctx->cb_accepted = cb_accepted;
     ctx->cb_read     = cb_read;
@@ -482,6 +483,9 @@ void ssls_server_loop(ssls_ctx_t *ctx)
                     }
                     else {
                         ssls_error(ret);
+                        if (ctx->cb_close) {
+                            ctx->cb_close(ctx, conn, fd);
+                        }
                         ssls_remove_connection(ctx, fd);
                         close(fd);
                     }

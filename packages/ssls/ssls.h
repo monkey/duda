@@ -77,8 +77,8 @@ struct ssls_ctx {
     void (*cb_accepted)(struct ssls_ctx *, ssls_conn_t *, int);
     void (*cb_read)    (struct ssls_ctx *, ssls_conn_t *, int, unsigned char *, int);
     void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int);
-    void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *, int, int);
-    void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *, int, int);
+    void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *, int);
+    void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *, int);
 };
 
 typedef struct ssls_ctx ssls_ctx_t;
@@ -100,9 +100,9 @@ struct duda_api_ssls {
                                                int, unsigned char *, int),
                            void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
                            void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
-                                               int, int),
+                                               int),
                            void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
-                                               int, int));
+                                               int));
     void (*server_loop) (ssls_ctx_t *);
     ssls_ctx_t *(*init) (int, char *);
 };
@@ -123,9 +123,9 @@ void ssls_set_callbacks(ssls_ctx_t *ctx,
                                             int, unsigned char *, int),
                         void (*cb_write)   (struct ssls_ctx *, ssls_conn_t *, int),
                         void (*cb_close)   (struct ssls_ctx *, ssls_conn_t *,
-                                            int, int),
+                                            int),
                         void (*cb_timeout) (struct ssls_ctx *, ssls_conn_t *,
-                                            int, int));
+                                            int));
 void ssls_server_loop(ssls_ctx_t *ctx);
 ssls_ctx_t *ssls_init(int port, char *listen_addr);
 

@@ -67,7 +67,8 @@ struct duda_package {
     mk_list_init(&duda_global_dist);                                    \
     mk_list_init(&duda_ws_packages);                                    \
     mk_list_init(&duda_worker_list);                                    \
-    mk_list_init(&duda_log_list);
+    mk_list_init(&duda_logger_main_list);                               \
+    mk_list_init(&duda_logger_worker_list);
 
 /* Data type */
 typedef struct duda_package duda_package_t;
