@@ -37,7 +37,7 @@
 /*
  * Logger writer: this function runs in a separate thread and its main job
  * is to read incoming messages from Logger pipes, wait until the pipe buffer
- * reach some % of it capacity and flush the content to the proper file.
+ * reach some % of it capacity and flush the content to the proper file on disk.
  */
 static void duda_logger_writer(void *arg)
 {
@@ -81,15 +81,13 @@ static void duda_logger_writer(void *arg)
      */
     long buffer_limit;
 
-    mk_api->worker_rename("monkey: logger");
-
-    /* Monkey allow just 75% of a pipe capacity */
+    /* Lets set 75% of a pipe capacity */
     pipe_size = sysconf(_SC_PAGESIZE) * 16;
     buffer_limit = (pipe_size * 0.70);
 
     /* Creating poll */
     efd = epoll_create(max_events);
-    //fcntl(efd, F_SETFD, FD_CLOEXEC);
+    fcntl(efd, F_SETFD, FD_CLOEXEC);
 
     /* Lookup all loggers and grab the pipe's FDs */
     mk_list_foreach(head_vs, &services_list) {

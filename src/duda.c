@@ -683,8 +683,8 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
     new_path_len = (sr->uri_processed.len + len);
 
     /*
-     * Is the new path length minor than MK_PATH_BASE ?, sr->real_path_static have a length
-     * of MK_PATH_BASE
+     * Is the new path length minor than MK_PATH_BASE ?, sr->real_path_static
+     * have a length of MK_PATH_BASE
      */
     if (new_path_len < MK_PATH_BASE) {
         if (sr->real_path.data != sr->real_path_static) {
@@ -747,7 +747,6 @@ int duda_service_html(duda_request_t *dr)
     ret = duda_override_docroot(sr, dr->ws_root->name.len + 1,
                                 dr->ws_root->docroot.data,
                                 dr->ws_root->docroot.len);
-
     return ret;
 }
 
@@ -803,14 +802,15 @@ int duda_service_run(struct plugin *plugin,
 
     /* Parse request for 'Duda Map' format */
     if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
-        /* Static Content file */
-        if (duda_service_html(dr) == 0) {
-            return -1;
-        }
 
         /* Static Map */
         if (duda_map_static_check(dr) == 0) {
             return 0;
+        }
+
+        /* Static Content file */
+        if (duda_service_html(dr) == 0) {
+            return -1;
         }
     }
     else {
