@@ -64,8 +64,6 @@ static inline void *_duda_logger_cb_create(void *data)
     ctx->name = strdup(info->name);
     ctx->key  = info->key;
 
-    printf("LOGGER CB from %lu\n", syscall(__NR_gettid));
-
     mk_list_add(&ctx->_head, &duda_logger_worker_list);
     pthread_mutex_unlock(&duda_logger_mutex);
 

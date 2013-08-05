@@ -96,6 +96,7 @@ struct plugin *duda_plugin;
 
 pthread_key_t duda_global_events_write;
 pthread_key_t duda_global_dr_list;
+pthread_mutex_t duda_mutex_thctx;
 
 mk_pointer dd_iov_none;
 

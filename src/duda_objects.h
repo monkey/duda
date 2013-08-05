@@ -37,6 +37,7 @@ struct mk_list MK_EXPORT duda_ws_packages;
 struct mk_list MK_EXPORT duda_worker_list;
 struct mk_list MK_EXPORT duda_logger_main_list;
 struct mk_list MK_EXPORT duda_logger_worker_list;
+void (*duda_event_signal_cb) (int fd, uint64_t val);
 
 /* Objects exported to the web service */
 struct plugin_api *monkey;

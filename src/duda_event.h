@@ -24,6 +24,7 @@
 
 #include "MKPlugin.h"
 #include "duda.h"
+#include "duda_objects.h"
 
 #define DUDA_EVENT_READ             MK_EPOLL_READ
 #define DUDA_EVENT_WRITE            MK_EPOLL_WRITE
@@ -40,6 +41,13 @@
 
 /* Thread key to map the event lists per worker */
 pthread_key_t duda_events_list;
+
+struct duda_event_signal_channel {
+    int fd;
+    struct mk_list _head;
+};
+
+struct mk_list duda_event_signals_list;
 
 struct duda_event_handler {
     int sockfd;
@@ -68,8 +76,8 @@ struct duda_api_event {
     struct duda_event_handler *(*lookup) (int);
     int (*mode) (int, int, int);
     int (*delete) (int);
+    int (*signal) (uint64_t);
 };
-
 
 /* Export an API object */
 struct duda_api_event *duda_event_object();
@@ -92,5 +100,17 @@ int duda_event_mode(int sockfd, int mode, int behavior);
 
 /* Delete an event_handler from the thread list */
 int duda_event_delete(int sockfd);
+
+/* Emit a signal to all workers */
+int duda_event_signal(uint64_t val);
+
+static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
+{
+    duda_event_signal_cb = func;
+}
+
+
+/* internal functions */
+int duda_event_fd_read(int fd, void *data);
 
 #endif

@@ -38,6 +38,7 @@ struct duda_api_event *duda_event_object()
     e->lookup = duda_event_lookup;
     e->mode   = duda_event_mode;
     e->delete = duda_event_delete;
+    e->signal = duda_event_signal;
 
     return e;
 };
@@ -194,4 +195,50 @@ int duda_event_delete(int sockfd)
     }
 
     return -1;
+}
+
+int duda_event_signal(uint64_t val)
+{
+    struct mk_list *head;
+    struct duda_event_signal_channel *esc;
+
+    mk_list_foreach(head, &duda_event_signals_list) {
+        esc = mk_list_entry(head, struct duda_event_signal_channel, _head);
+        write(esc->fd, &val, sizeof(uint64_t));
+    }
+
+    return 0;
+}
+
+/*
+ * This call aims to be the proxy for notification coming from some
+ * signal writer. Once we get here, the next step is to identify which
+ * service have defined it callbacks for it. This eventfd function is
+ * intended to be used from a server HTTP worker context. It can be used
+ * to wake up some pending HTTP response sleeping connection.
+ */
+int duda_event_fd_read(int fd, void *data)
+{
+    (void) data;
+    ssize_t s;
+    uint64_t val;
+    struct mk_list *head;
+    struct web_service *ws;
+
+    /* read the value */
+    s = read(fd, &val, sizeof(uint64_t));
+    if (s != sizeof(uint64_t)) {
+        msg->warn("Could not read signal");
+        return -1;
+    }
+
+    /* For all our web services, search and invoke the callback */
+    mk_list_foreach(head, &services_loaded) {
+        ws = mk_list_entry(head, struct web_service, _head_loaded);
+        if (ws->event_signal_cb) {
+            ws->event_signal_cb(fd, val);
+        }
+    }
+
+    return 0;
 }
