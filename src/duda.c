@@ -425,9 +425,9 @@ void _mkp_core_thctx()
     esc->fd = event_fd;
 
     /* Safe initialization */
-    //pthread_mutex_lock(&duda_mutex_thctx);
+    pthread_mutex_lock(&duda_mutex_thctx);
     mk_list_add(&esc->_head, &duda_event_signals_list);
-    //pthread_mutex_unlock(&duda_mutex_thctx);
+    pthread_mutex_unlock(&duda_mutex_thctx);
 
 
     printf("EVENTFD=%i\n", event_fd);
@@ -480,9 +480,6 @@ void _mkp_core_thctx()
             }
         }
     }
-
-
-
 }
 
 int _mkp_core_prctx(struct server_config *config)
@@ -490,9 +487,6 @@ int _mkp_core_prctx(struct server_config *config)
     struct mk_list *head;
     struct web_service *ws;
     struct plugin *mk_plugin;
-
-    /* global list for eventfd signals */
-    mk_list_init(&duda_event_signals_list);
 
     /*
      * lookup this plugin instance in Monkey internals and create a
@@ -541,6 +535,8 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
     pthread_key_create(&duda_global_dr_list, NULL);
+
+    mk_list_init(&duda_event_signals_list);
 
     /* Initialize Logger internals */
     duda_logger_init();
