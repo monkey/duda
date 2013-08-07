@@ -115,6 +115,9 @@ int _duda_main(struct duda_api_objects *api);
         /* Reference to this web service */                             \
         self = ws;                                                      \
                                                                         \
+        /* Setup initialization */                                      \
+        _setup.event_signal_cb = NULL;                                  \
+                                                                        \
         /* Initialize global linked lists */                            \
         mk_list_init(&duda_map_interfaces);                             \
         mk_list_init(&duda_map_urls);                                   \

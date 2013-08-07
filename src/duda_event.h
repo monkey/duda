@@ -106,7 +106,7 @@ int duda_event_signal(uint64_t val);
 
 static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
 {
-    duda_event_signal_cb = func;
+    _setup.event_signal_cb = func;
 }
 
 

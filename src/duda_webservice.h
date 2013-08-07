@@ -24,6 +24,10 @@
 #ifndef DUDA_DWEBSERVICE_H
 #define DUDA_DWEBSERVICE_H
 
+struct duda_setup {
+    void (*event_signal_cb) (int fd, uint64_t val);
+};
+
 /* Web service information */
 struct web_service {
     mk_pointer name;
@@ -54,8 +58,8 @@ struct web_service {
     /* packages loaded by the web service */
     struct mk_list *packages;
 
-    /* callback when signaling a worker thread */
-    void (*event_signal_cb) (int, uint64_t);
+    /* generic setup things related to the web service and Duda stack */
+    struct duda_setup *setup;
 
     /* node entry associated with services_list */
     struct mk_list _head;

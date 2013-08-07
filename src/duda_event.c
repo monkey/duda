@@ -235,10 +235,10 @@ int duda_event_fd_read(int fd, void *data)
     /* For all our web services, search and invoke the callback */
     mk_list_foreach(head, &services_loaded) {
         ws = mk_list_entry(head, struct web_service, _head_loaded);
-        if (ws->event_signal_cb) {
-            ws->event_signal_cb(fd, val);
+        if (ws->setup->event_signal_cb) {
+            ws->setup->event_signal_cb(fd, val);
         }
     }
 
-    return 0;
+    return DUDA_EVENT_OWNED;
 }

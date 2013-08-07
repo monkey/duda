@@ -162,7 +162,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
         ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
         ws->loggers  = duda_load_symbol(ws->handler, "duda_logger_main_list");
-        ws->event_signal_cb = duda_load_symbol(ws->handler, "duda_event_signal_cb");
+        ws->setup    = duda_load_symbol(ws->handler, "_setup");
 
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
@@ -429,8 +429,7 @@ void _mkp_core_thctx()
     mk_list_add(&esc->_head, &duda_event_signals_list);
     pthread_mutex_unlock(&duda_mutex_thctx);
 
-
-    printf("EVENTFD=%i\n", event_fd);
+    /* Register the event file descriptor in the events interface */
     duda_event_add(event_fd, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
                    duda_event_fd_read, NULL, NULL, NULL, NULL, NULL);
 
