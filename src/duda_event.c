@@ -25,7 +25,32 @@
  * @OBJ_NAME: event
  * @OBJ_MENU: Events
  * @OBJ_DESC: The event object provides a set of methods to handle event-driven sockets
- * over the main events loop of the server
+ * in the stack. When Duda I/O is started, it creates a fixed number of worker threads
+ * where each one is capable to receive a high number of incoming client connections, each
+ * thread have a separated main event loop based in the Linux epoll(7) interface.
+ *
+ * The methods presented here, allows to register your own file descriptors or sockets into
+ * the main event loop for the active worker in question. Once the file descriptor is
+ * registered, you are responsible for it deletion. You can define different callbacks
+ * for the event desired, when handling events and callbacks, the following modes are
+ * available:
+ *
+ *   DUDA_EVENT_READ: some data is available for a read operation on the socket.
+ *
+ *   DUDA_EVENT_WRITE: the socket is ready for write operations.
+ *
+ *   DUDA_EVENT_RW: the socket is ready for read or write operations.
+ *
+ *   DUDA_EVENT_SLEEP: the socket events are disable, socket in sleep mode.
+ *
+ *   DUDA_EVENT_WAKEUP: wake up a sleeping socket.
+ *
+ * Besides the callbacks and handlers, this interface also support notifications. When a
+ * worker is created, Duda also creates a notification interface for that main loop event,
+ * internally this is done through the Linux eventfd(2) system call. So if you create your
+ * own threads and wants to send some notification to the default workers, you can issue it
+ * using the method event->signal().
+ *
  */
 
 /* Event object / API */
@@ -45,12 +70,13 @@ struct duda_api_event *duda_event_object()
 
 /*
  * @METHOD_NAME: add
- * @METHOD_DESC: Register a new event into Duda events handler
+ * @METHOD_DESC: Register a new socket or file descriptor into the worker event loop and
+ * associate proper event handlers or callbacks.
  * @METHOD_PARAM: sockfd socket file descriptor
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: init_mode defines the initial event mode for the file descriptor in question,
- * allowed values are: DUDA_EVENT_READ, DUDA_EVENT_WRITE, DUDA_EVENT_RW, DUDA_EVENT_SLEEP or
- * DUDA_EVENT_WAKEUP.
+ * allowed values are DUDA_EVENT_READ, DUDA_EVENT_WRITE, DUDA_EVENT_RW and
+ * DUDA_EVENT_SLEEP.
  * @METHOD_PARAM: behavior defines the events triggered mode to work on. Allowed values are
  * DUDA_EVENT_LEVEL_TRIGGERED OR DUDA_EVENT_EDGE_TRIGGERED. For more details about the behavior
  * refer to the manpage epoll(7).
@@ -118,8 +144,12 @@ int duda_event_add(int sockfd,
 
 /*
  * @METHOD_NAME: lookup
- * @METHOD_DESC: Find a specific event_handler through the given file descriptor
- * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_DESC: When an event is registered through the add method, internally an
+ * event handler is created. It stores the references for socket and the callbacks for
+ * each type of event. This method allows to find a specific event_handler through the
+ * given socket file descriptor.
+ * @METHOD_PROTO: struct duda_event_handler *lookup(int socket)
+ * @METHOD_PARAM: socket socket file descriptor
  * @METHOD_RETURN: Upon successful completion it returns the event handler node, if the
  * lookup fails it returns NULL
  */
@@ -145,8 +175,7 @@ struct duda_event_handler *duda_event_lookup(int sockfd)
 
 /*
  * @METHOD_NAME: mode
- * @METHOD_DESC: Change the mode and behavior for a given file descriptor registered into
- * the events handler
+ * @METHOD_DESC: For a given socket file descriptor, alter the event handler mode and behavior.
  * @METHOD_PARAM: sockfd socket file descriptor
  * @METHOD_PARAM: mode defines the new event mode for the file descriptor in question,
  * allowed values are: DUDA_EVENT_READ, DUDA_EVENT_WRITE, DUDA_EVENT_RW, DUDA_EVENT_SLEEP or
@@ -171,8 +200,8 @@ int duda_event_mode(int sockfd, int mode, int behavior)
 
 /*
  * @METHOD_NAME: delete
- * @METHOD_DESC: Delete a registered event from the events handler
- * @METHOD_PARAM: sockfd socket file descriptor
+ * @METHOD_DESC: Delete a registered event handler from the worker events queue.
+ * @METHOD_PARAM: socket socket file descriptor
  * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
  */
 int duda_event_delete(int sockfd)
@@ -197,6 +226,14 @@ int duda_event_delete(int sockfd)
     return -1;
 }
 
+/*
+ * @METHOD_NAME: signal
+ * @METHOD_DESC: Send a notification signal to each worker thread. Upon receiving this
+ * signal on each worker, the defined callback through the function duda_event_set_callback()
+ * from duda_main(), will be triggered.
+ * @METHOD_PARAM: val an unsigned 64 bits value to be used as a signal type.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1
+ */
 int duda_event_signal(uint64_t val)
 {
     struct mk_list *head;
@@ -209,6 +246,7 @@ int duda_event_signal(uint64_t val)
 
     return 0;
 }
+
 
 /*
  * This call aims to be the proxy for notification coming from some
@@ -242,3 +280,24 @@ int duda_event_fd_read(int fd, void *data)
 
     return DUDA_EVENT_OWNED;
 }
+
+/*
+ * @METHOD_NAME: duda_event_signal_set_callback
+ * @METHOD_DESC: Define a callback function inside the web service to be triggered
+ * for when a signal is emited through the signal() method. This is a function that must
+ * be called inside duda_main().
+ * @METHOD_PROTO: void duda_event_set_signal_callback(void (*func) (int, uint64_t))
+ * @METHOD_PARAM: func the function reference, an example of this function definition
+ * is as follows:
+ *
+ * void my_signal_callback(int fd, uint64_t value) {
+ * ...
+ * }
+ *
+ * then from duda_main it can be set as:
+ *
+ * duda_event_set_signal_set_callback(my_signal_callback);
+ * @METHOD_RETURN: This function do not return any value.
+ */
+
+/* this is a static function defined in duda_event.h */

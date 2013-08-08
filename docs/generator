@@ -107,6 +107,7 @@ class DudaObject:
     COMM_START    = '/*'
     COMM_END      = ' */'
     COMM_LINE     = ' * '
+    COMM_CONT     = ' *\n'
     OBJ_NAME      = ' * @OBJ_NAME:'
     OBJ_MENU      = ' * @OBJ_MENU:'
     OBJ_DESC      = ' * @OBJ_DESC:'
@@ -185,10 +186,12 @@ class DudaObject:
                 last = self.PKG_INIT
 
             # Line belonging to a previous declaration
-            elif line.startswith(self.COMM_LINE) \
-                    and line[len(self.COMM_LINE)] != '@' \
+            elif (line.startswith(self.COMM_CONT) or \
+                    (line.startswith(self.COMM_LINE) and line[len(self.COMM_LINE)] != '@')) \
                     and last is not None:
+
                 row = line[3:].rstrip() + '\n'
+
                 if last == self.LAST_METHOD:
                     self.method.set(row)
                 elif last == self.METHOD_PARAM:
@@ -249,7 +252,6 @@ class DudaObject:
 
             # End of comments
             elif line.startswith(self.COMM_END):
-                print "line", line
                 last = None
 
             # Function prototype
@@ -465,10 +467,13 @@ class WriteObject:
         else:
             f.write('  <h1>%s object</h1>\n' % (obj.menu))
 
-        f.write('  <p>%s</p>\n' % (obj.desc))
+        desc = obj.desc.replace('\n\n', '<br><br>')
+
+        f.write('  <p>%s</p>\n' % (desc))
 
         if len(obj.comm) > 1:
-            f.write('  <p><strong>Comments</strong>: %s</p>\n' % (obj.comm))
+            comm = obj.comm.replace('\n\n', '<br><br>')
+            f.write('  <p><strong>Comments</strong>: %s</p>\n' % (comm))
 
         if (len(obj.pkg_header) > 0):
             f.write('  <p><strong>Initialization</strong></p>')
@@ -525,7 +530,8 @@ class WriteObject:
             if len(m.params) > 0:
                 f.write('  <dl class=\"dl-horizontal\">')
                 for p in m.params:
-                    f.write('<dt>' + p['name'] + '</dt><dd>' + p['desc'] + '</dd>')
+                    param_desc = p['desc'].replace('\n\n', '<br><br>')
+                    f.write('<dt>' + p['name'] + '</dt><dd>' + param_desc + '</dd>')
 
                 f.write('  </dl>')
             else:

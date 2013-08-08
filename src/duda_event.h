@@ -104,6 +104,7 @@ int duda_event_delete(int sockfd);
 /* Emit a signal to all workers */
 int duda_event_signal(uint64_t val);
 
+
 static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
 {
     _setup.event_signal_cb = func;
