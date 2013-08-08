@@ -27,6 +27,13 @@
 #include "duda_api.h"
 #include "webservice.h"
 
+/* fetch return values */
+#define KV_OK         UNQLITE_OK
+#define KV_BUSY       UNQLITE_BUSY
+#define KV_NOTFOUND   UNQLITE_NOTFOUND
+#define KV_IOERR      UNQLITE_IOERR
+#define KV_NOMEM      UNQLITE_NOMEM
+
 struct duda_api_kv {
     int (*init) (unqlite **);
     int (*store) (unqlite *, const void *, int, const void *, unqlite_int64);
