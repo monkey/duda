@@ -179,27 +179,47 @@ int duda_logger_init()
 /*
  * @OBJ_NAME: logger
  * @OBJ_MENU: Log Writer
- * @OBJ_DESC: The Log Writer object provides a set of methods to write messages in
- * multiple log files.
+ * @OBJ_DESC: The Log Writer object provides a set of methods to register
+ * text messages into the file system, most well known as log files. You
+ * can define many log writer contexts that can be used on callbacks or
+ * in other sections of the web service.
+ *
+ * In order to handle multiple contexts and a high concurrency, the Log Writer
+ * core implements a thread worker that contains a buffer for each Log Writer
+ * context, so every time a log entry is registered, it's buffered into the
+ * queue and flushed to disk every three seconds or when the buffer reachs its
+ * 75% of capacity. A common buffer size is 65Kb.
+ *
+ * It's mandatory that every Log Writer context must be initialized inside duda_main(), so
+ * it become available for the whole service when entering in the server loop.
+ *
+ * The storage path for the file logs it is given by the LogDir entry in the [WEB_SERVICE]
+ * section from the virtual host definition. If you are using Duda Client Manager (DudaC)
+ * this is automatically configured when the 'logs' directory exists in the web service
+ * source code tree.
  */
 
 /*
- * @METHOD_NAME: create
- * @METHOD_DESC: It create a log writer instance that can be used later to write
- * messages to the file system.
- * @METHOD_PROTO: dyda_log_t *duda_log_create(char *name)
+ * @METHOD_NAME: duda_logger_create
+ * @METHOD_DESC: This function initialize a Log Writter context for the web service, it can
+ * be used many times as required to initialize multiple contexts. It must be used ONLY
+ * inside duda_main().
+ * @METHOD_PROTO: int duda_logger_create(duda_logger_t *context, char *name)
+ * @METHOD_PARAM: context the Log Writer context, this is the unique identifier for logs
+ * associated to 'name'.
  * @METHOD_PARAM: name represents the target file name.
- * @METHOD_RETURN: Returns the log instance that must be used
+ * @METHOD_RETURN: This function always returns zero.
  */
 
 /*
  * @METHOD_NAME: print
- * @METHOD_DESC: It format and and prints a customized message to the web service
- * console interface
- * @METHOD_PROTO: void debug(duda_request_t *dr, char *format, ...)
- * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: format Specifies the subsequent arguments to be formatted
- * @METHOD_RETURN: Do not return anything
+ * @METHOD_DESC: It format and prints a customized message to the given Log Writer context. At
+ * the moment the only restriction of this method is that it cannot be used from duda_main().
+ * @METHOD_PROTO: int print(duda_logger_t *context, char *fmt, ...)
+ * @METHOD_PARAM: context the Log Writer context initialized previously from duda_main().
+ * @METHOD_PARAM: fmt it specifies the string format, much like printf works.
+ * @METHOD_RETURN: Uppon successfull completion it returns zero, under any error it returns
+ * a negative number.
  */
 int duda_logger_print(duda_logger_t *key, char *fmt, ...)
 {
