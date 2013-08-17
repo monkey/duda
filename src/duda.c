@@ -421,6 +421,7 @@ void _mkp_core_thctx()
 
    /* Register a Linux eventfd into the Events interface */
     event_fd = eventfd(0, 0);
+    mk_api->socket_set_nonblocking(event_fd);
     esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
     esc->fd = event_fd;
 

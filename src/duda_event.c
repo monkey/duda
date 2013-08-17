@@ -247,7 +247,6 @@ int duda_event_signal(uint64_t val)
     return 0;
 }
 
-
 /*
  * This call aims to be the proxy for notification coming from some
  * signal writer. Once we get here, the next step is to identify which
