@@ -34,6 +34,12 @@
 #define KV_IOERR      UNQLITE_IOERR
 #define KV_NOMEM      UNQLITE_NOMEM
 
+#define KV_CURSOR_FOREACH(c) \
+    for (kv->cursor_first(c); c && kv->cursor_valid(c); kv->cursor_next(c))
+
+typedef unqlite           kv_conn_t;
+typedef unqlite_kv_cursor kv_cursor_t;
+
 struct duda_api_kv {
     int (*init) (unqlite **);
     int (*store) (unqlite *, const void *, int, const void *, unqlite_int64);
@@ -46,10 +52,21 @@ struct duda_api_kv {
                                             void *pUserData),
                            void *);
     int (*delete) (unqlite *, const void *, int);
+
+    /* Cursor / Iterators */
+    int (*cursor_init)    (unqlite *pDb, unqlite_kv_cursor **ppOut);
+    int (*cursor_release) (unqlite *pDb, unqlite_kv_cursor *pCur);
+    int (*cursor_reset)   (unqlite_kv_cursor *pCursor);
+    int (*cursor_valid)   (unqlite_kv_cursor *pCursor);
+    int (*cursor_first)   (unqlite_kv_cursor *pCursor);
+    int (*cursor_last)    (unqlite_kv_cursor *pCursor);
+    int (*cursor_next)    (unqlite_kv_cursor *pCursor);
+    int (*cursor_prev)    (unqlite_kv_cursor *pCursor);
+    int (*cursor_key)     (unqlite_kv_cursor *pCursor, void *pBuf, int *pnByte);
+    int (*cursor_data)    (unqlite_kv_cursor *pCursor, void *pBuf, unqlite_int64 *pnData);
 };
 
 typedef struct duda_api_kv kv_object_t;
-typedef unqlite kv_conn_t;
 
 kv_object_t *kv;
 

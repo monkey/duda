@@ -47,6 +47,18 @@ struct duda_api_kv *get_kv_api()
     kv->fetch_callback = unqlite_kv_fetch_callback;
     kv->delete         = unqlite_kv_delete;
 
+    /* Cursor / Iterator */
+    kv->cursor_init    = unqlite_kv_cursor_init;
+    kv->cursor_release = unqlite_kv_cursor_release;
+    kv->cursor_reset   = unqlite_kv_cursor_reset;
+    kv->cursor_valid   = unqlite_kv_cursor_valid_entry;
+    kv->cursor_first   = unqlite_kv_cursor_first_entry;
+    kv->cursor_last    = unqlite_kv_cursor_last_entry;
+    kv->cursor_next    = unqlite_kv_cursor_next_entry;
+    kv->cursor_prev    = unqlite_kv_cursor_prev_entry;
+    kv->cursor_key     = unqlite_kv_cursor_key;
+    kv->cursor_data    = unqlite_kv_cursor_data;
+
     return kv;
 }
 
