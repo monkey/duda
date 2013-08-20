@@ -45,6 +45,10 @@ int duda_map_static_check(duda_request_t *dr)
     mk_list_foreach(head, dr->ws_root->map_urls) {
         st = mk_list_entry(head, struct duda_map_static_cb, _head);
 
+        if (!sr->uri_processed.data) {
+            continue;
+        }
+
         if (strncmp(sr->uri_processed.data + dr->ws_root->name.len + 1,
                     st->path, st->path_len) == 0) {
 
