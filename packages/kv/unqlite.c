@@ -30,13 +30,13 @@
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- * $SymiscID: unqlite.c v1.1.6 Unix|Win32/64 2013-07-05 04:34:40 stable <chm@symisc.net> $
+ * $SymiscID: unqlite.c v1.1.6 Unix|Win32/64 2013-07-08 03:38:18 stable <chm@symisc.net> $ 
  */
 /* This file is an amalgamation of many separate C source files from unqlite version 1.1.6
  * By combining all the individual C code files into this single large file, the entire code
@@ -45,7 +45,7 @@
  * are commonly seen when unqlite is compiled as a single translation unit.
  *
  * This file is all you need to compile unqlite. To use unqlite in other programs, you need
- * this file and the "unqlite.h" header file that defines the programming interface to the
+ * this file and the "unqlite.h" header file that defines the programming interface to the 
  * unqlite engine.(If you do not have the "unqlite.h" header file at hand, you will find
  * a copy embedded within the text of this file.Search for "Header file: <unqlite.h>" to find
  * the start of the embedded unqlite.h header file.) Additional code files may be needed if
@@ -70,7 +70,7 @@
  * MD5: d26e9847c6587edbbb183d0115d172cb
  * ----------------------------------------------------------
  */
-/* This file was automatically generated.  Do not edit (Except for compile time directives)! */
+/* This file was automatically generated.  Do not edit (Except for compile time directives)! */ 
 #ifndef _UNQLITE_H_
 #define _UNQLITE_H_
 /*
@@ -105,7 +105,7 @@
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -160,7 +160,7 @@
 #define UNQLITE_COPYRIGHT "Copyright (C) Symisc Systems, S.U.A.R.L [Mrad Chems Eddine <chm@symisc.net>] 2012-2013, http://unqlite.org/"
 /* Make sure we can call this stuff from C++ */
 #ifdef __cplusplus
-extern "C" {
+extern "C" { 
 #endif
 /* Forward declaration to public objects */
 typedef struct unqlite_io_methods unqlite_io_methods;
@@ -195,7 +195,7 @@ typedef struct unqlite unqlite;
  * at run-time using the unqlite_lib_config() interface together with one of these verbs:
  *    UNQLITE_LIB_CONFIG_THREAD_LEVEL_SINGLE
  *    UNQLITE_LIB_CONFIG_THREAD_LEVEL_MULTI
- *  Platforms others than Windows and UNIX systems must install their own mutex subsystem via
+ *  Platforms others than Windows and UNIX systems must install their own mutex subsystem via 
  *  unqlite_lib_config() with a configuration verb set to UNQLITE_LIB_CONFIG_USER_MUTEX.
  *  Otherwise the library is not threadsafe.
  *  Note that you must link UnQLite with the POSIX threads library under UNIX systems (i.e: -lpthread).
@@ -210,7 +210,7 @@ typedef struct unqlite unqlite;
  * any of these compile-time options.
  *
  * JX9_DISABLE_BUILTIN_FUNC
- *  Jx9 is shipped with more than 312 built-in functions suitable for most purposes like
+ *  Jx9 is shipped with more than 312 built-in functions suitable for most purposes like 
  *  string and INI processing, ZIP extracting, Base64 encoding/decoding, JSON encoding/decoding
  *  and so forth.
  *  If this directive is enabled, then all built-in Jx9 functions are omitted from the build.
@@ -237,7 +237,7 @@ typedef struct unqlite unqlite;
 /* Windows Systems */
 #if !defined(__WINNT__)
 #define __WINNT__
-#endif
+#endif 
 /*
  * Determine if we are dealing with WindowsCE - which has a much
  * reduced API.
@@ -336,7 +336,7 @@ struct Sytm
 	 (pSYTM)->tm_zone = 0;
 
 /* Dynamic memory allocation methods. */
-struct SyMemMethods
+struct SyMemMethods 
 {
 	void * (*xAlloc)(unsigned int);          /* [Required:] Allocate a memory chunk */
 	void * (*xRealloc)(void *, unsigned int); /* [Required:] Re-allocate a memory chunk */
@@ -349,7 +349,7 @@ struct SyMemMethods
 /* Out of memory callback signature. */
 typedef int (*ProcMemError)(void *);
 /* Mutex methods. */
-struct SyMutexMethods
+struct SyMutexMethods 
 {
 	int (*xGlobalInit)(void);		/* [Optional:] Global mutex initialization */
 	void  (*xGlobalRelease)(void);	/* [Optional:] Global Release callback () */
@@ -367,7 +367,7 @@ struct SyMutexMethods
 #define	SX_APIEXPORT
 #endif
 /* Standard return values from Symisc public interfaces */
-#define SXRET_OK       0      /* Not an error */
+#define SXRET_OK       0      /* Not an error */	
 #define SXERR_MEM      (-1)   /* Out of memory */
 #define SXERR_IO       (-2)   /* IO error */
 #define SXERR_EMPTY    (-3)   /* Empty field */
@@ -387,7 +387,7 @@ struct SyMutexMethods
 #define SXERR_NOTIMPLEMENTED  (-17) /* Operation not implemented */
 #define SXERR_EOF      (-18) /* End of input */
 #define SXERR_PERM     (-19) /* Permission error */
-#define SXERR_NOOP     (-20) /* No-op */
+#define SXERR_NOOP     (-20) /* No-op */	
 #define SXERR_FORMAT   (-21) /* Invalid format */
 #define SXERR_NEXT     (-22) /* Not an error */
 #define SXERR_OS       (-23) /* System call return an error */
@@ -403,8 +403,8 @@ struct SyMutexMethods
 #define SXERR_RETRY    (-33) /* Retry your call */
 #define SXERR_IGNORE   (-63) /* Ignore */
 #endif /* SYMISC_PUBLIC_DEFS */
-/*
- * Marker for exported interfaces.
+/* 
+ * Marker for exported interfaces. 
  */
 #define UNQLITE_APIEXPORT SX_APIEXPORT
 /*
@@ -424,7 +424,7 @@ typedef sxi64 unqlite_int64;
 #define UNQLITE_ABORT    SXERR_ABORT   /* Another thread have released this instance */
 #define UNQLITE_IOERR    SXERR_IO      /* IO error */
 #define UNQLITE_CORRUPT  SXERR_CORRUPT /* Corrupt pointer */
-#define UNQLITE_LOCKED   SXERR_LOCKED  /* Forbidden Operation */
+#define UNQLITE_LOCKED   SXERR_LOCKED  /* Forbidden Operation */ 
 #define UNQLITE_BUSY	 SXERR_BUSY    /* The database file is locked */
 #define UNQLITE_DONE	 SXERR_DONE    /* Operation done */
 #define UNQLITE_PERM     SXERR_PERM    /* Permission error */
@@ -454,7 +454,7 @@ typedef sxi64 unqlite_int64;
  * Each options require a variable number of arguments.
  * The [unqlite_config()] interface will return UNQLITE_OK on success, any other
  * return value indicates failure.
- * For a full discussion on the configuration verbs and their expected
+ * For a full discussion on the configuration verbs and their expected 
  * parameters, please refer to this page:
  *      http://unqlite.org/c_api/unqlite_config.html
  */
@@ -469,7 +469,7 @@ typedef sxi64 unqlite_int64;
  *
  * The following set of constants are the available configuration verbs that can
  * be used by the host-application to configure the Jx9 (Via UnQLite) Virtual machine.
- * These constants must be passed as the second argument to the [unqlite_vm_config()]
+ * These constants must be passed as the second argument to the [unqlite_vm_config()] 
  * interface.
  * Each options require a variable number of arguments.
  * The [unqlite_vm_config()] interface will return UNQLITE_OK on success, any other return
@@ -521,8 +521,8 @@ typedef sxi64 unqlite_int64;
  * value indicates failure.
  * Notes:
  * The default configuration is recommended for most applications and so the call to
- * [unqlite_lib_config()] is usually not necessary. It is provided to support rare
- * applications with unusual needs.
+ * [unqlite_lib_config()] is usually not necessary. It is provided to support rare 
+ * applications with unusual needs. 
  * The [unqlite_lib_config()] interface is not threadsafe. The application must insure that
  * no other [unqlite_*()] interfaces are invoked by other threads while [unqlite_lib_config()]
  * is running. Furthermore, [unqlite_lib_config()] may only be invoked prior to library
@@ -533,11 +533,11 @@ typedef sxi64 unqlite_int64;
  * refer to this page:
  *      http://unqlite.org/c_api/unqlite_lib.html
  */
-#define UNQLITE_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */
+#define UNQLITE_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */ 
 #define UNQLITE_LIB_CONFIG_MEM_ERR_CALLBACK       2 /* TWO ARGUMENTS: int (*xMemError)(void *), void *pUserData */
-#define UNQLITE_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */
-#define UNQLITE_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */
-#define UNQLITE_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */
+#define UNQLITE_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */ 
+#define UNQLITE_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */ 
+#define UNQLITE_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */ 
 #define UNQLITE_LIB_CONFIG_VFS                    6 /* ONE ARGUMENT: const unqlite_vfs *pVfs */
 #define UNQLITE_LIB_CONFIG_STORAGE_ENGINE         7 /* ONE ARGUMENT: unqlite_kv_methods *pStorage */
 #define UNQLITE_LIB_CONFIG_PAGE_SIZE              8 /* ONE ARGUMENT: int iPageSize */
@@ -604,7 +604,7 @@ struct unqlite_file {
  * This object defines the methods used to perform various operations
  * against the open file represented by the [unqlite_file] object.
  *
- * If the xOpen method sets the unqlite_file.pMethods element
+ * If the xOpen method sets the unqlite_file.pMethods element 
  * to a non-NULL pointer, then the unqlite_io_methods.xClose method
  * may be invoked even if the xOpen reported that it failed.  The
  * only way to prevent a call to xClose following a failed xOpen
@@ -623,13 +623,13 @@ struct unqlite_file {
  * UNQLITE_LOCK_RESERVED
  * UNQLITE_LOCK_PENDING
  * UNQLITE_LOCK_EXCLUSIVE
- *
+ * 
  * xLock() increases the lock. xUnlock() decreases the lock.
  * The xCheckReservedLock() method checks whether any database connection,
  * either in this process or in some other process, is holding a RESERVED,
  * PENDING, or EXCLUSIVE lock on the file. It returns true if such a lock exists
  * and false otherwise.
- *
+ * 
  * The xSectorSize() method returns the sector size of the device that underlies
  * the file. The sector size is the minimum write that can be performed without
  * disturbing other bytes in the file.
@@ -667,11 +667,11 @@ struct unqlite_io_methods {
  * must register their own vfs in order to be able to use the UnQLite library.
  *
  * The value of the iVersion field is initially 1 but may be larger in
- * future versions of UnQLite.
+ * future versions of UnQLite. 
  *
  * The szOsFile field is the size of the subclassed [unqlite_file] structure
  * used by this VFS. mxPathname is the maximum length of a pathname in this VFS.
- *
+ * 
  * At least szOsFile bytes of memory are allocated by UnQLite to hold the [unqlite_file]
  * structure passed as the third argument to xOpen. The xOpen method does not have to
  * allocate the structure; it should just fill it in. Note that the xOpen method must
@@ -716,8 +716,8 @@ struct unqlite_vfs {
  * UnQLite.
  */
 #define UNQLITE_ACCESS_EXISTS    0
-#define UNQLITE_ACCESS_READWRITE 1
-#define UNQLITE_ACCESS_READ      2
+#define UNQLITE_ACCESS_READWRITE 1   
+#define UNQLITE_ACCESS_READ      2 
 /*
  * The type used to represent a page number.  The first page in a file
  * is called page 1.  0 is used to represent "not a page".
@@ -765,7 +765,7 @@ struct unqlite_kv_io
 	int (*xPageSize)(unqlite_kv_handle);
 	int (*xReadOnly)(unqlite_kv_handle);
 	unsigned char * (*xTmpPage)(unqlite_kv_handle);
-	void (*xSetUnpin)(unqlite_kv_handle,void (*xPageUnpin)(void *));
+	void (*xSetUnpin)(unqlite_kv_handle,void (*xPageUnpin)(void *)); 
 	void (*xSetReload)(unqlite_kv_handle,void (*xPageReload)(void *));
 	void (*xErr)(unqlite_kv_handle,const char *);
 };
@@ -798,7 +798,7 @@ struct unqlite_kv_cursor
  * UnQLite come with two built-in KV storage engine: A Virtual Linear Hash (VLH) storage
  * engine is used for persistent on-disk databases with O(1) lookup time and an in-memory
  * hash-table or Red-black tree storage engine is used for in-memory databases.
- * Future versions of UnQLite might add other built-in storage engines (i.e. LSM).
+ * Future versions of UnQLite might add other built-in storage engines (i.e. LSM). 
  * Registration of a Key/Value storage engine at run-time is done via [unqlite_lib_config()]
  * with a configuration verb set to UNQLITE_LIB_CONFIG_STORAGE_ENGINE.
  */
@@ -830,7 +830,7 @@ struct unqlite_kv_methods
 	  unqlite_kv_engine *,
 	  const void *pKey,int nKeyLen,
 	  const void *pData,unqlite_int64 nDataLen
-	  );
+	  ); 
     int (*xAppend)(
 	  unqlite_kv_engine *,
 	  const void *pKey,int nKeyLen,
@@ -868,10 +868,10 @@ struct unqlite_kv_methods
 #define UNQLITE_CTX_ERR       1 /* Call context error such as unexpected number of arguments, invalid types and so on. */
 #define UNQLITE_CTX_WARNING   2 /* Call context Warning */
 #define UNQLITE_CTX_NOTICE    3 /* Call context Notice */
-/*
+/* 
  * C-API-REF: Please refer to the official documentation for interfaces
- * purpose and expected parameters.
- */
+ * purpose and expected parameters. 
+ */ 
 
 /* Database Engine Handle */
 UNQLITE_APIEXPORT int unqlite_open(unqlite **ppDB,const char *zFilename,unsigned int iMode);
@@ -1030,7 +1030,7 @@ UNQLITE_APIEXPORT const char * unqlite_lib_copyright(void);
  * MD5: d23a1e182f596794001533e1d6aa16a0
  * ----------------------------------------------------------
  */
-/* This file was automatically generated.  Do not edit (except for compile time directive)! */
+/* This file was automatically generated.  Do not edit (except for compile time directive)! */ 
 #ifndef _JX9H_
 #define _JX9H_
 /*
@@ -1057,7 +1057,7 @@ UNQLITE_APIEXPORT const char * unqlite_lib_copyright(void);
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  * 3. Redistributions in any form must be accompanied by information on
- *    how to obtain complete source code for the JX9 engine and any
+ *    how to obtain complete source code for the JX9 engine and any 
  *    accompanying software that uses the JX9 engine software.
  *    The source code must either be included in the distribution
  *    or be available for no more than the cost of distribution plus
@@ -1074,7 +1074,7 @@ UNQLITE_APIEXPORT const char * unqlite_lib_copyright(void);
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -1151,7 +1151,7 @@ typedef struct jx9 jx9;
 #define JX9_ABORT   UNQLITE_ABORT   /* Foreign Function request operation abort/Another thread have released this instance */
 #define JX9_IO_ERR  UNQLITE_IOERR      /* IO error */
 #define JX9_CORRUPT UNQLITE_CORRUPT /* Corrupt pointer/Unknown configuration option */
-#define JX9_LOOKED  UNQLITE_LOCKED  /* Forbidden Operation */
+#define JX9_LOOKED  UNQLITE_LOCKED  /* Forbidden Operation */ 
 #define JX9_COMPILE_ERR UNQLITE_COMPILE_ERR /* Compilation error */
 #define JX9_VM_ERR      UNQLITE_VM_ERR      /* Virtual machine error */
 /* end-of-error-codes */
@@ -1170,12 +1170,12 @@ typedef sxi64 jx9_int64;
  *
  * The following set of constants are the available configuration verbs that can
  * be used by the host-application to configure the JX9 engine.
- * These constants must be passed as the second argument to the [jx9_config()]
+ * These constants must be passed as the second argument to the [jx9_config()] 
  * interface.
  * Each options require a variable number of arguments.
  * The [jx9_config()] interface will return JX9_OK on success, any other
  * return value indicates failure.
- * For a full discussion on the configuration verbs and their expected
+ * For a full discussion on the configuration verbs and their expected 
  * parameters, please refer to this page:
  *      http://jx9.symisc.net/c_api_func.html#jx9_config
  */
@@ -1186,7 +1186,7 @@ typedef sxi64 jx9_int64;
  *
  * The following set of constants are the available configuration verbs that can
  * be used by the host-application to configure the JX9 Virtual machine.
- * These constants must be passed as the second argument to the [jx9_vm_config()]
+ * These constants must be passed as the second argument to the [jx9_vm_config()] 
  * interface.
  * Each options require a variable number of arguments.
  * The [jx9_vm_config()] interface will return JX9_OK on success, any other return
@@ -1216,15 +1216,15 @@ typedef sxi64 jx9_int64;
  *
  * The following set of constants are the available configuration verbs that can
  * be used by the host-application to configure the whole library.
- * These constants must be passed as the first argument to the [jx9_lib_config()]
+ * These constants must be passed as the first argument to the [jx9_lib_config()] 
  * interface.
  * Each options require a variable number of arguments.
  * The [jx9_lib_config()] interface will return JX9_OK on success, any other return
  * value indicates failure.
  * Notes:
  * The default configuration is recommended for most applications and so the call to
- * [jx9_lib_config()] is usually not necessary. It is provided to support rare
- * applications with unusual needs.
+ * [jx9_lib_config()] is usually not necessary. It is provided to support rare 
+ * applications with unusual needs. 
  * The [jx9_lib_config()] interface is not threadsafe. The application must insure that
  * no other [jx9_*()] interfaces are invoked by other threads while [jx9_lib_config()]
  * is running. Furthermore, [jx9_lib_config()] may only be invoked prior to library
@@ -1235,11 +1235,11 @@ typedef sxi64 jx9_int64;
  * refer to this page:
  *      http://jx9.symisc.net/c_api_func.html#Global_Library_Management_Interfaces
  */
-#define JX9_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */
+#define JX9_LIB_CONFIG_USER_MALLOC            1 /* ONE ARGUMENT: const SyMemMethods *pMemMethods */ 
 #define JX9_LIB_CONFIG_MEM_ERR_CALLBACK       2 /* TWO ARGUMENTS: int (*xMemError)(void *), void *pUserData */
-#define JX9_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */
-#define JX9_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */
-#define JX9_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */
+#define JX9_LIB_CONFIG_USER_MUTEX             3 /* ONE ARGUMENT: const SyMutexMethods *pMutexMethods */ 
+#define JX9_LIB_CONFIG_THREAD_LEVEL_SINGLE    4 /* NO ARGUMENTS */ 
+#define JX9_LIB_CONFIG_THREAD_LEVEL_MULTI     5 /* NO ARGUMENTS */ 
 #define JX9_LIB_CONFIG_VFS                    6 /* ONE ARGUMENT: const jx9_vfs *pVfs */
 /*
  * Call Context - Error Message Serverity Level.
@@ -1248,8 +1248,8 @@ typedef sxi64 jx9_int64;
 #define JX9_CTX_WARNING  UNQLITE_CTX_WARNING  /* Call context Warning */
 #define JX9_CTX_NOTICE   UNQLITE_CTX_NOTICE   /* Call context Notice */
 /* Current VFS structure version*/
-#define JX9_VFS_VERSION 2
-/*
+#define JX9_VFS_VERSION 2 
+/* 
  * JX9 Virtual File System (VFS).
  *
  * An instance of the jx9_vfs object defines the interface between the JX9 core
@@ -1321,8 +1321,8 @@ struct jx9_vfs
 	int (*xExec)(const char *, jx9_context *);        /* Execute an external program */
 };
 /* Current JX9 IO stream structure version. */
-#define JX9_IO_STREAM_VERSION 1
-/*
+#define JX9_IO_STREAM_VERSION 1 
+/* 
  * Possible open mode flags that can be passed to the xOpen() routine
  * of the underlying IO stream device .
  * Refer to the JX9 IO Stream C/C++ specification manual (http://jx9.symisc.net/io_stream_spec.html)
@@ -1353,13 +1353,13 @@ struct jx9_vfs
  * The file:// stream which perform very efficient disk IO and the jx9:// stream
  * which is a special stream that allow access various I/O streams (See the JX9 official
  * documentation for more information on this stream).
- * A stream is referenced as: scheme://target
- * scheme(string) - The name of the wrapper to be used. Examples include: file, http, https, ftp,
+ * A stream is referenced as: scheme://target 
+ * scheme(string) - The name of the wrapper to be used. Examples include: file, http, https, ftp, 
  * ftps, compress.zlib, compress.bz2, and jx9. If no wrapper is specified, the function default
- * is used (typically file://).
+ * is used (typically file://). 
  * target - Depends on the device used. For filesystem related streams this is typically a path
  * and filename of the desired file.For network related streams this is typically a hostname, often
- * with a path appended.
+ * with a path appended. 
  * IO stream devices are registered using a call to jx9_vm_config() with a configuration verb
  * set to JX9_VM_CONFIG_IO_STREAM.
  * Currently the JX9 development team is working on the implementation of the http:// and ftp://
@@ -1375,7 +1375,7 @@ struct jx9_io_stream
 	int  (*xOpenDir)(const char *, jx9_value *, void **);    /* Open directory handle */
 	void (*xClose)(void *);                                /* Close file handle */
 	void (*xCloseDir)(void *);                             /* Close directory handle */
-	jx9_int64 (*xRead)(void *, void *, jx9_int64);           /* Read from the open stream */
+	jx9_int64 (*xRead)(void *, void *, jx9_int64);           /* Read from the open stream */         
 	int (*xReadDir)(void *, jx9_context *);                 /* Read entry from directory handle */
 	jx9_int64 (*xWrite)(void *, const void *, jx9_int64);    /* Write to the open stream */
 	int (*xSeek)(void *, jx9_int64, int);                    /* Seek on the open stream */
@@ -1386,10 +1386,10 @@ struct jx9_io_stream
 	int (*xSync)(void *);                                  /* Flush open stream data */
 	int (*xStat)(void *, jx9_value *, jx9_value *);          /* Stat an open stream handle */
 };
-/*
+/* 
  * C-API-REF: Please refer to the official documentation for interfaces
- * purpose and expected parameters.
- */
+ * purpose and expected parameters. 
+ */ 
 /* Engine Handling Interfaces */
 JX9_PRIVATE int jx9_init(jx9 **ppEngine);
 /*JX9_PRIVATE int jx9_config(jx9 *pEngine, int nConfigOp, ...);*/
@@ -1523,7 +1523,7 @@ JX9_PRIVATE const char * jx9_lib_signature(void);
 #else
 #define JX9_PRIVATE
 #include "jx9.h"
-#endif
+#endif 
 #ifndef JX9_PI
 /* Value of PI */
 #define JX9_PI 3.1415926535898
@@ -1578,7 +1578,7 @@ typedef double             sxreal;
 #define SXI32_HIGH      0x7FFFFFFF
 #define SXU32_HIGH      0xFFFFFFFF
 #define SXI64_HIGH      0x7FFFFFFFFFFFFFFF
-#define SXU64_HIGH      0xFFFFFFFFFFFFFFFF
+#define SXU64_HIGH      0xFFFFFFFFFFFFFFFF 
 #if !defined(TRUE)
 #define TRUE 1
 #endif
@@ -1589,13 +1589,13 @@ typedef double             sxreal;
  * The following macros are used to cast pointers to integers and
  * integers to pointers.
  */
-#if defined(__PTRDIFF_TYPE__)
+#if defined(__PTRDIFF_TYPE__)  
 # define SX_INT_TO_PTR(X)  ((void*)(__PTRDIFF_TYPE__)(X))
 # define SX_PTR_TO_INT(X)  ((int)(__PTRDIFF_TYPE__)(X))
-#elif !defined(__GNUC__)
+#elif !defined(__GNUC__)    
 # define SX_INT_TO_PTR(X)  ((void*)&((char*)0)[X])
 # define SX_PTR_TO_INT(X)  ((int)(((char*)X)-(char*)0))
-#else
+#else                       
 # define SX_INT_TO_PTR(X)  ((void*)(X))
 # define SX_PTR_TO_INT(X)  ((int)(X))
 #endif
@@ -1645,7 +1645,7 @@ typedef sxi32 (*ProcRawStrCmp)(const SyString *, const SyString *);
 
 #define SX_ADDR(PTR)    ((sxptr)PTR)
 #define SX_ARRAYSIZE(X) (sizeof(X)/sizeof(X[0]))
-#define SXUNUSED(P)	(void) P
+#define SXUNUSED(P)	(P = 0)
 #define	SX_EMPTY(PTR)   (PTR == 0)
 #define SX_EMPTY_STR(STR) (STR == 0 || STR[0] == 0 )
 typedef struct SyMemBackend SyMemBackend;
@@ -1660,7 +1660,7 @@ typedef sxi32 (*ProcHashSum)(const void *, sxu32, unsigned char *, sxu32);
 typedef sxi32 (*ProcSort)(void *, sxu32, sxu32, ProcCmp);
 #define MACRO_LIST_PUSH(Head, Item)\
 	Item->pNext = Head;\
-	Head = Item;
+	Head = Item; 
 #define MACRO_LD_PUSH(Head, Item)\
 	if( Head == 0 ){\
 		Head = Item;\
@@ -1681,18 +1681,18 @@ typedef sxi32 (*ProcSort)(void *, sxu32, sxu32, ProcCmp);
 struct SySet
 {
 	SyMemBackend *pAllocator; /* Memory backend */
-	void *pBase;              /* Base pointer */
+	void *pBase;              /* Base pointer */	
 	sxu32 nUsed;              /* Total number of used slots  */
 	sxu32 nSize;              /* Total number of available slots */
 	sxu32 eSize;              /* Size of a single slot */
-	sxu32 nCursor;	          /* Loop cursor */
+	sxu32 nCursor;	          /* Loop cursor */	
 	void *pUserData;          /* User private data associated with this container */
 };
 #define SySetBasePtr(S)           ((S)->pBase)
 #define SySetBasePtrJump(S, OFFT)  (&((char *)(S)->pBase)[OFFT*(S)->eSize])
 #define SySetUsed(S)              ((S)->nUsed)
 #define SySetSize(S)              ((S)->nSize)
-#define SySetElemSize(S)          ((S)->eSize)
+#define SySetElemSize(S)          ((S)->eSize) 
 #define SySetCursor(S)            ((S)->nCursor)
 #define SySetGetAllocator(S)      ((S)->pAllocator)
 #define SySetSetUserData(S, DATA)  ((S)->pUserData = DATA)
@@ -1925,7 +1925,7 @@ struct SyToken
 struct SyStream
 {
 	const unsigned char *zInput; /* Complete text of the input */
-	const unsigned char *zText; /* Current input we are processing */
+	const unsigned char *zText; /* Current input we are processing */	
 	const unsigned char *zEnd; /* End of input marker */
 	sxu32  nLine; /* Total number of processed lines */
 	sxu32  nIgn; /* Total number of ignored tokens */
@@ -1957,7 +1957,7 @@ struct SyLex
 **
 */
 /*
-** Assuming zIn points to the first byte of a UTF-8 character,
+** Assuming zIn points to the first byte of a UTF-8 character, 
 ** advance zIn to point to the first byte of the next UTF-8 character.
 */
 #define SX_JMP_UTF8(zIn, zEnd)\
@@ -1981,8 +1981,8 @@ struct SyLex
 }
 /* Rely on the standard ctype */
 #include <ctype.h>
-#define SyToUpper(c) toupper(c)
-#define SyToLower(c) tolower(c)
+#define SyToUpper(c) toupper(c) 
+#define SyToLower(c) tolower(c) 
 #define SyisUpper(c) isupper(c)
 #define SyisLower(c) islower(c)
 #define SyisSpace(c) isspace(c)
@@ -1997,7 +1997,7 @@ struct SyLex
 #define SyisAscii(c) isascii(c)
 #define SyisAlphaNum(c) isalnum(c)
 #define SyisGraph(c)     isgraph(c)
-#define SyDigToHex(c)    "0123456789ABCDEF"[c & 0x0F]
+#define SyDigToHex(c)    "0123456789ABCDEF"[c & 0x0F] 		
 #define SyDigToInt(c)     ((c < 0xc0 && SyisDigit(c))? (c - '0') : 0 )
 #define SyCharToUpper(c)  ((c < 0xc0 && SyisLower(c))? SyToUpper(c) : c)
 #define SyCharToLower(c)  ((c < 0xc0 && SyisUpper(c))? SyToLower(c) : c)
@@ -2041,7 +2041,7 @@ struct SyLex
 		(RAW)->nByte--;\
 	}
 #ifndef JX9_DISABLE_BUILTIN_FUNC
-/*
+/* 
  * An XML raw text, CDATA, tag name and son is parsed out and stored
  * in an instance of the following structure.
  */
@@ -2067,37 +2067,37 @@ typedef sxi32 (*ProcXMLNameSpaceEnd)(SyXMLRawStr *, void *);
 typedef sxi32 (*ProcXMLEndDocument)(void *);
 /* XML processing control flags */
 #define SXML_ENABLE_NAMESPACE	    0x01 /* Parse XML with namespace support enbaled */
-#define SXML_ENABLE_QUERY		    0x02 /* Not used */
+#define SXML_ENABLE_QUERY		    0x02 /* Not used */	
 #define SXML_OPTION_CASE_FOLDING    0x04 /* Controls whether case-folding is enabled for this XML parser */
 #define SXML_OPTION_SKIP_TAGSTART   0x08 /* Specify how many characters should be skipped in the beginning of a tag name.*/
 #define SXML_OPTION_SKIP_WHITE      0x10 /* Whether to skip values consisting of whitespace characters. */
 #define SXML_OPTION_TARGET_ENCODING 0x20 /* Default encoding: UTF-8 */
 /* XML error codes */
 enum xml_err_code{
-    SXML_ERROR_NONE = 1,
-    SXML_ERROR_NO_MEMORY,
-    SXML_ERROR_SYNTAX,
-    SXML_ERROR_NO_ELEMENTS,
-    SXML_ERROR_INVALID_TOKEN,
-    SXML_ERROR_UNCLOSED_TOKEN,
-    SXML_ERROR_PARTIAL_CHAR,
-    SXML_ERROR_TAG_MISMATCH,
-    SXML_ERROR_DUPLICATE_ATTRIBUTE,
-    SXML_ERROR_JUNK_AFTER_DOC_ELEMENT,
-    SXML_ERROR_PARAM_ENTITY_REF,
-    SXML_ERROR_UNDEFINED_ENTITY,
-    SXML_ERROR_RECURSIVE_ENTITY_REF,
-    SXML_ERROR_ASYNC_ENTITY,
-    SXML_ERROR_BAD_CHAR_REF,
-    SXML_ERROR_BINARY_ENTITY_REF,
-    SXML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
-    SXML_ERROR_MISPLACED_XML_PI,
-    SXML_ERROR_UNKNOWN_ENCODING,
-    SXML_ERROR_INCORRECT_ENCODING,
-    SXML_ERROR_UNCLOSED_CDATA_SECTION,
+    SXML_ERROR_NONE = 1, 
+    SXML_ERROR_NO_MEMORY, 
+    SXML_ERROR_SYNTAX, 
+    SXML_ERROR_NO_ELEMENTS, 
+    SXML_ERROR_INVALID_TOKEN, 
+    SXML_ERROR_UNCLOSED_TOKEN, 
+    SXML_ERROR_PARTIAL_CHAR, 
+    SXML_ERROR_TAG_MISMATCH, 
+    SXML_ERROR_DUPLICATE_ATTRIBUTE, 
+    SXML_ERROR_JUNK_AFTER_DOC_ELEMENT, 
+    SXML_ERROR_PARAM_ENTITY_REF, 
+    SXML_ERROR_UNDEFINED_ENTITY, 
+    SXML_ERROR_RECURSIVE_ENTITY_REF, 
+    SXML_ERROR_ASYNC_ENTITY, 
+    SXML_ERROR_BAD_CHAR_REF, 
+    SXML_ERROR_BINARY_ENTITY_REF, 
+    SXML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF, 
+    SXML_ERROR_MISPLACED_XML_PI, 
+    SXML_ERROR_UNKNOWN_ENCODING, 
+    SXML_ERROR_INCORRECT_ENCODING, 
+    SXML_ERROR_UNCLOSED_CDATA_SECTION, 
     SXML_ERROR_EXTERNAL_ENTITY_HANDLING
 };
-/* Each active XML SAX parser is represented by an instance
+/* Each active XML SAX parser is represented by an instance 
  * of the following structure.
  */
 typedef struct SyXMLParser SyXMLParser;
@@ -2150,7 +2150,7 @@ struct SyXMLParser
  	sxu32 nCentralSize;	/* Central directory size(ZIP only. Otherwise Zero) */
 	void *pUserData;    /* Upper layer private data */
 	sxu32 nMagic;       /* Sanity check */
-
+	
  };
 #define SXARCH_MAGIC	0xDEAD635A
 #define SXARCH_INVALID(ARCH)            (ARCH == 0  || ARCH->nMagic != SXARCH_MAGIC)
@@ -2164,7 +2164,7 @@ struct SyXMLParser
  * of the following structure.
  */
  struct SyArchiveEntry
- {
+ { 	
  	sxu32 nByte;         /* Contents size before compression */
  	sxu32 nByteCompr;    /* Contents size after compression */
 	sxu32 nReadCount;    /* Read counter */
@@ -2179,12 +2179,12 @@ struct SyXMLParser
  	SyArchiveEntry *pNextName;    /* Next entry with the same name */
 	SyArchiveEntry *pNext, *pPrev; /* Next and previous entry in the list */
 	sxu32 nHash;     /* Hash of the entry name */
- 	void *pUserData; /* User data */
+ 	void *pUserData; /* User data */ 
 	sxu32 nMagic;    /* Sanity check */
  };
  /*
  * Extra flags for extending the file local header
- */
+ */ 
 #define SXZIP_EXTRA_TIMESTAMP	0x001	/* Extended UNIX timestamp */
 #endif /* JX9_DISABLE_BUILTIN_FUNC */
 #ifndef JX9_DISABLE_HASH_FUNC
@@ -2233,11 +2233,11 @@ struct jx9_value
 #define MEMOBJ_HASHMAP   0x040  /* Memory value is a hashmap (JSON representation of Array and Objects)  */
 #define MEMOBJ_RES       0x100  /* Memory value is a resource [User private data] */
 /* Mask of all known types */
-#define MEMOBJ_ALL (MEMOBJ_STRING|MEMOBJ_INT|MEMOBJ_REAL|MEMOBJ_BOOL|MEMOBJ_NULL|MEMOBJ_HASHMAP|MEMOBJ_RES)
+#define MEMOBJ_ALL (MEMOBJ_STRING|MEMOBJ_INT|MEMOBJ_REAL|MEMOBJ_BOOL|MEMOBJ_NULL|MEMOBJ_HASHMAP|MEMOBJ_RES) 
 /* Scalar variables
  * According to the JX9 language reference manual
  *  Scalar variables are those containing an integer, float, string or boolean.
- *  Types array, object and resource are not scalar.
+ *  Types array, object and resource are not scalar. 
  */
 #define MEMOBJ_SCALAR (MEMOBJ_STRING|MEMOBJ_INT|MEMOBJ_REAL|MEMOBJ_BOOL|MEMOBJ_NULL)
 /*
@@ -2252,7 +2252,7 @@ typedef struct jx9_output_consumer jx9_output_consumer;
 typedef struct jx9_user_func jx9_user_func;
 typedef struct jx9_conf jx9_conf;
 /*
- * An instance of the following structure store the default VM output
+ * An instance of the following structure store the default VM output 
  * consumer and it's private data.
  * Client-programs can register their own output consumer callback
  * via the [JX9_VM_CONFIG_OUTPUT] configuration directive.
@@ -2311,7 +2311,7 @@ typedef int (*ProcHostFunction)(jx9_context *, int, jx9_value **);
 /*
  * Each installed foreign function is recored in an instance of the following
  * structure.
- * Please refer to the official documentation for more information on how
+ * Please refer to the official documentation for more information on how 
  * to create/install foreign functions.
  */
 struct jx9_user_func
@@ -2334,7 +2334,7 @@ struct jx9_context
 	SySet sVar;             /* Container of dynamically allocated jx9_values
 							 * [i.e: Garbage collection purposes.]
 							 */
-	SySet sChunk;           /* Track dynamically allocated chunks [jx9_aux_data instance].
+	SySet sChunk;           /* Track dynamically allocated chunks [jx9_aux_data instance]. 
 							 * [i.e: Garbage collection purposes.]
 							 */
 	jx9_vm *pVm;            /* Virtual machine that own this context */
@@ -2360,7 +2360,7 @@ struct jx9_hashmap_node
 	jx9_hashmap_node *pNext, *pPrev;               /* Link to other entries [i.e: linear traversal] */
 	jx9_hashmap_node *pNextCollide, *pPrevCollide; /* Collision chain */
 };
-/*
+/* 
  * Each active hashmap aka array in the JX9 jargon is represented
  * by an instance of the following structure.
  */
@@ -2384,7 +2384,7 @@ struct jx9_hashmap
  * Those instructions are used to implement the 'foreach'
  * statement.
  * This structure is made available to these instructions
- * as the P3 operand.
+ * as the P3 operand. 
  */
 struct jx9_foreach_info
 {
@@ -2398,9 +2398,9 @@ struct jx9_foreach_step
 	sxi32 iFlags;                   /* Control flags (see below) */
 	/* Iterate on this map*/
 	jx9_hashmap *pMap;          /* Hashmap [i.e: array in the JX9 jargon] iteration
-									 * Ex: foreach(array(1, 2, 3) as $key=>$value){}
+									 * Ex: foreach(array(1, 2, 3) as $key=>$value){} 
 									 */
-
+	
 };
 /* Foreach step control flags */
 #define JX9_4EACH_STEP_KEY     0x001 /* Make Key available */
@@ -2434,15 +2434,15 @@ typedef sxi32 (*ProcNodeConstruct)(jx9_gen_state *, sxi32);
  * Each supported operator [i.e: +, -, ==, *, %, >>, >=, new, etc.] is represented
  * by an instance of the following structure.
  * The JX9 parser does not use any external tools and is 100% handcoded.
- * That is, the JX9 parser is thread-safe , full reentrant, produce consistant
+ * That is, the JX9 parser is thread-safe , full reentrant, produce consistant 
  * compile-time errrors and at least 7 times faster than the standard JX9 parser.
  */
 struct jx9_expr_op
 {
 	SyString sOp;   /* String representation of the operator [i.e: "+", "*", "=="...] */
 	sxi32 iOp;      /* Operator ID */
-	sxi32 iPrec;    /* Operator precedence: 1 == Highest */
-	sxi32 iAssoc;   /* Operator associativity (either left, right or non-associative) */
+	sxi32 iPrec;    /* Operator precedence: 1 == Highest */ 
+	sxi32 iAssoc;   /* Operator associativity (either left, right or non-associative) */ 
 	sxi32 iVmOp;    /* VM OP code for this operator [i.e: JX9_OP_EQ, JX9_OP_LT, JX9_OP_MUL...]*/
 };
 /*
@@ -2476,7 +2476,7 @@ struct GenBlock
 	sxi32 iFlags;         /* Block control flags (see below) */
 	SySet aJumpFix;       /* Jump fixup (JumpFixup instance) */
 	void *pUserData;      /* Upper layer private data */
-	/* The following two fields are used only when compiling
+	/* The following two fields are used only when compiling 
 	 * the 'do..while()' language construct.
 	 */
 	sxu8 bPostContinue;    /* TRUE when compiling the do..while() statement */
@@ -2485,7 +2485,7 @@ struct GenBlock
 /*
  * Code generator state is remembered in an instance of the following
  * structure. We put the information in this structure and pass around
- * a pointer to this structure, rather than pass around  all of the
+ * a pointer to this structure, rather than pass around  all of the 
  * information separately. This helps reduce the number of  arguments
  * to generator functions.
  * This structure is used only during compile-time and have no meaning
@@ -2544,11 +2544,11 @@ struct jx9_vm_func_arg
  * any complex default value associated with them unlike the standard
  * JX9 engine.
  * Example:
- *   static $rand_str = 'JX9'.rand_str(3); // Concatenate 'JX9' with
+ *   static $rand_str = 'JX9'.rand_str(3); // Concatenate 'JX9' with 
  *                                         // a random three characters(English alphabet)
  *   dump($rand_str);
  *   //You should see something like this
- *   string(6 'JX9awt');
+ *   string(6 'JX9awt');   
  */
 struct jx9_vm_func_static_var
 {
@@ -2648,7 +2648,7 @@ struct jx9_switch
 #define JX9_ASSERT_BAIL       0x04  /* Terminate execution on failed assertions */
 #define JX9_ASSERT_QUIET_EVAL 0x08  /* Not used */
 #define JX9_ASSERT_CALLBACK   0x10  /* Callback to call on failed assertions */
-/*
+/* 
  * An instance of the following structure hold the bytecode instructions
  * resulting from compiling a JX9 script.
  * This structure contains the complete state of the virtual machine.
@@ -2708,7 +2708,7 @@ struct jx9_vm
  */
 enum iErrCode
 {
-	E_ERROR             = 1,   /* Fatal run-time errors. These indicate errors that can not be recovered
+	E_ERROR             = 1,   /* Fatal run-time errors. These indicate errors that can not be recovered 
 							    * from, such as a memory allocation problem. Execution of the script is
 							    * halted.
 								* The only fatal error under JX9 is an out-of-memory. All others erros
@@ -2716,8 +2716,8 @@ enum iErrCode
 							    */
 	E_WARNING           ,   /* Run-time warnings (non-fatal errors). Execution of the script is not halted.  */
 	E_PARSE             ,   /* Compile-time parse errors. Parse errors should only be generated by the parser.*/
-	E_NOTICE            ,   /* Run-time notices. Indicate that the script encountered something that could
-							    * indicate an error, but could also happen in the normal course of running a script.
+	E_NOTICE            ,   /* Run-time notices. Indicate that the script encountered something that could 
+							    * indicate an error, but could also happen in the normal course of running a script. 
 							    */
 };
 /*
@@ -2733,13 +2733,13 @@ enum jx9_vm_op {
   JX9_OP_HALT,         /* Halt */
   JX9_OP_LOAD,         /* Load memory object */
   JX9_OP_LOADC,        /* Load constant */
-  JX9_OP_LOAD_IDX,     /* Load array entry */
+  JX9_OP_LOAD_IDX,     /* Load array entry */   
   JX9_OP_LOAD_MAP,     /* Load hashmap('array') */
   JX9_OP_NOOP,         /* NOOP */
   JX9_OP_JMP,          /* Unconditional jump */
   JX9_OP_JZ,           /* Jump on zero (FALSE jump) */
   JX9_OP_JNZ,          /* Jump on non-zero (TRUE jump) */
-  JX9_OP_POP,          /* Stack POP */
+  JX9_OP_POP,          /* Stack POP */ 
   JX9_OP_CAT,          /* Concatenation */
   JX9_OP_CVT_INT,      /* Integer cast */
   JX9_OP_CVT_STR,      /* String cast */
@@ -2809,7 +2809,7 @@ enum jx9_expr_id {
 	EXPR_OP_SUBSCRIPT, /* []: Subscripting */
 	EXPR_OP_FUNC_CALL, /* func_call() */
 	EXPR_OP_INCR,      /* ++ */
-	EXPR_OP_DECR,      /* -- */
+	EXPR_OP_DECR,      /* -- */ 
 	EXPR_OP_BITNOT,    /* ~ */
 	EXPR_OP_UMINUS,    /* Unary minus  */
 	EXPR_OP_UPLUS,     /* Unary plus */
@@ -2892,7 +2892,7 @@ enum jx9_expr_id {
  * These words have special meaning in JX9. Some of them represent things which look like
  * functions, some look like constants, and so on, but they're not, really: they are language constructs.
  * You cannot use any of the following words as constants, object names, function or method names.
- * Using them as variable names is generally OK, but could lead to confusion.
+ * Using them as variable names is generally OK, but could lead to confusion. 
  */
 #define JX9_TKWRD_SWITCH       1 /* switch */
 #define JX9_TKWRD_PRINT        2 /* print */
@@ -2967,7 +2967,7 @@ JX9_PRIVATE sxi64 jx9TokenValueToInt64(SyString *pData);
 JX9_PRIVATE sxi32 jx9Tokenize(const char *zInput, sxu32 nLen, SySet *pOut);
 /* vm.c function prototypes */
 JX9_PRIVATE void jx9VmReleaseContextValue(jx9_context *pCtx, jx9_value *pValue);
-JX9_PRIVATE sxi32 jx9VmInitFuncState(jx9_vm *pVm, jx9_vm_func *pFunc, const char *zName, sxu32 nByte,
+JX9_PRIVATE sxi32 jx9VmInitFuncState(jx9_vm *pVm, jx9_vm_func *pFunc, const char *zName, sxu32 nByte, 
 	sxi32 iFlags, void *pUserData);
 JX9_PRIVATE sxi32 jx9VmInstallUserFunction(jx9_vm *pVm, jx9_vm_func *pFunc, SyString *pName);
 JX9_PRIVATE sxi32 jx9VmRegisterConstant(jx9_vm *pVm, const SyString *pName, ProcConstant xExpand, void *pUserData);
@@ -3054,10 +3054,10 @@ JX9_PRIVATE void jx9RegisterHashmapFunctions(jx9_vm *pVm);
 JX9_PRIVATE sxi32 jx9HashmapWalk(jx9_hashmap *pMap, int (*xWalk)(jx9_value *, jx9_value *, void *), void *pUserData);
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 JX9_PRIVATE int jx9HashmapValuesToSet(jx9_hashmap *pMap, SySet *pOut);
-/* builtin.c function prototypes */
-JX9_PRIVATE sxi32 jx9InputFormat(int (*xConsumer)(jx9_context *, const char *, int, void *),
+/* builtin.c function prototypes */ 
+JX9_PRIVATE sxi32 jx9InputFormat(int (*xConsumer)(jx9_context *, const char *, int, void *), 
 	jx9_context *pCtx, const char *zIn, int nByte, int nArg, jx9_value **apArg, void *pUserData, int vf);
-JX9_PRIVATE sxi32 jx9ProcessCsv(const char *zInput, int nByte, int delim, int encl,
+JX9_PRIVATE sxi32 jx9ProcessCsv(const char *zInput, int nByte, int delim, int encl, 
 	int escape, sxi32 (*xConsumer)(const char *, int, void *), void *pUserData);
 JX9_PRIVATE sxi32 jx9CsvConsumer(const char *zToken, int nTokenLen, void *pUserData);
 JX9_PRIVATE sxi32 jx9StripTagsFromString(jx9_context *pCtx, const char *zIn, int nByte, const char *zTaglist, int nTaglen);
@@ -3065,7 +3065,7 @@ JX9_PRIVATE sxi32 jx9ParseIniString(jx9_context *pCtx, const char *zIn, sxu32 nB
 #endif
 /* vfs.c */
 #ifndef JX9_DISABLE_BUILTIN_FUNC
-JX9_PRIVATE void * jx9StreamOpenHandle(jx9_vm *pVm, const jx9_io_stream *pStream, const char *zFile,
+JX9_PRIVATE void * jx9StreamOpenHandle(jx9_vm *pVm, const jx9_io_stream *pStream, const char *zFile, 
 	int iFlags, int use_include, jx9_value *pResource, int bPushInclude, int *pNew);
 JX9_PRIVATE sxi32 jx9StreamReadWholeFile(void *pHandle, const jx9_io_stream *pStream, SyBlob *pOut);
 JX9_PRIVATE void jx9StreamCloseHandle(const jx9_io_stream *pStream, void *pHandle);
@@ -3235,7 +3235,7 @@ JX9_PRIVATE void SyDosTimeFormat(sxu32 nDosDate, Sytm *pOut);
 #define UNQLITE_PRIVATE
 #include "unqlite.h"
 #include "jx9Int.h"
-#endif
+#endif 
 /* forward declaration */
 typedef struct unqlite_db unqlite_db;
 /*
@@ -3266,7 +3266,7 @@ typedef struct unqlite_db unqlite_db;
  * The following #defines specify the range of bytes used for locking.
  * SHARED_SIZE is the number of bytes available in the pool from which
  * a random byte is selected for a shared lock.  The pool of bytes for
- * shared locks begins at SHARED_FIRST.
+ * shared locks begins at SHARED_FIRST. 
  *
  * The same locking strategy and byte ranges are used for Unix and Windows.
  * This leaves open the possiblity of having clients on winNT, and
@@ -3282,7 +3282,7 @@ typedef struct unqlite_db unqlite_db;
  * that all locks will fit on a single page even at the minimum page size.
  * PENDING_BYTE defines the beginning of the locks.  By default PENDING_BYTE
  * is set high so that we don't have to allocate an unused page except
- * for very large databases.  But one should test the page skipping logic
+ * for very large databases.  But one should test the page skipping logic 
  * by setting PENDING_BYTE low and running the entire regression suite.
  *
  * Changing the value of PENDING_BYTE results in a subtly incompatible
@@ -3356,7 +3356,7 @@ struct unqlite_col_record
 	unqlite_col_record *pNextCol,*pPrevCol; /* Collision chain */
 	unqlite_col_record *pNext,*pPrev;       /* Linked list of records */
 };
-/*
+/* 
  * Magic number to identify a valid collection on disk.
  */
 #define UNQLITE_COLLECTION_MAGIC 0x611E /* sizeof(unsigned short) 2 bytes */
@@ -3378,7 +3378,7 @@ struct unqlite_col
 	int iFlags;        /* Control flags (see below) */
 	unqlite_col_record **apRecord; /* Hashtable of loaded records */
 	unqlite_col_record *pList;     /* Linked list of records */
-	sxu32 nRec;        /* Total number of records in apRecord[] */
+	sxu32 nRec;        /* Total number of records in apRecord[] */     
 	sxu32 nRecSize;    /* apRecord[] size */
 	Sytm sCreation;    /* Colleation creation time */
 	unqlite_kv_cursor *pCursor; /* Cursor pointing to the raw binary data */
@@ -3404,7 +3404,7 @@ struct unqlite_vm
 	unqlite_vm *pNext,*pPrev;  /* Linked list of active unQLite VM */
 	sxu32 nMagic;              /* Magic number to avoid misuse */
 };
-/*
+/* 
  * Database signature to identify a valid database image.
  */
 #define UNQLITE_DB_SIG "unqlite"
@@ -3471,7 +3471,7 @@ UNQLITE_PRIVATE int unqliteRegisterJx9Functions(unqlite_vm *pVm);
 UNQLITE_PRIVATE sxi32 FastJsonEncode(
 	jx9_value *pValue, /* Value to encode */
 	SyBlob *pOut,      /* Store encoded value here */
-	int iNest          /* Nesting limit */
+	int iNest          /* Nesting limit */ 
 	);
 UNQLITE_PRIVATE sxi32 FastJsonDecode(
 	const void *pIn, /* Binary JSON  */
@@ -3499,8 +3499,8 @@ UNQLITE_PRIVATE int unqliteOsSectorSize(unqlite_file *id);
 UNQLITE_PRIVATE int unqliteOsOpen(
   unqlite_vfs *pVfs,
   SyMemBackend *pAlloc,
-  const char *zPath,
-  unqlite_file **ppOut,
+  const char *zPath, 
+  unqlite_file **ppOut, 
   unsigned int flags
 );
 UNQLITE_PRIVATE int unqliteOsCloseFree(SyMemBackend *pAlloc,unqlite_file *pId);
@@ -3576,10 +3576,10 @@ static struct unqlGlobal_Data
 #if defined(UNQLITE_ENABLE_THREADS)
 	const SyMutexMethods *pMutexMethods;   /* Mutex methods */
 	SyMutex *pMutex;                       /* Global mutex */
-	sxu32 nThreadingLevel;                 /* Threading level: 0 == Single threaded/1 == Multi-Threaded
+	sxu32 nThreadingLevel;                 /* Threading level: 0 == Single threaded/1 == Multi-Threaded 
 										    * The threading level can be set using the [unqlite_lib_config()]
 											* interface with a configuration verb set to
-											* UNQLITE_LIB_CONFIG_THREAD_LEVEL_SINGLE or
+											* UNQLITE_LIB_CONFIG_THREAD_LEVEL_SINGLE or 
 											* UNQLITE_LIB_CONFIG_THREAD_LEVEL_MULTI
 											*/
 #endif
@@ -3590,17 +3590,17 @@ static struct unqlGlobal_Data
 	unqlite *pDB;                          /* List of active DB handles */
 	sxu32 nMagic;                          /* Sanity check against library misuse */
 }sUnqlMPGlobal = {
-	{0, 0, 0, 0, 0, 0, 0, 0, {0}},
+	{0, 0, 0, 0, 0, 0, 0, 0, {0}}, 
 #if defined(UNQLITE_ENABLE_THREADS)
-	0,
-	0,
-	0,
+	0, 
+	0, 
+	0, 
 #endif
 	{0, 0, 0, 0, 0, 0, 0 },
 	UNQLITE_DEFAULT_PAGE_SIZE,
-	0,
-	0,
-	0,
+	0, 
+	0, 
+	0, 
 	0
 };
 #define UNQLITE_LIB_MAGIC  0xEA1495BA
@@ -3617,7 +3617,7 @@ static struct unqlGlobal_Data
  *  are enabled so that the application is free to share the same database handle
  *  between different threads at the same time.
  */
-#define UNQLITE_THREAD_LEVEL_SINGLE 1
+#define UNQLITE_THREAD_LEVEL_SINGLE 1 
 #define UNQLITE_THREAD_LEVEL_MULTI  2
 /*
  * Find a Key Value storage engine from the set of installed engines.
@@ -3673,7 +3673,7 @@ static sxi32 unqliteCoreConfigure(sxi32 nOp, va_list ap)
 			unqlite_kv_methods *pMethods = va_arg(ap,unqlite_kv_methods *);
 			/* Make sure we are delaing with a valid methods */
 			if( pMethods == 0 || SX_EMPTY_STR(pMethods->zName) || pMethods->xSeek == 0 || pMethods->xData == 0
-				|| pMethods->xKey == 0 || pMethods->xDataLength == 0 || pMethods->xKeyLength == 0
+				|| pMethods->xKey == 0 || pMethods->xDataLength == 0 || pMethods->xKeyLength == 0 
 				|| pMethods->szKv < (int)sizeof(unqlite_kv_engine) ){
 					rc = UNQLITE_INVALID;
 					break;
@@ -3711,7 +3711,7 @@ static sxi32 unqliteCoreConfigure(sxi32 nOp, va_list ap)
 			sUnqlMPGlobal.sAllocator.xMemError = xMemErr;
 			sUnqlMPGlobal.sAllocator.pUserData = pUserData;
 			break;
-												 }
+												 }	  
 		case UNQLITE_LIB_CONFIG_USER_MUTEX: {
 #if defined(UNQLITE_ENABLE_THREADS)
 			/* Use an alternative low-level mutex subsystem */
@@ -3755,10 +3755,10 @@ static sxi32 unqliteCoreConfigure(sxi32 nOp, va_list ap)
 				rc = UNQLITE_CORRUPT;
 				break;
 			}
-			sUnqlMPGlobal.pMutexMethods = pMethods;
+			sUnqlMPGlobal.pMutexMethods = pMethods;			
 			if( sUnqlMPGlobal.nThreadingLevel == 0 ){
 				/* Set a default threading level */
-				sUnqlMPGlobal.nThreadingLevel = UNQLITE_THREAD_LEVEL_MULTI;
+				sUnqlMPGlobal.nThreadingLevel = UNQLITE_THREAD_LEVEL_MULTI; 
 			}
 #endif
 			break;
@@ -3806,11 +3806,11 @@ int unqlite_lib_config(int nConfigOp,...)
 /*
  * Global library initialization
  * Refer to [unqlite_lib_init()]
- * This routine must be called to initialize the memory allocation subsystem, the mutex
+ * This routine must be called to initialize the memory allocation subsystem, the mutex 
  * subsystem prior to doing any serious work with the library. The first thread to call
  * this routine does the initialization process and set the magic number so no body later
  * can re-initialize the library. If subsequent threads call this  routine before the first
- * thread have finished the initialization process, then the subsequent threads must block
+ * thread have finished the initialization process, then the subsequent threads must block 
  * until the initialization process is done.
  */
 static sxi32 unqliteCoreInitialize(void)
@@ -3958,7 +3958,7 @@ static void unqliteCoreShutdown(void)
 			break;
 		}
 		pNext = pDb->pNext;
-		unqliteDbRelease(pDb);
+		unqliteDbRelease(pDb); 
 		pDb = pNext;
 		sUnqlMPGlobal.nDB--;
 	}
@@ -4112,7 +4112,7 @@ static int unqliteInitDatabase(
 	/* No need for internal mutexes */
 	SyMemBackendDisbaleMutexing(&pDB->sMem);
 #endif
-	SyBlobInit(&pDB->sErr,&pDB->sMem);
+	SyBlobInit(&pDB->sErr,&pDB->sMem);	
 	/* Sanityze flags */
 	iFlags = unqliteSanityzeFlag(iFlags);
 	/* Init the pager and the transaction manager */
@@ -4146,7 +4146,7 @@ static int unqliteInitVm(unqlite *pDb,jx9_vm *pJx9Vm,unqlite_vm **ppOut)
 	/* Initialize */
 	SyMemBackendInitFromParent(&pVm->sAlloc,&pDb->sMem);
 	/* Allocate a new collection table */
-	pVm->apCol = (unqlite_col **)SyMemBackendAlloc(&pVm->sAlloc,32 * sizeof(unqlite_col *));
+	pVm->apCol = (unqlite_col **)SyMemBackendAlloc(&pVm->sAlloc,32 * sizeof(unqlite_col *)); 
 	if( pVm->apCol == 0 ){
 		goto fail;
 	}
@@ -4387,7 +4387,7 @@ int unqlite_config(unqlite *pDb,int nConfigOp,...)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4414,7 +4414,7 @@ int unqlite_close(unqlite *pDb)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4456,7 +4456,7 @@ int unqlite_compile(unqlite *pDb,const char *zJx9,int nByte,unqlite_vm **ppOut)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT;
 	 }
@@ -4491,7 +4491,7 @@ int unqlite_compile_file(unqlite *pDb,const char *zPath,unqlite_vm **ppOut)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT;
 	 }
@@ -4535,7 +4535,7 @@ int unqlite_vm_config(unqlite_vm *pVm,int iOp,...)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4562,7 +4562,7 @@ int unqlite_vm_exec(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4588,7 +4588,7 @@ int unqlite_vm_release(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4607,7 +4607,7 @@ int unqlite_vm_release(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 			/* Acquire DB mutex */
 			SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-			if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+			if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 				UNQLITE_THRD_DB_RELEASE(pDb) ){
 					return UNQLITE_ABORT; /* Another thread have released this instance */
 			}
@@ -4636,7 +4636,7 @@ int unqlite_vm_reset(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4662,7 +4662,7 @@ int unqlite_vm_dump(unqlite_vm *pVm, int (*xConsumer)(const void *, unsigned int
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4689,7 +4689,7 @@ unqlite_value * unqlite_vm_extract_variable(unqlite_vm *pVm,const char *zVarname
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return 0; /* Another thread have released this instance */
 	 }
@@ -4724,7 +4724,7 @@ int unqlite_create_function(unqlite_vm *pVm, const char *zName,int (*xFunc)(unql
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4750,7 +4750,7 @@ int unqlite_delete_function(unqlite_vm *pVm, const char *zName)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4788,7 +4788,7 @@ int unqlite_create_constant(unqlite_vm *pVm,const char *zName,void (*xExpand)(un
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4814,7 +4814,7 @@ int unqlite_delete_constant(unqlite_vm *pVm, const char *zName)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -4882,13 +4882,14 @@ int unqlite_value_string(unqlite_value *pVal, const char *zString, int nLen)
 int unqlite_value_string_format(unqlite_value *pVal, const char *zFormat,...)
 {
 	va_list ap;
+	int rc;
 	if((pVal->iFlags & MEMOBJ_STRING) == 0 ){
 		/* Invalidate any prior representation */
 		jx9MemObjRelease(pVal);
 		MemObjSetType(pVal, MEMOBJ_STRING);
 	}
 	va_start(ap, zFormat);
-	SyBlobFormatAp(&pVal->sBlob, zFormat, ap);
+	rc = SyBlobFormatAp(&pVal->sBlob, zFormat, ap);
 	va_end(ap);
 	return UNQLITE_OK;
 }
@@ -5206,7 +5207,7 @@ unqlite_value * unqlite_vm_new_scalar(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return 0; /* Another thread have released this instance */
 	 }
@@ -5231,7 +5232,7 @@ unqlite_value * unqlite_vm_new_array(unqlite_vm *pVm)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return 0; /* Another thread have released this instance */
 	 }
@@ -5256,7 +5257,7 @@ int unqlite_vm_release_value(unqlite_vm *pVm,unqlite_value *pValue)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_VM_RELEASE(pVm) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5439,7 +5440,7 @@ int unqlite_kv_store(unqlite *pDb,const void *pKey,int nKeyLen,const void *pData
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5483,7 +5484,7 @@ int unqlite_kv_store_fmt(unqlite *pDb,const void *pKey,int nKeyLen,const char *z
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5536,7 +5537,7 @@ int unqlite_kv_append(unqlite *pDb,const void *pKey,int nKeyLen,const void *pDat
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5580,7 +5581,7 @@ int unqlite_kv_append_fmt(unqlite *pDb,const void *pKey,int nKeyLen,const char *
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5635,7 +5636,7 @@ int unqlite_kv_fetch(unqlite *pDb,const void *pKey,int nKeyLen,void *pBuf,unqlit
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5693,7 +5694,7 @@ int unqlite_kv_fetch_callback(unqlite *pDb,const void *pKey,int nKeyLen,int (*xC
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5715,7 +5716,7 @@ int unqlite_kv_fetch_callback(unqlite *pDb,const void *pKey,int nKeyLen,int (*xC
 	 }
 	 if( rc == UNQLITE_OK && xConsumer ){
 		 /* Consume the data directly */
-		 rc = pMethods->xData(pCur,xConsumer,pUserData);
+		 rc = pMethods->xData(pCur,xConsumer,pUserData);	 
 	 }
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Leave DB mutex */
@@ -5739,7 +5740,7 @@ int unqlite_kv_delete(unqlite *pDb,const void *pKey,int nKeyLen)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5789,7 +5790,7 @@ int unqlite_kv_config(unqlite *pDb,int iOp,...)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5826,7 +5827,7 @@ int unqlite_kv_cursor_init(unqlite *pDb,unqlite_kv_cursor **ppOut)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -5852,7 +5853,7 @@ int unqlite_kv_cursor_release(unqlite *pDb,unqlite_kv_cursor *pCur)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -6157,7 +6158,7 @@ int unqlite_begin(unqlite *pDb)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -6183,7 +6184,7 @@ int unqlite_commit(unqlite *pDb)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -6209,7 +6210,7 @@ int unqlite_rollback(unqlite *pDb)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -6243,7 +6244,7 @@ UNQLITE_APIEXPORT int unqlite_util_load_mmaped_file(const char *zFile,void **ppM
 	 */
 	if( pVfs == 0 || pVfs->xMmap == 0 ){
 		rc = UNQLITE_NOTIMPLEMENTED;
-	 }else{
+	 }else{ 
 		 /* Try to get a read-only memory view of the whole file */
 		 rc = pVfs->xMmap(zFile,ppMap,pFileSize);
 	 }
@@ -6264,7 +6265,7 @@ UNQLITE_APIEXPORT int unqlite_util_release_mmaped_file(void *pMap,unqlite_int64 
 	pVfs = jx9ExportBuiltinVfs();
 	if( pVfs == 0 || pVfs->xUnmap == 0 ){
 		rc = UNQLITE_NOTIMPLEMENTED;
-	 }else{
+	 }else{ 
 		 pVfs->xUnmap(pMap,iFileSize);
 	 }
 	return rc;
@@ -6285,7 +6286,7 @@ UNQLITE_APIEXPORT int unqlite_util_random_string(unqlite *pDb,char *zBuf,unsigne
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return UNQLITE_ABORT; /* Another thread have released this instance */
 	 }
@@ -6311,7 +6312,7 @@ UNQLITE_APIEXPORT unsigned int unqlite_util_random_num(unqlite *pDb)
 #if defined(UNQLITE_ENABLE_THREADS)
 	 /* Acquire DB mutex */
 	 SyMutexEnter(sUnqlMPGlobal.pMutexMethods, pDb->pMutex); /* NO-OP if sUnqlMPGlobal.nThreadingLevel != UNQLITE_THREAD_LEVEL_MULTI */
-	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE &&
+	 if( sUnqlMPGlobal.nThreadingLevel > UNQLITE_THREAD_LEVEL_SINGLE && 
 		 UNQLITE_THRD_DB_RELEASE(pDb) ){
 			 return 0; /* Another thread have released this instance */
 	 }
@@ -6356,7 +6357,7 @@ UNQLITE_APIEXPORT unsigned int unqlite_util_random_num(unqlite *pDb)
 ** So the bitmap is usually sparse and has low cardinality.
 */
 /*
- * Actually, this is not a bitmap but a simple hashtable where page
+ * Actually, this is not a bitmap but a simple hashtable where page 
  * number (64-bit unsigned integers) are used as the lookup keys.
  */
 typedef struct bitvec_rec bitvec_rec;
@@ -6373,14 +6374,14 @@ struct Bitvec
 	bitvec_rec **apRec;   /* Record table */
 	bitvec_rec *pList;    /* List of records */
 };
-/*
+/* 
  * Allocate a new bitvec instance.
 */
 UNQLITE_PRIVATE Bitvec * unqliteBitvecCreate(SyMemBackend *pAlloc,pgno iSize)
 {
 	bitvec_rec **apNew;
 	Bitvec *p;
-
+	
 	p = (Bitvec *)SyMemBackendAlloc(pAlloc,sizeof(*p) );
 	if( p == 0 ){
 		SXUNUSED(iSize); /* cc warning */
@@ -6407,7 +6408,7 @@ UNQLITE_PRIVATE Bitvec * unqliteBitvecCreate(SyMemBackend *pAlloc,pgno iSize)
  * Return true if installed. False otherwise.
  */
 UNQLITE_PRIVATE int unqliteBitvecTest(Bitvec *p,pgno i)
-{
+{  
 	bitvec_rec *pRec;
 	/* Point to the desired bucket */
 	pRec = p->apRec[i & (p->nSize - 1)];
@@ -6513,7 +6514,7 @@ UNQLITE_PRIVATE void unqliteBitvecDestroy(Bitvec *p)
 {
 	bitvec_rec *pNext,*pRec = p->pList;
 	SyMemBackend *pAlloc = p->pAlloc;
-
+	
 	for(;;){
 		if( p->nRec < 1 ){
 			break;
@@ -6582,7 +6583,7 @@ UNQLITE_PRIVATE void unqliteBitvecDestroy(Bitvec *p)
 #define UNQLITE_FAST_JSON_NEST_LIMIT 32 /* Nesting limit */
 #endif
 #endif /* UNQLITE_FAST_JSON_NEST_LIMIT */
-/*
+/* 
  * JSON to Binary using the FastJSON implementation (BigEndian).
  */
 /*
@@ -6608,7 +6609,7 @@ UNQLITE_PRIVATE void unqliteBitvecDestroy(Bitvec *p)
 UNQLITE_PRIVATE sxi32 FastJsonEncode(
 	jx9_value *pValue, /* Value to encode */
 	SyBlob *pOut,      /* Store encoded value here */
-	int iNest          /* Nesting limit */
+	int iNest          /* Nesting limit */ 
 	)
 {
 	sxi32 iType = pValue ? pValue->iFlags : MEMOBJ_NULL;
@@ -6999,10 +7000,10 @@ static struct Jx9Global_Data
 #if defined(JX9_ENABLE_THREADS)
 	const SyMutexMethods *pMutexMethods;   /* Mutex methods */
 	SyMutex *pMutex;                       /* Global mutex */
-	sxu32 nThreadingLevel;                 /* Threading level: 0 == Single threaded/1 == Multi-Threaded
+	sxu32 nThreadingLevel;                 /* Threading level: 0 == Single threaded/1 == Multi-Threaded 
 										    * The threading level can be set using the [jx9_lib_config()]
 											* interface with a configuration verb set to
-											* JX9_LIB_CONFIG_THREAD_LEVEL_SINGLE or
+											* JX9_LIB_CONFIG_THREAD_LEVEL_SINGLE or 
 											* JX9_LIB_CONFIG_THREAD_LEVEL_MULTI
 											*/
 #endif
@@ -7011,15 +7012,15 @@ static struct Jx9Global_Data
 	jx9 *pEngines;                          /* List of active engine */
 	sxu32 nMagic;                           /* Sanity check against library misuse */
 }sJx9MPGlobal = {
-	{0, 0, 0, 0, 0, 0, 0, 0, {0}},
+	{0, 0, 0, 0, 0, 0, 0, 0, {0}}, 
 #if defined(JX9_ENABLE_THREADS)
-	0,
-	0,
-	0,
+	0, 
+	0, 
+	0, 
 #endif
-	0,
-	0,
-	0,
+	0, 
+	0, 
+	0, 
 	0
 };
 #define JX9_LIB_MAGIC  0xEA1495BA
@@ -7036,7 +7037,7 @@ static struct Jx9Global_Data
  * are enabled so that the application is free to share the same engine
  * between different threads at the same time.
  */
-#define JX9_THREAD_LEVEL_SINGLE 1
+#define JX9_THREAD_LEVEL_SINGLE 1 
 #define JX9_THREAD_LEVEL_MULTI  2
 /*
  * Configure a running JX9 engine instance.
@@ -7049,7 +7050,7 @@ JX9_PRIVATE sxi32 jx9EngineConfig(jx9 *pEngine, sxi32 nOp, va_list ap)
 	jx9_conf *pConf = &pEngine->xConf;
 	int rc = JX9_OK;
 	/* Perform the requested operation */
-	switch(nOp){
+	switch(nOp){									 
 	case JX9_CONFIG_ERR_LOG:{
 		/* Extract compile-time error log if any */
 		const char **pzPtr = va_arg(ap, const char **);
@@ -7117,7 +7118,7 @@ static sxi32 Jx9CoreConfigure(sxi32 nOp, va_list ap)
 			sJx9MPGlobal.sAllocator.xMemError = xMemErr;
 			sJx9MPGlobal.sAllocator.pUserData = pUserData;
 			break;
-												 }
+												 }	  
 		case JX9_LIB_CONFIG_USER_MUTEX: {
 #if defined(JX9_ENABLE_THREADS)
 			/* Use an alternative low-level mutex subsystem */
@@ -7161,10 +7162,10 @@ static sxi32 Jx9CoreConfigure(sxi32 nOp, va_list ap)
 				rc = JX9_CORRUPT;
 				break;
 			}
-			sJx9MPGlobal.pMutexMethods = pMethods;
+			sJx9MPGlobal.pMutexMethods = pMethods;			
 			if( sJx9MPGlobal.nThreadingLevel == 0 ){
 				/* Set a default threading level */
-				sJx9MPGlobal.nThreadingLevel = JX9_THREAD_LEVEL_MULTI;
+				sJx9MPGlobal.nThreadingLevel = JX9_THREAD_LEVEL_MULTI; 
 			}
 #endif
 			break;
@@ -7210,11 +7211,11 @@ JX9_PRIVATE int jx9_lib_config(int nConfigOp, ...)
 /*
  * Global library initialization
  * Refer to [jx9_lib_init()]
- * This routine must be called to initialize the memory allocation subsystem, the mutex
+ * This routine must be called to initialize the memory allocation subsystem, the mutex 
  * subsystem prior to doing any serious work with the library.The first thread to call
  * this routine does the initialization process and set the magic number so no body later
  * can re-initialize the library.If subsequent threads call this  routine before the first
- * thread have finished the initialization process, then the subsequent threads must block
+ * thread have finished the initialization process, then the subsequent threads must block 
  * until the initialization process is done.
  */
 static sxi32 Jx9CoreInitialize(void)
@@ -7312,7 +7313,7 @@ static sxi32 EngineRelease(jx9 *pEngine)
 	/* Set a dummy magic number */
 	pEngine->nMagic = 0x7635;
 	/* Release the private memory subsystem */
-	SyMemBackendRelease(&pEngine->sAllocator);
+	SyMemBackendRelease(&pEngine->sAllocator); 
 	return JX9_OK;
 }
 /*
@@ -7331,7 +7332,7 @@ static void JX9CoreShutdown(void)
 			break;
 		}
 		pNext = pEngine->pNext;
-		EngineRelease(pEngine);
+		EngineRelease(pEngine); 
 		pEngine = pNext;
 		sJx9MPGlobal.nEngine--;
 	}
@@ -7353,7 +7354,7 @@ static void JX9CoreShutdown(void)
 		/* Release the memory backend */
 		SyMemBackendRelease(&sJx9MPGlobal.sAllocator);
 	}
-	sJx9MPGlobal.nMagic = 0x1928;
+	sJx9MPGlobal.nMagic = 0x1928;	
 }
 /*
  * [CAPIREF: jx9_lib_shutdown()]
@@ -7460,7 +7461,7 @@ JX9_PRIVATE int jx9_release(jx9 *pEngine)
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire engine mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pEngine->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_ENGINE_RELEASE(pEngine) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7602,7 +7603,7 @@ JX9_PRIVATE int jx9_compile(jx9 *pEngine, const char *zSource, int nLen, jx9_vm 
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire engine mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pEngine->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_ENGINE_RELEASE(pEngine) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7634,7 +7635,7 @@ JX9_PRIVATE int jx9_compile_file(jx9 *pEngine, const char *zFilePath, jx9_vm **p
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire engine mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pEngine->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_ENGINE_RELEASE(pEngine) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7688,7 +7689,7 @@ JX9_PRIVATE int jx9_vm_config(jx9_vm *pVm, int iConfigOp, ...)
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_VM_RELEASE(pVm) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7718,7 +7719,7 @@ JX9_PRIVATE int jx9_vm_release(jx9_vm *pVm)
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_VM_RELEASE(pVm) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7736,7 +7737,7 @@ JX9_PRIVATE int jx9_vm_release(jx9_vm *pVm)
 #if defined(JX9_ENABLE_THREADS)
 			/* Acquire engine mutex */
 			SyMutexEnter(sJx9MPGlobal.pMutexMethods, pEngine->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-			if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+			if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 				JX9_THRD_ENGINE_RELEASE(pEngine) ){
 					return JX9_ABORT; /* Another thread have released this instance */
 			}
@@ -7748,7 +7749,7 @@ JX9_PRIVATE int jx9_vm_release(jx9_vm *pVm)
 #if defined(JX9_ENABLE_THREADS)
 			/* Leave engine mutex */
 			SyMutexLeave(sJx9MPGlobal.pMutexMethods, pEngine->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-#endif
+#endif	
 	}
 	return rc;
 }
@@ -7774,13 +7775,13 @@ JX9_PRIVATE int jx9_create_function(jx9_vm *pVm, const char *zName, int (*xFunc)
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_VM_RELEASE(pVm) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
 #endif
 	/* Install the foreign function */
-	rc = jx9VmInstallForeignFunction(&(*pVm), &sName, xFunc, pUserData);
+	rc = jx9VmInstallForeignFunction(&(*pVm), &sName, xFunc, pUserData); 
 #if defined(JX9_ENABLE_THREADS)
 	 /* Leave VM mutex */
 	 SyMutexLeave(sJx9MPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
@@ -7827,7 +7828,7 @@ JX9_PRIVATE int jx9_create_constant(jx9_vm *pVm, const char *zName, void (*xExpa
 #if defined(JX9_ENABLE_THREADS)
 	 /* Acquire VM mutex */
 	 SyMutexEnter(sJx9MPGlobal.pMutexMethods, pVm->pMutex); /* NO-OP if sJx9MPGlobal.nThreadingLevel != JX9_THREAD_LEVEL_MULTI */
-	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE &&
+	 if( sJx9MPGlobal.nThreadingLevel > JX9_THREAD_LEVEL_SINGLE && 
 		 JX9_THRD_VM_RELEASE(pVm) ){
 			 return JX9_ABORT; /* Another thread have released this instance */
 	 }
@@ -7874,7 +7875,7 @@ JX9_PRIVATE jx9_value * jx9_new_scalar(jx9_vm *pVm)
 	return pObj;
 }
 /*
- * [CAPIREF: jx9_new_array()]
+ * [CAPIREF: jx9_new_array()] 
  * Please refer to the official documentation for function purpose and expected parameters.
  */
 JX9_PRIVATE jx9_value * jx9_new_array(jx9_vm *pVm)
@@ -8120,7 +8121,7 @@ JX9_PRIVATE jx9_value * jx9_context_new_scalar(jx9_context *pCtx)
 	pVal = jx9_new_scalar(pCtx->pVm);
 	if( pVal ){
 		/* Record value address so it can be freed automatically
-		 * when the calling function returns.
+		 * when the calling function returns. 
 		 */
 		SySetPut(&pCtx->sVar, (const void *)&pVal);
 	}
@@ -8136,7 +8137,7 @@ JX9_PRIVATE jx9_value * jx9_context_new_array(jx9_context *pCtx)
 	pVal = jx9_new_array(pCtx->pVm);
 	if( pVal ){
 		/* Record value address so it can be freed automatically
-		 * when the calling function returns.
+		 * when the calling function returns. 
 		 */
 		SySetPut(&pCtx->sVar, (const void *)&pVal);
 	}
@@ -8165,7 +8166,7 @@ JX9_PRIVATE void * jx9_context_alloc_chunk(jx9_context *pCtx, unsigned int nByte
 		}
 		if( AutoRelease ){
 			jx9_aux_data sAux;
-			/* Track the chunk so that it can be released automatically
+			/* Track the chunk so that it can be released automatically 
 			 * upon this context is destroyed.
 			 */
 			sAux.pAuxData = pChunk;
@@ -8548,13 +8549,14 @@ JX9_PRIVATE int jx9_value_string(jx9_value *pVal, const char *zString, int nLen)
 JX9_PRIVATE int jx9_value_string_format(jx9_value *pVal, const char *zFormat, ...)
 {
 	va_list ap;
+	int rc;
 	if((pVal->iFlags & MEMOBJ_STRING) == 0 ){
 		/* Invalidate any prior representation */
 		jx9MemObjRelease(pVal);
 		MemObjSetType(pVal, MEMOBJ_STRING);
 	}
 	va_start(ap, zFormat);
-	SyBlobFormatAp(&pVal->sBlob, zFormat, ap);
+	rc = SyBlobFormatAp(&pVal->sBlob, zFormat, ap);
 	va_end(ap);
 	return JX9_OK;
 }
@@ -8995,7 +8997,7 @@ static int jx9Builtin_empty(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	jx9_result_bool(pCtx, res);
 	return JX9_OK;
-
+	
 }
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 #ifdef JX9_ENABLE_MATH_FUNC
@@ -9344,7 +9346,7 @@ static int jx9Builtin_atan2(jx9_context *pCtx, int nArg, jx9_value **apArg)
  */
 static int jx9Builtin_abs(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
-	int is_float;
+	int is_float;	
 	if( nArg < 1 ){
 		/* Missing argument, return 0 */
 		jx9_result_int(pCtx, 0);
@@ -9374,8 +9376,8 @@ static int jx9Builtin_abs(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $base: The optional logarithmic base to use. (only base-10 is supported)
  * Return
  *  The logarithm of arg to base, if given, or the natural logarithm.
- * Note:
- *  only Natural log and base-10 log are supported.
+ * Note: 
+ *  only Natural log and base-10 log are supported. 
  */
 static int jx9Builtin_log(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9431,7 +9433,7 @@ static int jx9Builtin_log10(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Return
  *  base raised to the power of exp.
  *  If the result can be represented as integer it will be returned
- *  as type integer, else it will be returned as type float.
+ *  as type integer, else it will be returned as type float. 
  */
 static int jx9Builtin_pow(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9450,9 +9452,9 @@ static int jx9Builtin_pow(jx9_context *pCtx, int nArg, jx9_value **apArg)
 }
 /*
  * float pi(void)
- *  Returns an approximation of pi.
+ *  Returns an approximation of pi. 
  * Note
- *  you can use the M_PI constant which yields identical results to pi().
+ *  you can use the M_PI constant which yields identical results to pi(). 
  * Return
  *  The value of pi as float.
  */
@@ -9465,7 +9467,7 @@ static int jx9Builtin_pi(jx9_context *pCtx, int nArg, jx9_value **apArg)
 }
 /*
  * float fmod(float $x, float $y)
- *  Returns the floating point remainder (modulo) of the division of the arguments.
+ *  Returns the floating point remainder (modulo) of the division of the arguments. 
  * Parameters
  * $x
  *  The dividend
@@ -9476,7 +9478,7 @@ static int jx9Builtin_pi(jx9_context *pCtx, int nArg, jx9_value **apArg)
  */
 static int jx9Builtin_fmod(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
-	double x, y, r;
+	double x, y, r; 
 	if( nArg < 2 ){
 		/* Missing arguments */
 		jx9_result_double(pCtx, 0);
@@ -9493,7 +9495,7 @@ static int jx9Builtin_fmod(jx9_context *pCtx, int nArg, jx9_value **apArg)
 }
 /*
  * float hypot(float $x, float $y)
- *  Calculate the length of the hypotenuse of a right-angle triangle .
+ *  Calculate the length of the hypotenuse of a right-angle triangle . 
  * Parameters
  * $x
  *  Length of first side
@@ -9504,7 +9506,7 @@ static int jx9Builtin_fmod(jx9_context *pCtx, int nArg, jx9_value **apArg)
  */
 static int jx9Builtin_hypot(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
-	double x, y, r;
+	double x, y, r; 
 	if( nArg < 2 ){
 		/* Missing arguments */
 		jx9_result_double(pCtx, 0);
@@ -9554,8 +9556,8 @@ static int jx9Builtin_round(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		}
 	}
 	r = jx9_value_to_double(apArg[0]);
-	/* If Y==0 and X will fit in a 64-bit int,
-     * handle the rounding directly.Otherwise
+	/* If Y==0 and X will fit in a 64-bit int, 
+     * handle the rounding directly.Otherwise 
 	 * use our own cutsom printf [i.e:SyBufferFormat()].
      */
   if( n==0 && r>=0 && r<LARGEST_INT64-1 ){
@@ -9649,7 +9651,7 @@ static int jx9Builtin_decbin(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $hex_string
  *   The hexadecimal string to convert
  * Return
- *  The decimal representation of hex_string
+ *  The decimal representation of hex_string 
  */
 static int jx9Builtin_hexdec(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9702,7 +9704,7 @@ static int jx9Builtin_hexdec(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $bin_string
  *   The binary string to convert
  * Return
- *  Returns the decimal equivalent of the binary number represented by the binary_string argument.
+ *  Returns the decimal equivalent of the binary number represented by the binary_string argument.  
  */
 static int jx9Builtin_bindec(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9737,7 +9739,7 @@ static int jx9Builtin_bindec(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $oct_string
  *   The octal string to convert
  * Return
- *  Returns the decimal equivalent of the octal number represented by the octal_string argument.
+ *  Returns the decimal equivalent of the octal number represented by the octal_string argument.  
  */
 static int jx9Builtin_octdec(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9776,7 +9778,7 @@ static int jx9Builtin_octdec(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $tobase
  *  The base to convert number to
  * Return
- *  Number converted to base tobase
+ *  Number converted to base tobase 
  */
 static int jx9Builtin_base_convert(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9871,14 +9873,14 @@ static int jx9Builtin_base_convert(jx9_context *pCtx, int nArg, jx9_value **apAr
  *   If start denotes the position of this truncation or beyond, false will be returned.
  *   If length is given and is 0, FALSE or NULL an empty string will be returned.
  *   If length is omitted, the substring starting from start until the end of the string
- *   will be returned.
+ *   will be returned. 
  * Return
  *  Returns the extracted part of string, or FALSE on failure or an empty string.
  */
 static int jx9Builtin_substr(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
 	const char *zSource, *zOfft;
-	int nOfft, nLen, nSrcLen;
+	int nOfft, nLen, nSrcLen;	
 	if( nArg < 2 ){
 		/* return FALSE */
 		jx9_result_bool(pCtx, 0);
@@ -9895,7 +9897,7 @@ static int jx9Builtin_substr(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Extract the offset */
 	nOfft = jx9_value_to_int(apArg[1]);
 	if( nOfft < 0 ){
-		zOfft = &zSource[nSrcLen+nOfft];
+		zOfft = &zSource[nSrcLen+nOfft]; 
 		if( zOfft < zSource ){
 			/* Invalid offset */
 			jx9_result_bool(pCtx, 0);
@@ -9946,14 +9948,14 @@ static int jx9Builtin_substr(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  The start position for the comparison. If negative, it starts counting from
  *  the end of the string.
  * $length
- *  The length of the comparison. The default value is the largest of the length
+ *  The length of the comparison. The default value is the largest of the length 
  *  of the str compared to the length of main_str less the offset.
  * $case_insensitivity
  *  If case_insensitivity is TRUE, comparison is case insensitive.
  * Return
  *  Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than
  *  str, and 0 if they are equal. If offset is equal to or greater than the length of main_str
- *  or length is set and is less than 1, substr_compare() prints a warning and returns FALSE.
+ *  or length is set and is less than 1, substr_compare() prints a warning and returns FALSE. 
  */
 static int jx9Builtin_substr_compare(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -9984,7 +9986,7 @@ static int jx9Builtin_substr_compare(jx9_context *pCtx, int nArg, jx9_value **ap
 	/* Extract the offset */
 	nOfft = jx9_value_to_int(apArg[2]);
 	if( nOfft < 0 ){
-		zOfft = &zSource[nSrcLen+nOfft];
+		zOfft = &zSource[nSrcLen+nOfft]; 
 		if( zOfft < zSource ){
 			/* Invalid offset */
 			jx9_result_bool(pCtx, 0);
@@ -10319,11 +10321,11 @@ static int jx9Builtin_htmlspecialchars_decode(jx9_context *pCtx, int nArg, jx9_v
 		}else if( nLen >= (int)sizeof("&lt;")-1 && SyStrnicmp(zIn, "&lt;", sizeof("&lt;")-1) == 0 ){
 			/* &lt; ==> < */
 			jx9_result_string(pCtx, "<", (int)sizeof(char));
-			nJump = (int)sizeof("&lt;")-1;
+			nJump = (int)sizeof("&lt;")-1; 
 		}else if( nLen >= (int)sizeof("&gt;")-1 && SyStrnicmp(zIn, "&gt;", sizeof("&gt;")-1) == 0 ){
 			/* &gt; ==> '>' */
 			jx9_result_string(pCtx, ">", (int)sizeof(char));
-			nJump = (int)sizeof("&gt;")-1;
+			nJump = (int)sizeof("&gt;")-1; 
 		}else if( nLen >= (int)sizeof("&quot;")-1 && SyStrnicmp(zIn, "&quot;", sizeof("&quot;")-1) == 0 ){
 			/* &quot; ==> '"' */
 			if( (iFlags & 0x04) == 0 /*ENT_NOQUOTES*/ ){
@@ -10354,14 +10356,14 @@ static int jx9Builtin_htmlspecialchars_decode(jx9_context *pCtx, int nArg, jx9_v
 	}
 	return JX9_OK;
 }
-/* HTML encoding/Decoding table
+/* HTML encoding/Decoding table 
  * Source: Symisc RunTime API.[chm@symisc.net]
  */
 static const char *azHtmlEscape[] = {
- 	"&lt;", "<", "&gt;", ">", "&amp;", "&", "&quot;", "\"", "&#39;", "'",
-	"&#33;", "!", "&#36;", "$", "&#35;", "#", "&#37;", "%", "&#40;", "(",
-	"&#41;", ")", "&#123;", "{", "&#125;", "}", "&#61;", "=", "&#43;", "+",
-	"&#63;", "?", "&#91;", "[", "&#93;", "]", "&#64;", "@", "&#44;", ","
+ 	"&lt;", "<", "&gt;", ">", "&amp;", "&", "&quot;", "\"", "&#39;", "'", 
+	"&#33;", "!", "&#36;", "$", "&#35;", "#", "&#37;", "%", "&#40;", "(", 
+	"&#41;", ")", "&#123;", "{", "&#125;", "}", "&#61;", "=", "&#43;", "+", 
+	"&#63;", "?", "&#91;", "[", "&#93;", "]", "&#64;", "@", "&#44;", "," 
  };
 /*
  * array get_html_translation_table(void)
@@ -10400,7 +10402,7 @@ static int jx9Builtin_get_html_translation_table(jx9_context *pCtx, int nArg, jx
 		/* Reset the string cursor */
 		jx9_value_reset_string_cursor(pValue);
 	}
-	/*
+	/* 
 	 * Return the array.
 	 * Don't worry about freeing memory, everything will be automatically
 	 * released upon we return from this function.
@@ -10577,7 +10579,7 @@ static int jx9Builtin_strlen(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  str1: The first string
  *  str2: The second string
  * Return
- *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater
+ *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater 
  *  than str2, and 0 if they are equal.
  */
 static int jx9Builtin_strcmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -10605,7 +10607,7 @@ static int jx9Builtin_strcmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  str1: The first string
  *  str2: The second string
  * Return
- *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater
+ *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater 
  *  than str2, and 0 if they are equal.
  */
 static int jx9Builtin_strncmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -10639,7 +10641,7 @@ static int jx9Builtin_strncmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  str1: The first string
  *  str2: The second string
  * Return
- *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater
+ *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater 
  *  than str2, and 0 if they are equal.
  */
 static int jx9Builtin_strcasecmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -10668,7 +10670,7 @@ static int jx9Builtin_strcasecmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $str2: The second string
  *  $len:  The length of strings to be used in the comparison.
  * Return
- *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater
+ *  Returns < 0 if str1 is less than str2; > 0 if str1 is greater 
  *  than str2, and 0 if they are equal.
  */
 static int jx9Builtin_strncasecmp(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -10762,7 +10764,7 @@ static int implode_callback(jx9_value *pKey, jx9_value *pValue, void *pUserData)
  *   The array of strings to implode.
  * Return
  *  Returns a string containing a string representation of all the array elements in the same
- *  order, with the glue string between each element.
+ *  order, with the glue string between each element. 
  */
 static int jx9Builtin_implode(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -10878,8 +10880,8 @@ static int jx9Builtin_implode_recursive(jx9_context *pCtx, int nArg, jx9_value *
 }
 /*
  * array explode(string $delimiter, string $string[, int $limit ])
- *  Returns an array of strings, each of which is a substring of string
- *  formed by splitting it on boundaries formed by the string delimiter.
+ *  Returns an array of strings, each of which is a substring of string 
+ *  formed by splitting it on boundaries formed by the string delimiter. 
  * Parameters
  *  $delimiter
  *   The boundary string.
@@ -10893,10 +10895,10 @@ static int jx9Builtin_implode_recursive(jx9_context *pCtx, int nArg, jx9_value *
  * Returns
  *  Returns an array of strings created by splitting the string parameter
  *  on boundaries formed by the delimiter.
- *  If delimiter is an empty string (""), explode() will return FALSE.
+ *  If delimiter is an empty string (""), explode() will return FALSE. 
  *  If delimiter contains a value that is not contained in string and a negative
  *  limit is used, then an empty array will be returned, otherwise an array containing string
- *  will be returned.
+ *  will be returned. 
  * NOTE:
  *  Negative limit is not supported.
  */
@@ -10978,7 +10980,7 @@ static int jx9Builtin_explode(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Return the freshly created array */
 	jx9_result_value(pCtx, pArray);
-	/* NOTE that every allocated jx9_value will be automatically
+	/* NOTE that every allocated jx9_value will be automatically 
 	 * released as soon we return from this foregin function.
 	 */
 	return JX9_OK;
@@ -11487,7 +11489,7 @@ static sxi32 iPatternMatch(const void *pText, sxu32 nLen, const void *pPattern, 
  * $needle
  *   Search pattern (must be a string).
  * $before_needle
- *   If TRUE, strstr() returns the part of the haystack before the first occurrence
+ *   If TRUE, strstr() returns the part of the haystack before the first occurrence 
  *   of the needle (excluding the needle).
  * Return
  *  Returns the portion of string, or FALSE if needle is not found.
@@ -11540,7 +11542,7 @@ static int jx9Builtin_strstr(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $needle
  *   Search pattern (must be a string).
  * $before_needle
- *   If TRUE, strstr() returns the part of the haystack before the first occurrence
+ *   If TRUE, strstr() returns the part of the haystack before the first occurrence 
  *   of the needle (excluding the needle).
  * Return
  *  Returns the portion of string, or FALSE if needle is not found.
@@ -11716,7 +11718,7 @@ static int jx9Builtin_stripos(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   Search pattern (must be a string).
  * $offset
  *   If specified, search will start this number of characters counted from the beginning
- *   of the string. If the value is negative, search will instead start from that many
+ *   of the string. If the value is negative, search will instead start from that many 
  *   characters from the end of the string, searching backwards.
  * Return
  *  Returns the position as an integer.If needle is not found, strrpos() will return FALSE.
@@ -11799,7 +11801,7 @@ static int jx9Builtin_strrpos(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   Search pattern (must be a string).
  * $offset
  *   If specified, search will start this number of characters counted from the beginning
- *   of the string. If the value is negative, search will instead start from that many
+ *   of the string. If the value is negative, search will instead start from that many 
  *   characters from the end of the string, searching backwards.
  * Return
  *  Returns the position as an integer.If needle is not found, strrpos() will return FALSE.
@@ -12085,7 +12087,7 @@ static int jx9Builtin_nl2br(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Format a given string and invoke the given callback on each processed chunk.
  *  According to the JX9 reference manual.
  * The format string is composed of zero or more directives: ordinary characters
- * (excluding %) that are copied directly to the result, and conversion
+ * (excluding %) that are copied directly to the result, and conversion 
  * specifications, each of which results in fetching its own parameter.
  * This applies to both sprintf() and printf().
  * Each conversion specification consists of a percent sign (%), followed by one
@@ -12110,7 +12112,7 @@ static int jx9Builtin_nl2br(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *       b - the argument is treated as an integer, and presented as a binary number.
  *       c - the argument is treated as an integer, and presented as the character with that ASCII value.
  *       d - the argument is treated as an integer, and presented as a (signed) decimal number.
- *       e - the argument is treated as scientific notation (e.g. 1.2e+2). The precision specifier stands
+ *       e - the argument is treated as scientific notation (e.g. 1.2e+2). The precision specifier stands 
  * 	     for the number of digits after the decimal point.
  *       E - like %e but uses uppercase letter (e.g. 1.2E+2).
  *       u - the argument is treated as an integer, and presented as an unsigned decimal number.
@@ -12192,20 +12194,20 @@ static int vxGetdigit(sxlongreal *val, int *cnt)
  * used conversion types first.
  */
 static const jx9_fmt_info aFmt[] = {
-  {  'd', 10, JX9_FMT_FLAG_SIGNED, JX9_FMT_RADIX, "0123456789", 0    },
-  {  's',  0, 0, JX9_FMT_STRING,     0,                  0    },
-  {  'c',  0, 0, JX9_FMT_CHARX,      0,                  0    },
-  {  'x', 16, 0, JX9_FMT_RADIX,      "0123456789abcdef", "x0" },
-  {  'X', 16, 0, JX9_FMT_RADIX,      "0123456789ABCDEF", "X0" },
-  {  'b',  2, 0, JX9_FMT_RADIX,      "01",                "b0"},
-  {  'o',  8, 0, JX9_FMT_RADIX,      "01234567",         "0"  },
-  {  'u', 10, 0, JX9_FMT_RADIX,      "0123456789",       0    },
-  {  'f',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_FLOAT,        0,    0    },
-  {  'F',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_FLOAT,        0,    0    },
-  {  'e',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_EXP,        "e",    0    },
-  {  'E',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_EXP,        "E",    0    },
-  {  'g',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_GENERIC,    "e",    0    },
-  {  'G',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_GENERIC,    "E",    0    },
+  {  'd', 10, JX9_FMT_FLAG_SIGNED, JX9_FMT_RADIX, "0123456789", 0    }, 
+  {  's',  0, 0, JX9_FMT_STRING,     0,                  0    }, 
+  {  'c',  0, 0, JX9_FMT_CHARX,      0,                  0    }, 
+  {  'x', 16, 0, JX9_FMT_RADIX,      "0123456789abcdef", "x0" }, 
+  {  'X', 16, 0, JX9_FMT_RADIX,      "0123456789ABCDEF", "X0" }, 
+  {  'b',  2, 0, JX9_FMT_RADIX,      "01",                "b0"}, 
+  {  'o',  8, 0, JX9_FMT_RADIX,      "01234567",         "0"  }, 
+  {  'u', 10, 0, JX9_FMT_RADIX,      "0123456789",       0    }, 
+  {  'f',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_FLOAT,        0,    0    }, 
+  {  'F',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_FLOAT,        0,    0    }, 
+  {  'e',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_EXP,        "e",    0    }, 
+  {  'E',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_EXP,        "E",    0    }, 
+  {  'g',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_GENERIC,    "e",    0    }, 
+  {  'G',  0, JX9_FMT_FLAG_SIGNED, JX9_FMT_GENERIC,    "E",    0    }, 
   {  '%',  0, 0, JX9_FMT_PERCENT,    0,                  0    }
 };
 /*
@@ -12230,7 +12232,7 @@ JX9_PRIVATE sxi32 jx9InputFormat(
 	int nArg,           /* Total argument of the given arguments */
 	jx9_value **apArg,  /* User arguments */
 	void *pUserData,    /* Last argument to xConsumer() */
-	int vf              /* TRUE if called from vfprintf, vsprintf context */
+	int vf              /* TRUE if called from vfprintf, vsprintf context */ 
 	)
 {
 	char spaces[] = "                                                  ";
@@ -12246,7 +12248,7 @@ JX9_PRIVATE sxi32 jx9InputFormat(
 	jx9_value *pArg;         /* Current processed argument */
 	jx9_int64 iVal;
 	int precision;           /* Precision of the current field */
-	char *zExtra;
+	char *zExtra;  
 	int c, rc, n;
 	int length;              /* Length of the field */
 	int prefix;
@@ -12274,7 +12276,7 @@ JX9_PRIVATE sxi32 jx9InputFormat(
 			break;
 		}
 		/* Find out what flags are present */
-		flag_leftjustify = flag_plussign = flag_blanksign =
+		flag_leftjustify = flag_plussign = flag_blanksign = 
 			flag_alternateform = flag_zeropad = 0;
 		zIn++; /* Jump the precent sign */
 		do{
@@ -12309,7 +12311,7 @@ JX9_PRIVATE sxi32 jx9InputFormat(
 			/* Position specifer */
 			if( width > 0 ){
 				n = width;
-				if( vf && n > 0 ){
+				if( vf && n > 0 ){ 
 					n--;
 				}
 			}
@@ -12429,12 +12431,12 @@ JX9_PRIVATE sxi32 jx9InputFormat(
         ** I think this is stupid.*/
         if( iVal==0 ) flag_alternateform = 0;
 #else
-        /* More sensible: turn off the prefix for octal (to prevent "00"),
+        /* More sensible: turn off the prefix for octal (to prevent "00"), 
         ** but leave the prefix for hex.*/
         if( iVal==0 && pInfo->base==8 ) flag_alternateform = 0;
 #endif
         if( pInfo->flags & JX9_FMT_FLAG_SIGNED ){
-          if( iVal<0 ){
+          if( iVal<0 ){ 
             iVal = -iVal;
 			/* Ticket 1433-003 */
 			if( iVal < 0 ){
@@ -12695,10 +12697,10 @@ static int sprintfConsumer(jx9_context *pCtx, const char *zInput, int nLen, void
  * string sprintf(string $format[, mixed $args [, mixed $... ]])
  *  Return a formatted string.
  * Parameters
- *  $format
+ *  $format 
  *    The format string (see block comment above)
  * Return
- *  A string produced according to the formatting string format.
+ *  A string produced according to the formatting string format. 
  */
 static int jx9Builtin_sprintf(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -12875,7 +12877,7 @@ static int jx9Builtin_size_format(jx9_context *pCtx, int nArg, jx9_value **apArg
 		return JX9_OK;
 	}
 	for(;;){
-		nRest = (sxi32)(iSize & 0x3FF);
+		nRest = (sxi32)(iSize & 0x3FF); 
 		iSize >>= 10;
 		c++;
 		if( (iSize & (~0 ^ 1023)) == 0 ){
@@ -13336,7 +13338,7 @@ JX9_PRIVATE sxi32 jx9StripTagsFromString(jx9_context *pCtx, const char *zIn, int
  *  $str
  *  The input string.
  * $allowable_tags
- *  You can use the optional second parameter to specify tags which should not be stripped.
+ *  You can use the optional second parameter to specify tags which should not be stripped. 
  * Return
  *  Returns the stripped string.
  */
@@ -13355,7 +13357,7 @@ static int jx9Builtin_strip_tags(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	zString = jx9_value_to_string(apArg[0], &nLen);
 	if( nArg > 1 && jx9_value_is_string(apArg[1]) ){
 		/* Allowed tag */
-		zTaglist = jx9_value_to_string(apArg[1], &nTaglen);
+		zTaglist = jx9_value_to_string(apArg[1], &nTaglen);		
 	}
 	/* Process input */
 	jx9StripTagsFromString(pCtx, zString, nLen, zTaglist, nTaglen);
@@ -13373,7 +13375,7 @@ static int jx9Builtin_strip_tags(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  If the optional split_length parameter is specified, the returned array
  *  will be broken down into chunks with each being split_length in length, otherwise
  *  each chunk will be one character in length. FALSE is returned if split_length is less than 1.
- *  If the split_length length exceeds the length of string, the entire string is returned
+ *  If the split_length length exceeds the length of string, the entire string is returned 
  *  as the first (and only) array element.
  */
 static int jx9Builtin_str_split(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -13438,7 +13440,7 @@ static int jx9Builtin_str_split(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Update position */
 		zString += split_len;
 	}
-	/*
+	/* 
 	 * Return the array.
 	 * Don't worry about freeing memory, everything will be automatically released
 	 * upon we return from this function.
@@ -13548,7 +13550,7 @@ static int LongestStringMask2(const char *zString, int nLen, const char *zMask, 
  *  The list of allowable characters.
  * $start
  *  The position in subject to start searching.
- *  If start is given and is non-negative, then strspn() will begin examining
+ *  If start is given and is non-negative, then strspn() will begin examining 
  *  subject at the start'th position. For instance, in the string 'abcdef', the character
  *  at position 0 is 'a', the character at position 2 is 'c', and so forth.
  *  If start is given and is negative, then strspn() will begin examining subject at the
@@ -13592,7 +13594,7 @@ static int jx9Builtin_strspn(jx9_context *pCtx, int nArg, jx9_value **apArg)
 			const char *zBase = &zString[iLen + nOfft];
 			if( zBase > zString ){
 				iLen = (int)(&zString[iLen]-zBase);
-				zString = zBase;
+				zString = zBase;	
 			}else{
 				/* Invalid offset */
 				jx9_result_int(pCtx, 0);
@@ -13640,7 +13642,7 @@ static int jx9Builtin_strspn(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  The list of not allowed characters.
  * $start
  *  The position in subject to start searching.
- *  If start is given and is non-negative, then strspn() will begin examining
+ *  If start is given and is non-negative, then strspn() will begin examining 
  *  subject at the start'th position. For instance, in the string 'abcdef', the character
  *  at position 0 is 'a', the character at position 2 is 'c', and so forth.
  *  If start is given and is negative, then strspn() will begin examining subject at the
@@ -13688,7 +13690,7 @@ static int jx9Builtin_strcspn(jx9_context *pCtx, int nArg, jx9_value **apArg)
 			const char *zBase = &zString[iLen + nOfft];
 			if( zBase > zString ){
 				iLen = (int)(&zString[iLen]-zBase);
-				zString = zBase;
+				zString = zBase;	
 			}else{
 				/* Invalid offset */
 				jx9_result_int(pCtx, 0);
@@ -13796,14 +13798,14 @@ static int jx9Builtin_soundex(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	char zResult[8];
 	int i, j;
 	static const unsigned char iCode[] = {
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 1, 2, 3, 0, 1, 2, 0, 0, 2, 2, 4, 5, 5, 0,
-		1, 2, 6, 2, 3, 0, 1, 0, 2, 0, 2, 0, 0, 0, 0, 0,
-		0, 0, 1, 2, 3, 0, 1, 2, 0, 0, 2, 2, 4, 5, 5, 0,
-		1, 2, 6, 2, 3, 0, 1, 0, 2, 0, 2, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 1, 2, 3, 0, 1, 2, 0, 0, 2, 2, 4, 5, 5, 0, 
+		1, 2, 6, 2, 3, 0, 1, 0, 2, 0, 2, 0, 0, 0, 0, 0, 
+		0, 0, 1, 2, 3, 0, 1, 2, 0, 0, 2, 2, 4, 5, 5, 0, 
+		1, 2, 6, 2, 3, 0, 1, 0, 2, 0, 2, 0, 0, 0, 0, 0, 
 	};
 	if( nArg < 1 ){
 		/* Missing arguments, return the empty string */
@@ -13846,7 +13848,7 @@ static int jx9Builtin_soundex(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $break
  *  The line is broken using the optional break parameter.
  * Return
- *  Returns the given string wrapped at the specified column.
+ *  Returns the given string wrapped at the specified column. 
  */
 static int jx9Builtin_wordwrap(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -13980,11 +13982,11 @@ struct strtok_aux_data
  *  "This is an example string" you could tokenize this string into its individual
  *  words by using the space character as the token.
  *  Note that only the first call to strtok uses the string argument. Every subsequent
- *  call to strtok only needs the token to use, as it keeps track of where it is in
+ *  call to strtok only needs the token to use, as it keeps track of where it is in 
  *  the current string. To start over, or to tokenize a new string you simply call strtok
  *  with the string argument again to initialize it. Note that you may put multiple tokens
- *  in the token parameter. The string will be tokenized when any one of the characters in
- *  the argument are found.
+ *  in the token parameter. The string will be tokenized when any one of the characters in 
+ *  the argument are found. 
  * Parameters
  *  $str
  *  The string being split up into smaller strings (tokens).
@@ -13997,7 +13999,7 @@ static int jx9Builtin_strtok(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
 	strtok_aux_data *pAux;
 	const char *zMask;
-	SyString sToken;
+	SyString sToken; 
 	int nMasklen;
 	sxi32 rc;
 	if( nArg < 2 ){
@@ -14049,7 +14051,7 @@ static int jx9Builtin_strtok(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		zMask = jx9_value_to_string(apArg[1], &nMasklen);
 		if( nMasklen < 1 ){
 			/* Set a default mask */
-#define TOK_MASK " \n\t\r\f"
+#define TOK_MASK " \n\t\r\f" 
 			zMask = TOK_MASK;
 			nMasklen = (int)sizeof(TOK_MASK) - 1;
 #undef TOK_MASK
@@ -14092,7 +14094,7 @@ static int jx9Builtin_strtok(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $input
  *   The input string.
  * $pad_length
- *   If the value of pad_length is negative, less than, or equal to the length of the input
+ *   If the value of pad_length is negative, less than, or equal to the length of the input 
  *   string, no padding takes place.
  * $pad_string
  *   Note:
@@ -14228,9 +14230,9 @@ struct str_replace_data
 	for(;;){\
 		if(ELEN < 1)break; SRC[OFFT] = ENTRY[0]; OFFT++; ENTRY++; --ELEN;\
 	}\
-}
+} 
 /*
- * Replace all occurrences of the search string at offset (nOfft) with the given
+ * Replace all occurrences of the search string at offset (nOfft) with the given 
  * replacement string [i.e: zReplace].
  */
 static int StringReplace(SyBlob *pWorker, sxu32 nOfft, int nLen, const char *zReplace, int nReplen)
@@ -14259,7 +14261,7 @@ static int StringReplace(SyBlob *pWorker, sxu32 nOfft, int nLen, const char *zRe
 		n = SyBlobLength(pWorker);
 		SHIFTRANDINSERT(zInput, n, nOfft, zReplace, iRep);
 		SyBlobLength(pWorker) += nReplen;
-	}
+	}	
 	return SXRET_OK;
 }
 /*
@@ -14318,7 +14320,7 @@ static int StrReplaceWalker(jx9_value *pKey, jx9_value *pData, void *pUserData)
 	if( nByte > 0 ){
 		char *zDup;
 		/* Duplicate the chunk */
-		zDup = (char *)jx9_context_alloc_chunk(pRep->pCtx, (unsigned int)nByte, FALSE,
+		zDup = (char *)jx9_context_alloc_chunk(pRep->pCtx, (unsigned int)nByte, FALSE, 
 			TRUE /* Release the chunk automatically, upon this context is destroyd */
 			);
 		if( zDup == 0 ){
@@ -14355,7 +14357,7 @@ static int StrReplaceWalker(jx9_value *pKey, jx9_value *pData, void *pUserData)
  *  to designate multiple replacements.
  * $subject
  *  The string or array being searched and replaced on, otherwise known as the haystack.
- *  If subject is an array, then the search and replace is performed with every entry
+ *  If subject is an array, then the search and replace is performed with every entry 
  *  of subject, and the return value is an array as well.
  * $count (Not used)
  *  If passed, this will be set to the number of replacements performed.
@@ -14466,7 +14468,7 @@ static int jx9Builtin_str_replace(jx9_context *pCtx, int nArg, jx9_value **apArg
 				break;
 			}
 			/* Perform a pattern lookup */
-			rc = xMatch(SyBlobDataAt(&sWorker, nCount), SyBlobLength(&sWorker) - nCount, (const void *)pSearch->zString,
+			rc = xMatch(SyBlobDataAt(&sWorker, nCount), SyBlobLength(&sWorker) - nCount, (const void *)pSearch->zString, 
 				pSearch->nByte, &nOfft);
 			if( rc != SXRET_OK ){
 				/* Pattern not found */
@@ -14497,7 +14499,7 @@ static int jx9Builtin_str_replace(jx9_context *pCtx, int nArg, jx9_value **apArg
  * $to
  *  The string replacing from.
  * $replace_pairs
- *  The replace_pairs parameter may be used instead of to and
+ *  The replace_pairs parameter may be used instead of to and 
  *  from, in which case it's an array in the form array('from' => 'to', ...).
  * Return
  *  The translated string.
@@ -14531,7 +14533,7 @@ static int jx9Builtin_strtr(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Iterate throw array entries and perform the replace operation.*/
 		jx9_array_walk(apArg[1], StringReplaceWalker, &sRepData);
 		/* All done, return the result string */
-		jx9_result_string(pCtx, (const char *)SyBlobData(&sWorker),
+		jx9_result_string(pCtx, (const char *)SyBlobData(&sWorker), 
 			(int)SyBlobLength(&sWorker)); /* Will make it's own copy */
 		/* Clean-up */
 		SyBlobRelease(&sWorker);
@@ -14560,7 +14562,7 @@ static int jx9Builtin_strtr(jx9_context *pCtx, int nArg, jx9_value **apArg)
 				}
 			}
 			jx9_result_string(pCtx, (const char *)&c, (int)sizeof(char));
-
+			
 		}
 	}
 	return JX9_OK;
@@ -14992,7 +14994,7 @@ static int jx9Builtin_ctype_digit(jx9_context *pCtx, int nArg, jx9_value **apArg
  *   The tested string.
  * Return
  *  Returns TRUE if every character in text is a hexadecimal 'digit', that is
- * a decimal digit or a character from [A-Fa-f] , FALSE otherwise.
+ * a decimal digit or a character from [A-Fa-f] , FALSE otherwise. 
  */
 static int jx9Builtin_ctype_xdigit(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15040,7 +15042,7 @@ static int jx9Builtin_ctype_xdigit(jx9_context *pCtx, int nArg, jx9_value **apAr
  *   The tested string.
  * Return
  *  Returns TRUE if every character in text is printable and actually creates visible output
- * (no white space), FALSE otherwise.
+ * (no white space), FALSE otherwise. 
  */
 static int jx9Builtin_ctype_graph(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15089,7 +15091,7 @@ static int jx9Builtin_ctype_graph(jx9_context *pCtx, int nArg, jx9_value **apArg
  * Return
  *  Returns TRUE if every character in text will actually create output (including blanks).
  *  Returns FALSE if text contains control characters or characters that do not have any output
- *  or control function at all.
+ *  or control function at all. 
  */
 static int jx9Builtin_ctype_print(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15186,7 +15188,7 @@ static int jx9Builtin_ctype_punct(jx9_context *pCtx, int nArg, jx9_value **apArg
  * Return
  *  Returns TRUE if every character in text creates some sort of white space, FALSE otherwise.
  *  Besides the blank character this also includes tab, vertical tab, line feed, carriage return
- *  and form feed characters.
+ *  and form feed characters. 
  */
 static int jx9Builtin_ctype_space(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15233,7 +15235,7 @@ static int jx9Builtin_ctype_space(jx9_context *pCtx, int nArg, jx9_value **apArg
  *  $text
  *   The tested string.
  * Return
- *  Returns TRUE if every character in text is a lowercase letter in the current locale.
+ *  Returns TRUE if every character in text is a lowercase letter in the current locale. 
  */
 static int jx9Builtin_ctype_lower(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15276,7 +15278,7 @@ static int jx9Builtin_ctype_lower(jx9_context *pCtx, int nArg, jx9_value **apArg
  *  $text
  *   The tested string.
  * Return
- *  Returns TRUE if every character in text is a uppercase letter in the current locale.
+ *  Returns TRUE if every character in text is a uppercase letter in the current locale. 
  */
 static int jx9Builtin_ctype_upper(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15323,7 +15325,7 @@ static int jx9Builtin_ctype_upper(jx9_context *pCtx, int nArg, jx9_value **apArg
 #include <time.h>
 #ifdef __WINNT__
 /* GetSystemTime() */
-#include <Windows.h>
+#include <Windows.h> 
 #ifdef _WIN32_WCE
 /*
 ** WindowsCE does not have a localtime() function.  So create a
@@ -15384,17 +15386,17 @@ static int jx9Builtin_time(jx9_context *pCtx, int nArg, jx9_value **apArg)
   *   If used and set to TRUE, microtime() will return a float instead of a string
   *   as described in the return values section below.
   * Return
-  *  By default, microtime() returns a string in the form "msec sec", where sec
-  *  is the current time measured in the number of seconds since the Unix
+  *  By default, microtime() returns a string in the form "msec sec", where sec 
+  *  is the current time measured in the number of seconds since the Unix 
   *  epoch (0:00:00 January 1, 1970 GMT), and msec is the number of microseconds
   *  that have elapsed since sec expressed in seconds.
   *  If get_as_float is set to TRUE, then microtime() returns a float, which represents
-  *  the current time in seconds since the Unix epoch accurate to the nearest microsecond.
+  *  the current time in seconds since the Unix epoch accurate to the nearest microsecond. 
   */
 static int jx9Builtin_microtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
 	int bFloat = 0;
-	sytime sTime;
+	sytime sTime;	
 #if defined(__UNIXES__)
 	struct timeval tv;
 	gettimeofday(&tv, 0);
@@ -15427,7 +15429,7 @@ static int jx9Builtin_microtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *     In other words, it defaults to the value of time().
  * Returns
  *  Returns an associative array of information related to the timestamp.
- *  Elements from the returned associative array are as follows:
+ *  Elements from the returned associative array are as follows: 
  *   KEY                                                         VALUE
  * ---------                                                    -------
  * "seconds" 	Numeric representation of seconds 	            0 to 59
@@ -15440,7 +15442,7 @@ static int jx9Builtin_microtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * "yday" 	    Numeric representation of the day of the year   0 through 365
  * "weekday" 	A full textual representation of the day of the week 	Sunday through Saturday
  * "month" 	    A full textual representation of a month, such as January or March 	January through December
- * 0 	        Seconds since the Unix Epoch, similar to the values returned by time() and used by date().
+ * 0 	        Seconds since the Unix Epoch, similar to the values returned by time() and used by date(). 
  * NOTE:
  *   NULL is returned on failure.
  */
@@ -15544,7 +15546,7 @@ static int jx9Builtin_getdate(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   When set to TRUE, a float instead of an array is returned.
  * Return
  *   By default an array is returned. If return_float is set, then
- *   a float is returned.
+ *   a float is returned. 
  */
 static int jx9Builtin_gettimeofday(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -15599,13 +15601,13 @@ static const int aISO8601[] = { 7 /* Sunday */, 1 /* Monday */, 2, 3, 4, 5, 6 };
  * Format a given date string.
  * Supported format: (Taken from JX9 online docs)
  * character 	Description
- * d          Day of the month
+ * d          Day of the month 
  * D          A textual representation of a days
  * j          Day of the month without leading zeros
- * l          A full textual representation of the day of the week
- * N          ISO-8601 numeric representation of the day of the week
+ * l          A full textual representation of the day of the week 	
+ * N          ISO-8601 numeric representation of the day of the week 
  * w          Numeric representation of the day of the week
- * z          The day of the year (starting from 0)
+ * z          The day of the year (starting from 0) 	
  * F          A full textual representation of a month, such as January or March
  * m          Numeric representation of a month, with leading zeros 	01 through 12
  * M          A short textual representation of a month, three letters 	Jan through Dec
@@ -15788,13 +15790,13 @@ static sxi32 DateFormat(jx9_context *pCtx, const char *zIn, int nLen, Sytm *pTm)
 			break;
 		case 'r':
 			/* RFC 2822 formatted date 	Example: Thu, 21 Dec 2000 16:01:07 */
-			jx9_result_string_format(pCtx, "%.3s, %02d %.3s %4d %02d:%02d:%02d",
-				SyTimeGetDay(pTm->tm_wday),
-				pTm->tm_mday,
-				SyTimeGetMonth(pTm->tm_mon),
-				pTm->tm_year,
-				pTm->tm_hour,
-				pTm->tm_min,
+			jx9_result_string_format(pCtx, "%.3s, %02d %.3s %4d %02d:%02d:%02d", 
+				SyTimeGetDay(pTm->tm_wday), 
+				pTm->tm_mday, 
+				SyTimeGetMonth(pTm->tm_mon), 
+				pTm->tm_year, 
+				pTm->tm_hour, 
+				pTm->tm_min, 
 				pTm->tm_sec
 				);
 			break;
@@ -15818,13 +15820,13 @@ static sxi32 DateFormat(jx9_context *pCtx, const char *zIn, int nLen, Sytm *pTm)
 			break;
 		case 'c':
 			/* 	ISO 8601 date */
-			jx9_result_string_format(pCtx, "%4d-%02d-%02dT%02d:%02d:%02d%+05d",
-				pTm->tm_year,
-				pTm->tm_mon+1,
-				pTm->tm_mday,
-				pTm->tm_hour,
-				pTm->tm_min,
-				pTm->tm_sec,
+			jx9_result_string_format(pCtx, "%4d-%02d-%02dT%02d:%02d:%02d%+05d", 
+				pTm->tm_year, 
+				pTm->tm_mon+1, 
+				pTm->tm_mday, 
+				pTm->tm_hour, 
+				pTm->tm_min, 
+				pTm->tm_sec, 
 				pTm->tm_gmtoff
 				);
 			break;
@@ -15852,7 +15854,7 @@ static sxi32 DateFormat(jx9_context *pCtx, const char *zIn, int nLen, Sytm *pTm)
  * %A 	A full textual representation of the day
  * %d 	Two-digit day of the month (with leading zeros)
  * %e 	Day of the month, with a space preceding single digits.
- * %j 	Day of the year, 3 digits with leading zeros
+ * %j 	Day of the year, 3 digits with leading zeros 
  * %u 	ISO-8601 numeric representation of the day of the week 	1 (for Monday) though 7 (for Sunday)
  * %w 	Numeric representation of the day of the week 0 (for Sunday) through 6 (for Saturday)
  * %U 	Week number of the given year, starting with the first Sunday as the first week
@@ -16033,37 +16035,37 @@ static int jx9Strftime(
 			break;
 		case 'r':
 			/* Same as "%I:%M:%S %p" */
-			jx9_result_string_format(pCtx, "%02d:%02d:%02d %s",
-				1+(pTm->tm_hour%12),
-				pTm->tm_min,
-				pTm->tm_sec,
+			jx9_result_string_format(pCtx, "%02d:%02d:%02d %s", 
+				1+(pTm->tm_hour%12), 
+				pTm->tm_min, 
+				pTm->tm_sec, 
 				pTm->tm_hour > 12 ? "PM" : "AM"
 				);
 			break;
 		case 'D':
 		case 'x':
 			/* Same as "%m/%d/%y" */
-			jx9_result_string_format(pCtx, "%02d/%02d/%02d",
-				pTm->tm_mon+1,
-				pTm->tm_mday,
+			jx9_result_string_format(pCtx, "%02d/%02d/%02d", 
+				pTm->tm_mon+1, 
+				pTm->tm_mday, 
 				pTm->tm_year%100
 				);
 			break;
 		case 'F':
 			/* Same as "%Y-%m-%d" */
-			jx9_result_string_format(pCtx, "%d-%02d-%02d",
-				pTm->tm_year,
-				pTm->tm_mon+1,
+			jx9_result_string_format(pCtx, "%d-%02d-%02d", 
+				pTm->tm_year, 
+				pTm->tm_mon+1, 
 				pTm->tm_mday
 				);
 			break;
 		case 'c':
-			jx9_result_string_format(pCtx, "%d-%02d-%02d %02d:%02d:%02d",
-				pTm->tm_year,
-				pTm->tm_mon+1,
-				pTm->tm_mday,
-				pTm->tm_hour,
-				pTm->tm_min,
+			jx9_result_string_format(pCtx, "%d-%02d-%02d %02d:%02d:%02d", 
+				pTm->tm_year, 
+				pTm->tm_mon+1, 
+				pTm->tm_mday, 
+				pTm->tm_hour, 
+				pTm->tm_min, 
 				pTm->tm_sec
 				);
 			break;
@@ -16087,14 +16089,14 @@ static int jx9Strftime(
  * string date(string $format [, int $timestamp = time() ] )
  *  Returns a string formatted according to the given format string using
  *  the given integer timestamp or the current time if no timestamp is given.
- *  In other words, timestamp is optional and defaults to the value of time().
+ *  In other words, timestamp is optional and defaults to the value of time(). 
  * Parameters
  *  $format
  *   The format of the outputted date string (See code above)
  * $timestamp
  *   The optional timestamp parameter is an integer Unix timestamp
  *   that defaults to the current local time if a timestamp is not given.
- *   In other words, it defaults to the value of time().
+ *   In other words, it defaults to the value of time(). 
  * Return
  *  A formatted date string. If a non-numeric value is used for timestamp, FALSE is returned.
  */
@@ -16154,7 +16156,7 @@ static int jx9Builtin_date(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $timestamp
  *   The optional timestamp parameter is an integer Unix timestamp
  *   that defaults to the current local time if a timestamp is not given.
- *   In other words, it defaults to the value of time().
+ *   In other words, it defaults to the value of time(). 
  * Return
  * Returns a string formatted according format using the given timestamp
  * or the current local time if no timestamp is given.
@@ -16220,7 +16222,7 @@ static int jx9Builtin_strftime(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $timestamp
  *   The optional timestamp parameter is an integer Unix timestamp
  *   that defaults to the current local time if a timestamp is not given.
- *   In other words, it defaults to the value of time().
+ *   In other words, it defaults to the value of time(). 
  * Return
  *  A formatted date string. If a non-numeric value is used for timestamp, FALSE is returned.
  */
@@ -16343,7 +16345,7 @@ static int jx9Builtin_localtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		return JX9_OK;
 	}
 	if( nArg > 1 ){
-		isAssoc = jx9_value_to_bool(apArg[1]);
+		isAssoc = jx9_value_to_bool(apArg[1]); 
 	}
 	/* Fill the array */
 	/* Seconds */
@@ -16423,7 +16425,7 @@ static int jx9Builtin_localtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 /*
  * int idate(string $format [, int $timestamp = time() ])
  *  Returns a number formatted according to the given format string
- *  using the given integer timestamp or the current local time if
+ *  using the given integer timestamp or the current local time if 
  *  no timestamp is given. In other words, timestamp is optional and defaults
  *  to the value of time().
  *  Unlike the function date(), idate() accepts just one char in the format
@@ -16449,9 +16451,9 @@ static int jx9Builtin_localtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $timestamp
  *  The optional timestamp parameter is an integer Unix timestamp that defaults
  *  to the current local time if a timestamp is not given. In other words, it defaults
- *  to the value of time().
+ *  to the value of time(). 
  * Return
- *  An integer.
+ *  An integer. 
  */
 static int jx9Builtin_idate(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -16588,9 +16590,9 @@ static int jx9Builtin_idate(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	return JX9_OK;
 }
 /*
- * int mktime/gmmktime([ int $hour = date("H") [, int $minute = date("i") [, int $second = date("s")
+ * int mktime/gmmktime([ int $hour = date("H") [, int $minute = date("i") [, int $second = date("s") 
  *  [, int $month = date("n") [, int $day = date("j") [, int $year = date("Y") [, int $is_dst = -1 ]]]]]]] )
- *  Returns the Unix timestamp corresponding to the arguments given. This timestamp is a 64bit integer
+ *  Returns the Unix timestamp corresponding to the arguments given. This timestamp is a 64bit integer 
  *  containing the number of seconds between the Unix Epoch (January 1 1970 00:00:00 GMT) and the time
  *  specified.
  *  Arguments may be left out in order from right to left; any arguments thus omitted will be set to
@@ -16605,28 +16607,28 @@ static int jx9Builtin_idate(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  the minute in the previous hour. Values greater than 59 reference the appropriate minute
  *  in the following hour(s).
  * $second
- *  The number of seconds relevant to the start of the minute. Negative values reference
- *  the second in the previous minute. Values greater than 59 reference the appropriate
+ *  The number of seconds relevant to the start of the minute. Negative values reference 
+ *  the second in the previous minute. Values greater than 59 reference the appropriate 
  * second in the following minute(s).
  * $month
  *  The number of the month relevant to the end of the previous year. Values 1 to 12 reference
  *  the normal calendar months of the year in question. Values less than 1 (including negative values)
  *  reference the months in the previous year in reverse order, so 0 is December, -1 is November)...
  * $day
- *  The number of the day relevant to the end of the previous month. Values 1 to 28, 29, 30 or 31
+ *  The number of the day relevant to the end of the previous month. Values 1 to 28, 29, 30 or 31 
  *  (depending upon the month) reference the normal days in the relevant month. Values less than 1
- *  (including negative values) reference the days in the previous month, so 0 is the last day
+ *  (including negative values) reference the days in the previous month, so 0 is the last day 
  *  of the previous month, -1 is the day before that, etc. Values greater than the number of days
  *  in the relevant month reference the appropriate day in the following month(s).
  * $year
  *  The number of the year, may be a two or four digit value, with values between 0-69 mapping
- *  to 2000-2069 and 70-100 to 1970-2000. On systems where time_t is a 32bit signed integer, as
+ *  to 2000-2069 and 70-100 to 1970-2000. On systems where time_t is a 32bit signed integer, as 
  *  most common today, the valid range for year is somewhere between 1901 and 2038.
  * $is_dst
- *  This parameter can be set to 1 if the time is during daylight savings time (DST), 0 if it is not,
- *  or -1 (the default) if it is unknown whether the time is within daylight savings time or not.
+ *  This parameter can be set to 1 if the time is during daylight savings time (DST), 0 if it is not, 
+ *  or -1 (the default) if it is unknown whether the time is within daylight savings time or not. 
  * Return
- *   mktime() returns the Unix timestamp of the arguments given.
+ *   mktime() returns the Unix timestamp of the arguments given. 
  *   If the arguments are invalid, the function returns FALSE
  */
 static int jx9Builtin_mktime(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -16711,7 +16713,7 @@ static int Consumer(const void *pData, unsigned int nLen, void *pUserData)
 }
 /*
  * string base64_encode(string $data)
- * string convert_uuencode(string $data)
+ * string convert_uuencode(string $data)  
  *  Encodes data with MIME base64
  * Parameter
  *  $data
@@ -16803,7 +16805,7 @@ static int jx9Builtin_urlencode(jx9_context *pCtx, int nArg, jx9_value **apArg)
 /*
  * string urldecode(string $str)
  *  Decodes any %## encoding in the given string.
- *  Plus symbols ('+') are decoded to a space character.
+ *  Plus symbols ('+') are decoded to a space character. 
  * Parameter
  *  $data
  *    Input string.
@@ -16834,162 +16836,162 @@ static int jx9Builtin_urldecode(jx9_context *pCtx, int nArg, jx9_value **apArg)
 /* Table of the built-in functions */
 static const jx9_builtin_func aBuiltInFunc[] = {
 	   /* Variable handling functions */
-	{ "is_bool"    , jx9Builtin_is_bool     },
-	{ "is_float"   , jx9Builtin_is_float    },
-	{ "is_real"    , jx9Builtin_is_float    },
-	{ "is_double"  , jx9Builtin_is_float    },
-	{ "is_int"     , jx9Builtin_is_int      },
-	{ "is_integer" , jx9Builtin_is_int      },
-	{ "is_long"    , jx9Builtin_is_int      },
-	{ "is_string"  , jx9Builtin_is_string   },
-	{ "is_null"    , jx9Builtin_is_null     },
-	{ "is_numeric" , jx9Builtin_is_numeric  },
-	{ "is_scalar"  , jx9Builtin_is_scalar   },
-	{ "is_array"   , jx9Builtin_is_array    },
-	{ "is_object"  , jx9Builtin_is_object   },
-	{ "is_resource", jx9Builtin_is_resource },
-	{ "douleval"   , jx9Builtin_floatval    },
-	{ "floatval"   , jx9Builtin_floatval    },
-	{ "intval"     , jx9Builtin_intval      },
-	{ "strval"     , jx9Builtin_strval      },
-	{ "empty"      , jx9Builtin_empty       },
+	{ "is_bool"    , jx9Builtin_is_bool     }, 
+	{ "is_float"   , jx9Builtin_is_float    }, 
+	{ "is_real"    , jx9Builtin_is_float    }, 
+	{ "is_double"  , jx9Builtin_is_float    }, 
+	{ "is_int"     , jx9Builtin_is_int      }, 
+	{ "is_integer" , jx9Builtin_is_int      }, 
+	{ "is_long"    , jx9Builtin_is_int      }, 
+	{ "is_string"  , jx9Builtin_is_string   }, 
+	{ "is_null"    , jx9Builtin_is_null     }, 
+	{ "is_numeric" , jx9Builtin_is_numeric  }, 
+	{ "is_scalar"  , jx9Builtin_is_scalar   }, 
+	{ "is_array"   , jx9Builtin_is_array    }, 
+	{ "is_object"  , jx9Builtin_is_object   }, 
+	{ "is_resource", jx9Builtin_is_resource }, 
+	{ "douleval"   , jx9Builtin_floatval    }, 
+	{ "floatval"   , jx9Builtin_floatval    }, 
+	{ "intval"     , jx9Builtin_intval      }, 
+	{ "strval"     , jx9Builtin_strval      }, 
+	{ "empty"      , jx9Builtin_empty       }, 
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 #ifdef JX9_ENABLE_MATH_FUNC
 	   /* Math functions */
-	{ "abs"  ,    jx9Builtin_abs          },
-	{ "sqrt" ,    jx9Builtin_sqrt         },
-	{ "exp"  ,    jx9Builtin_exp          },
-	{ "floor",    jx9Builtin_floor        },
-	{ "cos"  ,    jx9Builtin_cos          },
-	{ "sin"  ,    jx9Builtin_sin          },
-	{ "acos" ,    jx9Builtin_acos         },
-	{ "asin" ,    jx9Builtin_asin         },
-	{ "cosh" ,    jx9Builtin_cosh         },
-	{ "sinh" ,    jx9Builtin_sinh         },
-	{ "ceil" ,    jx9Builtin_ceil         },
-	{ "tan"  ,    jx9Builtin_tan          },
-	{ "tanh" ,    jx9Builtin_tanh         },
-	{ "atan" ,    jx9Builtin_atan         },
-	{ "atan2",    jx9Builtin_atan2        },
-	{ "log"  ,    jx9Builtin_log          },
-	{ "log10" ,   jx9Builtin_log10        },
-	{ "pow"  ,    jx9Builtin_pow          },
-	{ "pi",       jx9Builtin_pi           },
-	{ "fmod",     jx9Builtin_fmod         },
-	{ "hypot",    jx9Builtin_hypot        },
+	{ "abs"  ,    jx9Builtin_abs          }, 
+	{ "sqrt" ,    jx9Builtin_sqrt         }, 
+	{ "exp"  ,    jx9Builtin_exp          }, 
+	{ "floor",    jx9Builtin_floor        }, 
+	{ "cos"  ,    jx9Builtin_cos          }, 
+	{ "sin"  ,    jx9Builtin_sin          }, 
+	{ "acos" ,    jx9Builtin_acos         }, 
+	{ "asin" ,    jx9Builtin_asin         }, 
+	{ "cosh" ,    jx9Builtin_cosh         }, 
+	{ "sinh" ,    jx9Builtin_sinh         }, 
+	{ "ceil" ,    jx9Builtin_ceil         }, 
+	{ "tan"  ,    jx9Builtin_tan          }, 
+	{ "tanh" ,    jx9Builtin_tanh         }, 
+	{ "atan" ,    jx9Builtin_atan         }, 
+	{ "atan2",    jx9Builtin_atan2        }, 
+	{ "log"  ,    jx9Builtin_log          }, 
+	{ "log10" ,   jx9Builtin_log10        }, 
+	{ "pow"  ,    jx9Builtin_pow          }, 
+	{ "pi",       jx9Builtin_pi           }, 
+	{ "fmod",     jx9Builtin_fmod         }, 
+	{ "hypot",    jx9Builtin_hypot        }, 
 #endif /* JX9_ENABLE_MATH_FUNC */
-	{ "round",    jx9Builtin_round        },
-	{ "dechex", jx9Builtin_dechex         },
-	{ "decoct", jx9Builtin_decoct         },
-	{ "decbin", jx9Builtin_decbin         },
-	{ "hexdec", jx9Builtin_hexdec         },
-	{ "bindec", jx9Builtin_bindec         },
-	{ "octdec", jx9Builtin_octdec         },
-	{ "base_convert", jx9Builtin_base_convert },
+	{ "round",    jx9Builtin_round        }, 
+	{ "dechex", jx9Builtin_dechex         }, 
+	{ "decoct", jx9Builtin_decoct         }, 
+	{ "decbin", jx9Builtin_decbin         }, 
+	{ "hexdec", jx9Builtin_hexdec         }, 
+	{ "bindec", jx9Builtin_bindec         }, 
+	{ "octdec", jx9Builtin_octdec         }, 
+	{ "base_convert", jx9Builtin_base_convert }, 
 	   /* String handling functions */
-	{ "substr",          jx9Builtin_substr     },
-	{ "substr_compare",  jx9Builtin_substr_compare },
-	{ "substr_count",    jx9Builtin_substr_count },
-	{ "chunk_split",     jx9Builtin_chunk_split},
-	{ "htmlspecialchars", jx9Builtin_htmlspecialchars },
-	{ "htmlspecialchars_decode", jx9Builtin_htmlspecialchars_decode },
-	{ "get_html_translation_table", jx9Builtin_get_html_translation_table },
-	{ "htmlentities", jx9Builtin_htmlentities},
-	{ "html_entity_decode", jx9Builtin_html_entity_decode},
-	{ "strlen"     , jx9Builtin_strlen     },
-	{ "strcmp"     , jx9Builtin_strcmp     },
-	{ "strcoll"    , jx9Builtin_strcmp     },
-	{ "strncmp"    , jx9Builtin_strncmp    },
-	{ "strcasecmp" , jx9Builtin_strcasecmp },
-	{ "strncasecmp", jx9Builtin_strncasecmp},
-	{ "implode"    , jx9Builtin_implode    },
-	{ "join"       , jx9Builtin_implode    },
-	{ "implode_recursive" , jx9Builtin_implode_recursive },
-	{ "join_recursive"    , jx9Builtin_implode_recursive },
-	{ "explode"     , jx9Builtin_explode    },
-	{ "trim"        , jx9Builtin_trim       },
-	{ "rtrim"       , jx9Builtin_rtrim      },
-	{ "chop"        , jx9Builtin_rtrim      },
-	{ "ltrim"       , jx9Builtin_ltrim      },
-	{ "strtolower",   jx9Builtin_strtolower },
+	{ "substr",          jx9Builtin_substr     }, 
+	{ "substr_compare",  jx9Builtin_substr_compare }, 
+	{ "substr_count",    jx9Builtin_substr_count }, 
+	{ "chunk_split",     jx9Builtin_chunk_split}, 
+	{ "htmlspecialchars", jx9Builtin_htmlspecialchars }, 
+	{ "htmlspecialchars_decode", jx9Builtin_htmlspecialchars_decode }, 
+	{ "get_html_translation_table", jx9Builtin_get_html_translation_table }, 
+	{ "htmlentities", jx9Builtin_htmlentities}, 
+	{ "html_entity_decode", jx9Builtin_html_entity_decode}, 
+	{ "strlen"     , jx9Builtin_strlen     }, 
+	{ "strcmp"     , jx9Builtin_strcmp     }, 
+	{ "strcoll"    , jx9Builtin_strcmp     }, 
+	{ "strncmp"    , jx9Builtin_strncmp    }, 
+	{ "strcasecmp" , jx9Builtin_strcasecmp }, 
+	{ "strncasecmp", jx9Builtin_strncasecmp}, 
+	{ "implode"    , jx9Builtin_implode    }, 
+	{ "join"       , jx9Builtin_implode    }, 
+	{ "implode_recursive" , jx9Builtin_implode_recursive }, 
+	{ "join_recursive"    , jx9Builtin_implode_recursive }, 
+	{ "explode"     , jx9Builtin_explode    }, 
+	{ "trim"        , jx9Builtin_trim       }, 
+	{ "rtrim"       , jx9Builtin_rtrim      }, 
+	{ "chop"        , jx9Builtin_rtrim      }, 
+	{ "ltrim"       , jx9Builtin_ltrim      }, 
+	{ "strtolower",   jx9Builtin_strtolower }, 
 	{ "mb_strtolower", jx9Builtin_strtolower }, /* Only UTF-8 encoding is supported */
-	{ "strtoupper",   jx9Builtin_strtoupper },
+	{ "strtoupper",   jx9Builtin_strtoupper }, 
 	{ "mb_strtoupper", jx9Builtin_strtoupper }, /* Only UTF-8 encoding is supported */
-	{ "ord",          jx9Builtin_ord        },
-	{ "chr",          jx9Builtin_chr        },
-	{ "bin2hex",      jx9Builtin_bin2hex    },
-	{ "strstr",       jx9Builtin_strstr     },
-	{ "stristr",      jx9Builtin_stristr    },
-	{ "strchr",       jx9Builtin_strstr     },
-	{ "strpos",       jx9Builtin_strpos     },
-	{ "stripos",      jx9Builtin_stripos    },
-	{ "strrpos",      jx9Builtin_strrpos    },
-	{ "strripos",     jx9Builtin_strripos   },
-	{ "strrchr",      jx9Builtin_strrchr    },
-	{ "strrev",       jx9Builtin_strrev     },
-	{ "str_repeat",   jx9Builtin_str_repeat },
-	{ "nl2br",        jx9Builtin_nl2br      },
-	{ "sprintf",      jx9Builtin_sprintf    },
-	{ "printf",       jx9Builtin_printf     },
-	{ "vprintf",      jx9Builtin_vprintf    },
-	{ "vsprintf",     jx9Builtin_vsprintf   },
-	{ "size_format",  jx9Builtin_size_format},
+	{ "ord",          jx9Builtin_ord        }, 
+	{ "chr",          jx9Builtin_chr        }, 
+	{ "bin2hex",      jx9Builtin_bin2hex    }, 
+	{ "strstr",       jx9Builtin_strstr     }, 
+	{ "stristr",      jx9Builtin_stristr    }, 
+	{ "strchr",       jx9Builtin_strstr     }, 
+	{ "strpos",       jx9Builtin_strpos     }, 
+	{ "stripos",      jx9Builtin_stripos    }, 
+	{ "strrpos",      jx9Builtin_strrpos    }, 
+	{ "strripos",     jx9Builtin_strripos   }, 
+	{ "strrchr",      jx9Builtin_strrchr    }, 
+	{ "strrev",       jx9Builtin_strrev     }, 
+	{ "str_repeat",   jx9Builtin_str_repeat }, 
+	{ "nl2br",        jx9Builtin_nl2br      }, 
+	{ "sprintf",      jx9Builtin_sprintf    }, 
+	{ "printf",       jx9Builtin_printf     }, 
+	{ "vprintf",      jx9Builtin_vprintf    }, 
+	{ "vsprintf",     jx9Builtin_vsprintf   }, 
+	{ "size_format",  jx9Builtin_size_format}, 
 #if !defined(JX9_DISABLE_HASH_FUNC)
-	{ "md5",          jx9Builtin_md5       },
-	{ "sha1",         jx9Builtin_sha1      },
-	{ "crc32",        jx9Builtin_crc32     },
+	{ "md5",          jx9Builtin_md5       }, 
+	{ "sha1",         jx9Builtin_sha1      }, 
+	{ "crc32",        jx9Builtin_crc32     }, 
 #endif /* JX9_DISABLE_HASH_FUNC */
-	{ "str_getcsv",   jx9Builtin_str_getcsv },
-	{ "strip_tags",   jx9Builtin_strip_tags },
-	{ "str_split",    jx9Builtin_str_split  },
-	{ "strspn",       jx9Builtin_strspn     },
-	{ "strcspn",      jx9Builtin_strcspn    },
-	{ "strpbrk",      jx9Builtin_strpbrk    },
-	{ "soundex",      jx9Builtin_soundex    },
-	{ "wordwrap",     jx9Builtin_wordwrap   },
-	{ "strtok",       jx9Builtin_strtok     },
-	{ "str_pad",      jx9Builtin_str_pad    },
-	{ "str_replace",  jx9Builtin_str_replace},
-	{ "str_ireplace", jx9Builtin_str_replace},
-	{ "strtr",        jx9Builtin_strtr      },
-	{ "parse_ini_string", jx9Builtin_parse_ini_string},
+	{ "str_getcsv",   jx9Builtin_str_getcsv }, 
+	{ "strip_tags",   jx9Builtin_strip_tags }, 
+	{ "str_split",    jx9Builtin_str_split  }, 
+	{ "strspn",       jx9Builtin_strspn     }, 
+	{ "strcspn",      jx9Builtin_strcspn    }, 
+	{ "strpbrk",      jx9Builtin_strpbrk    }, 
+	{ "soundex",      jx9Builtin_soundex    }, 
+	{ "wordwrap",     jx9Builtin_wordwrap   }, 
+	{ "strtok",       jx9Builtin_strtok     }, 
+	{ "str_pad",      jx9Builtin_str_pad    }, 
+	{ "str_replace",  jx9Builtin_str_replace}, 
+	{ "str_ireplace", jx9Builtin_str_replace}, 
+	{ "strtr",        jx9Builtin_strtr      }, 
+	{ "parse_ini_string", jx9Builtin_parse_ini_string}, 
 	         /* Ctype functions */
-	{ "ctype_alnum", jx9Builtin_ctype_alnum },
-	{ "ctype_alpha", jx9Builtin_ctype_alpha },
-	{ "ctype_cntrl", jx9Builtin_ctype_cntrl },
-	{ "ctype_digit", jx9Builtin_ctype_digit },
-	{ "ctype_xdigit", jx9Builtin_ctype_xdigit},
-	{ "ctype_graph", jx9Builtin_ctype_graph },
-	{ "ctype_print", jx9Builtin_ctype_print },
-	{ "ctype_punct", jx9Builtin_ctype_punct },
-	{ "ctype_space", jx9Builtin_ctype_space },
-	{ "ctype_lower", jx9Builtin_ctype_lower },
-	{ "ctype_upper", jx9Builtin_ctype_upper },
+	{ "ctype_alnum", jx9Builtin_ctype_alnum }, 
+	{ "ctype_alpha", jx9Builtin_ctype_alpha }, 
+	{ "ctype_cntrl", jx9Builtin_ctype_cntrl }, 
+	{ "ctype_digit", jx9Builtin_ctype_digit }, 
+	{ "ctype_xdigit", jx9Builtin_ctype_xdigit}, 
+	{ "ctype_graph", jx9Builtin_ctype_graph }, 
+	{ "ctype_print", jx9Builtin_ctype_print }, 
+	{ "ctype_punct", jx9Builtin_ctype_punct }, 
+	{ "ctype_space", jx9Builtin_ctype_space }, 
+	{ "ctype_lower", jx9Builtin_ctype_lower }, 
+	{ "ctype_upper", jx9Builtin_ctype_upper }, 
 	         /* Time functions */
-	{ "time"    ,    jx9Builtin_time         },
-	{ "microtime",   jx9Builtin_microtime    },
-	{ "getdate" ,    jx9Builtin_getdate      },
-	{ "gettimeofday", jx9Builtin_gettimeofday },
-	{ "date",        jx9Builtin_date         },
-	{ "strftime",    jx9Builtin_strftime     },
-	{ "idate",       jx9Builtin_idate        },
-	{ "gmdate",      jx9Builtin_gmdate       },
-	{ "localtime",   jx9Builtin_localtime    },
-	{ "mktime",      jx9Builtin_mktime       },
-	{ "gmmktime",    jx9Builtin_mktime       },
+	{ "time"    ,    jx9Builtin_time         }, 
+	{ "microtime",   jx9Builtin_microtime    }, 
+	{ "getdate" ,    jx9Builtin_getdate      }, 
+	{ "gettimeofday", jx9Builtin_gettimeofday }, 
+	{ "date",        jx9Builtin_date         }, 
+	{ "strftime",    jx9Builtin_strftime     }, 
+	{ "idate",       jx9Builtin_idate        }, 
+	{ "gmdate",      jx9Builtin_gmdate       }, 
+	{ "localtime",   jx9Builtin_localtime    }, 
+	{ "mktime",      jx9Builtin_mktime       }, 
+	{ "gmmktime",    jx9Builtin_mktime       }, 
 	        /* URL functions */
-	{ "base64_encode", jx9Builtin_base64_encode },
-	{ "base64_decode", jx9Builtin_base64_decode },
-	{ "convert_uuencode", jx9Builtin_base64_encode },
-	{ "convert_uudecode", jx9Builtin_base64_decode },
-	{ "urlencode",    jx9Builtin_urlencode },
-	{ "urldecode",    jx9Builtin_urldecode },
-	{ "rawurlencode", jx9Builtin_urlencode },
-	{ "rawurldecode", jx9Builtin_urldecode },
+	{ "base64_encode", jx9Builtin_base64_encode }, 
+	{ "base64_decode", jx9Builtin_base64_decode }, 
+	{ "convert_uuencode", jx9Builtin_base64_encode }, 
+	{ "convert_uudecode", jx9Builtin_base64_decode }, 
+	{ "urlencode",    jx9Builtin_urlencode }, 
+	{ "urldecode",    jx9Builtin_urldecode }, 
+	{ "rawurlencode", jx9Builtin_urlencode }, 
+	{ "rawurldecode", jx9Builtin_urldecode }, 
 #endif /* JX9_DISABLE_BUILTIN_FUNC */
 };
 /*
- * Register the built-in functions defined above, the array functions
+ * Register the built-in functions defined above, the array functions 
  * defined in hashmap.c and the IO functions defined in vfs.c.
  */
 JX9_PRIVATE void jx9RegisterBuiltInFunction(jx9_vm *pVm)
@@ -17280,7 +17282,7 @@ static sxi32 GenStateLeaveBlock(jx9_gen_state *pGen, GenBlock **ppBlock)
 		*ppBlock = pBlock;
 	}else{
 		/* Safely release the block */
-		GenStateFreeBlock(&(*pBlock));
+		GenStateFreeBlock(&(*pBlock));	
 	}
 	return SXRET_OK;
 }
@@ -17320,7 +17322,7 @@ static sxu32 GenStateFixJumps(GenBlock *pBlock, sxi32 nJumpType, sxu32 nJumpDest
 {
 	JumpFixup *aFix;
 	VmInstr *pInstr;
-	sxu32 nFixed;
+	sxu32 nFixed; 
 	sxu32 n;
 	/* Point to the jump fixup table */
 	aFix = (JumpFixup *)SySetBasePtr(&pBlock->aJumpFix);
@@ -17361,7 +17363,7 @@ static jx9_value * GenStateInstallNumLiteral(jx9_gen_state *pGen, sxu32 *pIdx)
 		return 0;
 	}
 	*pIdx = nIdx;
-	/* TODO(chems): Create a numeric table (64bit int keys) same as
+	/* TODO(chems): Create a numeric table (64bit int keys) same as 
 	 * the constant string iterals table [optimization purposes].
 	 */
 	return pObj;
@@ -17371,8 +17373,8 @@ static jx9_value * GenStateInstallNumLiteral(jx9_gen_state *pGen, sxu32 *pIdx)
  * Notes on the integer type.
  *  According to the JX9 language reference manual
  *  Integers can be specified in decimal (base 10), hexadecimal (base 16), octal (base 8)
- *  or binary (base 2) notation, optionally preceded by a sign (- or +).
- *  To use octal notation, precede the number with a 0 (zero). To use hexadecimal
+ *  or binary (base 2) notation, optionally preceded by a sign (- or +). 
+ *  To use octal notation, precede the number with a 0 (zero). To use hexadecimal 
  *  notation precede the number with 0x. To use binary notation precede the number with 0b.
  */
 static sxi32 jx9CompileNumLiteral(jx9_gen_state *pGen,sxi32 iCompileFlag)
@@ -17412,12 +17414,12 @@ static sxi32 jx9CompileNumLiteral(jx9_gen_state *pGen,sxi32 iCompileFlag)
  *  Nowdocs are to single-quoted strings what heredocs are to double-quoted strings.
  *  A nowdoc is specified similarly to a heredoc, but no parsing is done inside a nowdoc.
  *  The construct is ideal for embedding JX9 code or other large blocks of text without the
- *  need for escaping. It shares some features in common with the SGML <![CDATA[ ]]>
+ *  need for escaping. It shares some features in common with the SGML <![CDATA[ ]]> 
  *  construct, in that it declares a block of text which is not for parsing.
  *  A nowdoc is identified with the same <<< sequence used for heredocs, but the identifier
- *  which follows is enclosed in single quotes, e.g. <<<'EOT'. All the rules for heredoc
+ *  which follows is enclosed in single quotes, e.g. <<<'EOT'. All the rules for heredoc 
  *  identifiers also apply to nowdoc identifiers, especially those regarding the appearance
- *  of the closing identifier.
+ *  of the closing identifier. 
  */
 static sxi32 jx9CompileNowdoc(jx9_gen_state *pGen,sxi32 iCompileFlag)
 {
@@ -17451,9 +17453,9 @@ static sxi32 jx9CompileNowdoc(jx9_gen_state *pGen,sxi32 iCompileFlag)
  *   The simplest way to specify a string is to enclose it in single quotes (the character ' ).
  *   To specify a literal single quote, escape it with a backslash (\). To specify a literal
  *   backslash, double it (\\). All other instances of backslash will be treated as a literal
- *   backslash: this means that the other escape sequences you might be used to, such as \r
+ *   backslash: this means that the other escape sequences you might be used to, such as \r 
  *   or \n, will be output literally as specified rather than having any special meaning.
- *
+ * 
  */
 JX9_PRIVATE sxi32 jx9CompileSimpleString(jx9_gen_state *pGen, sxi32 iCompileFlag)
 {
@@ -17539,9 +17541,9 @@ JX9_PRIVATE sxi32 jx9CompileSimpleString(jx9_gen_state *pGen, sxi32 iCompileFlag
  *   the end of the name.
  *   Similarly, an array index or an object property can be parsed. With array indices, the closing
  *   square bracket (]) marks the end of the index. The same rules apply to object properties
- *   as to simple variables.
+ *   as to simple variables. 
  *  Complex (curly) syntax
- *   This isn't called complex because the syntax is complex, but because it allows for the use
+ *   This isn't called complex because the syntax is complex, but because it allows for the use 
  *   of complex expressions.
  *   Any scalar variable, array element or object property with a string representation can be
  *   included via this syntax. Simply write the expression the same way as it would appear outside
@@ -17617,7 +17619,7 @@ static jx9_value * GenStateNewStrObj(jx9_gen_state *pGen,sxi32 *pCount)
  *  If this rule is broken and the closing identifier is not "clean", it will not be considered a closing
  *  identifier, and JX9 will continue looking for one. If a proper closing identifier is not found before
  *  the end of the current file, a parse error will result at the last line.
- *  Heredocs can not be used for initializing object properties.
+ *  Heredocs can not be used for initializing object properties. 
  * Double quoted
  *  If the string is enclosed in double-quotes ("), JX9 will interpret more escape sequences for special characters:
  *  Escaped characters Sequence 	Meaning
@@ -17640,7 +17642,7 @@ static sxi32 GenStateCompileString(jx9_gen_state *pGen)
 	SyString *pStr = &pGen->pIn->sData; /* Raw token value */
 	const char *zIn, *zCur, *zEnd;
 	jx9_value *pObj = 0;
-	sxi32 iCons;
+	sxi32 iCons;	
 	sxi32 rc;
 	/* Delimit the string */
 	zIn  = pStr->zString;
@@ -17904,7 +17906,7 @@ JX9_PRIVATE sxi32 jx9CompileLiteral(jx9_gen_state *pGen,sxi32 iCompileFlag)
 {
 	SyToken *pToken = pGen->pIn;
 	jx9_value *pObj;
-	SyString *pStr;
+	SyString *pStr;	
 	sxu32 nIdx;
 	/* Extract token value */
 	pStr = &pToken->sData;
@@ -17997,7 +17999,7 @@ static sxi32 GenStateCompileJSONEntry(
 	RE_SWAP_DELIMITER(pGen);
 	return rc;
 }
-/*
+/* 
  * Compile a Jx9 JSON Array.
  */
 JX9_PRIVATE sxi32 jx9CompileJsonArray(jx9_gen_state *pGen, sxi32 iCompileFlag)
@@ -18037,10 +18039,10 @@ JX9_PRIVATE sxi32 jx9CompileJsonArray(jx9_gen_state *pGen, sxi32 iCompileFlag)
 static sxi32 GenStateJSONObjectKeyNodeValidator(jx9_gen_state *pGen,jx9_expr_node *pRoot)
 {
 	sxi32 rc = SXRET_OK;
-	if( pRoot->xCode != jx9CompileVariable && pRoot->xCode != jx9CompileString
+	if( pRoot->xCode != jx9CompileVariable && pRoot->xCode != jx9CompileString 
 		&& pRoot->xCode != jx9CompileSimpleString && pRoot->xCode != jx9CompileLiteral ){
 		/* Unexpected expression */
-		rc = jx9GenCompileError(&(*pGen), E_ERROR, pRoot->pStart? pRoot->pStart->nLine : 0,
+		rc = jx9GenCompileError(&(*pGen), E_ERROR, pRoot->pStart? pRoot->pStart->nLine : 0, 
 			"JSON Object: Unexpected expression, key must be of type string, literal or simple variable");
 		if( rc != SXERR_ABORT ){
 			rc = SXERR_INVALID;
@@ -18048,7 +18050,7 @@ static sxi32 GenStateJSONObjectKeyNodeValidator(jx9_gen_state *pGen,jx9_expr_nod
 	}
 	return rc;
 }
-/*
+/* 
  * Compile a Jx9 JSON Object
  */
 JX9_PRIVATE sxi32 jx9CompileJsonObject(jx9_gen_state *pGen, sxi32 iCompileFlag)
@@ -18090,7 +18092,7 @@ JX9_PRIVATE sxi32 jx9CompileJsonObject(jx9_gen_state *pGen, sxi32 iCompileFlag)
 			}
 			/* Compile the expression holding the key */
 			rc = GenStateCompileJSONEntry(&(*pGen), pKey, pCur,
-				EXPR_FLAG_RDONLY_LOAD                /* Do not create the variable if inexistant */,
+				EXPR_FLAG_RDONLY_LOAD                /* Do not create the variable if inexistant */, 
 				GenStateJSONObjectKeyNodeValidator   /* Node validator callback */
 				);
 			if( rc == SXERR_ABORT ){
@@ -18143,7 +18145,7 @@ JX9_PRIVATE sxi32 jx9CompileLangConstruct(jx9_gen_state *pGen,sxi32 iCompileFlag
 					return SXERR_ABORT;
 				}
 				if( rc != SXERR_EMPTY ){
-					/* Ticket 1433-008: Optimization #1: Consume input directly
+					/* Ticket 1433-008: Optimization #1: Consume input directly 
 					 * without the overhead of a function call.
 					 * This is a very powerful optimization that improve
 					 * performance greatly.
@@ -18158,7 +18160,7 @@ JX9_PRIVATE sxi32 jx9CompileLangConstruct(jx9_gen_state *pGen,sxi32 iCompileFlag
 			pGen->pIn = pNext;
 		}
 		/* Restore token stream */
-		pGen->pEnd = pTmp;
+		pGen->pEnd = pTmp;	
 	}else{
 		sxi32 nArg = 0;
 		sxu32 nIdx = 0;
@@ -18207,7 +18209,7 @@ JX9_PRIVATE sxi32 jx9CompileVariable(jx9_gen_state *pGen,sxi32 iCompileFlag)
 	sxi32 iP1;
 	void *p3;
 	sxi32 rc;
-
+	
 	pGen->pIn++; /* Jump the dollar sign '$' */
 	if( pGen->pIn >= pGen->pEnd || (pGen->pIn->nType & (JX9_TK_ID|JX9_TK_KEYWORD)) == 0 ){
 		/* Invalid variable name */
@@ -18235,7 +18237,7 @@ JX9_PRIVATE sxi32 jx9CompileVariable(jx9_gen_state *pGen,sxi32 iCompileFlag)
 		/* Name already available */
 		zName = (char *)pEntry->pUserData;
 	}
-	p3 = (void *)zName;
+	p3 = (void *)zName;	
 	iP1 = 0;
 	if( iCompileFlag & EXPR_FLAG_RDONLY_LOAD ){
 		if( (iCompileFlag & EXPR_FLAG_LOAD_IDX_STORE) == 0 ){
@@ -18317,11 +18319,11 @@ JX9_PRIVATE sxi32 jx9CompileAnnonFunc(jx9_gen_state *pGen,sxi32 iCompileFlag)
  *  and continue execution at the condition evaluation and then the beginning of the next
  *  iteration.
  *  Note: Note that in JX9 the switch statement is considered a looping structure for
- *  the purposes of continue.
+ *  the purposes of continue. 
  *  continue accepts an optional numeric argument which tells it how many levels
  *  of enclosing loops it should skip to the end of.
  *  Note:
- *   continue 0; and continue 1; is the same as running continue;.
+ *   continue 0; and continue 1; is the same as running continue;. 
  */
 static sxi32 jx9CompileContinue(jx9_gen_state *pGen)
 {
@@ -18335,7 +18337,7 @@ static sxi32 jx9CompileContinue(jx9_gen_state *pGen)
 	pGen->pIn++;
 	if( pGen->pIn < pGen->pEnd && (pGen->pIn->nType & JX9_TK_NUM) ){
 		/* optional numeric argument which tells us how many levels
-		 * of enclosing loops we should skip to the end of.
+		 * of enclosing loops we should skip to the end of. 
 		 */
 		iLevel = (sxi32)jx9TokenValueToInt64(&pGen->pIn->sData);
 		if( iLevel < 2 ){
@@ -18377,20 +18379,21 @@ static sxi32 jx9CompileContinue(jx9_gen_state *pGen)
  *  break ends execution of the current for, foreach, while, do-while or switch
  *  structure.
  *  break accepts an optional numeric argument which tells it how many nested
- *  enclosing structures are to be broken out of.
+ *  enclosing structures are to be broken out of. 
  */
 static sxi32 jx9CompileBreak(jx9_gen_state *pGen)
 {
 	GenBlock *pLoop; /* Target loop */
 	sxi32 iLevel;    /* How many nesting loop to skip */
+	sxu32 nLine;
 	sxi32 rc;
-	//nLine = pGen->pIn->nLine;
+	nLine = pGen->pIn->nLine;
 	iLevel = 0;
 	/* Jump the 'break' keyword */
 	pGen->pIn++;
 	if( pGen->pIn < pGen->pEnd && (pGen->pIn->nType & JX9_TK_NUM) ){
 		/* optional numeric argument which tells us how many levels
-		 * of enclosing loops we should skip to the end of.
+		 * of enclosing loops we should skip to the end of. 
 		 */
 		iLevel = (sxi32)jx9TokenValueToInt64(&pGen->pIn->sData);
 		if( iLevel < 2 ){
@@ -18408,7 +18411,7 @@ static sxi32 jx9CompileBreak(jx9_gen_state *pGen)
 			return SXERR_ABORT;
 		}
 	}else{
-		sxu32 nInstrIdx;
+		sxu32 nInstrIdx; 
 		rc = jx9VmEmitInstr(pGen->pVm, JX9_OP_JMP, 0, 0, 0, &nInstrIdx);
 		if( rc == SXRET_OK ){
 			/* Fix the jump later when the jump destination is resolved */
@@ -18462,7 +18465,7 @@ static sxi32 jx9CompileBlock(
 				return SXERR_ABORT;
 			}
 		}
-		GenStateLeaveBlock(&(*pGen), 0);
+		GenStateLeaveBlock(&(*pGen), 0);			
 	}else{
 		/* Compile a single statement */
 		rc = GenStateCompileChunk(&(*pGen),JX9_COMPILE_SINGLE_STMT);
@@ -18496,7 +18499,7 @@ static sxi32 jx9CompileBlock(
  *   endwhile;
  */
 static sxi32 jx9CompileWhile(jx9_gen_state *pGen)
-{
+{ 
 	GenBlock *pWhileBlock = 0;
 	SyToken *pTmp, *pEnd = 0;
 	sxu32 nFalseJump;
@@ -18504,7 +18507,7 @@ static sxi32 jx9CompileWhile(jx9_gen_state *pGen)
 	sxi32 rc;
 	nLine = pGen->pIn->nLine;
 	/* Jump the 'while' keyword */
-	pGen->pIn++;
+	pGen->pIn++;    
 	if( pGen->pIn >= pGen->pEnd || (pGen->pIn->nType & JX9_TK_LPAREN) == 0 ){
 		/* Syntax error */
 		rc = jx9GenCompileError(pGen, E_ERROR, nLine, "Expected '(' after 'while' keyword");
@@ -18515,7 +18518,7 @@ static sxi32 jx9CompileWhile(jx9_gen_state *pGen)
 		goto Synchronize;
 	}
 	/* Jump the left parenthesis '(' */
-	pGen->pIn++;
+	pGen->pIn++; 
 	/* Create the loop block */
 	rc = GenStateEnterBlock(&(*pGen), GEN_BLOCK_LOOP, jx9VmInstrLength(pGen->pVm), 0, &pWhileBlock);
 	if( rc != SXRET_OK ){
@@ -18569,7 +18572,7 @@ static sxi32 jx9CompileWhile(jx9_gen_state *pGen)
 	/* Statement successfully compiled */
 	return SXRET_OK;
 Synchronize:
-	/* Synchronize with the first semi-colon ';' so we can avoid
+	/* Synchronize with the first semi-colon ';' so we can avoid 
 	 * compiling this erroneous block.
 	 */
 	while( pGen->pIn < pGen->pEnd && (pGen->pIn->nType & (JX9_TK_SEMI|JX9_TK_OCB)) == 0 ){
@@ -18606,7 +18609,7 @@ static sxi32 jx9CompileFor(jx9_gen_state *pGen)
 	sxi32 rc;
 	nLine = pGen->pIn->nLine;
 	/* Jump the 'for' keyword */
-	pGen->pIn++;
+	pGen->pIn++;    
 	if( pGen->pIn >= pGen->pEnd || (pGen->pIn->nType & JX9_TK_LPAREN) == 0 ){
 		/* Syntax error */
 		rc = jx9GenCompileError(pGen, E_ERROR, nLine, "Expected '(' after 'for' keyword");
@@ -18617,7 +18620,7 @@ static sxi32 jx9CompileFor(jx9_gen_state *pGen)
 		return SXRET_OK;
 	}
 	/* Jump the left parenthesis '(' */
-	pGen->pIn++;
+	pGen->pIn++; 
 	/* Delimit the init-expr;condition;post-expr */
 	jx9DelimitNestedTokens(pGen->pIn, pGen->pEnd, JX9_TK_LPAREN /* '(' */, JX9_TK_RPAREN /* ')' */, &pEnd);
 	if( pGen->pIn == pEnd || pEnd >= pGen->pEnd ){
@@ -18648,7 +18651,7 @@ static sxi32 jx9CompileFor(jx9_gen_state *pGen)
 	}
 	if( (pGen->pIn->nType & JX9_TK_SEMI) == 0 ){
 		/* Syntax error */
-		rc = jx9GenCompileError(pGen, E_ERROR, pGen->pIn->nLine,
+		rc = jx9GenCompileError(pGen, E_ERROR, pGen->pIn->nLine, 
 			"for: Expected ';' after initialization expressions");
 		if( rc == SXERR_ABORT ){
 			/* Error count limit reached, abort immediately */
@@ -18678,7 +18681,7 @@ static sxi32 jx9CompileFor(jx9_gen_state *pGen)
 	}
 	if( (pGen->pIn->nType & JX9_TK_SEMI) == 0 ){
 		/* Syntax error */
-		rc = jx9GenCompileError(pGen, E_ERROR, pGen->pIn->nLine,
+		rc = jx9GenCompileError(pGen, E_ERROR, pGen->pIn->nLine, 
 			"for: Expected ';' after conditionals expressions");
 		if( rc == SXERR_ABORT ){
 			/* Error count limit reached, abort immediately */
@@ -18759,7 +18762,7 @@ static sxi32 GenStateForEachNodeValidator(jx9_gen_state *pGen,jx9_expr_node *pRo
 		/* Unexpected expression */
 		rc = jx9GenCompileError(&(*pGen),
 			E_ERROR,
-			pRoot->pStart? pRoot->pStart->nLine : 0,
+			pRoot->pStart? pRoot->pStart->nLine : 0, 
 			"foreach: Expecting a variable name"
 			);
 		if( rc != SXERR_ABORT ){
@@ -18779,17 +18782,17 @@ static sxi32 GenStateForEachNodeValidator(jx9_gen_state *pGen,jx9_expr_node *pRo
  *    statement
  *  foreach (json_array_json_objec as $key,$value)
  *   statement
- *  The first form loops over the array given by array_expression. On each loop, the value
+ *  The first form loops over the array given by array_expression. On each loop, the value 
  *  of the current element is assigned to $value and the internal array pointer is advanced
  *  by one (so on the next loop, you'll be looking at the next element).
  *  The second form does the same thing, except that the current element's key will be assigned
  *  to the variable $key on each loop.
  *  Note:
  *  When foreach first starts executing, the internal array pointer is automatically reset to the
- *  first element of the array. This means that you do not need to call reset() before a foreach loop.
+ *  first element of the array. This means that you do not need to call reset() before a foreach loop. 
  */
 static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
-{
+{ 
 	SyToken *pCur, *pTmp, *pEnd = 0;
 	GenBlock *pForeachBlock = 0;
 	jx9_foreach_info *pInfo;
@@ -18799,7 +18802,7 @@ static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
 	sxi32 rc;
 	nLine = pGen->pIn->nLine;
 	/* Jump the 'foreach' keyword */
-	pGen->pIn++;
+	pGen->pIn++;    
 	if( pGen->pIn >= pGen->pEnd || (pGen->pIn->nType & JX9_TK_LPAREN) == 0 ){
 		/* Syntax error */
 		rc = jx9GenCompileError(pGen, E_ERROR, nLine, "foreach: Expected '('");
@@ -18810,7 +18813,7 @@ static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
 		goto Synchronize;
 	}
 	/* Jump the left parenthesis '(' */
-	pGen->pIn++;
+	pGen->pIn++; 
 	/* Create the loop block */
 	rc = GenStateEnterBlock(&(*pGen), GEN_BLOCK_LOOP, jx9VmInstrLength(pGen->pVm), 0, &pForeachBlock);
 	if( rc != SXRET_OK ){
@@ -18846,7 +18849,7 @@ static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
 		pCur++;
 	}
 	if( pCur <= pGen->pIn ){
-		rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine,
+		rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, 
 			"foreach: Missing array/object expression");
 		if( rc == SXERR_ABORT ){
 			/* Don't worry about freeing memory, everything will be released shortly */
@@ -18872,7 +18875,7 @@ static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
 		pGen->pIn++;
 	}
 	pCur++; /* Jump the 'as' keyword */
-	pGen->pIn = pCur;
+	pGen->pIn = pCur; 
 	if( pGen->pIn >= pEnd ){
 		rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "foreach: Missing $key => $value pair");
 		if( rc == SXERR_ABORT ){
@@ -18964,7 +18967,7 @@ static sxi32 jx9CompileForeach(jx9_gen_state *pGen)
 	/* Statement successfully compiled */
 	return SXRET_OK;
 Synchronize:
-	/* Synchronize with the first semi-colon ';' so we can avoid
+	/* Synchronize with the first semi-colon ';' so we can avoid 
 	 * compiling this erroneous block.
 	 */
 	while( pGen->pIn < pGen->pEnd && (pGen->pIn->nType & (JX9_TK_SEMI|JX9_TK_OCB)) == 0 ){
@@ -18976,7 +18979,7 @@ Synchronize:
  * Compile the infamous if/elseif/else if/else statements.
  * According to the JX9 language reference
  *  The if construct is one of the most important features of many languages JX9 included.
- *  It allows for conditional execution of code fragments. JX9 features an if structure
+ *  It allows for conditional execution of code fragments. JX9 features an if structure 
  *  that is similar to that of C:
  *  if (expr)
  *   statement
@@ -19011,7 +19014,7 @@ static sxi32 jx9CompileIf(jx9_gen_state *pGen)
 	sxi32 rc;
 	/* Jump the 'if' keyword */
 	pGen->pIn++;
-	pToken = pGen->pIn;
+	pToken = pGen->pIn; 
 	/* Create the conditional block */
 	rc = GenStateEnterBlock(&(*pGen), GEN_BLOCK_COND, jx9VmInstrLength(pGen->pVm), 0, &pCondBlock);
 	if( rc != SXRET_OK ){
@@ -19032,7 +19035,7 @@ static sxi32 jx9CompileIf(jx9_gen_state *pGen)
 			goto Synchronize;
 		}
 		/* Jump the left parenthesis '(' */
-		pToken++;
+		pToken++; 
 		/* Delimit the condition */
 		jx9DelimitNestedTokens(pToken, pGen->pEnd, JX9_TK_LPAREN /* '(' */, JX9_TK_RPAREN /* ')' */, &pEnd);
 		if( pToken >= pEnd || (pEnd->nType & JX9_TK_RPAREN) == 0 ){
@@ -19105,7 +19108,7 @@ static sxi32 jx9CompileIf(jx9_gen_state *pGen)
 			pGen->pIn++;
 			rc = jx9CompileBlock(&(*pGen));
 			if( rc == SXERR_ABORT ){
-
+				
 				return SXERR_ABORT;
 			}
 	}
@@ -19137,7 +19140,7 @@ Synchronize:
  *  from within the main script file, then script execution end.
  *  Note that since return() is a language construct and not a function, the parentheses
  *  surrounding its arguments are not required. It is common to leave them out, and you actually
- *  should do so as JX9 has less work to do in this case.
+ *  should do so as JX9 has less work to do in this case. 
  *  Note: If no parameter is supplied, then the parentheses must be omitted and JX9 is returning NULL instead..
  */
 static sxi32 jx9CompileReturn(jx9_gen_state *pGen)
@@ -19278,7 +19281,7 @@ static sxi32 jx9CompileStatic(jx9_gen_state *pGen)
 	return SXRET_OK;
 Synchronize:
 	/* Synchronize with the first semi-colon ';', so we can avoid compiling this erroneous
-	 * statement.
+	 * statement. 
 	 */
 	while(pGen->pIn < pGen->pEnd && (pGen->pIn->nType & JX9_TK_SEMI) ==  0 ){
 		pGen->pIn++;
@@ -19293,7 +19296,7 @@ Synchronize:
  *  A constant is case-sensitive by default. By convention, constant identifiers are always uppercase.
  *  The name of a constant follows the same rules as any label in JX9. A valid constant name starts
  *  with a letter or underscore, followed by any number of letters, numbers, or underscores.
- *  As a regular expression it would be expressed thusly: [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
+ *  As a regular expression it would be expressed thusly: [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]* 
  *  Syntax
  *  You can define a constant by using the define()-function or by using the const keyword outside
  *  a object definition. Once a constant is defined, it can never be changed or undefined.
@@ -19354,7 +19357,7 @@ static sxi32 jx9CompileConstant(jx9_gen_state *pGen)
 	rc = jx9CompileExpr(&(*pGen), 0, 0);
 	/* Emit the done instruction */
 	jx9VmEmitInstr(pGen->pVm, JX9_OP_DONE, (rc != SXERR_EMPTY ? 1 : 0), 0, 0, 0);
-	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer);
+	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer); 
 	if( rc == SXERR_ABORT ){
 		/* Don't worry about freeing memory, everything will be released shortly */
 		return SXERR_ABORT;
@@ -19386,7 +19389,7 @@ Synchronize:
  *   {
  *    uplink $a, $b;
  *    $b = $a + $b;
- *   }
+ *   } 
  *   Sum();
  *   print $b;
  *  ?>
@@ -19531,7 +19534,7 @@ static sxi32 GenStateCompileCaseExpr(jx9_gen_state *pGen, jx9_case_expr *pExpr)
 	rc = jx9CompileExpr(&(*pGen), 0, 0);
 	/* Emit the done instruction */
 	jx9VmEmitInstr(pGen->pVm, JX9_OP_DONE, (rc != SXERR_EMPTY ? 1 : 0), 0, 0, 0);
-	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer);
+	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer); 
 	/* Update token stream */
 	pGen->pIn  = pEnd;
 	pGen->pEnd = pTmp;
@@ -19549,8 +19552,8 @@ static sxi32 GenStateCompileCaseExpr(jx9_gen_state *pGen, jx9_case_expr *pExpr)
  *  This is exactly what the switch statement is for.
  *  Note: Note that unlike some other languages, the continue statement applies to switch and acts
  *  similar to break. If you have a switch inside a loop and wish to continue to the next iteration
- *  of the outer loop, use continue 2.
- *  Note that switch/case does loose comparision.
+ *  of the outer loop, use continue 2. 
+ *  Note that switch/case does loose comparision. 
  *  It is important to understand how the switch statement is executed in order to avoid mistakes.
  *  The switch statement executes line by line (actually, statement by statement).
  *  In the beginning, no code is executed. Only when a case statement is found with a value that
@@ -19561,7 +19564,7 @@ static sxi32 GenStateCompileCaseExpr(jx9_gen_state *pGen, jx9_case_expr *pExpr)
  *  case statement. In an elseif statement, the condition is evaluated again. If your condition
  *  is more complicated than a simple compare and/or is in a tight loop, a switch may be faster.
  *  The statement list for a case can also be empty, which simply passes control into the statement
- *  list for the next case.
+ *  list for the next case. 
  *  The case expression may be any expression that evaluates to a simple type, that is, integer
  *  or floating-point numbers and strings.
  */
@@ -19574,7 +19577,7 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 	sxi32 rc;
 	nLine = pGen->pIn->nLine;
 	/* Jump the 'switch' keyword */
-	pGen->pIn++;
+	pGen->pIn++;    
 	if( pGen->pIn >= pGen->pEnd || (pGen->pIn->nType & JX9_TK_LPAREN) == 0 ){
 		/* Syntax error */
 		rc = jx9GenCompileError(pGen, E_ERROR, nLine, "Expected '(' after 'switch' keyword");
@@ -19585,10 +19588,10 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 		goto Synchronize;
 	}
 	/* Jump the left parenthesis '(' */
-	pGen->pIn++;
+	pGen->pIn++; 
 	pEnd = 0; /* cc warning */
 	/* Create the loop block */
-	rc = GenStateEnterBlock(&(*pGen), GEN_BLOCK_LOOP|GEN_BLOCK_SWITCH,
+	rc = GenStateEnterBlock(&(*pGen), GEN_BLOCK_LOOP|GEN_BLOCK_SWITCH, 
 		jx9VmInstrLength(pGen->pVm), 0, &pSwitchBlock);
 	if( rc != SXRET_OK ){
 		return SXERR_ABORT;
@@ -19614,7 +19617,7 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 	}
 	/* Update token stream */
 	while(pGen->pIn < pEnd ){
-		rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine,
+		rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, 
 			"Switch: Unexpected token '%z'", &pGen->pIn->sData);
 		if( rc == SXERR_ABORT ){
 			return SXERR_ABORT;
@@ -19659,7 +19662,7 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 		if( (pGen->pIn->nType & JX9_TK_KEYWORD) == 0 ){
 			if(  (pGen->pIn->nType & JX9_TK_CCB /*}*/) == 0 ){
 				/* Unexpected token */
-				rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "Switch: Unexpected token '%z'",
+				rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "Switch: Unexpected token '%z'", 
 					&pGen->pIn->sData);
 				if( rc == SXERR_ABORT ){
 					return SXERR_ABORT;
@@ -19678,7 +19681,7 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 			 *  that wasn't matched by the other cases.
 			 */
 			if( pSwitch->nDefault > 0 ){
-				/* Default case already compiled */
+				/* Default case already compiled */ 
 				rc = jx9GenCompileError(&(*pGen), E_WARNING, pGen->pIn->nLine, "Switch: 'default' case already compiled");
 				if( rc == SXERR_ABORT ){
 					return SXERR_ABORT;
@@ -19714,7 +19717,7 @@ static sxi32 jx9CompileSwitch(jx9_gen_state *pGen)
 			}
 		}else{
 			/* Unexpected token */
-			rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "Switch: Unexpected token '%z'",
+			rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "Switch: Unexpected token '%z'", 
 				&pGen->pIn->sData);
 			if( rc == SXERR_ABORT ){
 				return SXERR_ABORT;
@@ -19780,7 +19783,7 @@ Synchronize:
  * 	    dump($a);
  *	  }
  *	  foo('This is a great feature'); // a is a string [first foo]
- *	  foo(52); // a is integer [second foo]
+ *	  foo(52); // a is integer [second foo] 
  *    foo(array(14, __TIME__, __DATE__)); // a is an array [third foo]
  * Please refer to the official documentation for more information on the powerful extension
  * introduced by the JX9 engine.
@@ -19798,7 +19801,7 @@ static sxi32 GenStateProcessArgValue(jx9_gen_state *pGen, jx9_vm_func_arg *pArg,
 	rc = jx9CompileExpr(&(*pGen), 0, 0);
 	/* Emit the done instruction */
 	jx9VmEmitInstr(pGen->pVm, JX9_OP_DONE, (rc != SXERR_EMPTY ? 1 : 0), 0, 0, 0);
-	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer);
+	jx9VmSetByteCodeContainer(pGen->pVm, pInstrContainer); 
 	RE_SWAP_DELIMITER(pGen);
 	if( rc == SXERR_ABORT ){
 		return SXERR_ABORT;
@@ -19811,7 +19814,7 @@ static sxi32 GenStateProcessArgValue(jx9_gen_state *pGen, jx9_vm_func_arg *pArg,
  * Information may be passed to functions via the argument list, which is a comma-delimited
  * list of expressions.
  * JX9 supports passing arguments by value (the default), passing by reference
- * and default argument values. Variable-length argument lists are also supported,
+ * and default argument values. Variable-length argument lists are also supported, 
  * see also the function references for func_num_args(), func_get_arg(), and func_get_args()
  * for more information.
  * Example #1 Passing arrays to functions
@@ -19845,12 +19848,13 @@ static sxi32 GenStateProcessArgValue(jx9_gen_state *pGen, jx9_vm_func_arg *pArg,
 static sxi32 GenStateCollectFuncArgs(jx9_vm_func *pFunc, jx9_gen_state *pGen, SyToken *pEnd)
 {
 	jx9_vm_func_arg sArg; /* Current processed argument */
-	SyToken *pIn;  /* Token stream */
+	SyToken *pCur, *pIn;  /* Token stream */
 	SyBlob sSig;         /* Function signature */
 	char *zDup;          /* Copy of argument name */
 	sxi32 rc;
 
 	pIn = pGen->pIn;
+	pCur = 0;
 	SyBlobInit(&sSig, &pGen->pVm->sAllocator);
 	/* Process arguments one after one */
 	for(;;){
@@ -19872,8 +19876,8 @@ static sxi32 GenStateCollectFuncArgs(jx9_vm_func *pFunc, jx9_gen_state *pGen, Sy
 				}else if( nKey & JX9_TKWRD_FLOAT ){
 					sArg.nType = MEMOBJ_REAL;
 				}else{
-					jx9GenCompileError(&(*pGen), E_WARNING, pGen->pIn->nLine,
-						"Invalid argument type '%z', Automatic cast will not be performed",
+					jx9GenCompileError(&(*pGen), E_WARNING, pGen->pIn->nLine, 
+						"Invalid argument type '%z', Automatic cast will not be performed", 
 						&pIn->sData);
 				}
 			}
@@ -19884,7 +19888,7 @@ static sxi32 GenStateCollectFuncArgs(jx9_vm_func *pFunc, jx9_gen_state *pGen, Sy
 			return rc;
 		}
 		if( pIn >= pEnd || (pIn->nType & JX9_TK_DOLLAR) == 0 || &pIn[1] >= pEnd || (pIn[1].nType & (JX9_TK_ID|JX9_TK_KEYWORD)) == 0 ){
-			/* Invalid argument */
+			/* Invalid argument */ 
 			rc = jx9GenCompileError(&(*pGen), E_ERROR, pGen->pIn->nLine, "Invalid argument name");
 			return rc;
 		}
@@ -20016,14 +20020,14 @@ static sxi32 GenStateCompileFuncBody(
  *  Function names follow the same rules as other labels in JX9. A valid function name
  *  starts with a letter or underscore, followed by any number of letters, numbers, or
  *  underscores. As a regular expression, it would be expressed thus:
- *     [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*.
+ *     [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*. 
  *  Functions need not be defined before they are referenced.
  *  All functions and objectes in JX9 have the global scope - they can be called outside
  *  a function even if they were defined inside and vice versa.
  *  It is possible to call recursive functions in JX9. However avoid recursive function/method
- *  calls with over 32-64 recursion levels.
- *
- * JX9 have introduced powerful extension including full type hinting, function overloading,
+ *  calls with over 32-64 recursion levels. 
+ * 
+ * JX9 have introduced powerful extension including full type hinting, function overloading, 
  * complex agrument values and more. Please refer to the official documentation for more information
  * on these extension.
  */
@@ -20172,7 +20176,7 @@ static sxi32 GenStateEmitExprCode(
 		return rc;
 	}
 	if( pNode->pOp == 0 ){
-		jx9GenCompileError(&(*pGen), E_ERROR, pNode->pStart->nLine,
+		jx9GenCompileError(&(*pGen), E_ERROR, pNode->pStart->nLine, 
 			"Invalid expression node, JX9 is aborting compilation");
 		return SXERR_ABORT;
 	}
@@ -20336,7 +20340,7 @@ static sxi32 GenStateEmitExprCode(
  *  Expressions are the most important building stones of JX9.
  *  In JX9, almost anything you write is an expression.
  *  The simplest yet most accurate way to define an expression
- *  is "anything that has a value".
+ *  is "anything that has a value". 
  * If something goes wrong while compiling the expression, this
  * function takes care of generating the appropriate error
  * message.
@@ -20658,7 +20662,7 @@ JX9_PRIVATE sxi32 jx9GenCompileError(jx9_gen_state *pGen,sxi32 nErrType,sxu32 nL
 		pGen->nErr++;
 		if( pGen->nErr > 15 ){
 			/* Error count limit reached */
-			SyBlobFormat(pWorker, "%u Error count limit reached, JX9 is aborting compilation\n", nLine);
+			SyBlobFormat(pWorker, "%u Error count limit reached, JX9 is aborting compilation\n", nLine);	
 			/* Abort immediately */
 			return SXERR_ABORT;
 		}
@@ -21222,7 +21226,7 @@ static void JX9_M_EULER_Const(jx9_value *pVal, void *pUserData)
 #endif /* JX9_DISABLE_BUILTIN_MATH */
 /*
  * DATE_ATOM
- *  Expand Atom (example: 2005-08-15T15:52:01+00:00)
+ *  Expand Atom (example: 2005-08-15T15:52:01+00:00) 
  */
 static void JX9_DATE_ATOM_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21231,7 +21235,7 @@ static void JX9_DATE_ATOM_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_COOKIE
- *  HTTP Cookies (example: Monday, 15-Aug-05 15:52:01 UTC)
+ *  HTTP Cookies (example: Monday, 15-Aug-05 15:52:01 UTC)  
  */
 static void JX9_DATE_COOKIE_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21240,7 +21244,7 @@ static void JX9_DATE_COOKIE_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_ISO8601
- *  ISO-8601 (example: 2005-08-15T15:52:01+0000)
+ *  ISO-8601 (example: 2005-08-15T15:52:01+0000) 
  */
 static void JX9_DATE_ISO8601_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21249,7 +21253,7 @@ static void JX9_DATE_ISO8601_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RFC822
- *  RFC 822 (example: Mon, 15 Aug 05 15:52:01 +0000)
+ *  RFC 822 (example: Mon, 15 Aug 05 15:52:01 +0000) 
  */
 static void JX9_DATE_RFC822_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21258,7 +21262,7 @@ static void JX9_DATE_RFC822_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RFC850
- *  RFC 850 (example: Monday, 15-Aug-05 15:52:01 UTC)
+ *  RFC 850 (example: Monday, 15-Aug-05 15:52:01 UTC) 
  */
 static void JX9_DATE_RFC850_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21267,7 +21271,7 @@ static void JX9_DATE_RFC850_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RFC1036
- *  RFC 1123 (example: Mon, 15 Aug 2005 15:52:01 +0000)
+ *  RFC 1123 (example: Mon, 15 Aug 2005 15:52:01 +0000) 
  */
 static void JX9_DATE_RFC1036_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21276,7 +21280,7 @@ static void JX9_DATE_RFC1036_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RFC1123
- *  RFC 1123 (example: Mon, 15 Aug 2005 15:52:01 +0000)
+ *  RFC 1123 (example: Mon, 15 Aug 2005 15:52:01 +0000)  
  */
 static void JX9_DATE_RFC1123_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21285,7 +21289,7 @@ static void JX9_DATE_RFC1123_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RFC2822
- *  RFC 2822 (Mon, 15 Aug 2005 15:52:01 +0000)
+ *  RFC 2822 (Mon, 15 Aug 2005 15:52:01 +0000)  
  */
 static void JX9_DATE_RFC2822_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21294,7 +21298,7 @@ static void JX9_DATE_RFC2822_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_RSS
- *  RSS (Mon, 15 Aug 2005 15:52:01 +0000)
+ *  RSS (Mon, 15 Aug 2005 15:52:01 +0000) 
  */
 static void JX9_DATE_RSS_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21303,7 +21307,7 @@ static void JX9_DATE_RSS_Const(jx9_value *pVal, void *pUserData)
 }
 /*
  * DATE_W3C
- *  World Wide Web Consortium (example: 2005-08-15T15:52:01+00:00)
+ *  World Wide Web Consortium (example: 2005-08-15T15:52:01+00:00) 
  */
 static void JX9_DATE_W3C_Const(jx9_value *pVal, void *pUserData)
 {
@@ -21952,146 +21956,146 @@ static void JX9_EXTR_PREFIX_IF_EXISTS_Const(jx9_value *pVal, void *pUserData)
  * Table of built-in constants.
  */
 static const jx9_builtin_constant aBuiltIn[] = {
-	{"JX9_VERSION",          JX9_VER_Const      },
-	{"JX9_ENGINE",           JX9_VER_Const      },
-	{"__JX9__",              JX9_VER_Const      },
-	{"JX9_OS",               JX9_OS_Const       },
-	{"__OS__",               JX9_OS_Const       },
-	{"JX9_EOL",              JX9_EOL_Const      },
-	{"JX9_INT_MAX",          JX9_INTMAX_Const   },
-	{"MAXINT",               JX9_INTMAX_Const   },
-	{"JX9_INT_SIZE",         JX9_INTSIZE_Const  },
-	{"PATH_SEPARATOR",       JX9_PATHSEP_Const  },
-	{"DIRECTORY_SEPARATOR",  JX9_DIRSEP_Const   },
-	{"DIR_SEP",              JX9_DIRSEP_Const   },
-	{"__TIME__",             JX9_TIME_Const     },
-	{"__DATE__",             JX9_DATE_Const     },
-	{"__FILE__",             JX9_FILE_Const     },
-	{"__DIR__",              JX9_DIR_Const      },
-	{"E_ERROR",              JX9_E_ERROR_Const  },
-	{"E_WARNING",            JX9_E_WARNING_Const},
-	{"E_PARSE",              JX9_E_PARSE_Const  },
-	{"E_NOTICE",             JX9_E_NOTICE_Const },
-	{"CASE_LOWER",           JX9_CASE_LOWER_Const   },
-	{"CASE_UPPER",           JX9_CASE_UPPER_Const   },
-	{"STR_PAD_LEFT",         JX9_STR_PAD_LEFT_Const },
-	{"STR_PAD_RIGHT",        JX9_STR_PAD_RIGHT_Const},
-	{"STR_PAD_BOTH",         JX9_STR_PAD_BOTH_Const },
-	{"COUNT_NORMAL",         JX9_COUNT_NORMAL_Const },
-	{"COUNT_RECURSIVE",      JX9_COUNT_RECURSIVE_Const },
-	{"SORT_ASC",             JX9_SORT_ASC_Const     },
-	{"SORT_DESC",            JX9_SORT_DESC_Const    },
-	{"SORT_REGULAR",         JX9_SORT_REG_Const     },
-	{"SORT_NUMERIC",         JX9_SORT_NUMERIC_Const },
-	{"SORT_STRING",          JX9_SORT_STRING_Const  },
-	{"JX9_ROUND_HALF_DOWN",  JX9_JX9_ROUND_HALF_DOWN_Const },
-	{"JX9_ROUND_HALF_EVEN",  JX9_JX9_ROUND_HALF_EVEN_Const },
-	{"JX9_ROUND_HALF_UP",    JX9_JX9_ROUND_HALF_UP_Const   },
-	{"JX9_ROUND_HALF_ODD",   JX9_JX9_ROUND_HALF_ODD_Const  },
-#ifdef JX9_ENABLE_MATH_FUNC
-	{"PI",                 JX9_M_PI_Const         },
-	{"M_E",                  JX9_M_E_Const          },
-	{"M_LOG2E",              JX9_M_LOG2E_Const      },
-	{"M_LOG10E",             JX9_M_LOG10E_Const     },
-	{"M_LN2",                JX9_M_LN2_Const        },
-	{"M_LN10",               JX9_M_LN10_Const       },
-	{"M_PI_2",               JX9_M_PI_2_Const       },
-	{"M_PI_4",               JX9_M_PI_4_Const       },
-	{"M_1_PI",               JX9_M_1_PI_Const       },
-	{"M_2_PI",               JX9_M_2_PI_Const       },
-	{"M_SQRTPI",             JX9_M_SQRTPI_Const     },
-	{"M_2_SQRTPI",           JX9_M_2_SQRTPI_Const   },
-	{"M_SQRT2",              JX9_M_SQRT2_Const      },
-	{"M_SQRT3",              JX9_M_SQRT3_Const      },
-	{"M_SQRT1_2",            JX9_M_SQRT1_2_Const    },
-	{"M_LNPI",               JX9_M_LNPI_Const       },
-	{"M_EULER",              JX9_M_EULER_Const      },
+	{"JX9_VERSION",          JX9_VER_Const      }, 
+	{"JX9_ENGINE",           JX9_VER_Const      }, 
+	{"__JX9__",              JX9_VER_Const      }, 
+	{"JX9_OS",               JX9_OS_Const       }, 
+	{"__OS__",               JX9_OS_Const       }, 
+	{"JX9_EOL",              JX9_EOL_Const      }, 
+	{"JX9_INT_MAX",          JX9_INTMAX_Const   }, 
+	{"MAXINT",               JX9_INTMAX_Const   }, 
+	{"JX9_INT_SIZE",         JX9_INTSIZE_Const  }, 
+	{"PATH_SEPARATOR",       JX9_PATHSEP_Const  }, 
+	{"DIRECTORY_SEPARATOR",  JX9_DIRSEP_Const   }, 
+	{"DIR_SEP",              JX9_DIRSEP_Const   }, 
+	{"__TIME__",             JX9_TIME_Const     }, 
+	{"__DATE__",             JX9_DATE_Const     }, 
+	{"__FILE__",             JX9_FILE_Const     }, 
+	{"__DIR__",              JX9_DIR_Const      }, 
+	{"E_ERROR",              JX9_E_ERROR_Const  }, 
+	{"E_WARNING",            JX9_E_WARNING_Const}, 
+	{"E_PARSE",              JX9_E_PARSE_Const  }, 
+	{"E_NOTICE",             JX9_E_NOTICE_Const }, 
+	{"CASE_LOWER",           JX9_CASE_LOWER_Const   }, 
+	{"CASE_UPPER",           JX9_CASE_UPPER_Const   }, 
+	{"STR_PAD_LEFT",         JX9_STR_PAD_LEFT_Const }, 
+	{"STR_PAD_RIGHT",        JX9_STR_PAD_RIGHT_Const}, 
+	{"STR_PAD_BOTH",         JX9_STR_PAD_BOTH_Const }, 
+	{"COUNT_NORMAL",         JX9_COUNT_NORMAL_Const }, 
+	{"COUNT_RECURSIVE",      JX9_COUNT_RECURSIVE_Const }, 
+	{"SORT_ASC",             JX9_SORT_ASC_Const     }, 
+	{"SORT_DESC",            JX9_SORT_DESC_Const    }, 
+	{"SORT_REGULAR",         JX9_SORT_REG_Const     }, 
+	{"SORT_NUMERIC",         JX9_SORT_NUMERIC_Const }, 
+	{"SORT_STRING",          JX9_SORT_STRING_Const  }, 
+	{"JX9_ROUND_HALF_DOWN",  JX9_JX9_ROUND_HALF_DOWN_Const }, 
+	{"JX9_ROUND_HALF_EVEN",  JX9_JX9_ROUND_HALF_EVEN_Const }, 
+	{"JX9_ROUND_HALF_UP",    JX9_JX9_ROUND_HALF_UP_Const   }, 
+	{"JX9_ROUND_HALF_ODD",   JX9_JX9_ROUND_HALF_ODD_Const  }, 
+#ifdef JX9_ENABLE_MATH_FUNC 
+	{"PI",                 JX9_M_PI_Const         }, 
+	{"M_E",                  JX9_M_E_Const          }, 
+	{"M_LOG2E",              JX9_M_LOG2E_Const      }, 
+	{"M_LOG10E",             JX9_M_LOG10E_Const     }, 
+	{"M_LN2",                JX9_M_LN2_Const        }, 
+	{"M_LN10",               JX9_M_LN10_Const       }, 
+	{"M_PI_2",               JX9_M_PI_2_Const       }, 
+	{"M_PI_4",               JX9_M_PI_4_Const       }, 
+	{"M_1_PI",               JX9_M_1_PI_Const       }, 
+	{"M_2_PI",               JX9_M_2_PI_Const       }, 
+	{"M_SQRTPI",             JX9_M_SQRTPI_Const     }, 
+	{"M_2_SQRTPI",           JX9_M_2_SQRTPI_Const   }, 
+	{"M_SQRT2",              JX9_M_SQRT2_Const      }, 
+	{"M_SQRT3",              JX9_M_SQRT3_Const      }, 
+	{"M_SQRT1_2",            JX9_M_SQRT1_2_Const    }, 
+	{"M_LNPI",               JX9_M_LNPI_Const       }, 
+	{"M_EULER",              JX9_M_EULER_Const      }, 
 #endif /* JX9_ENABLE_MATH_FUNC */
-	{"DATE_ATOM",            JX9_DATE_ATOM_Const    },
-	{"DATE_COOKIE",          JX9_DATE_COOKIE_Const  },
-	{"DATE_ISO8601",         JX9_DATE_ISO8601_Const },
-	{"DATE_RFC822",          JX9_DATE_RFC822_Const  },
-	{"DATE_RFC850",          JX9_DATE_RFC850_Const  },
-	{"DATE_RFC1036",         JX9_DATE_RFC1036_Const },
-	{"DATE_RFC1123",         JX9_DATE_RFC1123_Const },
-	{"DATE_RFC2822",         JX9_DATE_RFC2822_Const },
-	{"DATE_RFC3339",         JX9_DATE_ATOM_Const    },
-	{"DATE_RSS",             JX9_DATE_RSS_Const     },
-	{"DATE_W3C",             JX9_DATE_W3C_Const     },
-	{"ENT_COMPAT",           JX9_ENT_COMPAT_Const   },
-	{"ENT_QUOTES",           JX9_ENT_QUOTES_Const   },
-	{"ENT_NOQUOTES",         JX9_ENT_NOQUOTES_Const },
-	{"ENT_IGNORE",           JX9_ENT_IGNORE_Const   },
-	{"ENT_SUBSTITUTE",       JX9_ENT_SUBSTITUTE_Const},
-	{"ENT_DISALLOWED",       JX9_ENT_DISALLOWED_Const},
-	{"ENT_HTML401",          JX9_ENT_HTML401_Const  },
-	{"ENT_XML1",             JX9_ENT_XML1_Const     },
-	{"ENT_XHTML",            JX9_ENT_XHTML_Const    },
-	{"ENT_HTML5",            JX9_ENT_HTML5_Const    },
-	{"ISO-8859-1",           JX9_ISO88591_Const     },
-	{"ISO_8859_1",           JX9_ISO88591_Const     },
-	{"UTF-8",                JX9_UTF8_Const         },
-	{"UTF8",                 JX9_UTF8_Const         },
-	{"HTML_ENTITIES",        JX9_HTML_ENTITIES_Const},
-	{"HTML_SPECIALCHARS",    JX9_HTML_SPECIALCHARS_Const },
-	{"JX9_URL_SCHEME",       JX9_JX9_URL_SCHEME_Const},
-	{"JX9_URL_HOST",         JX9_JX9_URL_HOST_Const},
-	{"JX9_URL_PORT",         JX9_JX9_URL_PORT_Const},
-	{"JX9_URL_USER",         JX9_JX9_URL_USER_Const},
-	{"JX9_URL_PASS",         JX9_JX9_URL_PASS_Const},
-	{"JX9_URL_PATH",         JX9_JX9_URL_PATH_Const},
-	{"JX9_URL_QUERY",        JX9_JX9_URL_QUERY_Const},
-	{"JX9_URL_FRAGMENT",     JX9_JX9_URL_FRAGMENT_Const},
-	{"JX9_QUERY_RFC1738",    JX9_JX9_QUERY_RFC1738_Const},
-	{"JX9_QUERY_RFC3986",    JX9_JX9_QUERY_RFC3986_Const},
-	{"FNM_NOESCAPE",         JX9_FNM_NOESCAPE_Const },
-	{"FNM_PATHNAME",         JX9_FNM_PATHNAME_Const },
-	{"FNM_PERIOD",           JX9_FNM_PERIOD_Const   },
-	{"FNM_CASEFOLD",         JX9_FNM_CASEFOLD_Const },
-	{"PATHINFO_DIRNAME",     JX9_PATHINFO_DIRNAME_Const  },
-	{"PATHINFO_BASENAME",    JX9_PATHINFO_BASENAME_Const },
-	{"PATHINFO_EXTENSION",   JX9_PATHINFO_EXTENSION_Const},
-	{"PATHINFO_FILENAME",    JX9_PATHINFO_FILENAME_Const },
-	{"ASSERT_ACTIVE",        JX9_ASSERT_ACTIVE_Const     },
-	{"ASSERT_WARNING",       JX9_ASSERT_WARNING_Const    },
-	{"ASSERT_BAIL",          JX9_ASSERT_BAIL_Const       },
-	{"ASSERT_QUIET_EVAL",    JX9_ASSERT_QUIET_EVAL_Const },
-	{"ASSERT_CALLBACK",      JX9_ASSERT_CALLBACK_Const   },
-	{"SEEK_SET",             JX9_SEEK_SET_Const      },
-	{"SEEK_CUR",             JX9_SEEK_CUR_Const      },
-	{"SEEK_END",             JX9_SEEK_END_Const      },
-	{"LOCK_EX",              JX9_LOCK_EX_Const      },
-	{"LOCK_SH",              JX9_LOCK_SH_Const      },
-	{"LOCK_NB",              JX9_LOCK_NB_Const      },
-	{"LOCK_UN",              JX9_LOCK_UN_Const      },
-	{"FILE_USE_INC_PATH",    JX9_FILE_USE_INCLUDE_PATH_Const},
-	{"FILE_IGN_NL",          JX9_FILE_IGNORE_NEW_LINES_Const},
-	{"FILE_SKIP_EL",         JX9_FILE_SKIP_EMPTY_LINES_Const},
-	{"FILE_APPEND",          JX9_FILE_APPEND_Const },
-	{"SCANDIR_SORT_ASC",     JX9_SCANDIR_SORT_ASCENDING_Const  },
-	{"SCANDIR_SORT_DESC",    JX9_SCANDIR_SORT_DESCENDING_Const },
-	{"SCANDIR_SORT_NONE",    JX9_SCANDIR_SORT_NONE_Const },
-	{"GLOB_MARK",            JX9_GLOB_MARK_Const    },
-	{"GLOB_NOSORT",          JX9_GLOB_NOSORT_Const  },
-	{"GLOB_NOCHECK",         JX9_GLOB_NOCHECK_Const },
-	{"GLOB_NOESCAPE",        JX9_GLOB_NOESCAPE_Const},
-	{"GLOB_BRACE",           JX9_GLOB_BRACE_Const   },
-	{"GLOB_ONLYDIR",         JX9_GLOB_ONLYDIR_Const },
-	{"GLOB_ERR",             JX9_GLOB_ERR_Const     },
-	{"STDIN",                JX9_STDIN_Const        },
-	{"stdin",                JX9_STDIN_Const        },
-	{"STDOUT",               JX9_STDOUT_Const       },
-	{"stdout",               JX9_STDOUT_Const       },
-	{"STDERR",               JX9_STDERR_Const       },
-	{"stderr",               JX9_STDERR_Const       },
-	{"INI_SCANNER_NORMAL",   JX9_INI_SCANNER_NORMAL_Const },
-	{"INI_SCANNER_RAW",      JX9_INI_SCANNER_RAW_Const    },
-	{"EXTR_OVERWRITE",       JX9_EXTR_OVERWRITE_Const     },
-	{"EXTR_SKIP",            JX9_EXTR_SKIP_Const        },
-	{"EXTR_PREFIX_SAME",     JX9_EXTR_PREFIX_SAME_Const },
-	{"EXTR_PREFIX_ALL",      JX9_EXTR_PREFIX_ALL_Const  },
-	{"EXTR_PREFIX_INVALID",  JX9_EXTR_PREFIX_INVALID_Const },
-	{"EXTR_IF_EXISTS",       JX9_EXTR_IF_EXISTS_Const   },
+	{"DATE_ATOM",            JX9_DATE_ATOM_Const    }, 
+	{"DATE_COOKIE",          JX9_DATE_COOKIE_Const  }, 
+	{"DATE_ISO8601",         JX9_DATE_ISO8601_Const }, 
+	{"DATE_RFC822",          JX9_DATE_RFC822_Const  }, 
+	{"DATE_RFC850",          JX9_DATE_RFC850_Const  }, 
+	{"DATE_RFC1036",         JX9_DATE_RFC1036_Const }, 
+	{"DATE_RFC1123",         JX9_DATE_RFC1123_Const }, 
+	{"DATE_RFC2822",         JX9_DATE_RFC2822_Const }, 
+	{"DATE_RFC3339",         JX9_DATE_ATOM_Const    }, 
+	{"DATE_RSS",             JX9_DATE_RSS_Const     }, 
+	{"DATE_W3C",             JX9_DATE_W3C_Const     }, 
+	{"ENT_COMPAT",           JX9_ENT_COMPAT_Const   }, 
+	{"ENT_QUOTES",           JX9_ENT_QUOTES_Const   }, 
+	{"ENT_NOQUOTES",         JX9_ENT_NOQUOTES_Const }, 
+	{"ENT_IGNORE",           JX9_ENT_IGNORE_Const   }, 
+	{"ENT_SUBSTITUTE",       JX9_ENT_SUBSTITUTE_Const}, 
+	{"ENT_DISALLOWED",       JX9_ENT_DISALLOWED_Const}, 
+	{"ENT_HTML401",          JX9_ENT_HTML401_Const  }, 
+	{"ENT_XML1",             JX9_ENT_XML1_Const     }, 
+	{"ENT_XHTML",            JX9_ENT_XHTML_Const    }, 
+	{"ENT_HTML5",            JX9_ENT_HTML5_Const    }, 
+	{"ISO-8859-1",           JX9_ISO88591_Const     }, 
+	{"ISO_8859_1",           JX9_ISO88591_Const     }, 
+	{"UTF-8",                JX9_UTF8_Const         }, 
+	{"UTF8",                 JX9_UTF8_Const         }, 
+	{"HTML_ENTITIES",        JX9_HTML_ENTITIES_Const}, 
+	{"HTML_SPECIALCHARS",    JX9_HTML_SPECIALCHARS_Const }, 
+	{"JX9_URL_SCHEME",       JX9_JX9_URL_SCHEME_Const}, 
+	{"JX9_URL_HOST",         JX9_JX9_URL_HOST_Const}, 
+	{"JX9_URL_PORT",         JX9_JX9_URL_PORT_Const}, 
+	{"JX9_URL_USER",         JX9_JX9_URL_USER_Const}, 
+	{"JX9_URL_PASS",         JX9_JX9_URL_PASS_Const}, 
+	{"JX9_URL_PATH",         JX9_JX9_URL_PATH_Const}, 
+	{"JX9_URL_QUERY",        JX9_JX9_URL_QUERY_Const}, 
+	{"JX9_URL_FRAGMENT",     JX9_JX9_URL_FRAGMENT_Const}, 
+	{"JX9_QUERY_RFC1738",    JX9_JX9_QUERY_RFC1738_Const}, 
+	{"JX9_QUERY_RFC3986",    JX9_JX9_QUERY_RFC3986_Const}, 
+	{"FNM_NOESCAPE",         JX9_FNM_NOESCAPE_Const }, 
+	{"FNM_PATHNAME",         JX9_FNM_PATHNAME_Const }, 
+	{"FNM_PERIOD",           JX9_FNM_PERIOD_Const   }, 
+	{"FNM_CASEFOLD",         JX9_FNM_CASEFOLD_Const }, 
+	{"PATHINFO_DIRNAME",     JX9_PATHINFO_DIRNAME_Const  }, 
+	{"PATHINFO_BASENAME",    JX9_PATHINFO_BASENAME_Const }, 
+	{"PATHINFO_EXTENSION",   JX9_PATHINFO_EXTENSION_Const}, 
+	{"PATHINFO_FILENAME",    JX9_PATHINFO_FILENAME_Const }, 
+	{"ASSERT_ACTIVE",        JX9_ASSERT_ACTIVE_Const     }, 
+	{"ASSERT_WARNING",       JX9_ASSERT_WARNING_Const    }, 
+	{"ASSERT_BAIL",          JX9_ASSERT_BAIL_Const       }, 
+	{"ASSERT_QUIET_EVAL",    JX9_ASSERT_QUIET_EVAL_Const }, 
+	{"ASSERT_CALLBACK",      JX9_ASSERT_CALLBACK_Const   }, 
+	{"SEEK_SET",             JX9_SEEK_SET_Const      }, 
+	{"SEEK_CUR",             JX9_SEEK_CUR_Const      }, 
+	{"SEEK_END",             JX9_SEEK_END_Const      }, 
+	{"LOCK_EX",              JX9_LOCK_EX_Const      }, 
+	{"LOCK_SH",              JX9_LOCK_SH_Const      }, 
+	{"LOCK_NB",              JX9_LOCK_NB_Const      }, 
+	{"LOCK_UN",              JX9_LOCK_UN_Const      }, 
+	{"FILE_USE_INC_PATH",    JX9_FILE_USE_INCLUDE_PATH_Const}, 
+	{"FILE_IGN_NL",          JX9_FILE_IGNORE_NEW_LINES_Const}, 
+	{"FILE_SKIP_EL",         JX9_FILE_SKIP_EMPTY_LINES_Const}, 
+	{"FILE_APPEND",          JX9_FILE_APPEND_Const }, 
+	{"SCANDIR_SORT_ASC",     JX9_SCANDIR_SORT_ASCENDING_Const  }, 
+	{"SCANDIR_SORT_DESC",    JX9_SCANDIR_SORT_DESCENDING_Const }, 
+	{"SCANDIR_SORT_NONE",    JX9_SCANDIR_SORT_NONE_Const }, 
+	{"GLOB_MARK",            JX9_GLOB_MARK_Const    }, 
+	{"GLOB_NOSORT",          JX9_GLOB_NOSORT_Const  }, 
+	{"GLOB_NOCHECK",         JX9_GLOB_NOCHECK_Const }, 
+	{"GLOB_NOESCAPE",        JX9_GLOB_NOESCAPE_Const}, 
+	{"GLOB_BRACE",           JX9_GLOB_BRACE_Const   }, 
+	{"GLOB_ONLYDIR",         JX9_GLOB_ONLYDIR_Const }, 
+	{"GLOB_ERR",             JX9_GLOB_ERR_Const     }, 
+	{"STDIN",                JX9_STDIN_Const        }, 
+	{"stdin",                JX9_STDIN_Const        }, 
+	{"STDOUT",               JX9_STDOUT_Const       }, 
+	{"stdout",               JX9_STDOUT_Const       }, 
+	{"STDERR",               JX9_STDERR_Const       }, 
+	{"stderr",               JX9_STDERR_Const       }, 
+	{"INI_SCANNER_NORMAL",   JX9_INI_SCANNER_NORMAL_Const }, 
+	{"INI_SCANNER_RAW",      JX9_INI_SCANNER_RAW_Const    }, 
+	{"EXTR_OVERWRITE",       JX9_EXTR_OVERWRITE_Const     }, 
+	{"EXTR_SKIP",            JX9_EXTR_SKIP_Const        }, 
+	{"EXTR_PREFIX_SAME",     JX9_EXTR_PREFIX_SAME_Const }, 
+	{"EXTR_PREFIX_ALL",      JX9_EXTR_PREFIX_ALL_Const  }, 
+	{"EXTR_PREFIX_INVALID",  JX9_EXTR_PREFIX_INVALID_Const }, 
+	{"EXTR_IF_EXISTS",       JX9_EXTR_IF_EXISTS_Const   }, 
 	{"EXTR_PREFIX_IF_EXISTS", JX9_EXTR_PREFIX_IF_EXISTS_Const}
 };
 /*
@@ -22100,7 +22104,7 @@ static const jx9_builtin_constant aBuiltIn[] = {
 JX9_PRIVATE void jx9RegisterBuiltInConstant(jx9_vm *pVm)
 {
 	sxu32 n;
-	/*
+	/* 
 	 * Note that all built-in constants have access to the jx9 virtual machine
 	 * that trigger the constant invocation as their private data.
 	 */
@@ -22155,13 +22159,13 @@ static sxu32 BinHash(const void *pSrc, sxu32 nLen)
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
-	}
+	}	
 	return nH;
 }
 /*
  * Return the total number of entries in a given hashmap.
  * If bRecurisve is set to TRUE then recurse on hashmap entries.
- * If the nesting limit is reached, this function abort immediately.
+ * If the nesting limit is reached, this function abort immediately. 
  */
 static sxi64 HashmapCount(jx9_hashmap *pMap, int bRecursive, int iRecCount)
 {
@@ -22295,7 +22299,7 @@ static void jx9HashmapUnlinkNode(jx9_hashmap_node *pNode)
 	/* Unlink from the map list */
 	MACRO_LD_REMOVE(pMap->pLast, pNode);
 	/* Restore to the free list */
-	jx9VmUnsetMemObj(pVm, pNode->nValIdx);
+	jx9VmUnsetMemObj(pVm, pNode->nValIdx);	
 	if( pNode->iType == HASHMAP_BLOB_NODE ){
 		SyBlobRelease(&pNode->xKey.sKey);
 	}
@@ -22386,7 +22390,7 @@ static sxi32 HashmapInsertIntKey(jx9_hashmap *pMap,sxi64 iKey,jx9_value *pValue)
 	if( pValue ){
 		/* Duplicate the value */
 		jx9MemObjStore(pValue, pObj);
-	}
+	}	
 	/* Hash the key */
 	nHash = pMap->xIntHash(iKey);
 	/* Allocate a new int node */
@@ -22511,9 +22515,9 @@ static sxi32 HashmapLookupBlobKey(
 		if( pNode == 0 ){
 			break;
 		}
-		if( pNode->iType == HASHMAP_BLOB_NODE
+		if( pNode->iType == HASHMAP_BLOB_NODE 
 			&& pNode->nHash == nHash
-			&& SyBlobLength(&pNode->xKey.sKey) == nKeyLen
+			&& SyBlobLength(&pNode->xKey.sKey) == nKeyLen 
 			&& SyMemcmp(SyBlobData(&pNode->xKey.sKey), pKey, nKeyLen) == 0 ){
 				/* Node found */
 				if( ppNode ){
@@ -22528,7 +22532,7 @@ static sxi32 HashmapLookupBlobKey(
 	return SXERR_NOTFOUND;
 }
 /*
- * Check if the given BLOB key looks like a decimal number.
+ * Check if the given BLOB key looks like a decimal number. 
  * Retrurn TRUE on success.FALSE otherwise.
  */
 static int HashmapIsIntKey(SyBlob *pKey)
@@ -22625,7 +22629,7 @@ static sxi32 HashmapInsert(
 			}
 			goto IntKey;
 		}
-		if( SXRET_OK == HashmapLookupBlobKey(&(*pMap), SyBlobData(&pKey->sBlob),
+		if( SXRET_OK == HashmapLookupBlobKey(&(*pMap), SyBlobData(&pKey->sBlob), 
 			SyBlobLength(&pKey->sBlob), &pNode) ){
 				/* Overwrite the old value */
 				jx9_value *pElem;
@@ -22668,7 +22672,7 @@ IntKey:
 		rc = HashmapInsertIntKey(&(*pMap), pKey->x.iVal, &(*pVal));
 		if( rc == SXRET_OK ){
 			if( pKey->x.iVal >= pMap->iNextIdx ){
-				/* Increment the automatic index */
+				/* Increment the automatic index */ 
 				pMap->iNextIdx = pKey->x.iVal + 1;
 				/* Make sure the automatic index is not reserved */
 				while( SXRET_OK == HashmapLookupIntKey(&(*pMap), pMap->iNextIdx, 0) ){
@@ -22721,7 +22725,7 @@ static sxi32 HashmapInsertNode(jx9_hashmap *pMap, jx9_hashmap_node *pNode, int b
 		}
 	}else{
 		/* Blob key */
-		rc = HashmapInsertBlobKey(&(*pMap), SyBlobData(&pNode->xKey.sKey),
+		rc = HashmapInsertBlobKey(&(*pMap), SyBlobData(&pNode->xKey.sKey), 
 			SyBlobLength(&pNode->xKey.sKey), pObj);
 	}
 	return rc;
@@ -22791,7 +22795,7 @@ static void HashmapRehashIntNode(jx9_hashmap_node *pEntry)
  * Perform a linear search on a given hashmap.
  * Write a pointer to the target node on success.
  * Otherwise SXERR_NOTFOUND is returned on failure.
- * Refer to [array_intersect(), array_diff(), in_array(), ...] implementations
+ * Refer to [array_intersect(), array_diff(), in_array(), ...] implementations 
  * for more information.
  */
 static int HashmapFindValue(
@@ -22859,7 +22863,7 @@ static int HashmapFindValue(
  *  Array Operators Example 	Name 	Result
  *  $a + $b 	Union 	Union of $a and $b.
  *  $a == $b 	Equality 	TRUE if $a and $b have the same key/value pairs.
- *  $a === $b 	Identity 	TRUE if $a and $b have the same key/value pairs in the same
+ *  $a === $b 	Identity 	TRUE if $a and $b have the same key/value pairs in the same 
  *                          order and of the same types.
  *  $a != $b 	Inequality 	TRUE if $a is not equal to $b.
  *  $a <> $b 	Inequality 	TRUE if $a is not equal to $b.
@@ -22969,7 +22973,7 @@ JX9_PRIVATE sxi32 jx9HashmapCmp(
  *  will overwrite the previous one. If, however, the arrays contain numeric keys
  *  the later value will not overwrite the original value, but will be appended.
  *  Values in the input array with numeric keys will be renumbered with incrementing
- *  keys starting from zero in the result array.
+ *  keys starting from zero in the result array. 
  */
 static sxi32 HashmapMerge(jx9_hashmap *pSrc, jx9_hashmap *pDest)
 {
@@ -23101,7 +23105,7 @@ JX9_PRIVATE sxi32 jx9HashmapUnion(jx9_hashmap *pLeft, jx9_hashmap *pRight)
 		/* Make sure the given key does not exists in the left array */
 		if( pEntry->iType == HASHMAP_BLOB_NODE ){
 			/* BLOB key */
-			if( SXRET_OK !=
+			if( SXRET_OK != 
 				HashmapLookupBlobKey(&(*pLeft), SyBlobData(&pEntry->xKey.sKey), SyBlobLength(&pEntry->xKey.sKey), 0) ){
 					pObj = HashmapExtractNodeValue(pEntry);
 					if( pObj ){
@@ -23212,9 +23216,9 @@ JX9_PRIVATE sxi32 jx9HashmapLoadBuiltin(jx9_vm *pVm)
 	 * 'SCRIPT_FILENAME'
 	 * The absolute pathname of the currently executing script.
 	 */
-	jx9_vm_config(pVm, JX9_VM_CONFIG_SERVER_ATTR,
-		"SCRIPT_FILENAME",
-		pFile ? pFile->zString : ":Memory:",
+	jx9_vm_config(pVm, JX9_VM_CONFIG_SERVER_ATTR, 
+		"SCRIPT_FILENAME", 
+		pFile ? pFile->zString : ":Memory:", 
 		pFile ? pFile->nByte : sizeof(":Memory:") - 1
 		);
 	/* All done, all global variables are installed now */
@@ -23506,7 +23510,7 @@ static sxi32 HashmapMergeSort(jx9_hashmap *pMap, ProcNodeCmp xCmp, void *pCmpDat
 	pMap->pCur = pMap->pFirst;
 	return SXRET_OK;
 }
-/*
+/* 
  * Node comparison callback.
  * used-by: [sort(), asort(), ...]
  */
@@ -23672,7 +23676,7 @@ static void HashmapSortRehash(jx9_hashmap *pMap)
  *   SORT_STRING - compare items as strings
  * Return
  *  TRUE on success or FALSE on failure.
- *
+ * 
  */
 static int jx9_hashmap_sort(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -23800,7 +23804,7 @@ static int jx9_hashmap_usort(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   The array or the object.
  * $mode
  *  If the optional mode parameter is set to COUNT_RECURSIVE (or 1), count()
- *  will recursively count the array. This is particularly useful for counting
+ *  will recursively count the array. This is particularly useful for counting 
  *  all the elements of a multidimensional array. count() does not detect infinite
  *  recursion.
  * Return
@@ -24031,7 +24035,7 @@ static sxi32 HashmapCurrentValue(jx9_context *pCtx, jx9_hashmap *pMap, int iDire
 			jx9_result_bool(pCtx, 0);
 			return JX9_OK;
 		}
-	}
+	}		
 	/* Point to the desired element */
 	pVal = HashmapExtractNodeValue(pCur);
 	if( pVal ){
@@ -24049,8 +24053,8 @@ static sxi32 HashmapCurrentValue(jx9_context *pCtx, jx9_hashmap *pMap, int iDire
  * Return
  *  The current() function simply returns the value of the array element that's currently
  *  being pointed to by the internal pointer. It does not move the pointer in any way.
- *  If the internal pointer points beyond the end of the elements list or the array
- *  is empty, current() returns FALSE.
+ *  If the internal pointer points beyond the end of the elements list or the array 
+ *  is empty, current() returns FALSE. 
  */
 static int jx9_hashmap_current(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24074,9 +24078,9 @@ static int jx9_hashmap_current(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Parameter
  *  $input: The input array.
  * Return
- *  next() behaves like current(), with one difference. It advances the internal array
- *  pointer one place forward before returning the element value. That means it returns
- *  the next array value and advances the internal array pointer by one.
+ *  next() behaves like current(), with one difference. It advances the internal array 
+ *  pointer one place forward before returning the element value. That means it returns 
+ *  the next array value and advances the internal array pointer by one. 
  */
 static int jx9_hashmap_next(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24094,7 +24098,7 @@ static int jx9_hashmap_next(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	HashmapCurrentValue(&(*pCtx), (jx9_hashmap *)apArg[0]->x.pOther, 1);
 	return JX9_OK;
 }
-/*
+/* 
  * value prev(array $input)
  *  Rewind the internal array pointer.
  * Parameter
@@ -24102,7 +24106,7 @@ static int jx9_hashmap_next(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Return
  *  Returns the array value in the previous place that's pointed
  *  to by the internal array pointer, or FALSE if there are no more
- *  elements.
+ *  elements. 
  */
 static int jx9_hashmap_prev(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24120,13 +24124,13 @@ static int jx9_hashmap_prev(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	HashmapCurrentValue(&(*pCtx), (jx9_hashmap *)apArg[0]->x.pOther, -1);
 	return JX9_OK;
 }
-/*
+/* 
  * value end(array $input)
  *  Set the internal pointer of an array to its last element.
  * Parameter
  *  $input: The input array.
  * Return
- *  Returns the value of the last element or FALSE for empty array.
+ *  Returns the value of the last element or FALSE for empty array. 
  */
 static int jx9_hashmap_end(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24150,13 +24154,13 @@ static int jx9_hashmap_end(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	HashmapCurrentValue(&(*pCtx), pMap, 0);
 	return JX9_OK;
 }
-/*
+/* 
  * value reset(array $array )
  *  Set the internal pointer of an array to its first element.
  * Parameter
  *  $input: The input array.
  * Return
- *  Returns the value of the first array element, or FALSE if the array is empty.
+ *  Returns the value of the first array element, or FALSE if the array is empty. 
  */
 static int jx9_hashmap_reset(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24189,8 +24193,8 @@ static int jx9_hashmap_reset(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Return
  *  The key() function simply returns the key of the array element that's currently
  *  being pointed to by the internal pointer. It does not move the pointer in any way.
- *  If the internal pointer points beyond the end of the elements list or the array
- *  is empty, key() returns NULL.
+ *  If the internal pointer points beyond the end of the elements list or the array 
+ *  is empty, key() returns NULL. 
  */
 static int jx9_hashmap_simple_key(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24219,7 +24223,7 @@ static int jx9_hashmap_simple_key(jx9_context *pCtx, int nArg, jx9_value **apArg
 		jx9_result_int64(pCtx, pCur->xKey.iKey);
 	}else{
 		/* Key is blob */
-		jx9_result_string(pCtx,
+		jx9_result_string(pCtx, 
 			(const char *)SyBlobData(&pCur->xKey.sKey), (int)SyBlobLength(&pCur->xKey.sKey));
 	}
 	return JX9_OK;
@@ -24231,11 +24235,11 @@ static int jx9_hashmap_simple_key(jx9_context *pCtx, int nArg, jx9_value **apArg
  *  $input
  *    The input array.
  * Return
- *  Returns the current key and value pair from the array array. This pair is returned
- *  in a four-element array, with the keys 0, 1, key, and value. Elements 0 and key
+ *  Returns the current key and value pair from the array array. This pair is returned 
+ *  in a four-element array, with the keys 0, 1, key, and value. Elements 0 and key 
  *  contain the key name of the array element, and 1 and value contain the data.
  *  If the internal pointer for the array points past the end of the array contents
- *  each() returns FALSE.
+ *  each() returns FALSE. 
  */
 static int jx9_hashmap_each(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24446,7 +24450,7 @@ static int jx9_hashmap_in_array(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		bStrict = jx9_value_to_bool(apArg[2]);
 	}
 	if( !jx9_value_is_json_array(apArg[1]) ){
-		/* haystack must be an array, perform a standard comparison */
+		/* haystack must be an array, perform a standard comparison */ 
 		rc = jx9_value_compare(pNeedle, apArg[1], bStrict);
 		/* Set the comparison result */
 		jx9_result_bool(pCtx, rc == 0);
@@ -24493,7 +24497,7 @@ static int jx9_hashmap_copy(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		jx9HashmapDup(pSrc, pMap);
 	}else{
 		/* Simple insertion */
-		jx9HashmapInsert(pMap, 0/* Automatic index assign*/, apArg[0]);
+		jx9HashmapInsert(pMap, 0/* Automatic index assign*/, apArg[0]); 
 	}
 	/* Return the duplicated array */
 	jx9_result_value(pCtx, pArray);
@@ -24531,7 +24535,7 @@ static int jx9_hashmap_erase(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $array1
  *    The array to compare from
  *  $array2
- *    An array to compare against
+ *    An array to compare against 
  *  $...
  *   More arrays to compare against
  * Return
@@ -24609,7 +24613,7 @@ static int jx9_hashmap_diff(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $array1
  *    The array to compare from
  *  $array2
- *    An array to compare against
+ *    An array to compare against 
  *  $...
  *   More arrays to compare against
  * Return
@@ -24745,7 +24749,7 @@ static void Int64Sum(jx9_context *pCtx, jx9_hashmap *pMap)
 	/* Return sum */
 	jx9_result_int64(pCtx, nSum);
 }
-/* number array_sum(array $array )
+/* number array_sum(array $array ) 
  * (See block-coment above)
  */
 static int jx9_hashmap_sum(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -24899,9 +24903,9 @@ static int jx9_hashmap_product(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   An array to run through the callback function.
  * Return
  *  Returns an array containing all the elements of arr1 after applying
- *  the callback function to each one.
+ *  the callback function to each one. 
  * NOTE:
- *  array_map() passes only a single value to the callback.
+ *  array_map() passes only a single value to the callback. 
  */
 static int jx9_hashmap_map(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -24962,7 +24966,7 @@ static int jx9_hashmap_map(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  the first, and the key/index second.
  * Note:
  *  If funcname needs to be working with the actual values of the array, specify the first
- *  parameter of funcname as a reference. Then, any changes made to those elements will
+ *  parameter of funcname as a reference. Then, any changes made to those elements will 
  *  be made in the original array itself.
  * $userdata
  *  If the optional userdata parameter is supplied, it will be passed as the third parameter
@@ -25014,34 +25018,34 @@ static int jx9_hashmap_walk(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * Table of built-in hashmap functions.
  */
 static const jx9_builtin_func aHashmapFunc[] = {
-	{"count",             jx9_hashmap_count },
-	{"sizeof",            jx9_hashmap_count },
-	{"array_key_exists",  jx9_hashmap_key_exists },
-	{"array_pop",         jx9_hashmap_pop     },
-	{"array_push",        jx9_hashmap_push    },
-	{"array_shift",       jx9_hashmap_shift   },
-	{"array_product",     jx9_hashmap_product },
-	{"array_sum",         jx9_hashmap_sum     },
-	{"array_values",      jx9_hashmap_values  },
+	{"count",             jx9_hashmap_count }, 
+	{"sizeof",            jx9_hashmap_count }, 
+	{"array_key_exists",  jx9_hashmap_key_exists }, 
+	{"array_pop",         jx9_hashmap_pop     }, 
+	{"array_push",        jx9_hashmap_push    }, 
+	{"array_shift",       jx9_hashmap_shift   }, 
+	{"array_product",     jx9_hashmap_product }, 
+	{"array_sum",         jx9_hashmap_sum     }, 
+	{"array_values",      jx9_hashmap_values  }, 
 	{"array_same",        jx9_hashmap_same    },
-	{"array_merge",       jx9_hashmap_merge   },
-	{"array_diff",        jx9_hashmap_diff    },
-	{"array_intersect",   jx9_hashmap_intersect},
+	{"array_merge",       jx9_hashmap_merge   }, 
+	{"array_diff",        jx9_hashmap_diff    }, 
+	{"array_intersect",   jx9_hashmap_intersect}, 
 	{"in_array",          jx9_hashmap_in_array },
-	{"array_copy",        jx9_hashmap_copy    },
-	{"array_erase",       jx9_hashmap_erase   },
-	{"array_map",         jx9_hashmap_map     },
-	{"array_walk",        jx9_hashmap_walk    },
-	{"sort",              jx9_hashmap_sort    },
-	{"rsort",             jx9_hashmap_rsort   },
-	{"usort",             jx9_hashmap_usort   },
-	{"current",           jx9_hashmap_current },
-	{"each",              jx9_hashmap_each    },
-	{"pos",               jx9_hashmap_current },
-	{"next",              jx9_hashmap_next    },
-	{"prev",              jx9_hashmap_prev    },
-	{"end",               jx9_hashmap_end     },
-	{"reset",             jx9_hashmap_reset   },
+	{"array_copy",        jx9_hashmap_copy    }, 
+	{"array_erase",       jx9_hashmap_erase   }, 
+	{"array_map",         jx9_hashmap_map     }, 
+	{"array_walk",        jx9_hashmap_walk    }, 
+	{"sort",              jx9_hashmap_sort    }, 
+	{"rsort",             jx9_hashmap_rsort   }, 
+	{"usort",             jx9_hashmap_usort   }, 
+	{"current",           jx9_hashmap_current }, 
+	{"each",              jx9_hashmap_each    }, 
+	{"pos",               jx9_hashmap_current }, 
+	{"next",              jx9_hashmap_next    }, 
+	{"prev",              jx9_hashmap_prev    }, 
+	{"end",               jx9_hashmap_end     }, 
+	{"reset",             jx9_hashmap_reset   }, 
 	{"key",               jx9_hashmap_simple_key }
 };
 /*
@@ -25055,9 +25059,9 @@ JX9_PRIVATE void jx9RegisterHashmapFunctions(jx9_vm *pVm)
 	}
 }
 /*
- * Iterate throw hashmap entries and invoke the given callback [i.e: xWalk()] for each
+ * Iterate throw hashmap entries and invoke the given callback [i.e: xWalk()] for each 
  * retrieved entry.
- * Note that argument are passed to the callback by copy. That is, any modification to
+ * Note that argument are passed to the callback by copy. That is, any modification to 
  * the entry value in the callback body will not alter the real value.
  * If the callback wishes to abort processing [i.e: it's invocation] it must return
  * a value different from JX9_OK.
@@ -25127,7 +25131,7 @@ JX9_PRIVATE sxi32 jx9HashmapWalk(
 #endif
 /* This file deals with JSON serialization, decoding and stuff like that. */
 /*
- * Section:
+ * Section: 
  *  JSON encoding/decoding routines.
  * Authors:
  *  Symisc Systems, devel@symisc.net.
@@ -25138,8 +25142,8 @@ JX9_PRIVATE sxi32 jx9HashmapWalk(
 /* Forward reference */
 static int VmJsonArrayEncode(jx9_value *pKey, jx9_value *pValue, void *pUserData);
 static int VmJsonObjectEncode(jx9_value *pKey, jx9_value *pValue, void *pUserData);
-/*
- * JSON encoder state is stored in an instance
+/* 
+ * JSON encoder state is stored in an instance 
  * of the following structure.
  */
 typedef struct json_private_data json_private_data;
@@ -25159,7 +25163,7 @@ struct json_private_data
  *   Boolean (true or false)
  *   Array (an ordered sequence of values, comma-separated and enclosed in square brackets; the values
  *    do not need to be of the same type)
- *   Object (an unordered collection of key:value pairs with the ':' character separating the key
+ *   Object (an unordered collection of key:value pairs with the ':' character separating the key 
  *     and the value, comma-separated and enclosed in curly braces; the keys must be strings and should
  *     be distinct from each other)
  *   null (empty)
@@ -25298,7 +25302,7 @@ static int VmJsonObjectEncode(jx9_value *pKey,jx9_value *pValue,void *pUserData)
 	return JX9_OK;
 }
 /*
- *  Returns a string containing the JSON representation of value.
+ *  Returns a string containing the JSON representation of value. 
  *  In other words, perform the serialization of the given JSON object.
  */
 JX9_PRIVATE int jx9JsonSerialize(jx9_value *pValue,SyBlob *pOut)
@@ -25328,7 +25332,7 @@ JX9_PRIVATE int jx9JsonSerialize(jx9_value *pValue,SyBlob *pOut)
 #define JSON_TK_COMMA   0x400 /* Single comma ',' */
 #define JSON_TK_ID      0x800 /* ID */
 #define JSON_TK_INVALID 0x1000 /* Unexpected token */
-/*
+/* 
  * Tokenize an entire JSON input.
  * Get a single low-level token from the input file.
  * Update the stream pointer so that it points to the first
@@ -25476,7 +25480,7 @@ static sxi32 VmJsonTokenize(SyStream *pStream, SyToken *pToken, void *pUserData,
 								}
 							}
 						}
-					}
+					}					
 				}else if( c=='e' || c=='E' ){
 					/* Real number */
 					pStream->zText++;
@@ -25488,7 +25492,7 @@ static sxi32 VmJsonTokenize(SyStream *pStream, SyToken *pToken, void *pUserData,
 						while( pStream->zText < pStream->zEnd && pStream->zText[0] < 0xc0 && SyisDigit(pStream->zText[0]) ){
 							pStream->zText++;
 						}
-					}
+					}					
 				}
 			}
 	}else{
@@ -25511,15 +25515,15 @@ static sxi32 VmJsonTokenize(SyStream *pStream, SyToken *pToken, void *pUserData,
 /*
  * JSON decoded input consumer callback signature.
  */
-typedef int (*ProcJSONConsumer)(jx9_context *, jx9_value *, jx9_value *, void *);
-/*
+typedef int (*ProcJSONConsumer)(jx9_context *, jx9_value *, jx9_value *, void *); 
+/* 
  * JSON decoder state is kept in the following structure.
  */
 typedef struct json_decoder json_decoder;
 struct json_decoder
 {
 	jx9_context *pCtx; /* Call context */
-	ProcJSONConsumer xConsumer; /* Consumer callback */
+	ProcJSONConsumer xConsumer; /* Consumer callback */ 
 	void *pUserData;   /* Last argument to xConsumer() */
 	int iFlags;        /* Configuration flags */
 	SyToken *pIn;      /* Token stream */
@@ -25581,14 +25585,14 @@ static void VmJsonDequoteString(const SyString *pStr, jx9_value *pWorker)
  *   Boolean (true or false)
  *   Array (an ordered sequence of values, comma-separated and enclosed in square brackets; the values
  *    do not need to be of the same type)
- *   Object (an unordered collection of key:value pairs with the ':' character separating the key
+ *   Object (an unordered collection of key:value pairs with the ':' character separating the key 
  *     and the value, comma-separated and enclosed in curly braces; the keys must be strings and should
  *     be distinct from each other)
  *   null (empty)
  * Non-significant white space may be added freely around the "structural characters" (i.e. the brackets "[{]}", colon ":" and comma ", ").
  */
 static sxi32 VmJsonDecode(
-	json_decoder *pDecoder, /* JSON decoder */
+	json_decoder *pDecoder, /* JSON decoder */      
 	jx9_value *pArrayKey    /* Key for the decoded array */
 	){
 	jx9_value *pWorker; /* Worker variable */
@@ -25615,7 +25619,7 @@ static sxi32 VmJsonDecode(
 			jx9_value_bool(pWorker, (pDecoder->pIn->nType & JSON_TK_TRUE) ? 1 : 0 );
 		}else if( pDecoder->pIn->nType & JSON_TK_NUM ){
 			SyString *pStr = &pDecoder->pIn->sData;
-			/*
+			/* 
 			 * Numeric value.
 			 * Get a string representation first then try to get a numeric
 			 * value.
@@ -25738,7 +25742,7 @@ static sxi32 VmJsonDecode(
 				VmJsonDequoteString(&pDecoder->pIn->sData, pKey);
 			}
 			/* Jump the key and the colon */
-			pDecoder->pIn += 2;
+			pDecoder->pIn += 2; 
 			/* Recurse and decode the value */
 			pDecoder->rec_count++;
 			rc = VmJsonDecode(pDecoder, pKey);
@@ -25828,7 +25832,7 @@ JX9_PRIVATE int jx9JsonDecode(jx9_context *pCtx,const char *zJSON,int nByte)
 	/* Decode the raw JSON input */
 	rc = VmJsonDecode(&sDecoder, 0);
 	if( rc == SXERR_ABORT ){
-		/*
+		/* 
 		 * Something goes wrong while decoding JSON input.Return NULL.
 		 */
 		jx9_result_null(pCtx);
@@ -25940,14 +25944,14 @@ static sxi32 jx9TokenizeInput(SyStream *pStream,SyToken *pToken,void *pUserData,
 	}else{
 		sxi32 c;
 		/* Non-alpha stream */
-		if( pStream->zText[0] == '#' ||
+		if( pStream->zText[0] == '#' || 
 			( pStream->zText[0] == '/' &&  &pStream->zText[1] < pStream->zEnd && pStream->zText[1] == '/') ){
 				pStream->zText++;
 				/* Inline comments */
 				while( pStream->zText < pStream->zEnd && pStream->zText[0] != '\n' ){
 					pStream->zText++;
 				}
-				/* Tell the upper-layer to ignore this token */
+				/* Tell the upper-layer to ignore this token */ 
 				return SXERR_CONTINUE;
 		}else if( pStream->zText[0] == '/' && &pStream->zText[1] < pStream->zEnd && pStream->zText[1] == '*' ){
 			pStream->zText += 2;
@@ -26038,15 +26042,15 @@ static sxi32 jx9TokenizeInput(SyStream *pStream,SyToken *pToken,void *pUserData,
 		pToken->nType = JX9_TK_OP;
 		switch(c){
 		case '$': pToken->nType = JX9_TK_DOLLAR; break;
-		case '{': pToken->nType = JX9_TK_OCB;   break;
+		case '{': pToken->nType = JX9_TK_OCB;   break; 
 		case '}': pToken->nType = JX9_TK_CCB;    break;
-		case '(': pToken->nType = JX9_TK_LPAREN; break;
-		case '[': pToken->nType |= JX9_TK_OSB;   break; /* Bitwise operation here, since the square bracket token '['
+		case '(': pToken->nType = JX9_TK_LPAREN; break; 
+		case '[': pToken->nType |= JX9_TK_OSB;   break; /* Bitwise operation here, since the square bracket token '[' 
 														 * is a potential operator [i.e: subscripting] */
 		case ']': pToken->nType = JX9_TK_CSB;    break;
 		case ')': {
 			SySet *pTokSet = pStream->pSet;
-			/* Assemble type cast operators [i.e: (int), (float), (bool)...] */
+			/* Assemble type cast operators [i.e: (int), (float), (bool)...] */ 
 			if( pTokSet->nUsed >= 2 ){
 				SyToken *pTmp;
 				/* Peek the last recongnized token */
@@ -26397,13 +26401,13 @@ static sxu32 keywordCode(const char *z, int n)
       95, 103, 109, 115, 121,
   };
   static const sxu32 aCode[31] = {
-    JX9_TKWRD_PRINT,   JX9_TKWRD_INT,      JX9_TKWRD_INT,     JX9_TKWRD_RETURN,   JX9_TKWRD_CONST,
+    JX9_TKWRD_PRINT,   JX9_TKWRD_INT,      JX9_TKWRD_INT,     JX9_TKWRD_RETURN,   JX9_TKWRD_CONST, 
     JX9_TKWRD_STATIC,  JX9_TKWRD_CASE,     JX9_TKWRD_AS,      JX9_TKWRD_ELIF,     JX9_TKWRD_ELSE,
-    JX9_TKWRD_IF,      JX9_TKWRD_FLOAT,    JX9_TKWRD_INCLUDE, JX9_TKWRD_DEFAULT,  JX9_TKWRD_DIE,
-    JX9_TKWRD_EXIT,    JX9_TKWRD_CONTINUE, JX9_TKWRD_DIE,     JX9_TKWRD_WHILE,    JX9_TKWRD_AS,
-    JX9_TKWRD_PRINT,   JX9_TKWRD_BOOL,     JX9_TKWRD_BOOL,    JX9_TKWRD_BREAK,    JX9_TKWRD_FOR,
-    JX9_TKWRD_FOREACH, JX9_TKWRD_FUNCTION, JX9_TKWRD_IMPORT,  JX9_TKWRD_STRING,  JX9_TKWRD_SWITCH,
-    JX9_TKWRD_UPLINK,
+    JX9_TKWRD_IF,      JX9_TKWRD_FLOAT,    JX9_TKWRD_INCLUDE, JX9_TKWRD_DEFAULT,  JX9_TKWRD_DIE, 
+    JX9_TKWRD_EXIT,    JX9_TKWRD_CONTINUE, JX9_TKWRD_DIE,     JX9_TKWRD_WHILE,    JX9_TKWRD_AS,  
+    JX9_TKWRD_PRINT,   JX9_TKWRD_BOOL,     JX9_TKWRD_BOOL,    JX9_TKWRD_BREAK,    JX9_TKWRD_FOR, 
+    JX9_TKWRD_FOREACH, JX9_TKWRD_FUNCTION, JX9_TKWRD_IMPORT,  JX9_TKWRD_STRING,  JX9_TKWRD_SWITCH,  
+    JX9_TKWRD_UPLINK,  
   };
   int h, i;
   if( n<2 ) return JX9_TK_ID;
@@ -26452,13 +26456,13 @@ static sxu32 keywordCode(const char *z, int n)
  *  A third way to delimit strings is the heredoc syntax: <<<. After this operator, an identifier
  *  is provided, then a newline. The string itself follows, and then the same identifier again
  *  to close the quotation.
- *  The closing identifier must begin in the first column of the line. Also, the identifier must
- *  follow the same naming rules as any other label in JX9: it must contain only alphanumeric
- *  characters and underscores, and must start with a non-digit character or underscore.
+ *  The closing identifier must begin in the first column of the line. Also, the identifier must 
+ *  follow the same naming rules as any other label in JX9: it must contain only alphanumeric 
+ *  characters and underscores, and must start with a non-digit character or underscore. 
  *  Heredoc text behaves just like a double-quoted string, without the double quotes.
  *  This means that quotes in a heredoc do not need to be escaped, but the escape codes listed
  *  above can still be used. Variables are expanded, but the same care must be taken when expressing
- *  complex variables inside a heredoc as with strings.
+ *  complex variables inside a heredoc as with strings. 
  *  Nowdocs are to single-quoted strings what heredocs are to double-quoted strings.
  *  A nowdoc is specified similarly to a heredoc, but no parsing is done inside a nowdoc.
  *  The construct is ideal for embedding JX9 code or other large blocks of text without the need
@@ -26585,7 +26589,7 @@ static sxi32 LexExtractNowdoc(SyStream *pStream, SyToken *pToken)
 }
 /*
  * Tokenize a raw jx9 input.
- * This is the public tokenizer called by most code generator routines.
+ * This is the public tokenizer called by most code generator routines. 
  */
 JX9_PRIVATE sxi32 jx9Tokenize(const char *zInput,sxu32 nLen,SySet *pOut)
 {
@@ -26649,11 +26653,11 @@ struct SyMutex
 };
 /* Preallocated static mutex */
 static SyMutex aStaticMutexes[] = {
-		{{0}, SXMUTEX_TYPE_STATIC_1},
-		{{0}, SXMUTEX_TYPE_STATIC_2},
-		{{0}, SXMUTEX_TYPE_STATIC_3},
-		{{0}, SXMUTEX_TYPE_STATIC_4},
-		{{0}, SXMUTEX_TYPE_STATIC_5},
+		{{0}, SXMUTEX_TYPE_STATIC_1}, 
+		{{0}, SXMUTEX_TYPE_STATIC_2}, 
+		{{0}, SXMUTEX_TYPE_STATIC_3}, 
+		{{0}, SXMUTEX_TYPE_STATIC_4}, 
+		{{0}, SXMUTEX_TYPE_STATIC_5}, 
 		{{0}, SXMUTEX_TYPE_STATIC_6}
 };
 static BOOL winMutexInit = FALSE;
@@ -26766,15 +26770,15 @@ struct SyMutex
 static SyMutex * UnixMutexNew(int nType)
 {
 	static SyMutex aStaticMutexes[] = {
-		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_1},
-		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_2},
-		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_3},
-		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_4},
-		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_5},
+		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_1}, 
+		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_2}, 
+		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_3}, 
+		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_4}, 
+		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_5}, 
 		{PTHREAD_MUTEX_INITIALIZER, SXMUTEX_TYPE_STATIC_6}
 	};
 	SyMutex *pMutex;
-
+	
 	if( nType == SXMUTEX_TYPE_FAST || nType == SXMUTEX_TYPE_RECURSIVE ){
 		pthread_mutexattr_t sRecursiveAttr;
   		/* Allocate a new mutex */
@@ -26798,7 +26802,7 @@ static SyMutex * UnixMutexNew(int nType)
 		pMutex = &aStaticMutexes[nType - 3];
 	}
   pMutex->nType = nType;
-
+  
   return pMutex;
 }
 static void UnixMutexRelease(SyMutex *pMutex)
@@ -26890,7 +26894,7 @@ static void * SyOSHeapRealloc(void *pOld, sxu32 nByte)
 #else
 	pNew = realloc(pOld, (size_t)nByte);
 #endif
-	return pNew;
+	return pNew;	
 }
 static void SyOSHeapFree(void *pPtr)
 {
@@ -26913,7 +26917,7 @@ JX9_PRIVATE sxu32 SyStrlen(const char *zSrc)
 		if( !zIn[0] ){ break; } zIn++;
 		if( !zIn[0] ){ break; } zIn++;
 		if( !zIn[0] ){ break; } zIn++;
-		if( !zIn[0] ){ break; } zIn++;
+		if( !zIn[0] ){ break; } zIn++;	
 	}
 	return (sxu32)(zIn - zSrc);
 }
@@ -26921,7 +26925,7 @@ JX9_PRIVATE sxi32 SyByteFind(const char *zStr, sxu32 nLen, sxi32 c, sxu32 *pPos)
 {
 	const char *zIn = zStr;
 	const char *zEnd;
-
+	
 	zEnd = &zIn[nLen];
 	for(;;){
 		if( zIn >= zEnd ){ break; }if( zIn[0] == c ){ if( pPos ){ *pPos = (sxu32)(zIn - zStr); } return SXRET_OK; } zIn++;
@@ -26936,7 +26940,7 @@ JX9_PRIVATE sxi32 SyByteFind2(const char *zStr, sxu32 nLen, sxi32 c, sxu32 *pPos
 {
 	const char *zIn = zStr;
 	const char *zEnd;
-
+	
 	zEnd = &zIn[nLen - 1];
 	for( ;; ){
 		if( zEnd < zIn ){ break; } if( zEnd[0] == c ){ if( pPos ){ *pPos =  (sxu32)(zEnd - zIn);} return SXRET_OK; } zEnd--;
@@ -26944,7 +26948,7 @@ JX9_PRIVATE sxi32 SyByteFind2(const char *zStr, sxu32 nLen, sxi32 c, sxu32 *pPos
 		if( zEnd < zIn ){ break; } if( zEnd[0] == c ){ if( pPos ){ *pPos =  (sxu32)(zEnd - zIn);} return SXRET_OK; } zEnd--;
 		if( zEnd < zIn ){ break; } if( zEnd[0] == c ){ if( pPos ){ *pPos =  (sxu32)(zEnd - zIn);} return SXRET_OK; } zEnd--;
 	}
-	return SXERR_NOTFOUND;
+	return SXERR_NOTFOUND; 
 }
 #endif /* JX9_DISABLE_BUILTIN_FUNC */
 JX9_PRIVATE sxi32 SyByteListFind(const char *zSrc, sxu32 nLen, const char *zList, sxu32 *pFirstPos)
@@ -26959,8 +26963,8 @@ JX9_PRIVATE sxi32 SyByteListFind(const char *zSrc, sxu32 nLen, const char *zList
 		if( zIn >= zEnd ){ break; }	for(zPtr = zList ; (c = zPtr[0]) != 0 ; zPtr++ ){ if( zIn[0] == c ){ if( pFirstPos ){ *pFirstPos = (sxu32)(zIn - zSrc); } return SXRET_OK; } } zIn++;
 		if( zIn >= zEnd ){ break; }	for(zPtr = zList ; (c = zPtr[0]) != 0 ; zPtr++ ){ if( zIn[0] == c ){ if( pFirstPos ){ *pFirstPos = (sxu32)(zIn - zSrc); } return SXRET_OK; } } zIn++;
 		if( zIn >= zEnd ){ break; }	for(zPtr = zList ; (c = zPtr[0]) != 0 ; zPtr++ ){ if( zIn[0] == c ){ if( pFirstPos ){ *pFirstPos = (sxu32)(zIn - zSrc); } return SXRET_OK; } } zIn++;
-	}
-	return SXERR_NOTFOUND;
+	}	
+	return SXERR_NOTFOUND; 
 }
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 JX9_PRIVATE sxi32 SyStrncmp(const char *zLeft, const char *zRight, sxu32 nLen)
@@ -26981,13 +26985,13 @@ JX9_PRIVATE sxi32 SyStrncmp(const char *zLeft, const char *zRight, sxu32 nLen)
 		if( nLen <= 0 ){ return 0; } if( zP[0] == 0 || zQ[0] == 0 || zP[0] != zQ[0] ){ break; } zP++; zQ++; nLen--;
 	}
 	return (sxi32)(zP[0] - zQ[0]);
-}
+}	
 #endif
 JX9_PRIVATE sxi32 SyStrnicmp(const char *zLeft, const char *zRight, sxu32 SLen)
 {
   	register unsigned char *p = (unsigned char *)zLeft;
 	register unsigned char *q = (unsigned char *)zRight;
-
+	
 	if( SX_EMPTY_STR(p) || SX_EMPTY_STR(q) ){
 		return SX_EMPTY_STR(p)? SX_EMPTY_STR(q) ? 0 : -1 :1;
 	}
@@ -26996,7 +27000,7 @@ JX9_PRIVATE sxi32 SyStrnicmp(const char *zLeft, const char *zRight, sxu32 SLen)
 		if( !SLen ){ return 0; }if( !*p || !*q || SyCharToLower(*p) != SyCharToLower(*q) ){ break; }p++;q++;--SLen;
 		if( !SLen ){ return 0; }if( !*p || !*q || SyCharToLower(*p) != SyCharToLower(*q) ){ break; }p++;q++;--SLen;
 		if( !SLen ){ return 0; }if( !*p || !*q || SyCharToLower(*p) != SyCharToLower(*q) ){ break; }p++;q++;--SLen;
-
+		
 	}
 	return (sxi32)(SyCharToLower(p[0]) - SyCharToLower(q[0]));
 }
@@ -27103,12 +27107,12 @@ static sxu32 MemOSChunkSize(void *pBlock)
 }
 /* Export OS allocation methods */
 static const SyMemMethods sOSAllocMethods = {
-	MemOSAlloc,
-	MemOSRealloc,
-	MemOSFree,
-	MemOSChunkSize,
-	0,
-	0,
+	MemOSAlloc, 
+	MemOSRealloc, 
+	MemOSFree, 
+	MemOSChunkSize, 
+	0, 
+	0, 
 	0
 };
 static void * MemBackendAlloc(SyMemBackend *pBackend, sxu32 nByte)
@@ -27122,7 +27126,7 @@ static void * MemBackendAlloc(SyMemBackend *pBackend, sxu32 nByte)
 	nByte += sizeof(SyMemBlock);
 	for(;;){
 		pBlock = (SyMemBlock *)pBackend->pMethods->xAlloc(nByte);
-		if( pBlock != 0 || pBackend->xMemError == 0 || nRetry > SXMEM_BACKEND_RETRY
+		if( pBlock != 0 || pBackend->xMemError == 0 || nRetry > SXMEM_BACKEND_RETRY 
 			|| SXERR_RETRY != pBackend->xMemError(pBackend->pUserData) ){
 				break;
 		}
@@ -27290,7 +27294,7 @@ JX9_PRIVATE sxi32 SyMemBackendDisbaleMutexing(SyMemBackend *pBackend)
 	}
 	SyMutexRelease(pBackend->pMutexMethods, pBackend->pMutex);
 	pBackend->pMutexMethods = 0;
-	pBackend->pMutex = 0;
+	pBackend->pMutex = 0; 
 	return SXRET_OK;
 }
 #endif
@@ -27298,14 +27302,14 @@ JX9_PRIVATE sxi32 SyMemBackendDisbaleMutexing(SyMemBackend *pBackend)
  * Memory pool allocator
  */
 #define SXMEM_POOL_MAGIC		0xDEAD
-#define SXMEM_POOL_MAXALLOC		(1<<(SXMEM_POOL_NBUCKETS+SXMEM_POOL_INCR))
+#define SXMEM_POOL_MAXALLOC		(1<<(SXMEM_POOL_NBUCKETS+SXMEM_POOL_INCR)) 
 #define SXMEM_POOL_MINALLOC		(1<<(SXMEM_POOL_INCR))
 static sxi32 MemPoolBucketAlloc(SyMemBackend *pBackend, sxu32 nBucket)
 {
 	char *zBucket, *zBucketEnd;
 	SyMemHeader *pHeader;
 	sxu32 nBucketSize;
-
+	
 	/* Allocate one big block first */
 	zBucket = (char *)MemBackendAlloc(&(*pBackend), SXMEM_POOL_MAXALLOC);
 	if( zBucket == 0 ){
@@ -27322,10 +27326,10 @@ static sxi32 MemPoolBucketAlloc(SyMemBackend *pBackend, sxu32 nBucket)
 		pHeader->pNext = (SyMemHeader *)&zBucket[nBucketSize];
 		/* Advance the cursor to the next available chunk */
 		pHeader = pHeader->pNext;
-		zBucket += nBucketSize;
+		zBucket += nBucketSize;	
 	}
 	pHeader->pNext = 0;
-
+	
 	return SXRET_OK;
 }
 static void * MemBackendPoolAlloc(SyMemBackend *pBackend, sxu32 nByte)
@@ -27854,7 +27858,7 @@ JX9_PRIVATE sxi32 SySetPut(SySet *pSet, const void *pItem)
 	}
 	zbase = (unsigned char *)pSet->pBase;
 	SX_MACRO_FAST_MEMCPY(pItem, &zbase[pSet->nUsed * pSet->eSize], pSet->eSize);
-	pSet->nUsed++;
+	pSet->nUsed++;	
 	return SXRET_OK;
 }
 JX9_PRIVATE sxi32 SySetAlloc(SySet *pSet, sxi32 nItem)
@@ -27871,7 +27875,7 @@ JX9_PRIVATE sxi32 SySetAlloc(SySet *pSet, sxi32 nItem)
 	}
 	pSet->nSize = nItem;
 	return SXRET_OK;
-}
+} 
 JX9_PRIVATE sxi32 SySetReset(SySet *pSet)
 {
 	pSet->nUsed   = 0;
@@ -27916,7 +27920,7 @@ JX9_PRIVATE void * SySetPeek(SySet *pSet)
 		return 0;
 	}
 	zBase = (const char *)pSet->pBase;
-	return (void *)&zBase[(pSet->nUsed - 1) * pSet->eSize];
+	return (void *)&zBase[(pSet->nUsed - 1) * pSet->eSize]; 
 }
 JX9_PRIVATE void * SySetPop(SySet *pSet)
 {
@@ -27927,7 +27931,7 @@ JX9_PRIVATE void * SySetPop(SySet *pSet)
 	}
 	zBase = (const char *)pSet->pBase;
 	pSet->nUsed--;
-	pData =  (void *)&zBase[pSet->nUsed * pSet->eSize];
+	pData =  (void *)&zBase[pSet->nUsed * pSet->eSize]; 
 	return pData;
 }
 JX9_PRIVATE void * SySetAt(SySet *pSet, sxu32 nIdx)
@@ -27938,7 +27942,7 @@ JX9_PRIVATE void * SySetAt(SySet *pSet, sxu32 nIdx)
 		return 0;
 	}
 	zBase = (const char *)pSet->pBase;
-	return (void *)&zBase[nIdx * pSet->eSize];
+	return (void *)&zBase[nIdx * pSet->eSize]; 
 }
 /* Private hash entry */
 struct SyHashEntry_Pr
@@ -28013,7 +28017,7 @@ static SyHashEntry_Pr * HashGetEntry(SyHash *pHash, const void *pKey, sxu32 nKey
 		if( pEntry == 0 ){
 			break;
 		}
-		if( pEntry->nHash == nHash && pEntry->nKeyLen == nKeyLen &&
+		if( pEntry->nHash == nHash && pEntry->nKeyLen == nKeyLen && 
 			pHash->xCmp(pEntry->pKey, pKey, nKeyLen) == 0 ){
 				return pEntry;
 		}
@@ -28278,12 +28282,12 @@ JX9_PRIVATE sxi32 SyStrToInt32(const char *zSrc, sxu32 nLen, void * pOutVal, con
 	}
 	/* Skip leading zero */
 	while(zSrc < zEnd && zSrc[0] == '0' ){
-		zSrc++;
+		zSrc++; 
 	}
 	i = 10;
 	if( (sxu32)(zEnd-zSrc) >= 10 ){
 		/* Handle overflow */
-		i = SyMemcmp(zSrc, (isNeg == TRUE) ? SXINT32_MIN_STR : SXINT32_MAX_STR, nLen) <= 0 ? 10 : 9;
+		i = SyMemcmp(zSrc, (isNeg == TRUE) ? SXINT32_MIN_STR : SXINT32_MAX_STR, nLen) <= 0 ? 10 : 9; 
 	}
 	for(;;){
 		if(zSrc >= zEnd || !i || !SyisDigit(zSrc[0])){ break; } nVal = nVal * 10 + ( zSrc[0] - '0' ) ; --i ; zSrc++;
@@ -28297,7 +28301,7 @@ JX9_PRIVATE sxi32 SyStrToInt32(const char *zSrc, sxu32 nLen, void * pOutVal, con
 	}
 	if( zRest ){
 		*zRest = (char *)zSrc;
-	}
+	}	
 	if( pOutVal ){
 		if( isNeg == TRUE && nVal != 0 ){
 			nVal = -nVal;
@@ -28349,7 +28353,7 @@ JX9_PRIVATE sxi32 SyStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal, con
 	}
 	if( zRest ){
 		*zRest = (char *)zSrc;
-	}
+	}	
 	if( pOutVal ){
 		if( isNeg == TRUE && nVal != 0 ){
 			nVal = -nVal;
@@ -28378,7 +28382,7 @@ JX9_PRIVATE sxi32 SyHexToint(sxi32 c)
 	case 'E': case 'e': return 14;
 	case 'F': case 'f': return 15;
 	}
-	return -1;
+	return -1; 	
 }
 JX9_PRIVATE sxi32 SyHexStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal, const char **zRest)
 {
@@ -28404,7 +28408,7 @@ JX9_PRIVATE sxi32 SyHexStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal, 
 	if( zSrc < &zEnd[-2] && zSrc[0] == '0' && (zSrc[1] == 'x' || zSrc[1] == 'X') ){
 		/* Bypass hex prefix */
 		zSrc += sizeof(char) * 2;
-	}
+	}	
 	/* Skip leading zero */
 	while(zSrc < zEnd && zSrc[0] == '0' ){
 		zSrc++;
@@ -28418,7 +28422,7 @@ JX9_PRIVATE sxi32 SyHexStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal, 
 	}
 	while( zSrc < zEnd && SyisSpace(zSrc[0]) ){
 		zSrc++;
-	}
+	}	
 	if( zRest ){
 		*zRest = zSrc;
 	}
@@ -28454,7 +28458,7 @@ JX9_PRIVATE sxi32 SyOctalStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal
 	}
 	/* Skip leading zero */
 	while(zSrc < zEnd && zSrc[0] == '0' ){
-		zSrc++;
+		zSrc++; 
 	}
 	zIn = zSrc;
 	for(;;){
@@ -28469,7 +28473,7 @@ JX9_PRIVATE sxi32 SyOctalStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVal
 	}
 	if( zRest ){
 		*zRest = zSrc;
-	}
+	}	
 	if( pOutVal ){
 		if( isNeg == TRUE && nVal != 0 ){
 			nVal = -nVal;
@@ -28506,7 +28510,7 @@ JX9_PRIVATE sxi32 SyBinaryStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVa
 	}
 	/* Skip leading zero */
 	while(zSrc < zEnd && zSrc[0] == '0' ){
-		zSrc++;
+		zSrc++; 
 	}
 	zIn = zSrc;
 	for(;;){
@@ -28521,7 +28525,7 @@ JX9_PRIVATE sxi32 SyBinaryStrToInt64(const char *zSrc, sxu32 nLen, void * pOutVa
 	}
 	if( zRest ){
 		*zRest = zSrc;
-	}
+	}	
 	if( pOutVal ){
 		if( isNeg == TRUE && nVal != 0 ){
 			nVal = -nVal;
@@ -28536,14 +28540,14 @@ JX9_PRIVATE sxi32 SyStrToReal(const char *zSrc, sxu32 nLen, void * pOutVal, cons
 #define SXDBL_MAX_EXP    308
 #define SXDBL_MIN_EXP_PLUS	307
 	static const sxreal aTab[] = {
-	10,
-	1.0e2,
-	1.0e4,
-	1.0e8,
-	1.0e16,
-	1.0e32,
-	1.0e64,
-	1.0e128,
+	10, 
+	1.0e2, 
+	1.0e4, 
+	1.0e8, 
+	1.0e16, 
+	1.0e32, 
+	1.0e64, 
+	1.0e128, 
 	1.0e256
 	};
 	sxu8 neg = FALSE;
@@ -28561,7 +28565,7 @@ JX9_PRIVATE sxi32 SyStrToReal(const char *zSrc, sxu32 nLen, void * pOutVal, cons
 #endif
 	zEnd = &zSrc[nLen];
 	while( zSrc < zEnd && SyisSpace(zSrc[0]) ){
-		zSrc++;
+		zSrc++; 
 	}
 	if( zSrc < zEnd && (zSrc[0] == '-' || zSrc[0] == '+' ) ){
 		neg =  zSrc[0] == '-' ? TRUE : FALSE ;
@@ -28586,13 +28590,13 @@ JX9_PRIVATE sxi32 SyStrToReal(const char *zSrc, sxu32 nLen, void * pOutVal, cons
 		Val /= dec;
 	}
 	if( neg == TRUE && Val != 0.0 ) {
-		Val = -Val ;
+		Val = -Val ; 
 	}
 	if( Lim <= 0 ){
 		/* jump overflow digit */
 		while( zSrc < zEnd ){
 			if( zSrc[0] == 'e' || zSrc[0] == 'E' ){
-				break;
+				break;  
 			}
 			zSrc++;
 		}
@@ -28612,8 +28616,8 @@ JX9_PRIVATE sxi32 SyStrToReal(const char *zSrc, sxu32 nLen, void * pOutVal, cons
 		if( neg  ){
 			if( exp > SXDBL_MIN_EXP_PLUS ) exp = SXDBL_MIN_EXP_PLUS ;
 		}else if ( exp > SXDBL_MAX_EXP ){
-			exp = SXDBL_MAX_EXP;
-		}
+			exp = SXDBL_MAX_EXP; 
+		}		
 		for( p = (sxreal *)aTab ; exp ; exp >>= 1 , p++ ){
 			if( exp & 01 ){
 				if( neg ){
@@ -28628,7 +28632,7 @@ JX9_PRIVATE sxi32 SyStrToReal(const char *zSrc, sxu32 nLen, void * pOutVal, cons
 		zSrc++;
 	}
 	if( zRest ){
-		*zRest = zSrc;
+		*zRest = zSrc; 
 	}
 	if( pOutVal ){
 		*(sxreal *)pOutVal = Val;
@@ -28647,7 +28651,7 @@ JX9_PRIVATE sxu32 SyBinHash(const void *pSrc, sxu32 nLen)
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
-	}
+	}	
 	return nH;
 }
 #ifndef JX9_DISABLE_BUILTIN_FUNC
@@ -28665,20 +28669,20 @@ JX9_PRIVATE sxi32 SyBase64Encode(const char *zSrc, sxu32 nLen, ProcConsumer xCon
 #endif
 	for(i = 0; i + 2 < nLen; i += 3){
 		z64[0] = zBase64[(zIn[i] >> 2) & 0x3F];
-		z64[1] = zBase64[( ((zIn[i] & 0x03) << 4)   | (zIn[i+1] >> 4)) & 0x3F];
+		z64[1] = zBase64[( ((zIn[i] & 0x03) << 4)   | (zIn[i+1] >> 4)) & 0x3F]; 
 		z64[2] = zBase64[( ((zIn[i+1] & 0x0F) << 2) | (zIn[i + 2] >> 6) ) & 0x3F];
 		z64[3] = zBase64[ zIn[i + 2] & 0x3F];
-
+		
 		rc = xConsumer((const void *)z64, sizeof(z64), pUserData);
 		if( rc != SXRET_OK ){return SXERR_ABORT;}
 
-	}
+	}	
 	if ( i+1 < nLen ){
 		z64[0] = zBase64[(zIn[i] >> 2) & 0x3F];
-		z64[1] = zBase64[( ((zIn[i] & 0x03) << 4)   | (zIn[i+1] >> 4)) & 0x3F];
+		z64[1] = zBase64[( ((zIn[i] & 0x03) << 4)   | (zIn[i+1] >> 4)) & 0x3F]; 
 		z64[2] = zBase64[(zIn[i+1] & 0x0F) << 2 ];
 		z64[3] = '=';
-
+		
 		rc = xConsumer((const void *)z64, sizeof(z64), pUserData);
 		if( rc != SXRET_OK ){return SXERR_ABORT;}
 
@@ -28687,7 +28691,7 @@ JX9_PRIVATE sxi32 SyBase64Encode(const char *zSrc, sxu32 nLen, ProcConsumer xCon
 		z64[1]   = zBase64[(zIn[i] & 0x03) << 4];
 		z64[2] = '=';
 		z64[3] = '=';
-
+		
 		rc = xConsumer((const void *)z64, sizeof(z64), pUserData);
 		if( rc != SXRET_OK ){return SXERR_ABORT;}
 	}
@@ -28697,10 +28701,10 @@ JX9_PRIVATE sxi32 SyBase64Encode(const char *zSrc, sxu32 nLen, ProcConsumer xCon
 JX9_PRIVATE sxi32 SyBase64Decode(const char *zB64, sxu32 nLen, ProcConsumer xConsumer, void *pUserData)
 {
 	static const sxu32 aBase64Trans[] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4,
-	5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27,
-	28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 
+	5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 
+	28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 
 	0, 0, 0
 	};
 	sxu32 n, w, x, y, z;
@@ -28768,7 +28772,7 @@ JX9_PRIVATE sxi32 SyLexInit(SyLex *pLex, SySet *pSet, ProcTokenizer xTokenizer, 
 	pStream = &pLex->sStream;
 	pLex->xTokenizer = xTokenizer;
 	pLex->pUserData = pUserData;
-
+	
 	pStream->nLine = 1;
 	pStream->nIgn  = 0;
 	pStream->zText = pStream->zEnd = 0;
@@ -28874,7 +28878,7 @@ JX9_PRIVATE sxi32 SyUriEncode(const char *zSrc, sxu32 nLen, ProcConsumer xConsum
 		}
 		if( zCur != zIn && SXRET_OK != (rc = xConsumer(zIn, (sxu32)(zCur-zIn), pUserData))){
 			break;
-		}
+		}		
 		if( c == ' ' ){
 			zOut[0] = '+';
 			rc = xConsumer((const void *)zOut, sizeof(unsigned char), pUserData);
@@ -28885,7 +28889,7 @@ JX9_PRIVATE sxi32 SyUriEncode(const char *zSrc, sxu32 nLen, ProcConsumer xConsum
 		}
 		if( SXRET_OK != rc ){
 			break;
-		}
+		}				
 		zIn = &zCur[1]; zCur = zIn ;
 	}
 	return rc == SXRET_OK ? SXRET_OK : SXERR_ABORT;
@@ -28904,19 +28908,19 @@ static sxi32 SyAsciiToHex(sxi32 c)
 	if( c >= 'A' && c <= 'F') {
 		c += 10 - 'A';
 		return c;
-	}
-	return 0;
+	}		
+	return 0; 
 }
 JX9_PRIVATE sxi32 SyUriDecode(const char *zSrc, sxu32 nLen, ProcConsumer xConsumer, void *pUserData, int bUTF8)
 {
 	static const sxu8 Utf8Trans[] = {
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-		0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-		0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 
+		0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
+		0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
 		0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x00, 0x00
 	};
 	const char *zIn = zSrc;
@@ -28980,7 +28984,7 @@ JX9_PRIVATE sxi32 SyUriDecode(const char *zSrc, sxu32 nLen, ProcConsumer xConsum
 					SX_WRITE_UTF8(zOutPtr, c);
 				}
 			}
-
+			
 		}
 		/* Consume the decoded characters */
 		rc = xConsumer((const void *)zOut, (unsigned int)(zOutPtr-zOut), pUserData);
@@ -28993,13 +28997,13 @@ JX9_PRIVATE sxi32 SyUriDecode(const char *zSrc, sxu32 nLen, ProcConsumer xConsum
 	return rc;
 }
 #ifndef JX9_DISABLE_BUILTIN_FUNC
-static const char *zEngDay[] = {
-	"Sunday", "Monday", "Tuesday", "Wednesday",
+static const char *zEngDay[] = { 
+	"Sunday", "Monday", "Tuesday", "Wednesday", 
 	"Thursday", "Friday", "Saturday"
 };
 static const char *zEngMonth[] = {
-	"January", "February", "March", "April",
-	"May", "June", "July", "August",
+	"January", "February", "March", "April", 
+	"May", "June", "July", "August", 
 	"September", "October", "November", "December"
 };
 static const char * GetDay(sxi32 i)
@@ -29036,7 +29040,7 @@ JX9_PRIVATE const char * SyTimeGetMonth(sxi32 iMonth)
 #define SXFMT_ERROR       9 /* Used to indicate no such conversion type */
 /* Extension by Symisc Systems */
 #define SXFMT_RAWSTR     13 /* %z Pointer to raw string (SyString *) */
-#define SXFMT_UNUSED     15
+#define SXFMT_UNUSED     15 
 /*
 ** Allowed values for SyFmtInfo.flags
 */
@@ -29068,13 +29072,13 @@ struct SyFmtConsumer
 	sxi32 nType; /* Type of the consumer see below */
 	sxi32 rc;	/* Consumer return value;Abort processing if rc != SXRET_OK */
  union{
-	struct{
+	struct{	
 	ProcConsumer xUserConsumer;
 	void *pUserData;
-	}sFunc;
+	}sFunc;  
 	SyBlob *pBlob;
- }uConsumer;
-};
+ }uConsumer;	
+}; 
 #ifndef SX_OMIT_FLOATINGPOINT
 static int getdigit(sxlongreal *val, int *cnt)
 {
@@ -29102,27 +29106,27 @@ static sxi32 InternFormat(ProcConsumer xConsumer, void *pUserData, const char *z
 	 * used conversion types first.
 	 */
 static const SyFmtInfo aFmt[] = {
-  {  'd', 10, SXFLAG_SIGNED, SXFMT_RADIX, "0123456789", 0    },
-  {  's',  0, 0, SXFMT_STRING,     0,                  0    },
-  {  'c',  0, 0, SXFMT_CHARX,      0,                  0    },
-  {  'x', 16, 0, SXFMT_RADIX,      "0123456789abcdef", "x0" },
-  {  'X', 16, 0, SXFMT_RADIX,      "0123456789ABCDEF", "X0" },
+  {  'd', 10, SXFLAG_SIGNED, SXFMT_RADIX, "0123456789", 0    }, 
+  {  's',  0, 0, SXFMT_STRING,     0,                  0    }, 
+  {  'c',  0, 0, SXFMT_CHARX,      0,                  0    }, 
+  {  'x', 16, 0, SXFMT_RADIX,      "0123456789abcdef", "x0" }, 
+  {  'X', 16, 0, SXFMT_RADIX,      "0123456789ABCDEF", "X0" }, 
          /* -- Extensions by Symisc Systems -- */
   {  'z',  0, 0, SXFMT_RAWSTR,     0,                   0   }, /* Pointer to a raw string (SyString *) */
-  {  'B',  2, 0, SXFMT_RADIX,      "01",                "b0"},
+  {  'B',  2, 0, SXFMT_RADIX,      "01",                "b0"}, 
          /* -- End of Extensions -- */
-  {  'o',  8, 0, SXFMT_RADIX,      "01234567",         "0"  },
-  {  'u', 10, 0, SXFMT_RADIX,      "0123456789",       0    },
+  {  'o',  8, 0, SXFMT_RADIX,      "01234567",         "0"  }, 
+  {  'u', 10, 0, SXFMT_RADIX,      "0123456789",       0    }, 
 #ifndef SX_OMIT_FLOATINGPOINT
-  {  'f',  0, SXFLAG_SIGNED, SXFMT_FLOAT,       0,     0    },
-  {  'e',  0, SXFLAG_SIGNED, SXFMT_EXP,        "e",    0    },
-  {  'E',  0, SXFLAG_SIGNED, SXFMT_EXP,        "E",    0    },
-  {  'g',  0, SXFLAG_SIGNED, SXFMT_GENERIC,    "e",    0    },
-  {  'G',  0, SXFLAG_SIGNED, SXFMT_GENERIC,    "E",    0    },
+  {  'f',  0, SXFLAG_SIGNED, SXFMT_FLOAT,       0,     0    }, 
+  {  'e',  0, SXFLAG_SIGNED, SXFMT_EXP,        "e",    0    }, 
+  {  'E',  0, SXFLAG_SIGNED, SXFMT_EXP,        "E",    0    }, 
+  {  'g',  0, SXFLAG_SIGNED, SXFMT_GENERIC,    "e",    0    }, 
+  {  'G',  0, SXFLAG_SIGNED, SXFMT_GENERIC,    "E",    0    }, 
 #endif
-  {  'i', 10, SXFLAG_SIGNED, SXFMT_RADIX, "0123456789", 0    },
-  {  'n',  0, 0, SXFMT_SIZE,       0,                  0    },
-  {  '%',  0, 0, SXFMT_PERCENT,    0,                  0    },
+  {  'i', 10, SXFLAG_SIGNED, SXFMT_RADIX, "0123456789", 0    }, 
+  {  'n',  0, 0, SXFMT_SIZE,       0,                  0    }, 
+  {  '%',  0, 0, SXFMT_PERCENT,    0,                  0    }, 
   {  'p', 10, 0, SXFMT_RADIX,      "0123456789",       0    }
 };
   int c;                     /* Next character in the format string */
@@ -29143,7 +29147,7 @@ static const SyFmtInfo aFmt[] = {
   char prefix;             /* Prefix character."+" or "-" or " " or '\0'.*/
   sxu8 errorflag = 0;      /* True if an error is encountered */
   sxu8 xtype;              /* Conversion paradigm */
-  char *zExtra;
+  char *zExtra;    
   static char spaces[] = "                                                  ";
 #define etSPACESIZE ((int)sizeof(spaces)-1)
 #ifndef SX_OMIT_FLOATINGPOINT
@@ -29182,7 +29186,7 @@ static const SyFmtInfo aFmt[] = {
       return errorflag > 0 ? SXERR_FORMAT : SXRET_OK;
     }
     /* Find out what flags are present */
-    flag_leftjustify = flag_plussign = flag_blanksign =
+    flag_leftjustify = flag_plussign = flag_blanksign = 
      flag_alternateform = flag_zeropad = 0;
     do{
       switch( c ){
@@ -29291,12 +29295,12 @@ static const SyFmtInfo aFmt[] = {
         ** I think this is stupid.*/
         if( longvalue==0 ) flag_alternateform = 0;
 #else
-        /* More sensible: turn off the prefix for octal (to prevent "00"),
+        /* More sensible: turn off the prefix for octal (to prevent "00"), 
         ** but leave the prefix for hex.*/
         if( longvalue==0 && infop->base==8 ) flag_alternateform = 0;
 #endif
         if( infop->flags & SXFLAG_SIGNED ){
-          if( longvalue<0 ){
+          if( longvalue<0 ){ 
             longvalue = -longvalue;
 			/* Ticket 1433-003 */
 			if( longvalue < 0 ){
@@ -29581,7 +29585,7 @@ static const SyFmtInfo aFmt[] = {
     }
   }/* End for loop over the format string */
   return errorflag ? SXERR_FORMAT : SXRET_OK;
-}
+} 
 static sxi32 FormatConsumer(const void *pSrc, unsigned int nLen, void *pData)
 {
 	SyFmtConsumer *pConsumer = (SyFmtConsumer *)pData;
@@ -29595,14 +29599,14 @@ static sxi32 FormatConsumer(const void *pSrc, unsigned int nLen, void *pData)
 			/* Blob consumer */
 			rc = SyBlobAppend(pConsumer->uConsumer.pBlob, pSrc, (sxu32)nLen);
 			break;
-		default:
+		default: 
 			/* Unknown consumer */
 			break;
 	}
 	/* Update total number of bytes consumed so far */
 	pConsumer->nLen += nLen;
 	pConsumer->rc = rc;
-	return rc;
+	return rc;	
 }
 static sxi32 FormatMount(sxi32 nType, void *pConsumer, ProcConsumer xUserCons, void *pUserData, sxu32 *pOutLen, const char *zFormat, va_list ap)
 {
@@ -29626,10 +29630,10 @@ static sxi32 FormatMount(sxi32 nType, void *pConsumer, ProcConsumer xUserCons, v
 		case SXFMT_CONS_BLOB:
 			sCons.uConsumer.pBlob = (SyBlob *)pConsumer;
 			break;
-		default:
+		default: 
 			return SXERR_UNKNOWN;
 	}
-	InternFormat(FormatConsumer, &sCons, zFormat, ap);
+	InternFormat(FormatConsumer, &sCons, zFormat, ap); 
 	if( pOutLen ){
 		*pOutLen = sCons.nLen;
 	}
@@ -29639,7 +29643,7 @@ JX9_PRIVATE sxi32 SyProcFormat(ProcConsumer xConsumer, void *pData, const char *
 {
 	va_list ap;
 	sxi32 rc;
-#if defined(UNTRUST)
+#if defined(UNTRUST)	
 	if( SX_EMPTY_STR(zFormat) ){
 		return SXERR_EMPTY;
 	}
@@ -29653,11 +29657,11 @@ JX9_PRIVATE sxu32 SyBlobFormat(SyBlob *pBlob, const char *zFormat, ...)
 {
 	va_list ap;
 	sxu32 n;
-#if defined(UNTRUST)
+#if defined(UNTRUST)	
 	if( SX_EMPTY_STR(zFormat) ){
 		return 0;
 	}
-#endif
+#endif			
 	va_start(ap, zFormat);
 	FormatMount(SXFMT_CONS_BLOB, &(*pBlob), 0, 0, &n, zFormat, ap);
 	va_end(ap);
@@ -29666,11 +29670,11 @@ JX9_PRIVATE sxu32 SyBlobFormat(SyBlob *pBlob, const char *zFormat, ...)
 JX9_PRIVATE sxu32 SyBlobFormatAp(SyBlob *pBlob, const char *zFormat, va_list ap)
 {
 	sxu32 n = 0; /* cc warning */
-#if defined(UNTRUST)
+#if defined(UNTRUST)	
 	if( SX_EMPTY_STR(zFormat) ){
 		return 0;
 	}
-#endif
+#endif	
 	FormatMount(SXFMT_CONS_BLOB, &(*pBlob), 0, 0, &n, zFormat, ap);
 	return n;
 }
@@ -29679,14 +29683,14 @@ JX9_PRIVATE sxu32 SyBufferFormat(char *zBuf, sxu32 nLen, const char *zFormat, ..
 	SyBlob sBlob;
 	va_list ap;
 	sxu32 n;
-#if defined(UNTRUST)
+#if defined(UNTRUST)	
 	if( SX_EMPTY_STR(zFormat) ){
 		return 0;
 	}
-#endif
+#endif	
 	if( SXRET_OK != SyBlobInitFromBuf(&sBlob, zBuf, nLen - 1) ){
 		return 0;
-	}
+	}		
 	va_start(ap, zFormat);
 	FormatMount(SXFMT_CONS_BLOB, &sBlob, 0, 0, 0, zFormat, ap);
 	va_end(ap);
@@ -29701,11 +29705,11 @@ JX9_PRIVATE sxu32 SyBufferFormat(char *zBuf, sxu32 nLen, const char *zFormat, ..
  * Zip File Format:
  *
  * Byte order: Little-endian
- *
+ * 
  * [Local file header + Compressed data [+ Extended local header]?]*
  * [Central directory]*
  * [End of central directory record]
- *
+ * 
  * Local file header:*
  * Offset   Length   Contents
  *  0      4 bytes  Local file header signature (0x04034b50)
@@ -29735,7 +29739,7 @@ JX9_PRIVATE sxu32 SyBufferFormat(char *zBuf, sxu32 nLen, const char *zFormat, ..
  * 0	  	2 bytes		Header ID (0x001 until 0xfb4a) see extended appnote from Info-zip
  * 2	  	2 bytes		Data size (g)
  * 		  	(g) bytes	(g) bytes of extra field
- *
+ * 
  * Central directory:*
  * Offset   Length   Contents
  *  0      4 bytes  Central file header signature (0x02014b50)
@@ -29781,7 +29785,7 @@ JX9_PRIVATE sxu32 SyBufferFormat(char *zBuf, sxu32 nLen, const char *zFormat, ..
  *          6 - The file is Imploded
  *          7 - Reserved for Tokenizing compression algorithm
  *          8 - The file is Deflated
- */
+ */ 
 
 #define SXMAKE_ZIP_WORKBUF	(SXU16_HIGH/2)	/* 32KB Initial working buffer size */
 #define SXMAKE_ZIP_EXTRACT_VER	0x000a	/* Version needed to extract */
@@ -29796,11 +29800,11 @@ JX9_PRIVATE sxu32 SyBufferFormat(char *zBuf, sxu32 nLen, const char *zFormat, ..
 #define SXZIP_LOCAL_EXT_HDRZ	16	/* Extended local header(footer) size */
 #define SXZIP_CENTRAL_HDRSZ		46	/* Central directory header size */
 #define SXZIP_END_CENTRAL_HDRSZ	22	/* End of central directory header size */
-
+	 
 #define SXARCHIVE_HASH_SIZE	64 /* Starting hash table size(MUST BE POWER OF 2)*/
 static sxi32 SyLittleEndianUnpack32(sxu32 *uNB, const unsigned char *buf, sxu32 Len)
 {
-	if( Len < sizeof(sxu32) ){
+	if( Len < sizeof(sxu32) ){ 
 		return SXERR_SHORT;
 	}
 	*uNB =  buf[0] + (buf[1] << 8) + (buf[2] << 16) + (buf[3] << 24);
@@ -29812,7 +29816,7 @@ static sxi32 SyLittleEndianUnpack16(sxu16 *pOut, const unsigned char *zBuf, sxu3
 		return SXERR_SHORT;
 	}
 	*pOut = zBuf[0] + (zBuf[1] <<8);
-
+	
 	return SXRET_OK;
 }
 /*
@@ -29891,12 +29895,12 @@ static sxi32 ArchiveHashInstallEntry(SyArchive *pArch, SyArchiveEntry *pEntry)
 }
  /*
   * Parse the End of central directory and report status
-  */
+  */ 
  static sxi32 ParseEndOfCentralDirectory(SyArchive *pArch, const unsigned char *zBuf)
  {
 	sxu32 nMagic = 0; /* cc -O6 warning */
  	sxi32 rc;
-
+ 	
  	/* Sanity check */
  	rc = SyLittleEndianUnpack32(&nMagic, zBuf, sizeof(sxu32));
  	if( /* rc != SXRET_OK || */nMagic != SXZIP_END_CENTRAL_MAGIC ){
@@ -29917,25 +29921,25 @@ static sxi32 ArchiveHashInstallEntry(SyArchive *pArch, SyArchiveEntry *pEntry)
  	if( /*rc != SXRET_OK ||*/ pArch->nCentralSize > SXI32_HIGH ){
  		return SXERR_CORRUPT;
  	}
-
+ 	
  	return SXRET_OK;
  }
  /*
   * Fill the zip entry with the appropriate information from the central directory
   */
 static sxi32 GetCentralDirectoryEntry(SyArchive *pArch, SyArchiveEntry *pEntry, const unsigned char *zCentral, sxu32 *pNextOffset)
- {
+ { 
  	SyString *pName = &pEntry->sFileName; /* File name */
  	sxu16 nDosDate, nDosTime;
 	sxu16 nComment = 0 ;
 	sxu32 nMagic = 0; /* cc -O6 warning */
-	sxi32 rc;
+	sxi32 rc; 	
 	nDosDate = nDosTime = 0; /* cc -O6 warning */
 	SXUNUSED(pArch);
  	/* Sanity check */
  	rc = SyLittleEndianUnpack32(&nMagic, zCentral, sizeof(sxu32));
  	if( /* rc != SXRET_OK || */ nMagic != SXZIP_CENTRAL_MAGIC ){
- 		rc = SXERR_CORRUPT;
+ 		rc = SXERR_CORRUPT; 		
  		/*
  		 * Try to recover by examing the next central directory record.
  		 * Dont worry here, there is no risk of an infinite loop since
@@ -29956,7 +29960,7 @@ static sxi32 GetCentralDirectoryEntry(SyArchive *pArch, SyArchiveEntry *pEntry, 
  	/* Extra information */
  	SyLittleEndianUnpack16(&pEntry->nExtra, &zCentral[30], sizeof(sxu16));
  	/* Comment length  */
- 	SyLittleEndianUnpack16(&nComment, &zCentral[32], sizeof(sxu16));
+ 	SyLittleEndianUnpack16(&nComment, &zCentral[32], sizeof(sxu16)); 	
  	/* Compression method 0 == stored / 8 == deflated */
  	rc = SyLittleEndianUnpack16(&pEntry->nComprMeth, &zCentral[10], sizeof(sxu16));
  	/* DOS Timestamp */
@@ -29971,31 +29975,31 @@ static sxi32 GetCentralDirectoryEntry(SyArchive *pArch, SyArchiveEntry *pEntry, 
  	rc = SyLittleEndianUnpack32(&pEntry->nByte, &zCentral[24], sizeof(sxu32));
  	if(  pEntry->nByte > SXI32_HIGH ){
  		rc = SXERR_BIG;
- 		goto update;
- 	}
+ 		goto update; 
+ 	} 	
  	/*
  	 * Content size after compression.
  	 * Note that if the file is stored pEntry->nByte should be equal to pEntry->nByteCompr
- 	 */
+ 	 */ 
  	rc = SyLittleEndianUnpack32(&pEntry->nByteCompr, &zCentral[20], sizeof(sxu32));
  	if( pEntry->nByteCompr > SXI32_HIGH ){
  		rc = SXERR_BIG;
- 		goto update;
- 	}
+ 		goto update; 
+ 	} 	 	
  	/* Finally grab the contents offset */
  	SyLittleEndianUnpack32(&pEntry->nOfft, &zCentral[42], sizeof(sxu32));
  	if( pEntry->nOfft > SXI32_HIGH ){
  		rc = SXERR_BIG;
  		goto update;
- 	}
+ 	} 	
   	 rc = SXRET_OK;
-update:
+update:	  
  	/* Update the offset to point to the next central directory record */
  	*pNextOffset =  SXZIP_CENTRAL_HDRSZ + pName->nByte + pEntry->nExtra + nComment;
  	return rc; /* Report failure or success */
 }
 static sxi32 ZipFixOffset(SyArchiveEntry *pEntry, void *pSrc)
-{
+{	
 	sxu16 nExtra, nNameLen;
 	unsigned char *zHdr;
 	nExtra = nNameLen = 0;
@@ -30011,8 +30015,8 @@ static sxi32 ZipFixOffset(SyArchiveEntry *pEntry, void *pSrc)
 	return SXRET_OK;
 }
 /*
- * Extract all valid entries from the central directory
- */
+ * Extract all valid entries from the central directory 
+ */	 
 static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 nLen, void *pSrc)
 {
 	SyArchiveEntry *pEntry, *pDup;
@@ -30021,10 +30025,10 @@ static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 n
 	SyString *pName;	        /* Entry name */
 	char *zName;
 	sxi32 rc;
-
+	
 	nOfft = nIncr = 0;
 	zEnd = &zCentral[nLen];
-
+	
 	for(;;){
 		if( &zCentral[nOfft] >= zEnd ){
 			break;
@@ -30034,7 +30038,7 @@ static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 n
 		if( pEntry == 0 ){
 			break;
 		}
-		SyZero(pEntry, sizeof(SyArchiveEntry));
+		SyZero(pEntry, sizeof(SyArchiveEntry)); 
 		pEntry->nMagic = SXARCH_MAGIC;
 		nIncr = 0;
 		rc = GetCentralDirectoryEntry(&(*pArch), pEntry, &zCentral[nOfft], &nIncr);
@@ -30046,7 +30050,7 @@ static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 n
 			sxu32 nJmp = 0;
 			SyMemBackendPoolFree(pArch->pAllocator, pEntry);
 			/* Try to recover by brute-forcing for a valid central directory record */
-			if( SXRET_OK == SyBlobSearch((const void *)&zCentral[nOfft + nIncr], (sxu32)(zEnd - &zCentral[nOfft + nIncr]),
+			if( SXRET_OK == SyBlobSearch((const void *)&zCentral[nOfft + nIncr], (sxu32)(zEnd - &zCentral[nOfft + nIncr]), 
 				(const void *)"PK\001\002", sizeof(sxu32), &nJmp)){
 					nOfft += nIncr + nJmp; /* Check next entry */
 					continue;
@@ -30057,13 +30061,13 @@ static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 n
 		pName->zString = (const char *)&zCentral[nOfft + SXZIP_CENTRAL_HDRSZ];
 		if( pName->nByte <= 0 || ( pEntry->nByte <= 0 && pName->zString[pName->nByte - 1] != '/') ){
 			/* Ignore zero length records (except folders) and records without names */
-			SyMemBackendPoolFree(pArch->pAllocator, pEntry);
+			SyMemBackendPoolFree(pArch->pAllocator, pEntry); 
 		 	nOfft += nIncr; /* Check next entry */
 			continue;
 		}
 		zName = SyMemBackendStrDup(pArch->pAllocator, pName->zString, pName->nByte);
  	 	if( zName == 0 ){
- 	 		 SyMemBackendPoolFree(pArch->pAllocator, pEntry);
+ 	 		 SyMemBackendPoolFree(pArch->pAllocator, pEntry); 
 		 	 nOfft += nIncr; /* Check next entry */
 			continue;
  	 	}
@@ -30078,13 +30082,13 @@ static sxi32 ZipExtract(SyArchive *pArch, const unsigned char *zCentral, sxu32 n
 		}else{
 			/* Insert in hashtable */
 			ArchiveHashInstallEntry(pArch, pEntry);
-		}
+		}	
 		nOfft += nIncr;	/* Check next record */
 	}
 	pArch->pCursor = pArch->pList;
-
+	
 	return pArch->nLoaded > 0 ? SXRET_OK : SXERR_EMPTY;
-}
+} 						
 JX9_PRIVATE sxi32 SyZipExtractFromBuf(SyArchive *pArch, const char *zBuf, sxu32 nLen)
  {
  	const unsigned char *zCentral, *zEnd;
@@ -30093,7 +30097,7 @@ JX9_PRIVATE sxi32 SyZipExtractFromBuf(SyArchive *pArch, const char *zBuf, sxu32 
  	if( SXARCH_INVALID(pArch) || zBuf == 0 ){
  		return SXERR_INVALID;
  	}
-#endif
+#endif 	
  	/* The miminal size of a zip archive:
  	 * LOCAL_HDR_SZ + CENTRAL_HDR_SZ + END_OF_CENTRAL_HDR_SZ
  	 * 		30				46				22
@@ -30101,19 +30105,19 @@ JX9_PRIVATE sxi32 SyZipExtractFromBuf(SyArchive *pArch, const char *zBuf, sxu32 
  	 if( nLen < SXZIP_LOCAL_HDRSZ + SXZIP_CENTRAL_HDRSZ + SXZIP_END_CENTRAL_HDRSZ ){
  	 	return SXERR_CORRUPT; /* Don't bother processing return immediately */
  	 }
-
+ 	  		
  	zEnd = (unsigned char *)&zBuf[nLen - SXZIP_END_CENTRAL_HDRSZ];
  	/* Find the end of central directory */
  	while( ((sxu32)((unsigned char *)&zBuf[nLen] - zEnd) < (SXZIP_END_CENTRAL_HDRSZ + SXI16_HIGH)) &&
 		zEnd > (unsigned char *)zBuf && SyMemcmp(zEnd, "PK\005\006", sizeof(sxu32)) != 0 ){
  		zEnd--;
- 	}
+ 	} 	
  	/* Parse the end of central directory */
  	rc = ParseEndOfCentralDirectory(&(*pArch), zEnd);
  	if( rc != SXRET_OK ){
  		return rc;
- 	}
-
+ 	} 	
+ 	
  	/* Find the starting offset of the central directory */
  	zCentral = &zEnd[-(sxi32)pArch->nCentralSize];
  	if( zCentral <= (unsigned char *)zBuf || SyMemcmp(zCentral, "PK\001\002", sizeof(sxu32)) != 0 ){
@@ -30149,7 +30153,7 @@ JX9_PRIVATE sxi32 SyArchiveInit(SyArchive *pArch, SyMemBackend *pAllocator, Proc
  	}
 #endif
  	SyZero(pArch, sizeof(SyArchive));
- 	/* Allocate a new hashtable */
+ 	/* Allocate a new hashtable */ 	
 	apHash = (SyArchiveEntry **)SyMemBackendAlloc(&(*pAllocator), SXARCHIVE_HASH_SIZE * sizeof(SyArchiveEntry *));
 	if( apHash == 0){
 		return SXERR_MEM;
@@ -30167,7 +30171,7 @@ JX9_PRIVATE sxi32 SyArchiveInit(SyArchive *pArch, SyMemBackend *pAllocator, Proc
  {
  	SyArchiveEntry *pDup = pEntry->pNextName;
  	SyArchiveEntry *pNextDup;
-
+ 	
  	/* Release duplicates first since there are not stored in the hashtable */
  	for(;;){
  		if( pEntry->nDup == 0 ){
@@ -30176,19 +30180,19 @@ JX9_PRIVATE sxi32 SyArchiveInit(SyArchive *pArch, SyMemBackend *pAllocator, Proc
  		pNextDup = pDup->pNextName;
 		pDup->nMagic = 0x2661;
  		SyMemBackendFree(pAllocator, (void *)SyStringData(&pDup->sFileName));
- 		SyMemBackendPoolFree(pAllocator, pDup);
+ 		SyMemBackendPoolFree(pAllocator, pDup); 		
  		pDup = pNextDup;
  		pEntry->nDup--;
- 	}
+ 	} 		
 	pEntry->nMagic = 0x2661;
   	SyMemBackendFree(pAllocator, (void *)SyStringData(&pEntry->sFileName));
  	SyMemBackendPoolFree(pAllocator, pEntry);
  	return SXRET_OK;
- }
+ } 	
 JX9_PRIVATE sxi32 SyArchiveRelease(SyArchive *pArch)
  {
 	SyArchiveEntry *pEntry, *pNext;
- 	pEntry = pArch->pList;
+ 	pEntry = pArch->pList; 	 	
 	for(;;){
 		if( pArch->nLoaded < 1 ){
 			break;
@@ -30291,11 +30295,11 @@ JX9_PRIVATE sxi32 SyRandomnessInit(SyPRNGCtx *pCtx, ProcRandomSeed xSeed, void *
 	if( pCtx->nMagic == SXPRNG_MAGIC ){
 		return SXRET_OK; /* Already initialized */
 	}
- /* Initialize the state of the random number generator once,
+ /* Initialize the state of the random number generator once, 
   ** the first time this routine is called.The seed value does
   ** not need to contain a lot of randomness since we are not
   ** trying to do secure encryption or anything like that...
-  */
+  */	
 	if( xSeed == 0 ){
 		xSeed = SyOSUtilRandomSeed;
 	}
@@ -30314,7 +30318,7 @@ JX9_PRIVATE sxi32 SyRandomnessInit(SyPRNGCtx *pCtx, ProcRandomSeed xSeed, void *
       pCtx->s[i] = t;
     }
 	pCtx->nMagic = SXPRNG_MAGIC;
-
+	
 	return SXRET_OK;
 }
 /*
@@ -30323,7 +30327,7 @@ JX9_PRIVATE sxi32 SyRandomnessInit(SyPRNGCtx *pCtx, ProcRandomSeed xSeed, void *
 static sxu8 randomByte(SyPRNGCtx *pCtx)
 {
   sxu8 t;
-
+  
   /* Generate and return single random byte */
   pCtx->i++;
   t = pCtx->s[pCtx->i];
@@ -30346,12 +30350,12 @@ JX9_PRIVATE sxi32 SyRandomness(SyPRNGCtx *pCtx, void *pBuf, sxu32 nLen)
 		return SXERR_CORRUPT;
 	}
 	for(;;){
-		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;
-		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;
-		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;
-		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;
+		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;	
+		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;	
+		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;	
+		if( zBuf >= zEnd ){break;}	zBuf[0] = randomByte(pCtx);	zBuf++;	
 	}
-	return SXRET_OK;
+	return SXRET_OK;  
 }
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 #ifndef JX9_DISABLE_HASH_FUNC
@@ -30363,7 +30367,7 @@ JX9_PRIVATE sxi32 SyRandomness(SyPRNGCtx *pCtx, void *pBuf, sxu32 nLen)
  * This code is in the public domain; do with it what you wish.
  *
  * Equivalent code is available from RSA Data Security, Inc.
- * This code has been tested against that, and is equivalent,
+ * This code has been tested against that, and is equivalent, 
  * except that you don't need to include two pages of legalese
  * with every copy.
  *
@@ -30540,7 +30544,7 @@ JX9_PRIVATE void MD5Update(MD5Context *ctx, const unsigned char *buf, unsigned i
         SyMemcpy(buf, ctx->in, len);
 }
 /*
- * Final wrapup - pad to 64-byte boundary with the bit pattern
+ * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
 JX9_PRIVATE void MD5Final(unsigned char digest[16], MD5Context *ctx){
@@ -30587,14 +30591,14 @@ JX9_PRIVATE void MD5Final(unsigned char digest[16], MD5Context *ctx){
 #undef F3
 #undef F4
 JX9_PRIVATE sxi32 MD5Init(MD5Context *pCtx)
-{
+{	
 	pCtx->buf[0] = 0x67452301;
     pCtx->buf[1] = 0xefcdab89;
     pCtx->buf[2] = 0x98badcfe;
     pCtx->buf[3] = 0x10325476;
     pCtx->bits[0] = 0;
     pCtx->bits[1] = 0;
-
+   
    return SXRET_OK;
 }
 JX9_PRIVATE sxi32 SyMD5Compute(const void *pIn, sxu32 nLen, unsigned char zDigest[16])
@@ -30602,7 +30606,7 @@ JX9_PRIVATE sxi32 SyMD5Compute(const void *pIn, sxu32 nLen, unsigned char zDiges
 	MD5Context sCtx;
 	MD5Init(&sCtx);
 	MD5Update(&sCtx, (const unsigned char *)pIn, nLen);
-	MD5Final(zDigest, &sCtx);
+	MD5Final(zDigest, &sCtx);	
 	return SXRET_OK;
 }
 /*
@@ -30643,7 +30647,7 @@ JX9_PRIVATE sxi32 SyMD5Compute(const void *pIn, sxu32 nLen, unsigned char zDiges
 /*
  * (R0+R1), R2, R3, R4 are the different operations (rounds) used in SHA1
  *
- * Rl0() for little-endian and Rb0() for big-endian.  Endianness is
+ * Rl0() for little-endian and Rb0() for big-endian.  Endianness is 
  * determined at run-time.
  */
 #define Rl0(v, w, x, y, z, i) \
@@ -30797,70 +30801,70 @@ JX9_PRIVATE sxi32 SySha1Compute(const void *pIn, sxu32 nLen, unsigned char zDige
 	return SXRET_OK;
 }
 static const sxu32 crc32_table[] = {
-	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
-	0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
-	0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
-	0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
-	0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de,
-	0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
-	0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec,
-	0x14015c4f, 0x63066cd9, 0xfa0f3d63, 0x8d080df5,
-	0x3b6e20c8, 0x4c69105e, 0xd56041e4, 0xa2677172,
-	0x3c03e4d1, 0x4b04d447, 0xd20d85fd, 0xa50ab56b,
-	0x35b5a8fa, 0x42b2986c, 0xdbbbc9d6, 0xacbcf940,
-	0x32d86ce3, 0x45df5c75, 0xdcd60dcf, 0xabd13d59,
-	0x26d930ac, 0x51de003a, 0xc8d75180, 0xbfd06116,
-	0x21b4f4b5, 0x56b3c423, 0xcfba9599, 0xb8bda50f,
-	0x2802b89e, 0x5f058808, 0xc60cd9b2, 0xb10be924,
-	0x2f6f7c87, 0x58684c11, 0xc1611dab, 0xb6662d3d,
-	0x76dc4190, 0x01db7106, 0x98d220bc, 0xefd5102a,
-	0x71b18589, 0x06b6b51f, 0x9fbfe4a5, 0xe8b8d433,
-	0x7807c9a2, 0x0f00f934, 0x9609a88e, 0xe10e9818,
-	0x7f6a0dbb, 0x086d3d2d, 0x91646c97, 0xe6635c01,
-	0x6b6b51f4, 0x1c6c6162, 0x856530d8, 0xf262004e,
-	0x6c0695ed, 0x1b01a57b, 0x8208f4c1, 0xf50fc457,
-	0x65b0d9c6, 0x12b7e950, 0x8bbeb8ea, 0xfcb9887c,
-	0x62dd1ddf, 0x15da2d49, 0x8cd37cf3, 0xfbd44c65,
-	0x4db26158, 0x3ab551ce, 0xa3bc0074, 0xd4bb30e2,
-	0x4adfa541, 0x3dd895d7, 0xa4d1c46d, 0xd3d6f4fb,
-	0x4369e96a, 0x346ed9fc, 0xad678846, 0xda60b8d0,
-	0x44042d73, 0x33031de5, 0xaa0a4c5f, 0xdd0d7cc9,
-	0x5005713c, 0x270241aa, 0xbe0b1010, 0xc90c2086,
-	0x5768b525, 0x206f85b3, 0xb966d409, 0xce61e49f,
-	0x5edef90e, 0x29d9c998, 0xb0d09822, 0xc7d7a8b4,
-	0x59b33d17, 0x2eb40d81, 0xb7bd5c3b, 0xc0ba6cad,
-	0xedb88320, 0x9abfb3b6, 0x03b6e20c, 0x74b1d29a,
-	0xead54739, 0x9dd277af, 0x04db2615, 0x73dc1683,
-	0xe3630b12, 0x94643b84, 0x0d6d6a3e, 0x7a6a5aa8,
-	0xe40ecf0b, 0x9309ff9d, 0x0a00ae27, 0x7d079eb1,
-	0xf00f9344, 0x8708a3d2, 0x1e01f268, 0x6906c2fe,
-	0xf762575d, 0x806567cb, 0x196c3671, 0x6e6b06e7,
-	0xfed41b76, 0x89d32be0, 0x10da7a5a, 0x67dd4acc,
-	0xf9b9df6f, 0x8ebeeff9, 0x17b7be43, 0x60b08ed5,
-	0xd6d6a3e8, 0xa1d1937e, 0x38d8c2c4, 0x4fdff252,
-	0xd1bb67f1, 0xa6bc5767, 0x3fb506dd, 0x48b2364b,
-	0xd80d2bda, 0xaf0a1b4c, 0x36034af6, 0x41047a60,
-	0xdf60efc3, 0xa867df55, 0x316e8eef, 0x4669be79,
-	0xcb61b38c, 0xbc66831a, 0x256fd2a0, 0x5268e236,
-	0xcc0c7795, 0xbb0b4703, 0x220216b9, 0x5505262f,
-	0xc5ba3bbe, 0xb2bd0b28, 0x2bb45a92, 0x5cb36a04,
-	0xc2d7ffa7, 0xb5d0cf31, 0x2cd99e8b, 0x5bdeae1d,
-	0x9b64c2b0, 0xec63f226, 0x756aa39c, 0x026d930a,
-	0x9c0906a9, 0xeb0e363f, 0x72076785, 0x05005713,
-	0x95bf4a82, 0xe2b87a14, 0x7bb12bae, 0x0cb61b38,
-	0x92d28e9b, 0xe5d5be0d, 0x7cdcefb7, 0x0bdbdf21,
-	0x86d3d2d4, 0xf1d4e242, 0x68ddb3f8, 0x1fda836e,
-	0x81be16cd, 0xf6b9265b, 0x6fb077e1, 0x18b74777,
-	0x88085ae6, 0xff0f6a70, 0x66063bca, 0x11010b5c,
-	0x8f659eff, 0xf862ae69, 0x616bffd3, 0x166ccf45,
-	0xa00ae278, 0xd70dd2ee, 0x4e048354, 0x3903b3c2,
-	0xa7672661, 0xd06016f7, 0x4969474d, 0x3e6e77db,
-	0xaed16a4a, 0xd9d65adc, 0x40df0b66, 0x37d83bf0,
-	0xa9bcae53, 0xdebb9ec5, 0x47b2cf7f, 0x30b5ffe9,
-	0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6,
-	0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf,
-	0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
-	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
+	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 
+	0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3, 
+	0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 
+	0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91, 
+	0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 
+	0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 
+	0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec, 
+	0x14015c4f, 0x63066cd9, 0xfa0f3d63, 0x8d080df5, 
+	0x3b6e20c8, 0x4c69105e, 0xd56041e4, 0xa2677172, 
+	0x3c03e4d1, 0x4b04d447, 0xd20d85fd, 0xa50ab56b, 
+	0x35b5a8fa, 0x42b2986c, 0xdbbbc9d6, 0xacbcf940, 
+	0x32d86ce3, 0x45df5c75, 0xdcd60dcf, 0xabd13d59, 
+	0x26d930ac, 0x51de003a, 0xc8d75180, 0xbfd06116, 
+	0x21b4f4b5, 0x56b3c423, 0xcfba9599, 0xb8bda50f, 
+	0x2802b89e, 0x5f058808, 0xc60cd9b2, 0xb10be924, 
+	0x2f6f7c87, 0x58684c11, 0xc1611dab, 0xb6662d3d, 
+	0x76dc4190, 0x01db7106, 0x98d220bc, 0xefd5102a, 
+	0x71b18589, 0x06b6b51f, 0x9fbfe4a5, 0xe8b8d433, 
+	0x7807c9a2, 0x0f00f934, 0x9609a88e, 0xe10e9818, 
+	0x7f6a0dbb, 0x086d3d2d, 0x91646c97, 0xe6635c01, 
+	0x6b6b51f4, 0x1c6c6162, 0x856530d8, 0xf262004e, 
+	0x6c0695ed, 0x1b01a57b, 0x8208f4c1, 0xf50fc457, 
+	0x65b0d9c6, 0x12b7e950, 0x8bbeb8ea, 0xfcb9887c, 
+	0x62dd1ddf, 0x15da2d49, 0x8cd37cf3, 0xfbd44c65, 
+	0x4db26158, 0x3ab551ce, 0xa3bc0074, 0xd4bb30e2, 
+	0x4adfa541, 0x3dd895d7, 0xa4d1c46d, 0xd3d6f4fb, 
+	0x4369e96a, 0x346ed9fc, 0xad678846, 0xda60b8d0, 
+	0x44042d73, 0x33031de5, 0xaa0a4c5f, 0xdd0d7cc9, 
+	0x5005713c, 0x270241aa, 0xbe0b1010, 0xc90c2086, 
+	0x5768b525, 0x206f85b3, 0xb966d409, 0xce61e49f, 
+	0x5edef90e, 0x29d9c998, 0xb0d09822, 0xc7d7a8b4, 
+	0x59b33d17, 0x2eb40d81, 0xb7bd5c3b, 0xc0ba6cad, 
+	0xedb88320, 0x9abfb3b6, 0x03b6e20c, 0x74b1d29a, 
+	0xead54739, 0x9dd277af, 0x04db2615, 0x73dc1683, 
+	0xe3630b12, 0x94643b84, 0x0d6d6a3e, 0x7a6a5aa8, 
+	0xe40ecf0b, 0x9309ff9d, 0x0a00ae27, 0x7d079eb1, 
+	0xf00f9344, 0x8708a3d2, 0x1e01f268, 0x6906c2fe, 
+	0xf762575d, 0x806567cb, 0x196c3671, 0x6e6b06e7, 
+	0xfed41b76, 0x89d32be0, 0x10da7a5a, 0x67dd4acc, 
+	0xf9b9df6f, 0x8ebeeff9, 0x17b7be43, 0x60b08ed5, 
+	0xd6d6a3e8, 0xa1d1937e, 0x38d8c2c4, 0x4fdff252, 
+	0xd1bb67f1, 0xa6bc5767, 0x3fb506dd, 0x48b2364b, 
+	0xd80d2bda, 0xaf0a1b4c, 0x36034af6, 0x41047a60, 
+	0xdf60efc3, 0xa867df55, 0x316e8eef, 0x4669be79, 
+	0xcb61b38c, 0xbc66831a, 0x256fd2a0, 0x5268e236, 
+	0xcc0c7795, 0xbb0b4703, 0x220216b9, 0x5505262f, 
+	0xc5ba3bbe, 0xb2bd0b28, 0x2bb45a92, 0x5cb36a04, 
+	0xc2d7ffa7, 0xb5d0cf31, 0x2cd99e8b, 0x5bdeae1d, 
+	0x9b64c2b0, 0xec63f226, 0x756aa39c, 0x026d930a, 
+	0x9c0906a9, 0xeb0e363f, 0x72076785, 0x05005713, 
+	0x95bf4a82, 0xe2b87a14, 0x7bb12bae, 0x0cb61b38, 
+	0x92d28e9b, 0xe5d5be0d, 0x7cdcefb7, 0x0bdbdf21, 
+	0x86d3d2d4, 0xf1d4e242, 0x68ddb3f8, 0x1fda836e, 
+	0x81be16cd, 0xf6b9265b, 0x6fb077e1, 0x18b74777, 
+	0x88085ae6, 0xff0f6a70, 0x66063bca, 0x11010b5c, 
+	0x8f659eff, 0xf862ae69, 0x616bffd3, 0x166ccf45, 
+	0xa00ae278, 0xd70dd2ee, 0x4e048354, 0x3903b3c2, 
+	0xa7672661, 0xd06016f7, 0x4969474d, 0x3e6e77db, 
+	0xaed16a4a, 0xd9d65adc, 0x40df0b66, 0x37d83bf0, 
+	0xa9bcae53, 0xdebb9ec5, 0x47b2cf7f, 0x30b5ffe9, 
+	0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 
+	0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf, 
+	0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94, 
+	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d, 
 };
 #define CRC32C(c, d) (c = ( crc32_table[(c ^ (d)) & 0xFF] ^ (c>>8) ) )
 static sxu32 SyCrc32Update(sxu32 crc32, const void *pSrc, sxu32 nLen)
@@ -30877,7 +30881,7 @@ static sxu32 SyCrc32Update(sxu32 crc32, const void *pSrc, sxu32 nLen)
 		if(zIn >= zEnd ){ break; } CRC32C(crc32, zIn[0]); zIn++;
 		if(zIn >= zEnd ){ break; } CRC32C(crc32, zIn[0]); zIn++;
 	}
-
+		
 	return crc32;
 }
 JX9_PRIVATE sxu32 SyCrc32(const void *pSrc, sxu32 nLen)
@@ -30909,7 +30913,7 @@ JX9_PRIVATE sxi32 SyBinToHexConsumer(const void *pIn, sxu32 nLen, ProcConsumer x
 		if( rc != SXRET_OK ){
 			return rc;
 		}
-		zIn++;
+		zIn++; 
 	}
 	return SXRET_OK;
 }
@@ -30943,7 +30947,7 @@ JX9_PRIVATE void SyBigEndianPack64(unsigned char *buf,sxu64 n64)
 	buf[3] = n64 & 0xFF; n64 >>=8;
 	buf[2] = n64 & 0xFF; n64 >>=8;
 	buf[1] = n64 & 0xFF; n64 >>=8;
-	buf[0] = (sxu8)n64 ;
+	buf[0] = (sxu8)n64 ; 
 }
 JX9_PRIVATE void SyBigEndianUnpack64(const unsigned char *buf,sxu64 *n64)
 {
@@ -31024,7 +31028,7 @@ JX9_PRIVATE void SyDosTimeFormat(sxu32 nDosDate, Sytm *pOut)
  * Notes on memory objects [i.e: jx9_value].
  * Internally, the JX9 virtual machine manipulates nearly all JX9 values
  * [i.e: string, int, float, resource, object, bool, null..] as jx9_values structures.
- * Each jx9_values struct may cache multiple representations (string,
+ * Each jx9_values struct may cache multiple representations (string, 
  * integer etc.) of the same value.
  */
 /*
@@ -31033,7 +31037,7 @@ JX9_PRIVATE void SyDosTimeFormat(sxu32 nDosDate, Sytm *pOut)
  *
  * Most systems appear to do this simply by assigning ariables and without
  * the extra range tests.
- * But there are reports that windows throws an expection if the floating
+ * But there are reports that windows throws an expection if the floating 
  * point value is out of range.
  */
 static sxi64 MemObjRealToInt(jx9_value *pObj)
@@ -31068,7 +31072,7 @@ static sxi64 MemObjRealToInt(jx9_value *pObj)
 #endif
 }
 /*
- * Convert a raw token value typically a stream of digit [i.e: hex, octal, binary or decimal]
+ * Convert a raw token value typically a stream of digit [i.e: hex, octal, binary or decimal] 
  * to a 64-bit integer.
  */
 JX9_PRIVATE sxi64 jx9TokenValueToInt64(SyString *pVal)
@@ -31108,7 +31112,7 @@ static sxi64 MemObjStringToInt(jx9_value *pObj)
 {
 	SyString sVal;
 	SyStringInitFromBuf(&sVal, SyBlobData(&pObj->sBlob), SyBlobLength(&pObj->sBlob));
-	return jx9TokenValueToInt64(&sVal);
+	return jx9TokenValueToInt64(&sVal);	
 }
 /*
  * Return some kind of integer value which is the best we can
@@ -31116,7 +31120,7 @@ static sxi64 MemObjStringToInt(jx9_value *pObj)
  * If pObj is an integer, then the value is exact. If pObj is
  * a floating-point then  the value returned is the integer part.
  * If pObj is a string, then we make an attempt to convert it into
- * a integer and return that.
+ * a integer and return that. 
  * If pObj represents a NULL value, return 0.
  */
 static sxi64 MemObjIntValue(jx9_value *pObj)
@@ -31136,7 +31140,7 @@ static sxi64 MemObjIntValue(jx9_value *pObj)
 		sxu32 n = pMap->nEntry;
 		jx9HashmapUnref(pMap);
 		/* Return total number of entries in the hashmap */
-		return n;
+		return n; 
 	}else if(iFlags & MEMOBJ_RES ){
 		return pObj->x.pOther != 0;
 	}
@@ -31150,7 +31154,7 @@ static sxi64 MemObjIntValue(jx9_value *pObj)
  * integer then the integer  is promoted to real and that value
  * is returned.
  * If pObj is a string, then we make an attempt to convert it
- * into a real and return that.
+ * into a real and return that. 
  * If pObj represents a NULL value, return 0.0
  */
 static jx9_real MemObjRealValue(jx9_value *pObj)
@@ -31196,7 +31200,7 @@ static jx9_real MemObjRealValue(jx9_value *pObj)
 	/* NOT REACHED  */
 	return 0;
 }
-/*
+/* 
  * Return the string representation of a given jx9_value.
  * This function never fail and always return SXRET_OK.
  */
@@ -31232,11 +31236,11 @@ static sxi32 MemObjStringValue(SyBlob *pOut,jx9_value *pObj)
  * the real 0.0 (zero).
  * the empty string, a stream of zero [i.e: "0", "00", "000", ...] and the string
  * "false".
- * an array with zero elements.
+ * an array with zero elements. 
  */
 static sxi32 MemObjBooleanValue(jx9_value *pObj)
 {
-	sxi32 iFlags;
+	sxi32 iFlags;	
 	iFlags = pObj->iFlags;
 	if (iFlags & MEMOBJ_REAL ){
 #ifdef JX9_OMIT_FLOATING_POINT
@@ -31299,7 +31303,7 @@ static sxi32 MemObjTryIntger(jx9_value *pObj)
   ** architectures might behave differently.
   */
 	if( pObj->x.rVal ==(jx9_real)iVal && iVal>SMALLEST_INT64 && iVal<LARGEST_INT64 ){
-		pObj->x.iVal = iVal;
+		pObj->x.iVal = iVal; 
 		pObj->iFlags = MEMOBJ_INT;
 	}
 	return SXRET_OK;
@@ -31373,7 +31377,7 @@ JX9_PRIVATE sxi32 jx9MemObjToNull(jx9_value *pObj)
  * Convert a jx9_value to type array.Invalidate any prior representations.
   * According to the JX9 language reference manual.
   *   For any of the types: integer, float, string, boolean converting a value
-  *   to an array results in an array with a single element with index zero
+  *   to an array results in an array with a single element with index zero 
   *   and the value of the scalar which was converted.
   */
 JX9_PRIVATE sxi32 jx9MemObjToHashmap(jx9_value *pObj)
@@ -31386,10 +31390,10 @@ JX9_PRIVATE sxi32 jx9MemObjToHashmap(jx9_value *pObj)
 			return SXERR_MEM;
 		}
 		if( (pObj->iFlags & (MEMOBJ_NULL|MEMOBJ_RES)) == 0 ){
-			/*
+			/* 
 			 * According to the JX9 language reference manual.
 			 *   For any of the types: integer, float, string, boolean converting a value
-			 *   to an array results in an array with a single element with index zero
+			 *   to an array results in an array with a single element with index zero 
 			 *   and the value of the scalar which was converted.
 			 */
 			/* Insert a single element */
@@ -31403,15 +31407,15 @@ JX9_PRIVATE sxi32 jx9MemObjToHashmap(jx9_value *pObj)
 	return SXRET_OK;
 }
 /*
- * Return a pointer to the appropriate convertion method associated
- * with the given type.
+ * Return a pointer to the appropriate convertion method associated 
+ * with the given type. 
  * Note on type juggling.
  * Accoding to the JX9 language reference manual
  *  JX9 does not require (or support) explicit type definition in variable
  *  declaration; a variable's type is determined by the context in which
- *  the variable is used. That is to say, if a string value is assigned
+ *  the variable is used. That is to say, if a string value is assigned 
  *  to variable $var, $var becomes a string. If an integer value is then
- *  assigned to $var, it becomes an integer.
+ *  assigned to $var, it becomes an integer. 
  */
 JX9_PRIVATE ProcMemObjCast jx9MemObjCastMethod(sxi32 iFlags)
 {
@@ -31505,7 +31509,7 @@ JX9_PRIVATE sxi32 jx9MemObjIsEmpty(jx9_value *pObj)
  * Convert a jx9_value so that it has types MEMOBJ_REAL or MEMOBJ_INT
  * or both.
  * Invalidate any prior representations. Every effort is made to force
- * the conversion, even if the input is a string that does not look
+ * the conversion, even if the input is a string that does not look 
  * completely like a number.Convert as much of the string as we can
  * and ignore the rest.
  */
@@ -31730,7 +31734,7 @@ JX9_PRIVATE sxi32 jx9MemObjStore(jx9_value *pSrc, jx9_value *pDest)
  */
 JX9_PRIVATE sxi32 jx9MemObjLoad(jx9_value *pSrc, jx9_value *pDest)
 {
-	SyMemcpy((const void *)&(*pSrc), &(*pDest),
+	SyMemcpy((const void *)&(*pSrc), &(*pDest), 
 		sizeof(jx9_value)-(sizeof(jx9_vm *)+sizeof(SyBlob)+sizeof(sxu32)));
 	if( pSrc->iFlags & MEMOBJ_HASHMAP ){
 		/* Increment reference count */
@@ -31784,7 +31788,7 @@ JX9_PRIVATE sxi32 jx9MemObjRelease(jx9_value *pObj)
  * $x = "jx9"; 	string 	FALSE 	FALSE 	TRUE 	TRUE
  * $x = "true"; string 	FALSE 	FALSE 	TRUE 	TRUE
  * $x = "false"; string 	FALSE 	FALSE 	TRUE 	TRUE
- *      Loose comparisons with ==
+ *      Loose comparisons with == 
  * TRUE 	FALSE 	1 	0 	-1 	"1" 	"0" 	"-1" 	NULL 	array() 	"jx9" 	""
  * TRUE 	TRUE 	FALSE 	TRUE 	FALSE 	TRUE 	TRUE 	FALSE 	TRUE 	FALSE 	FALSE 	TRUE 	FALSE
  * FALSE 	FALSE 	TRUE 	FALSE 	TRUE 	FALSE 	FALSE 	TRUE 	FALSE 	TRUE 	TRUE 	FALSE 	TRUE
@@ -31798,7 +31802,7 @@ JX9_PRIVATE sxi32 jx9MemObjRelease(jx9_value *pObj)
  * array() 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	TRUE 	FALSE 	FALSE
  * "jx9" 	TRUE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE
  * "" 	FALSE 	TRUE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	TRUE
- *    Strict comparisons with ===
+ *    Strict comparisons with === 
  * TRUE 	FALSE 	1 	0 	-1 	"1" 	"0" 	"-1" 	NULL 	array() 	"jx9" 	""
  * TRUE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE
  * FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE
@@ -31807,7 +31811,7 @@ JX9_PRIVATE sxi32 jx9MemObjRelease(jx9_value *pObj)
  * -1 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE
  * "1" 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE
  * "0" 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE
- * "-1" 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE
+ * "-1" 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE 	FALSE 
  * NULL 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE 	FALSE
  * array() 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE 	FALSE
  * "jx9" 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	FALSE 	TRUE 	FALSE
@@ -31815,7 +31819,7 @@ JX9_PRIVATE sxi32 jx9MemObjRelease(jx9_value *pObj)
  */
 JX9_PRIVATE sxi32 jx9MemObjCmp(jx9_value *pObj1, jx9_value *pObj2, int bStrict, int iNest)
 {
-	sxi32 iComb;
+	sxi32 iComb; 
 	sxi32 rc;
 	if( bStrict ){
 		sxi32 iF1, iF2;
@@ -31887,7 +31891,7 @@ JX9_PRIVATE sxi32 jx9MemObjCmp(jx9_value *pObj1, jx9_value *pObj2, int bStrict, 
 			if( (pObj1->iFlags & MEMOBJ_REAL) == 0 ){
 				jx9MemObjToReal(pObj1);
 			}
-			r1 = pObj1->x.rVal;
+			r1 = pObj1->x.rVal;	
 			if( (pObj2->iFlags & MEMOBJ_REAL) == 0 ){
 				jx9MemObjToReal(pObj2);
 			}
@@ -31916,8 +31920,8 @@ JX9_PRIVATE sxi32 jx9MemObjCmp(jx9_value *pObj1, jx9_value *pObj2, int bStrict, 
  * Perform an addition operation of two jx9_values.
  * The reason this function is implemented here rather than 'vm.c'
  * is that the '+' operator is overloaded.
- * That is, the '+' operator is used for arithmetic operation and also
- * used for operation on arrays [i.e: union]. When used with an array
+ * That is, the '+' operator is used for arithmetic operation and also 
+ * used for operation on arrays [i.e: union]. When used with an array 
  * The + operator returns the right-hand array appended to the left-hand array.
  * For keys that exist in both arrays, the elements from the left-hand array
  * will be used, and the matching elements from the right-hand array will
@@ -31960,7 +31964,7 @@ JX9_PRIVATE sxi32 jx9MemObjAdd(jx9_value *pObj1, jx9_value *pObj2, int bAddStore
 			if( bAddStore ){
 				/* Do not duplicate the hashmap, use the left one since its an add&store operation.
 				 */
-				if( (pObj1->iFlags & MEMOBJ_HASHMAP) == 0 ){
+				if( (pObj1->iFlags & MEMOBJ_HASHMAP) == 0 ){				
 					/* Force a hashmap cast */
 					rc = jx9MemObjToHashmap(pObj1);
 					if( rc != SXRET_OK ){
@@ -32009,7 +32013,7 @@ JX9_PRIVATE sxi32 jx9MemObjAdd(jx9_value *pObj1, jx9_value *pObj2, int bAddStore
 	return SXRET_OK;
 }
 /*
- * Return a printable representation of the type of a given
+ * Return a printable representation of the type of a given 
  * jx9_value.
  */
 JX9_PRIVATE const char * jx9MemObjTypeDump(jx9_value *pVal)
@@ -32072,7 +32076,7 @@ JX9_PRIVATE sxi32 jx9MemObjDump(
 				SyBlobAppend(&(*pOut), "'", sizeof(char));
 			}
 		}
-		SyBlobAppend(&(*pOut), ")", sizeof(char));
+		SyBlobAppend(&(*pOut), ")", sizeof(char));	
 	}
 #ifdef __WINNT__
 	SyBlobAppend(&(*pOut), "\r\n", sizeof("\r\n")-1);
@@ -32108,7 +32112,7 @@ JX9_PRIVATE sxi32 jx9MemObjDump(
 #define EXPR_OP_ASSOC_LEFT   0x01 /* Left associative operator */
 #define EXPR_OP_ASSOC_RIGHT  0x02 /* Right associative operator */
 #define EXPR_OP_NON_ASSOC    0x04 /* Non-associative operator */
-/*
+/* 
  * Operators table
  * This table is sorted by operators priority (highest to lowest) according
  * the JX9 language reference manual.
@@ -32123,73 +32127,73 @@ static const jx9_expr_op aOpTable[] = {
 	                              /* Postfix operators */
 	/* Precedence 2(Highest), left-associative */
 	{ {".", sizeof(char)}, EXPR_OP_DOT,     2, EXPR_OP_ASSOC_LEFT ,   JX9_OP_MEMBER },
-	{ {"[", sizeof(char)}, EXPR_OP_SUBSCRIPT, 2, EXPR_OP_ASSOC_LEFT , JX9_OP_LOAD_IDX},
+	{ {"[", sizeof(char)}, EXPR_OP_SUBSCRIPT, 2, EXPR_OP_ASSOC_LEFT , JX9_OP_LOAD_IDX}, 
 	/* Precedence 3, non-associative  */
-	{ {"++", sizeof(char)*2}, EXPR_OP_INCR, 3, EXPR_OP_NON_ASSOC , JX9_OP_INCR},
-	{ {"--", sizeof(char)*2}, EXPR_OP_DECR, 3, EXPR_OP_NON_ASSOC , JX9_OP_DECR},
+	{ {"++", sizeof(char)*2}, EXPR_OP_INCR, 3, EXPR_OP_NON_ASSOC , JX9_OP_INCR}, 
+	{ {"--", sizeof(char)*2}, EXPR_OP_DECR, 3, EXPR_OP_NON_ASSOC , JX9_OP_DECR}, 
 	                              /* Unary operators */
 	/* Precedence 4, right-associative  */
-	{ {"-", sizeof(char)},                 EXPR_OP_UMINUS,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_UMINUS },
-	{ {"+", sizeof(char)},                 EXPR_OP_UPLUS,     4, EXPR_OP_ASSOC_RIGHT, JX9_OP_UPLUS },
-	{ {"~", sizeof(char)},                 EXPR_OP_BITNOT,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_BITNOT },
-	{ {"!", sizeof(char)},                 EXPR_OP_LOGNOT,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_LNOT },
+	{ {"-", sizeof(char)},                 EXPR_OP_UMINUS,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_UMINUS }, 
+	{ {"+", sizeof(char)},                 EXPR_OP_UPLUS,     4, EXPR_OP_ASSOC_RIGHT, JX9_OP_UPLUS }, 
+	{ {"~", sizeof(char)},                 EXPR_OP_BITNOT,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_BITNOT }, 
+	{ {"!", sizeof(char)},                 EXPR_OP_LOGNOT,    4, EXPR_OP_ASSOC_RIGHT, JX9_OP_LNOT }, 
 	                             /* Cast operators */
-	{ {"(int)",    sizeof("(int)")-1   }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_INT  },
-	{ {"(bool)",   sizeof("(bool)")-1  }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_BOOL },
-	{ {"(string)", sizeof("(string)")-1}, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_STR  },
+	{ {"(int)",    sizeof("(int)")-1   }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_INT  }, 
+	{ {"(bool)",   sizeof("(bool)")-1  }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_BOOL }, 
+	{ {"(string)", sizeof("(string)")-1}, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_STR  }, 
 	{ {"(float)",  sizeof("(float)")-1 }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_REAL },
 	{ {"(array)",  sizeof("(array)")-1 }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_ARRAY },   /* Not used, but reserved for future use */
 	{ {"(object)",  sizeof("(object)")-1 }, EXPR_OP_TYPECAST, 4, EXPR_OP_ASSOC_RIGHT, JX9_OP_CVT_ARRAY }, /* Not used, but reserved for future use */
 	                           /* Binary operators */
-	/* Precedence 7, left-associative */
-	{ {"*", sizeof(char)}, EXPR_OP_MUL, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_MUL},
-	{ {"/", sizeof(char)}, EXPR_OP_DIV, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_DIV},
-	{ {"%", sizeof(char)}, EXPR_OP_MOD, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_MOD},
+	/* Precedence 7, left-associative */ 
+	{ {"*", sizeof(char)}, EXPR_OP_MUL, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_MUL}, 
+	{ {"/", sizeof(char)}, EXPR_OP_DIV, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_DIV}, 
+	{ {"%", sizeof(char)}, EXPR_OP_MOD, 7, EXPR_OP_ASSOC_LEFT , JX9_OP_MOD}, 
 	/* Precedence 8, left-associative */
-	{ {"+", sizeof(char)}, EXPR_OP_ADD, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_ADD},
-	{ {"-", sizeof(char)}, EXPR_OP_SUB, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_SUB},
-	{ {"..", sizeof(char)*2},EXPR_OP_DDOT, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_CAT},
+	{ {"+", sizeof(char)}, EXPR_OP_ADD, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_ADD}, 
+	{ {"-", sizeof(char)}, EXPR_OP_SUB, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_SUB}, 
+	{ {"..", sizeof(char)*2},EXPR_OP_DDOT, 8,  EXPR_OP_ASSOC_LEFT, JX9_OP_CAT}, 
 	/* Precedence 9, left-associative */
-	{ {"<<", sizeof(char)*2}, EXPR_OP_SHL, 9, EXPR_OP_ASSOC_LEFT, JX9_OP_SHL},
-	{ {">>", sizeof(char)*2}, EXPR_OP_SHR, 9, EXPR_OP_ASSOC_LEFT, JX9_OP_SHR},
+	{ {"<<", sizeof(char)*2}, EXPR_OP_SHL, 9, EXPR_OP_ASSOC_LEFT, JX9_OP_SHL}, 
+	{ {">>", sizeof(char)*2}, EXPR_OP_SHR, 9, EXPR_OP_ASSOC_LEFT, JX9_OP_SHR}, 
 	/* Precedence 10, non-associative */
-	{ {"<", sizeof(char)},    EXPR_OP_LT,  10, EXPR_OP_NON_ASSOC, JX9_OP_LT},
-	{ {">", sizeof(char)},    EXPR_OP_GT,  10, EXPR_OP_NON_ASSOC, JX9_OP_GT},
-	{ {"<=", sizeof(char)*2}, EXPR_OP_LE,  10, EXPR_OP_NON_ASSOC, JX9_OP_LE},
-	{ {">=", sizeof(char)*2}, EXPR_OP_GE,  10, EXPR_OP_NON_ASSOC, JX9_OP_GE},
-	{ {"<>", sizeof(char)*2}, EXPR_OP_NE,  10, EXPR_OP_NON_ASSOC, JX9_OP_NEQ},
+	{ {"<", sizeof(char)},    EXPR_OP_LT,  10, EXPR_OP_NON_ASSOC, JX9_OP_LT}, 
+	{ {">", sizeof(char)},    EXPR_OP_GT,  10, EXPR_OP_NON_ASSOC, JX9_OP_GT}, 
+	{ {"<=", sizeof(char)*2}, EXPR_OP_LE,  10, EXPR_OP_NON_ASSOC, JX9_OP_LE}, 
+	{ {">=", sizeof(char)*2}, EXPR_OP_GE,  10, EXPR_OP_NON_ASSOC, JX9_OP_GE}, 
+	{ {"<>", sizeof(char)*2}, EXPR_OP_NE,  10, EXPR_OP_NON_ASSOC, JX9_OP_NEQ}, 
 	/* Precedence 11, non-associative */
-	{ {"==", sizeof(char)*2},  EXPR_OP_EQ,  11, EXPR_OP_NON_ASSOC, JX9_OP_EQ},
-	{ {"!=", sizeof(char)*2},  EXPR_OP_NE,  11, EXPR_OP_NON_ASSOC, JX9_OP_NEQ},
-	{ {"===", sizeof(char)*3}, EXPR_OP_TEQ, 11, EXPR_OP_NON_ASSOC, JX9_OP_TEQ},
-	{ {"!==", sizeof(char)*3}, EXPR_OP_TNE, 11, EXPR_OP_NON_ASSOC, JX9_OP_TNE},
+	{ {"==", sizeof(char)*2},  EXPR_OP_EQ,  11, EXPR_OP_NON_ASSOC, JX9_OP_EQ}, 
+	{ {"!=", sizeof(char)*2},  EXPR_OP_NE,  11, EXPR_OP_NON_ASSOC, JX9_OP_NEQ}, 
+	{ {"===", sizeof(char)*3}, EXPR_OP_TEQ, 11, EXPR_OP_NON_ASSOC, JX9_OP_TEQ}, 
+	{ {"!==", sizeof(char)*3}, EXPR_OP_TNE, 11, EXPR_OP_NON_ASSOC, JX9_OP_TNE}, 
 		/* Precedence 12, left-associative */
-	{ {"&", sizeof(char)}, EXPR_OP_BAND, 12, EXPR_OP_ASSOC_LEFT,   JX9_OP_BAND},
+	{ {"&", sizeof(char)}, EXPR_OP_BAND, 12, EXPR_OP_ASSOC_LEFT,   JX9_OP_BAND}, 
 	                         /* Binary operators */
 	/* Precedence 13, left-associative */
-	{ {"^", sizeof(char)}, EXPR_OP_XOR, 13, EXPR_OP_ASSOC_LEFT, JX9_OP_BXOR},
+	{ {"^", sizeof(char)}, EXPR_OP_XOR, 13, EXPR_OP_ASSOC_LEFT, JX9_OP_BXOR}, 
 	/* Precedence 14, left-associative */
-	{ {"|", sizeof(char)}, EXPR_OP_BOR, 14, EXPR_OP_ASSOC_LEFT, JX9_OP_BOR},
+	{ {"|", sizeof(char)}, EXPR_OP_BOR, 14, EXPR_OP_ASSOC_LEFT, JX9_OP_BOR}, 
 	/* Precedence 15, left-associative */
-	{ {"&&", sizeof(char)*2}, EXPR_OP_LAND, 15, EXPR_OP_ASSOC_LEFT, JX9_OP_LAND},
+	{ {"&&", sizeof(char)*2}, EXPR_OP_LAND, 15, EXPR_OP_ASSOC_LEFT, JX9_OP_LAND}, 
 	/* Precedence 16, left-associative */
-	{ {"||", sizeof(char)*2}, EXPR_OP_LOR, 16, EXPR_OP_ASSOC_LEFT, JX9_OP_LOR},
+	{ {"||", sizeof(char)*2}, EXPR_OP_LOR, 16, EXPR_OP_ASSOC_LEFT, JX9_OP_LOR}, 
 	                      /* Ternary operator */
 	/* Precedence 17, left-associative */
-    { {"?", sizeof(char)}, EXPR_OP_QUESTY, 17, EXPR_OP_ASSOC_LEFT, 0},
+    { {"?", sizeof(char)}, EXPR_OP_QUESTY, 17, EXPR_OP_ASSOC_LEFT, 0}, 
 	                     /* Combined binary operators */
 	/* Precedence 18, right-associative */
-	{ {"=", sizeof(char)},     EXPR_OP_ASSIGN,     18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_STORE},
-	{ {"+=", sizeof(char)*2},  EXPR_OP_ADD_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_ADD_STORE },
-	{ {"-=", sizeof(char)*2},  EXPR_OP_SUB_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_SUB_STORE },
-	{ {".=", sizeof(char)*2},  EXPR_OP_DOT_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_CAT_STORE },
-	{ {"*=", sizeof(char)*2},  EXPR_OP_MUL_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_MUL_STORE },
-	{ {"/=", sizeof(char)*2},  EXPR_OP_DIV_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_DIV_STORE },
-	{ {"%=", sizeof(char)*2},  EXPR_OP_MOD_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_MOD_STORE },
-	{ {"&=", sizeof(char)*2},  EXPR_OP_AND_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BAND_STORE },
-	{ {"|=", sizeof(char)*2},  EXPR_OP_OR_ASSIGN,  18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BOR_STORE  },
-	{ {"^=", sizeof(char)*2},  EXPR_OP_XOR_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BXOR_STORE },
-	{ {"<<=", sizeof(char)*3}, EXPR_OP_SHL_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_SHL_STORE },
+	{ {"=", sizeof(char)},     EXPR_OP_ASSIGN,     18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_STORE}, 
+	{ {"+=", sizeof(char)*2},  EXPR_OP_ADD_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_ADD_STORE }, 
+	{ {"-=", sizeof(char)*2},  EXPR_OP_SUB_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_SUB_STORE }, 
+	{ {".=", sizeof(char)*2},  EXPR_OP_DOT_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_CAT_STORE }, 
+	{ {"*=", sizeof(char)*2},  EXPR_OP_MUL_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_MUL_STORE }, 
+	{ {"/=", sizeof(char)*2},  EXPR_OP_DIV_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_DIV_STORE }, 
+	{ {"%=", sizeof(char)*2},  EXPR_OP_MOD_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_MOD_STORE }, 
+	{ {"&=", sizeof(char)*2},  EXPR_OP_AND_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BAND_STORE }, 
+	{ {"|=", sizeof(char)*2},  EXPR_OP_OR_ASSIGN,  18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BOR_STORE  }, 
+	{ {"^=", sizeof(char)*2},  EXPR_OP_XOR_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_BXOR_STORE }, 
+	{ {"<<=", sizeof(char)*3}, EXPR_OP_SHL_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_SHL_STORE }, 
 	{ {">>=", sizeof(char)*3}, EXPR_OP_SHR_ASSIGN, 18,  EXPR_OP_ASSOC_RIGHT, JX9_OP_SHR_STORE },
 		/* Precedence 22, left-associative [Lowest operator] */
 	{ {",", sizeof(char)},  EXPR_OP_COMMA, 22, EXPR_OP_ASSOC_LEFT, 0}, /* IMP-0139-COMMA: Symisc eXtension */
@@ -32198,7 +32202,7 @@ static const jx9_expr_op aOpTable[] = {
 static const jx9_expr_op sFCallOp = {{"(", sizeof(char)}, EXPR_OP_FUNC_CALL, 2, EXPR_OP_ASSOC_LEFT , JX9_OP_CALL};
 /*
  * Check if the given token is a potential operator or not.
- * This function is called by the lexer each time it extract a token that may
+ * This function is called by the lexer each time it extract a token that may 
  * look like an operator.
  * Return a structure [i.e: jx9_expr_op instnace ] that describe the operator on success.
  * Otherwise NULL.
@@ -32214,7 +32218,7 @@ JX9_PRIVATE const jx9_expr_op *  jx9ExprExtractOperator(SyString *pStr, SyToken 
 		if( n >= SX_ARRAYSIZE(aOpTable) ){
 			break;
 		}
-		rc = SyStringCmp(pStr, &aOpTable[n].sOp, SyMemcmp);
+		rc = SyStringCmp(pStr, &aOpTable[n].sOp, SyMemcmp);		
 		if( rc == 0 ){
 			if( aOpTable[n].sOp.nByte != sizeof(char) || (aOpTable[n].iOp != EXPR_OP_UMINUS && aOpTable[n].iOp != EXPR_OP_UPLUS) || pLast == 0 ){
 				if( aOpTable[n].iOp == EXPR_OP_SUBSCRIPT && (pLast == 0 || (pLast->nType & (JX9_TK_ID|JX9_TK_CSB/*]*/|JX9_TK_RPAREN/*)*/)) == 0) ){
@@ -32236,7 +32240,7 @@ JX9_PRIVATE const jx9_expr_op *  jx9ExprExtractOperator(SyString *pStr, SyToken 
 					/* Unary opertors have prcedence here over binary operators */
 					return &aOpTable[n];
 				}
-
+			
 			}
 		}
 		++n; /* Next operator in the table */
@@ -32277,7 +32281,7 @@ JX9_PRIVATE void jx9DelimitNestedTokens(SyToken *pIn,SyToken *pEnd,sxu32 nTokSta
  * Retrun TRUE if the given ID represent a language construct [i.e: print, print..]. FALSE otherwise.
  * Note on reserved keywords.
  *  According to the JX9 language reference manual:
- *   These words have special meaning in JX9. Some of them represent things which look like
+ *   These words have special meaning in JX9. Some of them represent things which look like 
  *   functions, some look like constants, and so on--but they're not, really: they are language
  *   constructs. You cannot use any of the following words as constants, object names, function
  *   or method names. Using them as variable names is generally OK, but could lead to confusion.
@@ -32289,7 +32293,7 @@ JX9_PRIVATE int jx9IsLangConstruct(sxu32 nKeyID)
 			return TRUE;
 	}
 	/* Not a language construct */
-	return FALSE;
+	return FALSE; 
 }
 /*
  * Point to the next expression that should be evaluated shortly.
@@ -32325,11 +32329,11 @@ JX9_PRIVATE sxi32 jx9GetNextExpr(SyToken *pStart,SyToken *pEnd,SyToken **ppNext)
  *  According to the JX9 language reference manual:
  *  Anonymous functions, also known as closures, allow the creation of functions
  *  which have no specified name. They are most useful as the value of callback
- *  parameters, but they have many other uses.
+ *  parameters, but they have many other uses. 
  *  Closures may also inherit variables from the parent scope. Any such variables
  *  must be declared in the function header. Inheriting variables from the parent
  *  scope is not the same as using global variables. Global variables exist in the global scope
- *  which is the same no matter what function is executing. The parent scope of a closure is the
+ *  which is the same no matter what function is executing. The parent scope of a closure is the 
  *  function in which the closure was declared (not necessarily the function it was called from).
  *
  * Some example:
@@ -32345,8 +32349,8 @@ JX9_PRIVATE sxi32 jx9GetNextExpr(SyToken *pStart,SyToken *pEnd,SyToken **ppNext)
  * };
  * // This is our range of numbers
  * $numbers = range(1, 5);
- * // Use the Annonymous function as a callback here to
- * // double the size of each element in our
+ * // Use the Annonymous function as a callback here to 
+ * // double the size of each element in our 
  * // range
  * $new_numbers = array_map($double, $numbers);
  * print implode(' ', $new_numbers);
@@ -32392,7 +32396,7 @@ static sxi32 ExprAssembleAnnon(jx9_gen_state *pGen,SyToken **ppCur, SyToken *pEn
 		rc = jx9GenCompileError(&(*pGen), E_ERROR, nLine, "Syntax error while declaring annonymous function, missing '{'");
 		if( rc == SXERR_ABORT ){
 			return SXERR_ABORT;
-		}
+		}			
 	}
 	rc = SXRET_OK;
 Synchronize:
@@ -32500,7 +32504,7 @@ static sxi32 ExprVerifyNodes(jx9_gen_state *pGen, jx9_expr_node **apNode, sxi32 
  * Extract a single expression node from the input.
  * On success store the freshly extractd node in ppNode.
  * When errors, JX9 take care of generating the appropriate error message.
- * An expression node can be a variable [i.e: $var], an operator [i.e: ++]
+ * An expression node can be a variable [i.e: $var], an operator [i.e: ++] 
  * an annonymous function [i.e: function(){ return "Hello"; }, a double/single
  * quoted string, a heredoc/nowdoc, a literal [i.e: JX9_EOL], a namespace path
  * [i.e: namespaces\path\to..], a array/list [i.e: array(4, 5, 6)] and so on.
@@ -32588,7 +32592,7 @@ static sxi32 ExprExtractNode(jx9_gen_state *pGen, jx9_expr_node **ppNode)
 				 rc = ExprAssembleAnnon(&(*pGen), &pCur, pGen->pEnd);
 				 if( rc != SXRET_OK ){
 					 SyMemBackendPoolFree(&pGen->pVm->sAllocator, pNode);
-					 return rc;
+					 return rc; 
 				 }
 				 pNode->xCode = jx9CompileAnnonFunc;
 			  }
@@ -32857,7 +32861,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 					 if( rc != SXERR_ABORT ){
 						 rc = SXERR_SYNTAX;
 					 }
-					 return rc;
+					 return rc; 
 				 }
 				 if(  iLeft < 0 || !NODE_ISTERM(iLeft) /*|| ( apNode[iLeft]->pOp && apNode[iLeft]->pOp->iPrec != 2)*/ ){
 					 /* Syntax error */
@@ -32936,7 +32940,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 				 pNode->pLeft = apNode[iLeft];
 				 if( pNode->pLeft->pOp == 0 && pNode->pLeft->xCode != jx9CompileVariable ){
 					 /* Syntax error */
-					 rc = jx9GenCompileError(pGen, E_ERROR, pNode->pStart->nLine,
+					 rc = jx9GenCompileError(pGen, E_ERROR, pNode->pStart->nLine, 
 						 "'%z': Expecting a variable as left operand", &pNode->pOp->sOp);
 					 if( rc != SXERR_ABORT ){
 						 rc = SXERR_SYNTAX;
@@ -32961,7 +32965,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 				 || apNode[iLeft]->xCode == jx9CompileVariable) ){
 					 /* Link the node to the tree */
 					 pNode->pLeft = apNode[iLeft];
-					 apNode[iLeft] = 0;
+					 apNode[iLeft] = 0; 
 			 }
 		  }
 		 iLeft = iCur;
@@ -33022,7 +33026,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 			  /* Save terminal position */
 			  iLeft = iCur;
 		  }
-	  }
+	  }	 
 	 /* Process left and non-associative binary operators [i.e: *, /, &&, ||...]*/
 	 for( i = 7 ; i < 17 ; i++ ){
 		 iLeft = -1;
@@ -33043,7 +33047,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 					 if( rc != SXERR_ABORT ){
 						 rc = SXERR_SYNTAX;
 					 }
-					 return rc;
+					 return rc; 
 				 }
 				 /* Link the node to the tree */
 				 pNode->pLeft = apNode[iLeft];
@@ -33053,7 +33057,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 			 iLeft = iCur;
 		 }
 	 }
-	 /* Handle the ternary operator. (expr1) ? (expr2) : (expr3)
+	 /* Handle the ternary operator. (expr1) ? (expr2) : (expr3) 
 	  * Note that we do not need a precedence loop here since
 	  * we are dealing with a single operator.
 	  */
@@ -33129,7 +33133,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 		  }
 		  iLeft = iCur;
 	  }
-	 /* Process right associative binary operators [i.e: '=', '+=', '/=']
+	 /* Process right associative binary operators [i.e: '=', '+=', '/='] 
 	  * Note: All right associative binary operators have precedence 18
 	  * so there is no need for a precedence loop here.
 	  */
@@ -33156,12 +33160,12 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 			 if( ExprIsModifiableValue(apNode[iLeft]) == FALSE ){
 				 if( pNode->pOp->iVmOp != JX9_OP_STORE  ){
 					 /* Left operand must be a modifiable l-value */
-					 rc = jx9GenCompileError(pGen, E_ERROR, pNode->pStart->nLine,
+					 rc = jx9GenCompileError(pGen, E_ERROR, pNode->pStart->nLine, 
 						 "'%z': Left operand must be a modifiable l-value", &pNode->pOp->sOp);
 					 if( rc != SXERR_ABORT ){
 						 rc = SXERR_SYNTAX;
 					 }
-					 return rc;
+					 return rc; 
 				 }
 			 }
 			 /* Link the node to the tree (Reverse) */
@@ -33207,7 +33211,7 @@ static sxi32 ExprProcessFuncArguments(jx9_gen_state *pGen, jx9_expr_node *pOp, j
 				  if( rc != SXERR_ABORT ){
 					  rc = SXERR_SYNTAX;
 				  }
-				  return rc;
+				  return rc;  
 			 }
 			 apNode[0] = apNode[iCur];
 			 apNode[iCur] = 0;
@@ -33290,7 +33294,7 @@ JX9_PRIVATE sxi32 jx9ExprMakeTree(jx9_gen_state *pGen, SySet *pExprNode, jx9_exp
  * This file implement a virtual file systems (VFS) for the JX9 engine.
  */
 /*
- * Given a string containing the path of a file or directory, this function
+ * Given a string containing the path of a file or directory, this function 
  * return the parent directory's path.
  */
 JX9_PRIVATE const char * jx9ExtractDirName(const char *zPath, int nByte, int *pLen)
@@ -33353,8 +33357,8 @@ static int jx9Vfs_chdir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xChdir == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33391,8 +33395,8 @@ static int jx9Vfs_chroot(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xChroot == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33424,8 +33428,8 @@ static int jx9Vfs_getcwd(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33463,8 +33467,8 @@ static int jx9Vfs_rmdir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xRmdir == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33501,8 +33505,8 @@ static int jx9Vfs_is_dir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xIsdir == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33547,8 +33551,8 @@ static int jx9Vfs_mkdir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xMkdir == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33599,8 +33603,8 @@ static int jx9Vfs_rename(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xRename == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33637,8 +33641,8 @@ static int jx9Vfs_realpath(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xRealpath == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33676,8 +33680,8 @@ static int jx9Vfs_sleep(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xSleep == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33722,8 +33726,8 @@ static int jx9Vfs_usleep(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xSleep == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
 			);
 		return JX9_OK;
@@ -33761,8 +33765,8 @@ static int jx9Vfs_unlink(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xUnlink == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33802,8 +33806,8 @@ static int jx9Vfs_chmod(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xChmod == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33844,8 +33848,8 @@ static int jx9Vfs_chown(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xChown == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33886,8 +33890,8 @@ static int jx9Vfs_chgrp(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xChgrp == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33926,8 +33930,8 @@ static int jx9Vfs_disk_free_space(jx9_context *pCtx, int nArg, jx9_value **apArg
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFreeSpace == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -33964,8 +33968,8 @@ static int jx9Vfs_disk_total_space(jx9_context *pCtx, int nArg, jx9_value **apAr
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xTotalSpace == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34002,8 +34006,8 @@ static int jx9Vfs_file_exists(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFileExists == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34040,8 +34044,8 @@ static int jx9Vfs_file_size(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFileSize == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34078,8 +34082,8 @@ static int jx9Vfs_file_atime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFileAtime == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34116,8 +34120,8 @@ static int jx9Vfs_file_mtime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFileMtime == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34154,8 +34158,8 @@ static int jx9Vfs_file_ctime(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFileCtime == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34192,8 +34196,8 @@ static int jx9Vfs_is_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xIsfile == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34230,8 +34234,8 @@ static int jx9Vfs_is_link(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xIslink == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34268,8 +34272,8 @@ static int jx9Vfs_is_readable(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xReadable == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34306,8 +34310,8 @@ static int jx9Vfs_is_writable(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xWritable == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34344,8 +34348,8 @@ static int jx9Vfs_is_executable(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xExecutable == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34382,8 +34386,8 @@ static int jx9Vfs_filetype(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xFiletype == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34436,8 +34440,8 @@ static int jx9Vfs_stat(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xStat == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34505,8 +34509,8 @@ static int jx9Vfs_lstat(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xlStat == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34543,7 +34547,7 @@ static int jx9Vfs_lstat(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   The variable name.
  * Return
  *  Returns the value of the environment variable varname, or FALSE if the environment
- * variable varname does not exist.
+ * variable varname does not exist. 
  */
 static int jx9Vfs_getenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -34559,8 +34563,8 @@ static int jx9Vfs_getenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xGetenv == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34585,7 +34589,7 @@ static int jx9Vfs_getenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $setting
  *   The setting, like "FOO=BAR"
  * Return
- *  TRUE on success or FALSE on failure.
+ *  TRUE on success or FALSE on failure.  
  */
 static int jx9Vfs_putenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -34632,8 +34636,8 @@ static int jx9Vfs_putenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xSetenv == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34658,7 +34662,7 @@ static int jx9Vfs_putenv(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   The touch time. If time is not supplied, the current system time is used.
  * $atime
  *   If present, the access time of the given filename is set to the value of atime.
- *   Otherwise, it is set to the value passed to the time parameter. If neither are
+ *   Otherwise, it is set to the value passed to the time parameter. If neither are 
  *   present, the current system time is used.
  * Return
  *  TRUE on success or FALSE on failure.
@@ -34678,8 +34682,8 @@ static int jx9Vfs_touch(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xTouch == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -34718,7 +34722,7 @@ static int jx9Vfs_touch(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  On Windows, both slash (/) and backslash (\) are used as directory separator character.
  *  In other environments, it is the forward slash (/).
  * Return
- *  The path of the parent directory. If there are no slashes in path, a dot ('.')
+ *  The path of the parent directory. If there are no slashes in path, a dot ('.') 
  *  is returned, indicating the current directory.
  */
 static int jx9Builtin_dirname(jx9_context *pCtx, int nArg, jx9_value **apArg)
@@ -34754,7 +34758,7 @@ static int jx9Builtin_dirname(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $suffix
  *  If the name component ends in suffix this will also be cut off.
  * Return
- *  The base name of the given path.
+ *  The base name of the given path. 
  */
 static int jx9Builtin_basename(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -34812,8 +34816,8 @@ static int jx9Builtin_basename(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *      PATHINFO_DIRNAME, PATHINFO_BASENAME, PATHINFO_EXTENSION or PATHINFO_FILENAME.
  * Return
  *  If the options parameter is not passed, an associative array containing the following
- *  elements is returned: dirname, basename, extension (if any), and filename.
- *  If options is present, returns a string containing the requested element.
+ *  elements is returned: dirname, basename, extension (if any), and filename. 
+ *  If options is present, returns a string containing the requested element. 
  */
 typedef struct path_info path_info;
 struct path_info
@@ -35021,32 +35025,32 @@ static int jx9Builtin_pathinfo(jx9_context *pCtx, int nArg, jx9_value **apArg)
  */
 typedef unsigned char u8;
 /* An array to map all upper-case characters into their corresponding
-** lower-case character.
+** lower-case character. 
 **
 ** SQLite only considers US-ASCII (or EBCDIC) characters.  We do not
 ** handle case conversions for the UTF character set since the tables
 ** involved are nearly as big or bigger than SQLite itself.
 */
 static const unsigned char sqlite3UpperToLower[] = {
-      0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
-     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
-     36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
-     54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 97, 98, 99, 100, 101, 102, 103,
-    104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
-    122, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107,
-    108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
-    126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161,
-    162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
-    180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197,
-    198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215,
-    216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233,
-    234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
+      0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 
+     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 
+     36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 
+     54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 97, 98, 99, 100, 101, 102, 103, 
+    104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 
+    122, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 
+    108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 
+    126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 
+    162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 
+    180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 
+    198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 
+    216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 
+    234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 
     252, 253, 254, 255
 };
 #define GlogUpperToLower(A)     if( A<0x80 ){ A = sqlite3UpperToLower[A]; }
 /*
-** Assuming zIn points to the first byte of a UTF-8 character,
+** Assuming zIn points to the first byte of a UTF-8 character, 
 ** advance zIn to point to the first byte of the next UTF-8 character.
 */
 #define SQLITE_SKIP_UTF8(zIn) {                        \
@@ -35216,7 +35220,7 @@ static int Glob(const unsigned char *zPattern, const unsigned char *zString, int
  *    FNM_PERIOD 	Leading period in string must be exactly matched by period in the given pattern.
  *    FNM_CASEFOLD 	Caseless match.
  * Return
- *  TRUE if there is a match, FALSE otherwise.
+ *  TRUE if there is a match, FALSE otherwise. 
  */
 static int jx9Builtin_fnmatch(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -35257,7 +35261,7 @@ static int jx9Builtin_fnmatch(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $string
  *  The tested string.
  * Return
- *  TRUE if there is a match, FALSE otherwise.
+ *  TRUE if there is a match, FALSE otherwise. 
  */
 static int jx9Builtin_strglob(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -35303,8 +35307,8 @@ static int jx9Vfs_link(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xLink == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35344,8 +35348,8 @@ static int jx9Vfs_symlink(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xLink == 0 ){
 		/* IO routine not implemented, return NULL */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS, JX9 is returning FALSE", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35378,8 +35382,8 @@ static int jx9Vfs_umask(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	pVfs = (jx9_vfs *)jx9_context_user_data(pCtx);
 	if( pVfs == 0 || pVfs->xUmask == 0 ){
 		/* IO routine not implemented, return -1 */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_int(pCtx, 0);
@@ -35414,10 +35418,10 @@ static int jx9Vfs_sys_get_temp_dir(jx9_context *pCtx, int nArg, jx9_value **apAr
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented, return "" */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
-			);
+			);		
 		return JX9_OK;
 	}
 	/* Perform the requested operation */
@@ -35441,10 +35445,10 @@ static int jx9Vfs_get_current_user(jx9_context *pCtx, int nArg, jx9_value **apAr
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
-			);
+			);		
 		/* Set a dummy username */
 		jx9_result_string(pCtx, "unknown", sizeof("unknown")-1);
 		return JX9_OK;
@@ -35471,8 +35475,8 @@ static int jx9Vfs_getmypid(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented, return -1 */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_int(pCtx, -1);
@@ -35502,8 +35506,8 @@ static int jx9Vfs_getmyuid(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented, return -1 */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_int(pCtx, -1);
@@ -35533,8 +35537,8 @@ static int jx9Vfs_getmygid(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		SXUNUSED(nArg); /* cc warning */
 		SXUNUSED(apArg);
 		/* IO routine not implemented, return -1 */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying VFS",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying VFS", 
 			jx9_function_name(pCtx)
 			);
 		jx9_result_int(pCtx, -1);
@@ -35615,7 +35619,7 @@ static int jx9Vfs_uname(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	case 'r':
 	case 'v':
 		/* Version information. */
-		jx9_result_string_format(pCtx, "%u.%u build %u",
+		jx9_result_string_format(pCtx, "%u.%u build %u", 
 			sVer.dwMajorVersion, sVer.dwMinorVersion, sVer.dwBuildNumber
 			);
 		break;
@@ -35624,8 +35628,8 @@ static int jx9Vfs_uname(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		jx9_result_string(pCtx, "x86", (int)sizeof("x86")-1);
 		break;
 	default:
-		jx9_result_string_format(pCtx, "%s localhost %u.%u build %u x86",
-			zName,
+		jx9_result_string_format(pCtx, "%s localhost %u.%u build %u x86", 
+			zName, 
 			sVer.dwMajorVersion, sVer.dwMinorVersion, sVer.dwBuildNumber
 			);
 		break;
@@ -35657,12 +35661,12 @@ static int jx9Vfs_uname(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		jx9_result_string(pCtx, sName.machine, -1/* Compute length automatically*/);
 		break;
 	default:
-		jx9_result_string_format(pCtx,
-			"%s %s %s %s %s",
-			sName.sysname,
-			sName.release,
-			sName.version,
-			sName.nodename,
+		jx9_result_string_format(pCtx, 
+			"%s %s %s %s %s", 
+			sName.sysname, 
+			sName.release, 
+			sName.version, 
+			sName.nodename, 
 			sName.machine
 			);
 		break;
@@ -35693,7 +35697,7 @@ struct io_private
 };
 #define IO_PRIVATE_MAGIC 0xFEAC14
 /* Make sure we are dealing with a valid io_private instance */
-#define IO_PRIVATE_INVALID(IO) ( IO == 0 || IO->iMagic != IO_PRIVATE_MAGIC )
+#define IO_PRIVATE_INVALID(IO) ( IO == 0 || IO->iMagic != IO_PRIVATE_MAGIC ) 
 /* Forward declaration */
 static void ResetIOPrivate(io_private *pDev);
 /*
@@ -35732,8 +35736,8 @@ static int jx9Builtin_ftruncate(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xTrunc == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35747,7 +35751,7 @@ static int jx9Builtin_ftruncate(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* IO result */
 	jx9_result_bool(pCtx, rc == JX9_OK);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * int fseek(resource $handle, int $offset[, int $whence = SEEK_SET ])
@@ -35772,7 +35776,7 @@ static int jx9Builtin_fseek(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	const jx9_io_stream *pStream;
 	io_private *pDev;
 	jx9_int64 iOfft;
-	int whence;
+	int whence;  
 	int rc;
 	if( nArg < 2 || !jx9_value_is_resource(apArg[0]) ){
 		/* Missing/Invalid arguments, return FALSE */
@@ -35792,8 +35796,8 @@ static int jx9Builtin_fseek(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xSeek == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_int(pCtx, -1);
@@ -35813,7 +35817,7 @@ static int jx9Builtin_fseek(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* IO result */
 	jx9_result_int(pCtx, rc == JX9_OK ? 0 : - 1);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * int64 ftell(resource $handle)
@@ -35849,8 +35853,8 @@ static int jx9Builtin_ftell(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xTell == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35860,7 +35864,7 @@ static int jx9Builtin_ftell(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	iOfft = pStream->xTell(pDev->pHandle);
 	/* IO result */
 	jx9_result_int64(pCtx, iOfft);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * bool rewind(resource $handle)
@@ -35894,8 +35898,8 @@ static int jx9Builtin_rewind(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xSeek == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35909,7 +35913,7 @@ static int jx9Builtin_rewind(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* IO result */
 	jx9_result_bool(pCtx, rc == JX9_OK);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * bool fflush(resource $handle)
@@ -35943,8 +35947,8 @@ static int jx9Builtin_fflush(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0 || pStream->xSync == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -35954,7 +35958,7 @@ static int jx9Builtin_fflush(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	rc = pStream->xSync(pDev->pHandle);
 	/* IO result */
 	jx9_result_bool(pCtx, rc == JX9_OK);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * bool feof(resource $handle)
@@ -35988,8 +35992,8 @@ static int jx9Builtin_feof(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 1);
@@ -36013,11 +36017,11 @@ static int jx9Builtin_feof(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* EOF or not */
 	jx9_result_bool(pCtx, rc == SXERR_EOF);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * Read n bytes from the underlying IO stream device.
- * Return total numbers of bytes readen on success. A number < 1 on failure
+ * Return total numbers of bytes readen on success. A number < 1 on failure 
  * [i.e: IO error ] or EOF.
  */
 static jx9_int64 StreamRead(io_private *pDev, void *pBuf, jx9_int64 nLen)
@@ -36146,7 +36150,7 @@ static jx9_int64 StreamReadLine(io_private *pDev, const char **pzData, jx9_int64
  * Notes on stream:
  * According to the JX9 reference manual.
  * In its simplest definition, a stream is a resource object which exhibits streamable behavior.
- * That is, it can be read from or written to in a linear fashion, and may be able to fseek()
+ * That is, it can be read from or written to in a linear fashion, and may be able to fseek() 
  * to an arbitrary locations within the stream.
  * A wrapper is additional code which tells the stream how to handle specific protocols/encodings.
  * For example, the http wrapper knows how to translate a URL into an HTTP/1.0 request for a file
@@ -36156,13 +36160,13 @@ static jx9_int64 StreamReadLine(io_private *pDev, const char **pzData, jx9_int64
  *   If no wrapper is specified, the function default is used (typically file://).
  *   target - Depends on the wrapper used. For filesystem related streams this is typically a path
  *  and filename of the desired file. For network related streams this is typically a hostname, often
- *  with a path appended.
+ *  with a path appended. 
  *
  * Note that JX9 IO streams looks like JX9 streams but their implementation differ greately.
  * Please refer to the official documentation for a full discussion.
  * This function return a handle on success. Otherwise null.
  */
-JX9_PRIVATE void * jx9StreamOpenHandle(jx9_vm *pVm, const jx9_io_stream *pStream, const char *zFile,
+JX9_PRIVATE void * jx9StreamOpenHandle(jx9_vm *pVm, const jx9_io_stream *pStream, const char *zFile, 
 	int iFlags, int use_include, jx9_value *pResource, int bPushInclude, int *pNew)
 {
 	void *pHandle = 0; /* cc warning */
@@ -36276,7 +36280,7 @@ JX9_PRIVATE void jx9StreamCloseHandle(const jx9_io_stream *pStream, void *pHandl
  *   The file pointer.
  * Return
  *  Returns a string containing a single character read from the file
- *  pointed to by handle. Returns FALSE on EOF.
+ *  pointed to by handle. Returns FALSE on EOF. 
  * WARNING
  *  This operation is extremely slow.Avoid using it.
  */
@@ -36303,8 +36307,8 @@ static int jx9Builtin_fgetc(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36320,7 +36324,7 @@ static int jx9Builtin_fgetc(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Return the string holding the character */
 		jx9_result_string(pCtx, (const char *)&c, sizeof(char));
 	}
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * string fgets(resource $handle[, int64 $length ])
@@ -36332,7 +36336,7 @@ static int jx9Builtin_fgetc(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  Reading ends when length - 1 bytes have been read, on a newline
  *  (which is included in the return value), or on EOF (whichever comes first).
  *  If no length is specified, it will keep reading from the stream until it reaches
- *  the end of the line.
+ *  the end of the line. 
  * Return
  *  Returns a string of up to length - 1 bytes read from the file pointed to by handle.
  *  If there is no more data to read in the file pointer, then FALSE is returned.
@@ -36362,8 +36366,8 @@ static int jx9Builtin_fgets(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36383,7 +36387,7 @@ static int jx9Builtin_fgets(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Return the freshly extracted line */
 		jx9_result_string(pCtx, zLine, (int)n);
 	}
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * string fread(resource $handle, int64 $length)
@@ -36394,7 +36398,7 @@ static int jx9Builtin_fgets(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * $length
  *  Up to length number of bytes read.
  * Return
- *  The data readen on success or FALSE on failure.
+ *  The data readen on success or FALSE on failure. 
  */
 static int jx9Builtin_fread(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -36421,8 +36425,8 @@ static int jx9Builtin_fread(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36439,7 +36443,7 @@ static int jx9Builtin_fread(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Allocate enough buffer */
 	pBuf = jx9_context_alloc_chunk(pCtx, (unsigned int)nLen, FALSE, FALSE);
 	if( pBuf == 0 ){
-		jx9_context_throw_error(pCtx, JX9_CTX_ERR, "JX9 is running out of memory");
+		jx9_context_throw_error(pCtx, JX9_CTX_ERR, "JX9 is running out of memory");			
 		jx9_result_bool(pCtx, 0);
 		return JX9_OK;
 	}
@@ -36454,10 +36458,10 @@ static int jx9Builtin_fread(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Release the buffer */
 	jx9_context_free_chunk(pCtx, pBuf);
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
- * array fgetcsv(resource $handle [, int $length = 0
+ * array fgetcsv(resource $handle [, int $length = 0 
  *         [, string $delimiter = ', '[, string $enclosure = '"'[, string $escape='\\']]]])
  * Gets line from file pointer and parse for CSV fields.
  * Parameters
@@ -36467,7 +36471,7 @@ static int jx9Builtin_fread(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  Reading ends when length - 1 bytes have been read, on a newline
  *  (which is included in the return value), or on EOF (whichever comes first).
  *  If no length is specified, it will keep reading from the stream until it reaches
- *  the end of the line.
+ *  the end of the line. 
  * $delimiter
  *   Set the field delimiter (one character only).
  * $enclosure
@@ -36503,8 +36507,8 @@ static int jx9Builtin_fgetcsv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36566,7 +36570,7 @@ static int jx9Builtin_fgetcsv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Return the freshly created array  */
 		jx9_result_value(pCtx, pArray);
 	}
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * string fgetss(resource $handle [, int $length [, string $allowable_tags ]])
@@ -36578,12 +36582,12 @@ static int jx9Builtin_fgetcsv(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  Reading ends when length - 1 bytes have been read, on a newline
  *  (which is included in the return value), or on EOF (whichever comes first).
  *  If no length is specified, it will keep reading from the stream until it reaches
- *  the end of the line.
+ *  the end of the line. 
  * $allowable_tags
- *  You can use the optional second parameter to specify tags which should not be stripped.
+ *  You can use the optional second parameter to specify tags which should not be stripped. 
  * Return
- *  Returns a string of up to length - 1 bytes read from the file pointed to by
- *  handle, with all HTML and JX9 code stripped. If an error occurs, returns FALSE.
+ *  Returns a string of up to length - 1 bytes read from the file pointed to by 
+ *  handle, with all HTML and JX9 code stripped. If an error occurs, returns FALSE. 
  */
 static int jx9Builtin_fgetss(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -36609,8 +36613,8 @@ static int jx9Builtin_fgetss(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36636,7 +36640,7 @@ static int jx9Builtin_fgetss(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		/* Process data just read */
 		jx9StripTagsFromString(pCtx, zLine, (int)n, zTaglist, nTaglen);
 	}
-	return JX9_OK;
+	return JX9_OK;	
 }
 /*
  * string readdir(resource $dir_handle)
@@ -36670,8 +36674,8 @@ static int jx9Builtin_readdir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xReadDir == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36717,8 +36721,8 @@ static int jx9Builtin_rewinddir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xRewindDir == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36762,8 +36766,8 @@ static int jx9Builtin_closedir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xCloseDir == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36804,14 +36808,14 @@ static int jx9Builtin_opendir(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Try to extract a stream */
 	pStream = jx9VmGetStreamDevice(pCtx->pVm, &zPath, iLen);
 	if( pStream == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
 			"No stream device is associated with the given path(%s)", zPath);
 		jx9_result_bool(pCtx, 0);
 		return JX9_OK;
 	}
 	if( pStream->xOpenDir == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device", 
 			jx9_function_name(pCtx), pStream->zName
 			);
 		jx9_result_bool(pCtx, 0);
@@ -36880,7 +36884,7 @@ static int jx9Builtin_readfile(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		use_include = jx9_value_to_bool(apArg[1]);
 	}
 	/* Try to open the file in read-only mode */
-	pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zFile, JX9_IO_OPEN_RDONLY,
+	pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zFile, JX9_IO_OPEN_RDONLY, 
 		use_include, nArg > 2 ? apArg[2] : 0, FALSE, 0);
 	if( pHandle == 0 ){
 		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR, "IO error while opening '%s'", zFile);
@@ -36910,7 +36914,7 @@ static int jx9Builtin_readfile(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	return JX9_OK;
 }
 /*
- * string file_get_contents(string $filename[, bool $use_include_path = false
+ * string file_get_contents(string $filename[, bool $use_include_path = false 
  *         [, resource $context [, int $offset = -1 [, int $maxlen ]]]])
  *  Reads entire file into a string.
  * Parameters
@@ -36924,7 +36928,7 @@ static int jx9Builtin_readfile(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $offset
  *   The offset where the reading starts on the original stream.
  *  $maxlen
- *    Maximum length of data read. The default is to read until end of file
+ *    Maximum length of data read. The default is to read until end of file 
  *    is reached. Note that this parameter is applied to the stream processed by the filters.
  * Return
  *   The function returns the read data or FALSE on failure.
@@ -36938,7 +36942,7 @@ static int jx9Builtin_file_get_contents(jx9_context *pCtx, int nArg, jx9_value *
 	char zBuf[8192];
 	void *pHandle;
 	int nLen;
-
+	
 	if( nArg < 1 || !jx9_value_is_string(apArg[0]) ){
 		/* Missing/Invalid arguments, return FALSE */
 		jx9_context_throw_error(pCtx, JX9_CTX_WARNING, "Expecting a file path");
@@ -36982,7 +36986,7 @@ static int jx9Builtin_file_get_contents(jx9_context *pCtx, int nArg, jx9_value *
 	/* Perform the requested operation */
 	nRead = 0;
 	for(;;){
-		n = pStream->xRead(pHandle, zBuf,
+		n = pStream->xRead(pHandle, zBuf, 
 			(nMaxlen > 0 && (nMaxlen < sizeof(zBuf))) ? nMaxlen : sizeof(zBuf));
 		if( n < 1 ){
 			/* EOF or IO error, break immediately */
@@ -37023,7 +37027,7 @@ static int jx9Builtin_file_get_contents(jx9_context *pCtx, int nArg, jx9_value *
  * context
  *  A context stream resource.
  * Return
- *  The function returns the number of bytes that were written to the file, or FALSE on failure.
+ *  The function returns the number of bytes that were written to the file, or FALSE on failure. 
  */
 static int jx9Builtin_file_put_contents(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -37035,7 +37039,7 @@ static int jx9Builtin_file_put_contents(jx9_context *pCtx, int nArg, jx9_value *
 	void *pHandle;
 	int iFlags;
 	int nLen;
-
+	
 	if( nArg < 2 || !jx9_value_is_string(apArg[0]) ){
 		/* Missing/Invalid arguments, return FALSE */
 		jx9_context_throw_error(pCtx, JX9_CTX_WARNING, "Expecting a file path");
@@ -37076,7 +37080,7 @@ static int jx9Builtin_file_put_contents(jx9_context *pCtx, int nArg, jx9_value *
 			iOpenFlags |= JX9_IO_OPEN_APPEND;
 		}
 	}
-	pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zFile, iOpenFlags, use_include,
+	pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zFile, iOpenFlags, use_include, 
 		nArg > 3 ? apArg[3] : 0, FALSE, FALSE);
 	if( pHandle == 0 ){
 		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR, "IO error while opening '%s'", zFile);
@@ -37100,8 +37104,8 @@ static int jx9Builtin_file_put_contents(jx9_context *pCtx, int nArg, jx9_value *
 		}
 	}else{
 		/* Read-only stream */
-		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR,
-			"Read-only stream(%s): Cannot perform write operation",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR, 
+			"Read-only stream(%s): Cannot perform write operation", 
 			pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37119,11 +37123,11 @@ static int jx9Builtin_file_put_contents(jx9_context *pCtx, int nArg, jx9_value *
  *  $flags
  *   The optional parameter flags can be one, or more, of the following constants:
  *   FILE_USE_INCLUDE_PATH
- *       Search for the file in the include_path.
+ *       Search for the file in the include_path. 
  *   FILE_IGNORE_NEW_LINES
- *       Do not add newline at the end of each array element
+ *       Do not add newline at the end of each array element 
  *   FILE_SKIP_EMPTY_LINES
- *       Skip empty lines
+ *       Skip empty lines 
  *  $context
  *   A context stream resource.
  * Return
@@ -37139,7 +37143,7 @@ static int jx9Builtin_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	jx9_int64 n;
 	int iFlags;
 	int nLen;
-
+	
 	if( nArg < 1 || !jx9_value_is_string(apArg[0]) ){
 		/* Missing/Invalid arguments, return FALSE */
 		jx9_context_throw_error(pCtx, JX9_CTX_WARNING, "Expecting a file path");
@@ -37204,7 +37208,7 @@ static int jx9Builtin_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		zEnd = &zBuf[n];
 		if( iFlags & 0x02 /* FILE_IGNORE_NEW_LINES */ ){
 			/* Ignore trailig lines */
-			while( zPtr < zEnd && (zEnd[-1] == '\n'
+			while( zPtr < zEnd && (zEnd[-1] == '\n' 
 #ifdef __WINNT__
 				|| zEnd[-1] == '\r'
 #endif
@@ -37242,8 +37246,8 @@ static int jx9Builtin_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $source
  *   Path to the source file.
  *  $dest
- *   The destination path. If dest is a URL, the copy operation
- *   may fail if the wrapper does not support overwriting of existing files.
+ *   The destination path. If dest is a URL, the copy operation 
+ *   may fail if the wrapper does not support overwriting of existing files. 
  *  $context
  *   A context stream resource.
  * Return
@@ -37251,7 +37255,7 @@ static int jx9Builtin_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
  */
 static int jx9Builtin_copy(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
-	const jx9_io_stream *pSin, *pSout;
+	const jx9_io_stream *pSin, *pSout;	
 	const char *zFile;
 	char zBuf[8192];
 	void *pIn, *pOut;
@@ -37290,8 +37294,8 @@ static int jx9Builtin_copy(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		return JX9_OK;
 	}
 	if( pSout->xWrite == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pSin->zName
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37299,7 +37303,7 @@ static int jx9Builtin_copy(jx9_context *pCtx, int nArg, jx9_value **apArg)
 		return JX9_OK;
 	}
 	/* Try to open the destination file in a read-write mode */
-	pOut = jx9StreamOpenHandle(pCtx->pVm, pSout, zFile,
+	pOut = jx9StreamOpenHandle(pCtx->pVm, pSout, zFile, 
 		JX9_IO_OPEN_CREATE|JX9_IO_OPEN_TRUNC|JX9_IO_OPEN_RDWR, FALSE, nArg > 2 ? apArg[2] : 0, FALSE, 0);
 	if( pOut == 0 ){
 		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR, "IO error while opening destination: '%s'", zFile);
@@ -37361,8 +37365,8 @@ static int jx9Builtin_fstat(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xStat == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37395,7 +37399,7 @@ static int jx9Builtin_fstat(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *   The string that is to be written.
  *  $length
  *   If the length argument is given, writing will stop after length bytes have been written
- *   or the end of string is reached, whichever comes first.
+ *   or the end of string is reached, whichever comes first. 
  * Return
  *  Returns the number of bytes written, or FALSE on error.
  */
@@ -37423,8 +37427,8 @@ static int jx9Builtin_fwrite(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xWrite == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37493,8 +37497,8 @@ static int jx9Builtin_flock(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xLock == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37513,7 +37517,7 @@ static int jx9Builtin_flock(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  Output all remaining data on a file pointer.
  * Parameters
  *  $handle
- *   The file pointer.
+ *   The file pointer. 
  * Return
  *  Total number of characters read from handle and passed through
  *  to the output on success or FALSE on failure.
@@ -37543,8 +37547,8 @@ static int jx9Builtin_fpassthru(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37579,7 +37583,7 @@ struct csv_data
 	io_private *pDev; /* Open stream handle */
 	int iCount;       /* Counter */
 };
-/*
+/* 
  * The following callback is used by the fputcsv() function inorder to iterate
  * throw array entries and output CSV data based on the current key and it's
  * associated data.
@@ -37602,7 +37606,7 @@ static int csv_write_callback(jx9_value *pKey, jx9_value *pValue, void *pUserDat
 	}
 	n = 1;
 	c2 = 0;
-	if( SyByteFind(zData, (sxu32)nLen, pData->delimiter, 0) == SXRET_OK ||
+	if( SyByteFind(zData, (sxu32)nLen, pData->delimiter, 0) == SXRET_OK || 
 		SyByteFind(zData, (sxu32)nLen, pData->enclosure, &n) == SXRET_OK ){
 			c2 = 1;
 			if( n == 0 ){
@@ -37667,8 +37671,8 @@ static int jx9Builtin_fputcsv(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0  || pStream->xWrite == 0){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -37771,8 +37775,8 @@ static int jx9Builtin_fprintf(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Point to the target IO stream device */
 	if( pDev->pStream == 0  || pDev->pStream->xWrite == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device", 
 			jx9_function_name(pCtx), pDev->pStream ? pDev->pStream->zName : "null_stream"
 			);
 		jx9_result_int(pCtx, 0);
@@ -37832,8 +37836,8 @@ static int jx9Builtin_vfprintf(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Point to the target IO stream device */
 	if( pDev->pStream == 0  || pDev->pStream->xWrite == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device", 
 			jx9_function_name(pCtx), pDev->pStream ? pDev->pStream->zName : "null_stream"
 			);
 		jx9_result_int(pCtx, 0);
@@ -37870,12 +37874,12 @@ static int jx9Builtin_vfprintf(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *          to zero length. If the file does not exist, attempt to create it.
  *   'w+' 	Open for reading and writing; place the file pointer at the beginning of the file and truncate
  *              the file to zero length. If the file does not exist, attempt to create it.
- *   'a' 	Open for writing only; place the file pointer at the end of the file. If the file does not
+ *   'a' 	Open for writing only; place the file pointer at the end of the file. If the file does not 
  *         exist, attempt to create it.
- *   'a+' 	Open for reading and writing; place the file pointer at the end of the file. If the file does
+ *   'a+' 	Open for reading and writing; place the file pointer at the end of the file. If the file does 
  *          not exist, attempt to create it.
  *   'x' 	Create and open for writing only; place the file pointer at the beginning of the file. If the file
- *         already exists,
+ *         already exists, 
  *         the fopen() call will fail by returning FALSE and generating an error of level E_WARNING. If the file
  *         does not exist attempt to create it. This is equivalent to specifying O_EXCL|O_CREAT flags for
  *         the underlying open(2) system call.
@@ -37886,7 +37890,7 @@ static int jx9Builtin_vfprintf(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *          This may be useful if it's desired to get an advisory lock (see flock()) before attempting to modify the file
  *          as using 'w' could truncate the file before the lock was obtained (if truncation is desired, ftruncate() can
  *          be used after the lock is requested).
- *   'c+' 	Open the file for reading and writing; otherwise it has the same behavior as 'c'.
+ *   'c+' 	Open the file for reading and writing; otherwise it has the same behavior as 'c'. 
  */
 static int StrModeToFlags(jx9_context *pCtx, const char *zMode, int nLen)
 {
@@ -38023,7 +38027,7 @@ static int is_jx9_stream(const jx9_io_stream *pStream);
  *   then a regular file is assumed.
  *  $mode
  *   The mode parameter specifies the type of access you require to the stream
- *   See the block comment associated with the StrModeToFlags() for the supported
+ *   See the block comment associated with the StrModeToFlags() for the supported 
  *   modes.
  *  $use_include_path
  *   You can use the optional second parameter and set it to
@@ -38059,7 +38063,7 @@ static int jx9Builtin_fopen(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Try to extract a stream */
 	pStream = jx9VmGetStreamDevice(pCtx->pVm, &zUri, iLen);
 	if( pStream == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
 			"No stream device is associated with the given URI(%s)", zUri);
 		jx9_result_bool(pCtx, 0);
 		return JX9_OK;
@@ -38085,7 +38089,7 @@ static int jx9Builtin_fopen(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Convert open mode to JX9 flags */
 	iOpenFlags = StrModeToFlags(pCtx, zMode, imLen);
 	/* Try to get a handle */
-	pDev->pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zUri, iOpenFlags,
+	pDev->pHandle = jx9StreamOpenHandle(pCtx->pVm, pStream, zUri, iOpenFlags, 
 		nArg > 2 ? jx9_value_to_bool(apArg[2]) : FALSE, pResource, FALSE, 0);
 	if( pDev->pHandle == 0 ){
 		jx9_context_throw_error_format(pCtx, JX9_CTX_ERR, "IO error while opening '%s'", zUri);
@@ -38102,7 +38106,7 @@ static int jx9Builtin_fopen(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  Closes an open file pointer
  * Parameters
  *  $handle
- *   The file pointer.
+ *   The file pointer. 
  * Return
  *  TRUE on success or FALSE on failure.
  */
@@ -38129,8 +38133,8 @@ static int jx9Builtin_fclose(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	/* Point to the target IO stream device */
 	pStream = pDev->pStream;
 	if( pStream == 0 ){
-		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING,
-			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE",
+		jx9_context_throw_error_format(pCtx, JX9_CTX_WARNING, 
+			"IO routine(%s) not implemented in the underlying stream(%s) device, JX9 is returning FALSE", 
 			jx9_function_name(pCtx), pStream ? pStream->zName : "null_stream"
 			);
 		jx9_result_bool(pCtx, 0);
@@ -38210,7 +38214,7 @@ static int jx9Builtin_md5_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Init the MD5 context */
 	MD5Init(&sCtx);
-	/* Perform the requested operation */
+	/* Perform the requested operation */ 
 	for(;;){
 		n = pStream->xRead(pHandle, zBuf, sizeof(zBuf));
 		if( n < 1 ){
@@ -38281,7 +38285,7 @@ static int jx9Builtin_sha1_file(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Init the SHA1 context */
 	SHA1Init(&sCtx);
-	/* Perform the requested operation */
+	/* Perform the requested operation */ 
 	for(;;){
 		n = pStream->xRead(pHandle, zBuf, sizeof(zBuf));
 		if( n < 1 ){
@@ -38358,7 +38362,7 @@ static int jx9Builtin_parse_ini_file(jx9_context *pCtx, int nArg, jx9_value **ap
 		jx9_result_bool(pCtx, 0);
 	}else{
 		/* Process the raw INI buffer */
-		jx9ParseIniString(pCtx, (const char *)SyBlobData(&sContents), SyBlobLength(&sContents),
+		jx9ParseIniString(pCtx, (const char *)SyBlobData(&sContents), SyBlobLength(&sContents), 
 			nArg > 1 ? jx9_value_to_bool(apArg[1]) : 0);
 	}
 	/* Close the stream */
@@ -38896,7 +38900,7 @@ static int jx9Builtin_zip_entry_compressionmethod(jx9_context *pCtx, int nArg, j
 		/* Entry is deflated (Default compression algorithm)  */
 		jx9_result_string(pCtx, "deflate", (int)sizeof("deflate")-1);
 		break;
-		/* Exotic compression algorithms */
+		/* Exotic compression algorithms */ 
 	case 1:
 		jx9_result_string(pCtx, "shrunk", (int)sizeof("shrunk")-1);
 		break;
@@ -38920,13 +38924,13 @@ static int jx9Builtin_zip_entry_compressionmethod(jx9_context *pCtx, int nArg, j
 #endif /* #ifndef JX9_DISABLE_BUILTIN_FUNC*/
 /* NULL VFS [i.e: a no-op VFS]*/
 static const jx9_vfs null_vfs = {
-	"null_vfs",
-	JX9_VFS_VERSION,
+	"null_vfs", 
+	JX9_VFS_VERSION, 
 	0, /* int (*xChdir)(const char *) */
 	0, /* int (*xChroot)(const char *); */
 	0, /* int (*xGetcwd)(jx9_context *) */
 	0, /* int (*xMkdir)(const char *, int, int) */
-	0, /* int (*xRmdir)(const char *) */
+	0, /* int (*xRmdir)(const char *) */ 
 	0, /* int (*xIsdir)(const char *) */
 	0, /* int (*xRename)(const char *, const char *) */
 	0, /*int (*xRealpath)(const char *, jx9_context *)*/
@@ -38951,7 +38955,7 @@ static const jx9_vfs null_vfs = {
 	0, /* int (*xExecutable)(const char *) */
 	0, /* int (*xFiletype)(const char *, jx9_context *) */
 	0, /* int (*xGetenv)(const char *, jx9_context *) */
-	0, /* int (*xSetenv)(const char *, const char *) */
+	0, /* int (*xSetenv)(const char *, const char *) */ 
 	0, /* int (*xTouch)(const char *, jx9_int64, jx9_int64) */
 	0, /* int (*xMmap)(const char *, void **, jx9_int64 *) */
 	0, /* void (*xUnmap)(void *, jx9_int64);  */
@@ -38992,7 +38996,7 @@ static WCHAR *jx9utf8ToUnicode(const char *zFilename){
   zWideFilename = (WCHAR *)HeapAlloc(GetProcessHeap(), 0, nChar*sizeof(zWideFilename[0]));
   if( zWideFilename == 0 ){
  	return 0;
-  }
+  } 
   nChar = MultiByteToWideChar(CP_UTF8, 0, zFilename, -1, zWideFilename, nChar);
   if( nChar==0 ){
     HeapFree(GetProcessHeap(), 0, zWideFilename);
@@ -39261,7 +39265,7 @@ static HANDLE OpenReadOnly(LPCWSTR pPath)
 	DWORD dwType = FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS;
 	DWORD dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE;
 	DWORD dwAccess = GENERIC_READ;
-	DWORD dwCreate = OPEN_EXISTING;
+	DWORD dwCreate = OPEN_EXISTING;	
 	HANDLE pHandle;
 	pHandle = CreateFileW(pPath, dwAccess, dwShare, 0, dwCreate, dwType, 0);
 	if( pHandle == INVALID_HANDLE_VALUE){
@@ -39276,7 +39280,7 @@ static jx9_int64 WinVfs_FileSize(const char *zPath)
 	void * pConverted;
 	jx9_int64 nSize;
 	HANDLE pHandle;
-
+	
 	pConverted = jx9convertUtf8Filename(zPath);
 	if( pConverted == 0 ){
 		return -1;
@@ -39485,7 +39489,7 @@ static int WinVfs_Stat(const char *zPath, jx9_value *pArray, jx9_value *pWorker)
 	jx9_value_int64(pWorker, convertWindowsTimeToUnixTime(&sInfo.ftCreationTime));
 	jx9_array_add_strkey_elem(pArray, "ctime", pWorker); /* Will make it's own copy */
 	/* blksize, blocks */
-	jx9_value_int(pWorker, 0);
+	jx9_value_int(pWorker, 0);		
 	jx9_array_add_strkey_elem(pArray, "blksize", pWorker);
 	jx9_array_add_strkey_elem(pArray, "blocks", pWorker);
 	return JX9_OK;
@@ -39606,9 +39610,9 @@ static int WinVfs_Getenv(const char *zVar, jx9_context *pCtx)
 	DWORD n;
 	/*
 	 * According to MSDN
-	 * If lpBuffer is not large enough to hold the data, the return
-	 * value is the buffer size, in characters, required to hold the
-	 * string and its terminating null character and the contents
+	 * If lpBuffer is not large enough to hold the data, the return 
+	 * value is the buffer size, in characters, required to hold the 
+	 * string and its terminating null character and the contents 
 	 * of lpBuffer are undefined.
 	 */
 	n = sizeof(zValue);
@@ -39698,13 +39702,13 @@ static unsigned int WinVfs_ProcessId(void)
 
 /* Export the windows vfs */
 static const jx9_vfs sWinVfs = {
-	"Windows_vfs",
-	JX9_VFS_VERSION,
+	"Windows_vfs", 
+	JX9_VFS_VERSION, 
 	WinVfs_chdir,    /* int (*xChdir)(const char *) */
 	0,               /* int (*xChroot)(const char *); */
 	WinVfs_getcwd,   /* int (*xGetcwd)(jx9_context *) */
 	WinVfs_mkdir,    /* int (*xMkdir)(const char *, int, int) */
-	WinVfs_rmdir,    /* int (*xRmdir)(const char *) */
+	WinVfs_rmdir,    /* int (*xRmdir)(const char *) */ 
 	WinVfs_isdir,    /* int (*xIsdir)(const char *) */
 	WinVfs_Rename,   /* int (*xRename)(const char *, const char *) */
 	WinVfs_Realpath, /*int (*xRealpath)(const char *, jx9_context *)*/
@@ -39729,7 +39733,7 @@ static const jx9_vfs sWinVfs = {
 	WinVfs_isexecutable, /* int (*xExecutable)(const char *) */
 	WinVfs_Filetype,   /* int (*xFiletype)(const char *, jx9_context *) */
 	WinVfs_Getenv,     /* int (*xGetenv)(const char *, jx9_context *) */
-	WinVfs_Setenv,     /* int (*xSetenv)(const char *, const char *) */
+	WinVfs_Setenv,     /* int (*xSetenv)(const char *, const char *) */ 
 	WinVfs_Touch,      /* int (*xTouch)(const char *, jx9_int64, jx9_int64) */
 	WinVfs_Mmap,       /* int (*xMmap)(const char *, void **, jx9_int64 *) */
 	WinVfs_Unmap,      /* void (*xUnmap)(void *, jx9_int64);  */
@@ -39751,7 +39755,7 @@ static int WinFile_Open(const char *zPath, int iOpenMode, jx9_value *pResource, 
 {
 	DWORD dwType = FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS;
 	DWORD dwAccess = GENERIC_READ;
-	DWORD dwShare, dwCreate;
+	DWORD dwShare, dwCreate;	
 	void *pConverted;
 	HANDLE pHandle;
 
@@ -39807,7 +39811,7 @@ static int WinFile_Open(const char *zPath, int iOpenMode, jx9_value *pResource, 
 	*ppHandle = (void *)pHandle;
 	return JX9_OK;
 }
-/* An instance of the following structure is used to record state information
+/* An instance of the following structure is used to record state information 
  * while iterating throw directory entries.
  */
 typedef struct WinDir_Info WinDir_Info;
@@ -40091,7 +40095,7 @@ static int WinFile_Stat(void *pUserData, jx9_value *pArray, jx9_value *pWorker)
 	jx9_value_int64(pWorker, convertWindowsTimeToUnixTime(&sInfo.ftCreationTime));
 	jx9_array_add_strkey_elem(pArray, "ctime", pWorker); /* Will make it's own copy */
 	/* blksize, blocks */
-	jx9_value_int(pWorker, 0);
+	jx9_value_int(pWorker, 0);		
 	jx9_array_add_strkey_elem(pArray, "blksize", pWorker);
 	jx9_array_add_strkey_elem(pArray, "blocks", pWorker);
 	return JX9_OK;
@@ -40099,7 +40103,7 @@ static int WinFile_Stat(void *pUserData, jx9_value *pArray, jx9_value *pWorker)
 /* Export the file:// stream */
 static const jx9_io_stream sWinFileStream = {
 	"file", /* Stream name */
-	JX9_IO_STREAM_VERSION,
+	JX9_IO_STREAM_VERSION, 
 	WinFile_Open,  /* xOpen */
 	WinDir_Open,   /* xOpenDir */
 	WinFile_Close, /* xClose */
@@ -40237,7 +40241,7 @@ static jx9_int64 UnixVfs_FileSize(const char *zPath)
 	struct stat st;
 	int rc;
 	rc = stat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	return (jx9_int64)st.st_size;
@@ -40261,7 +40265,7 @@ static jx9_int64 UnixVfs_FileAtime(const char *zPath)
 	struct stat st;
 	int rc;
 	rc = stat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	return (jx9_int64)st.st_atime;
@@ -40272,7 +40276,7 @@ static jx9_int64 UnixVfs_FileMtime(const char *zPath)
 	struct stat st;
 	int rc;
 	rc = stat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	return (jx9_int64)st.st_mtime;
@@ -40283,7 +40287,7 @@ static jx9_int64 UnixVfs_FileCtime(const char *zPath)
 	struct stat st;
 	int rc;
 	rc = stat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	return (jx9_int64)st.st_ctime;
@@ -40294,7 +40298,7 @@ static int UnixVfs_Stat(const char *zPath, jx9_value *pArray, jx9_value *pWorker
 	struct stat st;
 	int rc;
 	rc = stat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	/* dev */
@@ -40329,7 +40333,7 @@ static int UnixVfs_Stat(const char *zPath, jx9_value *pArray, jx9_value *pWorker
 	jx9_value_int64(pWorker, (jx9_int64)st.st_ctime);
 	jx9_array_add_strkey_elem(pArray, "ctime", pWorker); /* Will make it's own copy */
 	/* blksize, blocks */
-	jx9_value_int(pWorker, (int)st.st_blksize);
+	jx9_value_int(pWorker, (int)st.st_blksize);		
 	jx9_array_add_strkey_elem(pArray, "blksize", pWorker);
 	jx9_value_int(pWorker, (int)st.st_blocks);
 	jx9_array_add_strkey_elem(pArray, "blocks", pWorker);
@@ -40341,7 +40345,7 @@ static int UnixVfs_lStat(const char *zPath, jx9_value *pArray, jx9_value *pWorke
 	struct stat st;
 	int rc;
 	rc = lstat(zPath, &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	/* dev */
@@ -40376,7 +40380,7 @@ static int UnixVfs_lStat(const char *zPath, jx9_value *pArray, jx9_value *pWorke
 	jx9_value_int64(pWorker, (jx9_int64)st.st_ctime);
 	jx9_array_add_strkey_elem(pArray, "ctime", pWorker); /* Will make it's own copy */
 	/* blksize, blocks */
-	jx9_value_int(pWorker, (int)st.st_blksize);
+	jx9_value_int(pWorker, (int)st.st_blksize);		
 	jx9_array_add_strkey_elem(pArray, "blksize", pWorker);
 	jx9_value_int(pWorker, (int)st.st_blocks);
 	jx9_array_add_strkey_elem(pArray, "blocks", pWorker);
@@ -40556,8 +40560,8 @@ static void UnixVfs_Unmap(void *pView, jx9_int64 nSize)
 static void UnixVfs_TempDir(jx9_context *pCtx)
 {
 	static const char *azDirs[] = {
-     "/var/tmp",
-     "/usr/tmp",
+     "/var/tmp", 
+     "/usr/tmp", 
 	 "/usr/local/tmp"
   };
   unsigned int i;
@@ -40643,13 +40647,13 @@ static int UnixVfs_chroot(const char *zRootDir)
 }
 /* Export the UNIX vfs */
 static const jx9_vfs sUnixVfs = {
-	"Unix_vfs",
-	JX9_VFS_VERSION,
+	"Unix_vfs", 
+	JX9_VFS_VERSION, 
 	UnixVfs_chdir,    /* int (*xChdir)(const char *) */
 	UnixVfs_chroot,   /* int (*xChroot)(const char *); */
 	UnixVfs_getcwd,   /* int (*xGetcwd)(jx9_context *) */
 	UnixVfs_mkdir,    /* int (*xMkdir)(const char *, int, int) */
-	UnixVfs_rmdir,    /* int (*xRmdir)(const char *) */
+	UnixVfs_rmdir,    /* int (*xRmdir)(const char *) */ 
 	UnixVfs_isdir,    /* int (*xIsdir)(const char *) */
 	UnixVfs_Rename,   /* int (*xRename)(const char *, const char *) */
 	UnixVfs_Realpath, /*int (*xRealpath)(const char *, jx9_context *)*/
@@ -40674,7 +40678,7 @@ static const jx9_vfs sUnixVfs = {
 	UnixVfs_isexecutable, /* int (*xExecutable)(const char *) */
 	UnixVfs_Filetype,   /* int (*xFiletype)(const char *, jx9_context *) */
 	UnixVfs_Getenv,     /* int (*xGetenv)(const char *, jx9_context *) */
-	UnixVfs_Setenv,     /* int (*xSetenv)(const char *, const char *) */
+	UnixVfs_Setenv,     /* int (*xSetenv)(const char *, const char *) */ 
 	UnixVfs_Touch,      /* int (*xTouch)(const char *, jx9_int64, jx9_int64) */
 	UnixVfs_Mmap,       /* int (*xMmap)(const char *, void **, jx9_int64 *) */
 	UnixVfs_Unmap,      /* void (*xUnmap)(void *, jx9_int64);  */
@@ -40780,7 +40784,7 @@ static int UnixDir_Read(void *pUserData, jx9_context *pCtx)
 			/* No more entries to process */
 			return -1;
 		}
-		zName = pEntry->d_name;
+		zName = pEntry->d_name; 
 		n = SyStrlen(zName);
 		/* Ignore '.' && '..' */
 		if( n > sizeof("..")-1 || zName[0] != '.' || ( n == sizeof("..")-1 && zName[1] != '.') ){
@@ -40895,7 +40899,7 @@ static int UnixFile_Trunc(void *pUserData, jx9_int64 nOfft)
 /* int (*xSync)(void *); */
 static int UnixFile_Sync(void *pUserData)
 {
-	int rc;
+	int rc;	
 	rc = fsync(SX_PTR_TO_INT(pUserData));
 	return rc == 0 ? JX9_OK : - 1;
 }
@@ -40905,7 +40909,7 @@ static int UnixFile_Stat(void *pUserData, jx9_value *pArray, jx9_value *pWorker)
 	struct stat st;
 	int rc;
 	rc = fstat(SX_PTR_TO_INT(pUserData), &st);
-	if( rc != 0 ){
+	if( rc != 0 ){ 
 	 return -1;
 	}
 	/* dev */
@@ -40940,7 +40944,7 @@ static int UnixFile_Stat(void *pUserData, jx9_value *pArray, jx9_value *pWorker)
 	jx9_value_int64(pWorker, (jx9_int64)st.st_ctime);
 	jx9_array_add_strkey_elem(pArray, "ctime", pWorker); /* Will make it's own copy */
 	/* blksize, blocks */
-	jx9_value_int(pWorker, (int)st.st_blksize);
+	jx9_value_int(pWorker, (int)st.st_blksize);		
 	jx9_array_add_strkey_elem(pArray, "blksize", pWorker);
 	jx9_value_int(pWorker, (int)st.st_blocks);
 	jx9_array_add_strkey_elem(pArray, "blocks", pWorker);
@@ -40949,7 +40953,7 @@ static int UnixFile_Stat(void *pUserData, jx9_value *pArray, jx9_value *pWorker)
 /* Export the file:// stream */
 static const jx9_io_stream sUnixFileStream = {
 	"file", /* Stream name */
-	JX9_IO_STREAM_VERSION,
+	JX9_IO_STREAM_VERSION, 
 	UnixFile_Open,  /* xOpen */
 	UnixDir_Open,   /* xOpenDir */
 	UnixFile_Close, /* xClose */
@@ -40968,7 +40972,7 @@ static const jx9_io_stream sUnixFileStream = {
 #endif /* __WINNT__/__UNIXES__ */
 #endif /* JX9_DISABLE_DISK_IO */
 #endif /* JX9_DISABLE_BUILTIN_FUNC */
-/*
+/* 
  * Export the builtin vfs.
  * Return a pointer to the builtin vfs if available.
  * Otherwise return the null_vfs [i.e: a no-op vfs] instead.
@@ -41022,8 +41026,8 @@ JX9_PRIVATE const jx9_vfs * jx9ExportBuiltinVfs(void)
  *  close it, you close only your copy of the descriptor-the actual stream referenced by STDIN is unaffected.
  *  jx9://stdin is read-only, whereas jx9://stdout and jx9://stderr are write-only.
  * jx9://output
- *  jx9://output is a write-only stream that allows you to write to the output buffer
- *  mechanism in the same way as print and print.
+ *  jx9://output is a write-only stream that allows you to write to the output buffer 
+ *  mechanism in the same way as print and print. 
  */
 typedef struct jx9_stream_data jx9_stream_data;
 /* Supported IO streams */
@@ -41061,7 +41065,7 @@ static jx9_stream_data * JX9StreamDataInit(jx9_vm *pVm, int iType)
 	pData->iType = iType;
 	if( iType == JX9_IO_STREAM_OUTPUT ){
 		/* Point to the default VM consumer routine. */
-		pData->x.sConsumer = pVm->sVmConsumer;
+		pData->x.sConsumer = pVm->sVmConsumer; 
 	}else{
 #ifdef __WINNT__
 		DWORD nChannel;
@@ -41069,7 +41073,7 @@ static jx9_stream_data * JX9StreamDataInit(jx9_vm *pVm, int iType)
 		case JX9_IO_STREAM_STDOUT:	nChannel = STD_OUTPUT_HANDLE; break;
 		case JX9_IO_STREAM_STDERR:  nChannel = STD_ERROR_HANDLE; break;
 		default:
-			nChannel = STD_INPUT_HANDLE;
+			nChannel = STD_INPUT_HANDLE; 
 			break;
 		}
 		pData->x.pHandle = GetStdHandle(nChannel);
@@ -41088,7 +41092,7 @@ static jx9_stream_data * JX9StreamDataInit(jx9_vm *pVm, int iType)
 	pData->pVm = pVm;
 	return pData;
 }
-/*
+/* 
  * Implementation of the jx9:// IO streams routines
  * Authors:
  *  Symisc Systems, devel@symisc.net.
@@ -41223,8 +41227,8 @@ static void JX9StreamData_Close(void *pHandle)
 }
 /* Export the jx9:// stream */
 static const jx9_io_stream sjx9Stream = {
-	"jx9",
-	JX9_IO_STREAM_VERSION,
+	"jx9", 
+	JX9_IO_STREAM_VERSION, 
 	JX9StreamData_Open,  /* xOpen */
 	0,   /* xOpenDir */
 	JX9StreamData_Close, /* xClose */
@@ -41268,104 +41272,104 @@ JX9_PRIVATE sxi32 jx9RegisterIORoutine(jx9_vm *pVm)
 #ifndef JX9_DISABLE_BUILTIN_FUNC
 	      /* VFS functions */
 	static const jx9_builtin_func aVfsFunc[] = {
-		{"chdir",   jx9Vfs_chdir   },
-		{"chroot",  jx9Vfs_chroot  },
-		{"getcwd",  jx9Vfs_getcwd  },
-		{"rmdir",   jx9Vfs_rmdir   },
-		{"is_dir",  jx9Vfs_is_dir  },
-		{"mkdir",   jx9Vfs_mkdir   },
-		{"rename",  jx9Vfs_rename  },
-		{"realpath", jx9Vfs_realpath},
-		{"sleep",   jx9Vfs_sleep   },
-		{"usleep",  jx9Vfs_usleep  },
-		{"unlink",  jx9Vfs_unlink  },
-		{"delete",  jx9Vfs_unlink  },
-		{"chmod",   jx9Vfs_chmod   },
-		{"chown",   jx9Vfs_chown   },
-		{"chgrp",   jx9Vfs_chgrp   },
-		{"disk_free_space", jx9Vfs_disk_free_space  },
-		{"disk_total_space", jx9Vfs_disk_total_space},
-		{"file_exists", jx9Vfs_file_exists },
-		{"filesize",    jx9Vfs_file_size   },
-		{"fileatime",   jx9Vfs_file_atime  },
-		{"filemtime",   jx9Vfs_file_mtime  },
-		{"filectime",   jx9Vfs_file_ctime  },
-		{"is_file",     jx9Vfs_is_file  },
-		{"is_link",     jx9Vfs_is_link  },
-		{"is_readable", jx9Vfs_is_readable   },
-		{"is_writable", jx9Vfs_is_writable   },
-		{"is_executable", jx9Vfs_is_executable},
-		{"filetype",    jx9Vfs_filetype },
-		{"stat",        jx9Vfs_stat     },
-		{"lstat",       jx9Vfs_lstat    },
-		{"getenv",      jx9Vfs_getenv   },
-		{"setenv",      jx9Vfs_putenv   },
-		{"putenv",      jx9Vfs_putenv   },
-		{"touch",       jx9Vfs_touch    },
-		{"link",        jx9Vfs_link     },
-		{"symlink",     jx9Vfs_symlink  },
-		{"umask",       jx9Vfs_umask    },
-		{"sys_get_temp_dir", jx9Vfs_sys_get_temp_dir },
-		{"get_current_user", jx9Vfs_get_current_user },
-		{"getpid",      jx9Vfs_getmypid },
-		{"getuid",      jx9Vfs_getmyuid },
-		{"getgid",      jx9Vfs_getmygid },
-		{"uname",       jx9Vfs_uname},
-		     /* Path processing */
-		{"dirname",     jx9Builtin_dirname  },
-		{"basename",    jx9Builtin_basename },
-		{"pathinfo",    jx9Builtin_pathinfo },
-		{"strglob",     jx9Builtin_strglob  },
-		{"fnmatch",     jx9Builtin_fnmatch  },
+		{"chdir",   jx9Vfs_chdir   }, 
+		{"chroot",  jx9Vfs_chroot  }, 
+		{"getcwd",  jx9Vfs_getcwd  }, 
+		{"rmdir",   jx9Vfs_rmdir   }, 
+		{"is_dir",  jx9Vfs_is_dir  }, 
+		{"mkdir",   jx9Vfs_mkdir   }, 
+		{"rename",  jx9Vfs_rename  }, 
+		{"realpath", jx9Vfs_realpath}, 
+		{"sleep",   jx9Vfs_sleep   }, 
+		{"usleep",  jx9Vfs_usleep  }, 
+		{"unlink",  jx9Vfs_unlink  }, 
+		{"delete",  jx9Vfs_unlink  }, 
+		{"chmod",   jx9Vfs_chmod   }, 
+		{"chown",   jx9Vfs_chown   }, 
+		{"chgrp",   jx9Vfs_chgrp   }, 
+		{"disk_free_space", jx9Vfs_disk_free_space  }, 
+		{"disk_total_space", jx9Vfs_disk_total_space}, 
+		{"file_exists", jx9Vfs_file_exists }, 
+		{"filesize",    jx9Vfs_file_size   }, 
+		{"fileatime",   jx9Vfs_file_atime  }, 
+		{"filemtime",   jx9Vfs_file_mtime  }, 
+		{"filectime",   jx9Vfs_file_ctime  }, 
+		{"is_file",     jx9Vfs_is_file  }, 
+		{"is_link",     jx9Vfs_is_link  }, 
+		{"is_readable", jx9Vfs_is_readable   }, 
+		{"is_writable", jx9Vfs_is_writable   }, 
+		{"is_executable", jx9Vfs_is_executable}, 
+		{"filetype",    jx9Vfs_filetype }, 
+		{"stat",        jx9Vfs_stat     }, 
+		{"lstat",       jx9Vfs_lstat    }, 
+		{"getenv",      jx9Vfs_getenv   }, 
+		{"setenv",      jx9Vfs_putenv   }, 
+		{"putenv",      jx9Vfs_putenv   }, 
+		{"touch",       jx9Vfs_touch    }, 
+		{"link",        jx9Vfs_link     }, 
+		{"symlink",     jx9Vfs_symlink  }, 
+		{"umask",       jx9Vfs_umask    }, 
+		{"sys_get_temp_dir", jx9Vfs_sys_get_temp_dir }, 
+		{"get_current_user", jx9Vfs_get_current_user }, 
+		{"getpid",      jx9Vfs_getmypid }, 
+		{"getuid",      jx9Vfs_getmyuid }, 
+		{"getgid",      jx9Vfs_getmygid }, 
+		{"uname",       jx9Vfs_uname}, 
+		     /* Path processing */ 
+		{"dirname",     jx9Builtin_dirname  }, 
+		{"basename",    jx9Builtin_basename }, 
+		{"pathinfo",    jx9Builtin_pathinfo }, 
+		{"strglob",     jx9Builtin_strglob  }, 
+		{"fnmatch",     jx9Builtin_fnmatch  }, 
 		     /* ZIP processing */
-		{"zip_open",    jx9Builtin_zip_open },
-		{"zip_close",   jx9Builtin_zip_close},
-		{"zip_read",    jx9Builtin_zip_read },
-		{"zip_entry_open", jx9Builtin_zip_entry_open },
-		{"zip_entry_close", jx9Builtin_zip_entry_close},
-		{"zip_entry_name", jx9Builtin_zip_entry_name },
-		{"zip_entry_filesize",      jx9Builtin_zip_entry_filesize       },
-		{"zip_entry_compressedsize", jx9Builtin_zip_entry_compressedsize },
-		{"zip_entry_read", jx9Builtin_zip_entry_read },
-		{"zip_entry_reset_cursor", jx9Builtin_zip_entry_reset_cursor},
+		{"zip_open",    jx9Builtin_zip_open }, 
+		{"zip_close",   jx9Builtin_zip_close}, 
+		{"zip_read",    jx9Builtin_zip_read }, 
+		{"zip_entry_open", jx9Builtin_zip_entry_open }, 
+		{"zip_entry_close", jx9Builtin_zip_entry_close}, 
+		{"zip_entry_name", jx9Builtin_zip_entry_name }, 
+		{"zip_entry_filesize",      jx9Builtin_zip_entry_filesize       }, 
+		{"zip_entry_compressedsize", jx9Builtin_zip_entry_compressedsize }, 
+		{"zip_entry_read", jx9Builtin_zip_entry_read }, 
+		{"zip_entry_reset_cursor", jx9Builtin_zip_entry_reset_cursor}, 
 		{"zip_entry_compressionmethod", jx9Builtin_zip_entry_compressionmethod}
 	};
 	    /* IO stream functions */
 	static const jx9_builtin_func aIOFunc[] = {
-		{"ftruncate", jx9Builtin_ftruncate },
-		{"fseek",     jx9Builtin_fseek  },
-		{"ftell",     jx9Builtin_ftell  },
-		{"rewind",    jx9Builtin_rewind },
-		{"fflush",    jx9Builtin_fflush },
-		{"feof",      jx9Builtin_feof   },
-		{"fgetc",     jx9Builtin_fgetc  },
-		{"fgets",     jx9Builtin_fgets  },
-		{"fread",     jx9Builtin_fread  },
-		{"fgetcsv",   jx9Builtin_fgetcsv},
-		{"fgetss",    jx9Builtin_fgetss },
-		{"readdir",   jx9Builtin_readdir},
-		{"rewinddir", jx9Builtin_rewinddir },
-		{"closedir",  jx9Builtin_closedir},
-		{"opendir",   jx9Builtin_opendir },
-		{"readfile",  jx9Builtin_readfile},
-		{"file_get_contents", jx9Builtin_file_get_contents},
-		{"file_put_contents", jx9Builtin_file_put_contents},
-		{"file",      jx9Builtin_file   },
-		{"copy",      jx9Builtin_copy   },
-		{"fstat",     jx9Builtin_fstat  },
-		{"fwrite",    jx9Builtin_fwrite },
-		{"fputs",     jx9Builtin_fwrite },
-		{"flock",     jx9Builtin_flock  },
-		{"fclose",    jx9Builtin_fclose },
-		{"fopen",     jx9Builtin_fopen  },
-		{"fpassthru", jx9Builtin_fpassthru },
-		{"fputcsv",   jx9Builtin_fputcsv },
-		{"fprintf",   jx9Builtin_fprintf },
+		{"ftruncate", jx9Builtin_ftruncate }, 
+		{"fseek",     jx9Builtin_fseek  }, 
+		{"ftell",     jx9Builtin_ftell  }, 
+		{"rewind",    jx9Builtin_rewind }, 
+		{"fflush",    jx9Builtin_fflush }, 
+		{"feof",      jx9Builtin_feof   }, 
+		{"fgetc",     jx9Builtin_fgetc  }, 
+		{"fgets",     jx9Builtin_fgets  }, 
+		{"fread",     jx9Builtin_fread  }, 
+		{"fgetcsv",   jx9Builtin_fgetcsv}, 
+		{"fgetss",    jx9Builtin_fgetss }, 
+		{"readdir",   jx9Builtin_readdir}, 
+		{"rewinddir", jx9Builtin_rewinddir }, 
+		{"closedir",  jx9Builtin_closedir}, 
+		{"opendir",   jx9Builtin_opendir }, 
+		{"readfile",  jx9Builtin_readfile}, 
+		{"file_get_contents", jx9Builtin_file_get_contents}, 
+		{"file_put_contents", jx9Builtin_file_put_contents}, 
+		{"file",      jx9Builtin_file   }, 
+		{"copy",      jx9Builtin_copy   }, 
+		{"fstat",     jx9Builtin_fstat  }, 
+		{"fwrite",    jx9Builtin_fwrite }, 
+		{"fputs",     jx9Builtin_fwrite }, 
+		{"flock",     jx9Builtin_flock  }, 
+		{"fclose",    jx9Builtin_fclose }, 
+		{"fopen",     jx9Builtin_fopen  }, 
+		{"fpassthru", jx9Builtin_fpassthru }, 
+		{"fputcsv",   jx9Builtin_fputcsv }, 
+		{"fprintf",   jx9Builtin_fprintf }, 
 #if !defined(JX9_DISABLE_HASH_FUNC)
-		{"md5_file",  jx9Builtin_md5_file},
-		{"sha1_file", jx9Builtin_sha1_file},
+		{"md5_file",  jx9Builtin_md5_file}, 
+		{"sha1_file", jx9Builtin_sha1_file}, 
 #endif /* JX9_DISABLE_HASH_FUNC */
-		{"parse_ini_file", jx9Builtin_parse_ini_file},
+		{"parse_ini_file", jx9Builtin_parse_ini_file}, 
 		{"vfprintf",  jx9Builtin_vfprintf}
 	};
 	const jx9_io_stream *pFileStream = 0;
@@ -41539,7 +41543,7 @@ JX9_PRIVATE void * jx9ExportStderr(jx9_vm *pVm)
  * to help in building up a program instruction by instruction.
  */
 /*
- * Each active virtual machine frame is represented by an instance
+ * Each active virtual machine frame is represented by an instance 
  * of the following structure.
  * VM Frame hold local variables and other stuff related to function call.
  */
@@ -41562,7 +41566,7 @@ struct VmFrame
 typedef struct VmSlot VmSlot;
 struct VmSlot
 {
-	sxu32 nIdx;      /* Index in pVm->aMemObj[] */
+	sxu32 nIdx;      /* Index in pVm->aMemObj[] */ 
 	void *pUserData; /* Upper-layer private data */
 };
 /*
@@ -41572,30 +41576,30 @@ struct VmSlot
  * the xHT project is developed internally by Symisc Systems.
  */
 typedef struct SyhttpUri SyhttpUri;
-struct SyhttpUri
-{
-	SyString sHost;     /* Hostname or IP address */
-	SyString sPort;     /* Port number */
-	SyString sPath;     /* Mandatory resource path passed verbatim (Not decoded) */
-	SyString sQuery;    /* Query part */
-	SyString sFragment; /* Fragment part */
-	SyString sScheme;   /* Scheme */
-	SyString sUser;     /* Username */
+struct SyhttpUri 
+{ 
+	SyString sHost;     /* Hostname or IP address */ 
+	SyString sPort;     /* Port number */ 
+	SyString sPath;     /* Mandatory resource path passed verbatim (Not decoded) */ 
+	SyString sQuery;    /* Query part */	 
+	SyString sFragment; /* Fragment part */ 
+	SyString sScheme;   /* Scheme */ 
+	SyString sUser;     /* Username */ 
 	SyString sPass;     /* Password */
 	SyString sRaw;      /* Raw URI */
 };
-/*
+/* 
  * An instance of the following structure is used to record all MIME headers seen
- * during a HTTP interaction.
+ * during a HTTP interaction. 
  * This structure and it's related routines are taken verbatim from the xHT project
  * [A modern embeddable HTTP engine implementing all the RFC2616 methods]
  * the xHT project is developed internally by Symisc Systems.
- */
+ */  
 typedef struct SyhttpHeader SyhttpHeader;
-struct SyhttpHeader
-{
-	SyString sName;    /* Header name [i.e:"Content-Type", "Host", "User-Agent"]. NOT NUL TERMINATED */
-	SyString sValue;   /* Header values [i.e: "text/html"]. NOT NUL TERMINATED */
+struct SyhttpHeader 
+{ 
+	SyString sName;    /* Header name [i.e:"Content-Type", "Host", "User-Agent"]. NOT NUL TERMINATED */ 
+	SyString sValue;   /* Header values [i.e: "text/html"]. NOT NUL TERMINATED */ 
 };
 /*
  * Supported HTTP methods.
@@ -41761,7 +41765,7 @@ JX9_PRIVATE sxi32 jx9VmInitFuncState(
 	)
 {
 	/* Zero the structure */
-	SyZero(pFunc, sizeof(jx9_vm_func));
+	SyZero(pFunc, sizeof(jx9_vm_func));	
 	/* Initialize structure fields */
 	/* Arguments container */
 	SySetInit(&pFunc->aArgs, &pVm->sAllocator, sizeof(jx9_vm_func_arg));
@@ -41822,10 +41826,10 @@ JX9_PRIVATE sxi32 jx9VmEmitInstr(
 	VmInstr sInstr;
 	sxi32 rc;
 	/* Fill the VM instruction */
-	sInstr.iOp = (sxu8)iOp;
-	sInstr.iP1 = iP1;
-	sInstr.iP2 = iP2;
-	sInstr.p3  = p3;
+	sInstr.iOp = (sxu8)iOp; 
+	sInstr.iP1 = iP1; 
+	sInstr.iP2 = iP2; 
+	sInstr.p3  = p3;  
 	if( pIndex ){
 		/* Instruction index in the bytecode array */
 		*pIndex = SySetUsed(pVm->pByteContainer);
@@ -41957,7 +41961,7 @@ static sxi32 VmFrameLink(jx9_vm *pVm,SyString *pName)
 		if( pEntry ){
 			/* Variable found */
 			break;
-		}
+		}		
 		/* Point to the upper frame */
 		pFrame = pFrame->pParent;
 	}
@@ -42100,10 +42104,10 @@ static jx9_vm_func * VmOverload(
 	/* Appropriate function for the current call context */
 	return apSet[iTarget];
 }
-/*
+/* 
  * Dummy read-only buffer used for slot reservation.
  */
-static const char zDummy[sizeof(jx9_value)] = { 0 }; /* Must be >= sizeof(jx9_value) */
+static const char zDummy[sizeof(jx9_value)] = { 0 }; /* Must be >= sizeof(jx9_value) */ 
 /*
  * Reserve a constant memory object.
  * Return a pointer to the raw jx9_value on success. NULL on failure.
@@ -42463,7 +42467,7 @@ JX9_PRIVATE sxi32 jx9VmMakeReady(
 		return SXERR_CORRUPT;
 	}
 	/* Mark the VM ready for bytecode execution */
-	pVm->nMagic = JX9_VM_RUN;
+	pVm->nMagic = JX9_VM_RUN; 
 	/* Release the code generator now we have compiled our program */
 	jx9ResetCodeGenerator(pVm, 0, 0);
 	/* Emit the DONE instruction */
@@ -42473,12 +42477,12 @@ JX9_PRIVATE sxi32 jx9VmMakeReady(
 	}
 	/* Script return value */
 	jx9MemObjInit(&(*pVm), &pVm->sExec); /* Assume a NULL return value */
-	/* Allocate a new operand stack */
+	/* Allocate a new operand stack */	
 	pVm->aOps = VmNewOperandStack(&(*pVm), SySetUsed(pVm->pByteContainer));
 	if( pVm->aOps == 0 ){
 		return SXERR_MEM;
 	}
-	/* Set the default VM output consumer callback and it's
+	/* Set the default VM output consumer callback and it's 
 	 * private data. */
 	pVm->sVmConsumer.xConsumer = jx9VmBlobConsumer;
 	pVm->sVmConsumer.pUserData = &pVm->sConsumer;
@@ -42534,7 +42538,7 @@ JX9_PRIVATE sxi32 jx9VmRelease(jx9_vm *pVm)
  * A pointer to a jx9_context object is always first parameter to application-defined foreign
  * functions.
  * The application-defined foreign function implementation will pass this pointer through into
- * calls to dozens of interfaces, these includes jx9_result_int(), jx9_result_string(), jx9_result_value(),
+ * calls to dozens of interfaces, these includes jx9_result_int(), jx9_result_string(), jx9_result_value(), 
  * jx9_context_new_scalar(), jx9_context_alloc_chunk(), jx9_context_output(), jx9_context_throw_error()
  * and many more. Refer to the C/C++ Interfaces documentation for additional information.
  */
@@ -42578,7 +42582,7 @@ static void VmReleaseCallContext(jx9_context *pCtx)
 	if( SySetUsed(&pCtx->sChunk) > 0 ){
 		jx9_aux_data *aAux;
 		void *pChunk;
-		/* Automatic release of dynamically allocated chunk
+		/* Automatic release of dynamically allocated chunk 
 		 * using [jx9_context_alloc_chunk()].
 		 */
 		aAux = (jx9_aux_data *)SySetBasePtr(&pCtx->sChunk);
@@ -42669,7 +42673,7 @@ JX9_PRIVATE jx9_value * jx9VmReserveMemObj(jx9_vm *pVm,sxu32 *pIdx)
 }
 /*
  * Extract a variable value from the top active VM frame.
- * Return a pointer to the variable value on success.
+ * Return a pointer to the variable value on success. 
  * NULL otherwise (non-existent variable/Out-of-memory, ...).
  */
 static jx9_value * VmExtractMemObj(
@@ -42751,7 +42755,7 @@ static jx9_value * VmExtractMemObj(
 	return pObj;
 }
 /*
- * Extract a superglobal variable such as $_GET, $_POST, $_HEADERS, ....
+ * Extract a superglobal variable such as $_GET, $_POST, $_HEADERS, .... 
  * Return a pointer to the variable value on success.NULL otherwise.
  */
 static jx9_value * VmExtractSuper(
@@ -42824,7 +42828,7 @@ static sxi32 VmHttpProcessRequest(jx9_vm *pVm, const char *zRequest, int nByte);
  * The second argument to this function is an integer configuration option
  * that determines what property of the JX9 virtual machine is to be configured.
  * Subsequent arguments vary depending on the configuration option in the second
- * argument. There are many verbs but the most important are JX9_VM_CONFIG_OUTPUT,
+ * argument. There are many verbs but the most important are JX9_VM_CONFIG_OUTPUT, 
  * JX9_VM_CONFIG_HTTP_REQUEST and JX9_VM_CONFIG_ARGV_ENTRY.
  * Refer to the official documentation for the list of allowed verbs.
  */
@@ -42907,7 +42911,7 @@ JX9_PRIVATE sxi32 jx9VmConfigure(
 		SyHashEntry *pEntry;
 		jx9_value *pObj;
 		sxu32 nByte;
-		sxu32 nIdx;
+		sxu32 nIdx; 
 #ifdef UNTRUST
 		if( SX_EMPTY_STR(zName) || pValue == 0 ){
 			rc = SXERR_CORRUPT;
@@ -43093,8 +43097,8 @@ static sxi32 VmByteCodeDump(
 			break;
 		}
 		/* Format and call the consumer callback */
-		rc = SyProcFormat(xConsumer, pUserData, "%s %8d %8u %#8x [%u]\n",
-			VmInstrToString(pInstr->iOp), pInstr->iP1, pInstr->iP2,
+		rc = SyProcFormat(xConsumer, pUserData, "%s %8d %8u %#8x [%u]\n", 
+			VmInstrToString(pInstr->iOp), pInstr->iP1, pInstr->iP2, 
 			SX_PTR_TO_INT(pInstr->p3), n);
 		if( rc != SXRET_OK ){
 			/* Consumer routine request an operation abort */
@@ -43123,7 +43127,7 @@ static sxi32 VmCallErrorHandler(jx9_vm *pVm, SyBlob *pMsg)
 	rc = pCons->xConsumer(SyBlobData(pMsg), SyBlobLength(pMsg), pCons->pUserData);
 	/* Increment output length */
 	pVm->nOutputLen += SyBlobLength(pMsg);
-
+	
 	return rc;
 }
 /*
@@ -43304,7 +43308,7 @@ static sxi32 VmByteCodeExec(
  */
 		switch(pInstr->iOp){
 /*
- * DONE: P1 * *
+ * DONE: P1 * * 
  *
  * Program execution completed: Clean up the mess left behind
  * and return immediately.
@@ -43319,7 +43323,7 @@ case JX9_OP_DONE:
 		if( pResult ){
 			/* Execution result */
 			jx9MemObjStore(pTos, pResult);
-		}
+		}		
 		VmPopOperand(&pTos, 1);
 	}
 	goto Done;
@@ -43339,7 +43343,7 @@ case JX9_OP_HALT:
 		if( pTos->iFlags & MEMOBJ_STRING ){
 			if( SyBlobLength(&pTos->sBlob) > 0 ){
 				/* Output the exit message */
-				pVm->sVmConsumer.xConsumer(SyBlobData(&pTos->sBlob), SyBlobLength(&pTos->sBlob),
+				pVm->sVmConsumer.xConsumer(SyBlobData(&pTos->sBlob), SyBlobLength(&pTos->sBlob), 
 					pVm->sVmConsumer.pUserData);
 					/* Increment output length */
 					pVm->nOutputLen += SyBlobLength(&pTos->sBlob);
@@ -43354,7 +43358,7 @@ case JX9_OP_HALT:
 /*
  * JMP: * P2 *
  *
- * Unconditional jump: The next instruction executed will be
+ * Unconditional jump: The next instruction executed will be 
  * the one at index P2 from the beginning of the program.
  */
 case JX9_OP_JMP:
@@ -43364,7 +43368,7 @@ case JX9_OP_JMP:
  * JZ: P1 P2 *
  *
  * Take the jump if the top value is zero (FALSE jump).Pop the top most
- * entry in the stack if P1 is zero.
+ * entry in the stack if P1 is zero. 
  */
 case JX9_OP_JZ:
 #ifdef UNTRUST
@@ -43536,7 +43540,7 @@ case JX9_OP_CVT_ARRAY:
 	rc = jx9MemObjToHashmap(pTos);
 	if( rc != SXRET_OK ){
 		/* Not so fatal, emit a simple warning */
-		jx9VmThrowError(&(*pVm), 0, JX9_CTX_WARNING,
+		jx9VmThrowError(&(*pVm), 0, JX9_CTX_WARNING, 
 			"JX9 engine is running out of memory while performing an array cast");
 	}
 	break;
@@ -43641,7 +43645,7 @@ case JX9_OP_LOAD_MAP: {
 	/* Allocate a new hashmap instance */
 	pMap = jx9NewHashmap(&(*pVm), 0, 0);
 	if( pMap == 0 ){
-		VmErrorFormat(&(*pVm), JX9_CTX_ERR,
+		VmErrorFormat(&(*pVm), JX9_CTX_ERR, 
 			"Fatal, JX9 engine is running out of memory while loading JSON array/object at instruction #:%d", pc);
 		goto Abort;
 	}
@@ -43657,10 +43661,10 @@ case JX9_OP_LOAD_MAP: {
 		/* Perform the insertion */
 		while( pEntry <= pTos ){
 			/* Standard insertion */
-			jx9HashmapInsert(pMap,
+			jx9HashmapInsert(pMap, 
 				is_json_object ? pEntry : 0 /* Automatic index assign */,
 				is_json_object ? &pEntry[1] : pEntry
-			);
+			);			
 			/* Next pair on the stack */
 			pEntry += iIncr;
 		}
@@ -43698,7 +43702,7 @@ case JX9_OP_LOAD_IDX: {
 				pTos->nIdx = SXU32_HIGH;
 			}
 			/* Emit a notice */
-			jx9VmThrowError(&(*pVm), 0, JX9_CTX_NOTICE,
+			jx9VmThrowError(&(*pVm), 0, JX9_CTX_NOTICE, 
 				"JSON Array/Object: Attempt to access an undefined member, JX9 is loading NULL");
 			break;
 		}
@@ -43799,7 +43803,7 @@ case JX9_OP_STORE: {
 		nIdx = pTos->nIdx;
 		VmPopOperand(&pTos, 1);
 		if( nIdx == SXU32_HIGH ){
-			jx9VmThrowError(&(*pVm), 0, JX9_CTX_ERR,
+			jx9VmThrowError(&(*pVm), 0, JX9_CTX_ERR, 
 				"Cannot perform assignment on a constant object attribute, JX9 is loading NULL");
 			pTos->nIdx = SXU32_HIGH;
 		}else{
@@ -43830,7 +43834,7 @@ case JX9_OP_STORE: {
 	/* Extract the desired variable and if not available dynamically create it */
 	pObj = VmExtractMemObj(&(*pVm), &sName, pInstr->p3 ? FALSE : TRUE, TRUE);
 	if( pObj == 0 ){
-		VmErrorFormat(&(*pVm), JX9_CTX_ERR,
+		VmErrorFormat(&(*pVm), JX9_CTX_ERR, 
 			"Fatal, JX9 engine is running out of memory while loading variable '%z'", &sName);
 		goto Abort;
 	}
@@ -43921,7 +43925,7 @@ case JX9_OP_STORE_IDX: {
 	}
 	VmPopOperand(&pTos, 1);
 	/* Phase#2: Perform the insertion */
-	jx9HashmapInsert(pMap, pKey, pTos);
+	jx9HashmapInsert(pMap, pKey, pTos);	
 	if( pKey ){
 		jx9MemObjRelease(pKey);
 	}
@@ -43980,7 +43984,7 @@ case JX9_OP_INCR:
  * DECR: P1 * *
  *
  * Force a numeric cast and decrement the top of the stack by 1.
- * If the P1 operand is set then perform a duplication of the top of the stack
+ * If the P1 operand is set then perform a duplication of the top of the stack 
  * and decrement after that.
  */
 case JX9_OP_DECR:
@@ -44044,7 +44048,7 @@ case JX9_OP_UMINUS:
 	if( pTos->iFlags & MEMOBJ_INT ){
 		pTos->x.iVal = -pTos->x.iVal;
 	}
-	break;
+	break;				   
 /*
  * UPLUS: * * *
  *
@@ -44104,7 +44108,7 @@ case JX9_OP_BITNOT:
 /* OP_MUL * * *
  * OP_MUL_STORE * * *
  *
- * Pop the top two elements from the stack, multiply them together,
+ * Pop the top two elements from the stack, multiply them together, 
  * and push the result back onto the stack.
  */
 case JX9_OP_MUL:
@@ -44159,7 +44163,7 @@ case JX9_OP_MUL_STORE: {
 				 }
 /* OP_ADD * * *
  *
- * Pop the top two elements from the stack, add them together,
+ * Pop the top two elements from the stack, add them together, 
  * and push the result back onto the stack.
  */
 case JX9_OP_ADD:{
@@ -44177,7 +44181,7 @@ case JX9_OP_ADD:{
 /*
  * OP_ADD_STORE * * *
  *
- * Pop the top two elements from the stack, add them together,
+ * Pop the top two elements from the stack, add them together, 
  * and push the result back onto the stack.
  */
 case JX9_OP_ADD_STORE:{
@@ -44227,7 +44231,7 @@ case JX9_OP_SUB: {
 		}
 		a = pNos->x.rVal;
 		b = pTos->x.rVal;
-		r = a - b;
+		r = a - b; 
 		/* Push the result */
 		pNos->x.rVal = r;
 		MemObjSetType(pNos, MEMOBJ_REAL);
@@ -44271,7 +44275,7 @@ case JX9_OP_SUB_STORE: {
 		}
 		a = pTos->x.rVal;
 		b = pNos->x.rVal;
-		r = a - b;
+		r = a - b; 
 		/* Push the result */
 		pNos->x.rVal = r;
 		MemObjSetType(pNos, MEMOBJ_REAL);
@@ -44301,7 +44305,7 @@ case JX9_OP_SUB_STORE: {
  *
  * Pop the top two elements from the stack, divide the
  * first (what was next on the stack) from the second (the
- * top of the stack) and push the remainder after division
+ * top of the stack) and push the remainder after division 
  * onto the stack.
  * Note: Only integer arithemtic is allowed.
  */
@@ -44341,7 +44345,7 @@ case JX9_OP_MOD:{
  *
  * Pop the top two elements from the stack, divide the
  * first (what was next on the stack) from the second (the
- * top of the stack) and push the remainder after division
+ * top of the stack) and push the remainder after division 
  * onto the stack.
  * Note: Only integer arithemtic is allowed.
  */
@@ -44384,7 +44388,7 @@ case JX9_OP_MOD_STORE: {
 				}
 /*
  * OP_DIV * * *
- *
+ * 
  * Pop the top two elements from the stack, divide the
  * first (what was next on the stack) from the second (the
  * top of the stack) and push the result onto the stack.
@@ -44426,7 +44430,7 @@ case JX9_OP_DIV:{
 				}
 /*
  * OP_DIV_STORE * * *
- *
+ * 
  * Pop the top two elements from the stack, divide the
  * first (what was next on the stack) from the second (the
  * top of the stack) and push the result onto the stack.
@@ -44525,7 +44529,7 @@ case JX9_OP_BXOR:{
 	VmPopOperand(&pTos, 1);
 	break;
 				 }
-/* OP_BAND_STORE * * *
+/* OP_BAND_STORE * * * 
  *
  * Pop the top two elements from the stack.  Convert both elements
  * to integers.  Push back onto the stack the bit-wise AND of the
@@ -44755,13 +44759,13 @@ case JX9_OP_CAT_STORE:{
  *
  * Pop two values off the stack.  Take the logical AND of the
  * two values and push the resulting boolean value back onto the
- * stack.
+ * stack. 
  */
 /* OP_OR: * * *
  *
  * Pop two values off the stack.  Take the logical OR of the
  * two values and push the resulting boolean value back onto the
- * stack.
+ * stack. 
  */
 case JX9_OP_LAND:
 case JX9_OP_LOR: {
@@ -44802,7 +44806,7 @@ case JX9_OP_LOR: {
  * two values and push the resulting boolean value back onto the
  * stack.
  * According to the JX9 language reference manual:
- *  $a xor $b is evaluated to TRUE if either $a or $b is
+ *  $a xor $b is evaluated to TRUE if either $a or $b is 
  *  TRUE, but not both.
  */
 case JX9_OP_LXOR:{
@@ -44833,7 +44837,7 @@ case JX9_OP_LXOR:{
  * Pop the top two elements from the stack.  If they are equal, then
  * jump to instruction P2.  Otherwise, continue to the next instruction.
  * If P2 is zero, do not jump.  Instead, push a boolean 1 (TRUE) onto the
- * stack if the jump would have been taken, or a 0 (FALSE) if not.
+ * stack if the jump would have been taken, or a 0 (FALSE) if not. 
  */
 /* OP_NEQ P1 P2 P3
  *
@@ -44878,7 +44882,7 @@ case JX9_OP_NEQ: {
  * Pop the top two elements from the stack. If they have the same type and are equal
  * then jump to instruction P2. Otherwise, continue to the next instruction.
  * If P2 is zero, do not jump. Instead, push a boolean 1 (TRUE) onto the
- * stack if the jump would have been taken, or a 0 (FALSE) if not.
+ * stack if the jump would have been taken, or a 0 (FALSE) if not. 
  */
 case JX9_OP_TEQ: {
 	jx9_value *pNos = &pTos[-1];
@@ -44907,12 +44911,12 @@ case JX9_OP_TEQ: {
 				 }
 /* OP_TNE P1 P2 *
  *
- * Pop the top two elements from the stack.If they are not equal an they are not
- * of the same type, then jump to instruction P2. Otherwise, continue to the next
+ * Pop the top two elements from the stack.If they are not equal an they are not 
+ * of the same type, then jump to instruction P2. Otherwise, continue to the next 
  * instruction.
  * If P2 is zero, do not jump. Instead, push a boolean 1 (TRUE) onto the
  * stack if the jump would have been taken, or a 0 (FALSE) if not.
- *
+ * 
  */
 case JX9_OP_TNE: {
 	jx9_value *pNos = &pTos[-1];
@@ -44946,7 +44950,7 @@ case JX9_OP_TNE: {
  * continue to the next instruction. In other words, jump if pNos<pTos.
  * If P2 is zero, do not jump.Instead, push a boolean 1 (TRUE) onto the
  * stack if the jump would have been taken, or a 0 (FALSE) if not.
- *
+ * 
  */
 /* OP_LE P1 P2 P3
  *
@@ -44955,7 +44959,7 @@ case JX9_OP_TNE: {
  * Otherwise continue to the next instruction. In other words, jump if pNos<pTos.
  * If P2 is zero, do not jump.Instead, push a boolean 1 (TRUE) onto the
  * stack if the jump would have been taken, or a 0 (FALSE) if not.
- *
+ * 
  */
 case JX9_OP_LT:
 case JX9_OP_LE: {
@@ -44995,7 +44999,7 @@ case JX9_OP_LE: {
  * continue to the next instruction. In other words, jump if pNos<pTos.
  * If P2 is zero, do not jump.Instead, push a boolean 1 (TRUE) onto the
  * stack if the jump would have been taken, or a 0 (FALSE) if not.
- *
+ * 
  */
 /* OP_GE P1 P2 P3
  *
@@ -45004,7 +45008,7 @@ case JX9_OP_LE: {
  * Otherwise continue to the next instruction. In other words, jump if pNos<pTos.
  * If P2 is zero, do not jump.Instead, push a boolean 1 (TRUE) onto the
  * stack if the jump would have been taken, or a 0 (FALSE) if not.
- *
+ * 
  */
 case JX9_OP_GT:
 case JX9_OP_GE: {
@@ -45170,7 +45174,7 @@ case JX9_OP_MEMBER: {
 		/* Load the desired entry */
 		rc = jx9HashmapLookup(pMap, pIdx, &pNode);
 	}
-	jx9MemObjRelease(pIdx);
+	jx9MemObjRelease(pIdx);	
 	if( rc == SXRET_OK ){
 		/* Load entry contents */
 		if( pMap->iRef < 2 ){
@@ -45198,7 +45202,7 @@ case JX9_OP_MEMBER: {
 case JX9_OP_SWITCH: {
 	jx9_switch *pSwitch = (jx9_switch *)pInstr->p3;
 	jx9_case_expr *aCase, *pCase;
-	jx9_value sValue, sCaseValue;
+	jx9_value sValue, sCaseValue; 
 	sxu32 n, nEntry;
 #ifdef UNTRUST
 	if( pSwitch == 0 || pTos < pStack ){
@@ -45240,7 +45244,7 @@ case JX9_OP_SWITCH: {
 					}
 /*
  * OP_UPLINK P1 * *
- * Link a variable to the top active VM frame.
+ * Link a variable to the top active VM frame. 
  * This is used to implement the 'uplink' JX9 construct.
  */
 case JX9_OP_UPLINK: {
@@ -45298,8 +45302,8 @@ case JX9_OP_CALL: {
 		pVmFunc = (jx9_vm_func *)pEntry->pUserData;
 		/* Check The recursion limit */
 		if( pVm->nRecursionDepth > pVm->nMaxDepth ){
-			VmErrorFormat(&(*pVm), JX9_CTX_ERR,
-				"Recursion limit reached while invoking user function '%z', JX9 will set a NULL return value",
+			VmErrorFormat(&(*pVm), JX9_CTX_ERR, 
+				"Recursion limit reached while invoking user function '%z', JX9 will set a NULL return value", 
 				&pVmFunc->sName);
 			/* Pop given arguments */
 			if( pInstr->iP1 > 0 ){
@@ -45319,8 +45323,8 @@ case JX9_OP_CALL: {
 		rc = VmEnterFrame(&(*pVm),pVmFunc,&pFrame);
 		if( rc != SXRET_OK ){
 			/* Raise exception: Out of memory */
-			VmErrorFormat(&(*pVm), JX9_CTX_ERR,
-				"JX9 is running out of memory while calling function '%z', JX9 is returning NULL.",
+			VmErrorFormat(&(*pVm), JX9_CTX_ERR, 
+				"JX9 is running out of memory while calling function '%z', JX9 is returning NULL.", 
 				&pVmFunc->sName);
 			/* Pop given arguments */
 			if( pInstr->iP1 > 0 ){
@@ -45352,7 +45356,7 @@ case JX9_OP_CALL: {
 					}
 				}
 				/* Install in the current frame */
-				SyHashInsert(&pFrame->hVar, SyStringData(&pStatic->sName), SyStringLength(&pStatic->sName),
+				SyHashInsert(&pFrame->hVar, SyStringData(&pStatic->sName), SyStringLength(&pStatic->sName), 
 					SX_INT_TO_PTR(pStatic->nIdx));
 			}
 		}
@@ -45423,7 +45427,7 @@ case JX9_OP_CALL: {
 			}
 			++n;
 		}
-		/* Pop arguments, function name from the operand stack and assume the function
+		/* Pop arguments, function name from the operand stack and assume the function 
 		 * does not return anything.
 		 */
 		jx9MemObjRelease(pTos);
@@ -45432,7 +45436,7 @@ case JX9_OP_CALL: {
 		pFrameStack = VmNewOperandStack(&(*pVm), SySetUsed(&pVmFunc->aByteCode));
 		if( pFrameStack == 0 ){
 			/* Raise exception: Out of memory */
-			VmErrorFormat(&(*pVm), JX9_CTX_ERR, "JX9 is running out of memory while calling function '%z', JX9 is returning NULL.",
+			VmErrorFormat(&(*pVm), JX9_CTX_ERR, "JX9 is running out of memory while calling function '%z', JX9 is returning NULL.", 
 				&pVmFunc->sName);
 			if( pInstr->iP1 > 0 ){
 				VmPopOperand(&pTos, pInstr->iP1);
@@ -45454,7 +45458,7 @@ case JX9_OP_CALL: {
 			goto Abort;
 		}
 	}else{
-		jx9_user_func *pFunc;
+		jx9_user_func *pFunc; 
 		jx9_context sCtx;
 		jx9_value sRet;
 		/* Look for an installed foreign function */
@@ -45636,7 +45640,7 @@ JX9_PRIVATE sxi32 jx9VmOutputConsume(
 JX9_PRIVATE sxi32 jx9VmOutputConsumeAp(
 	jx9_vm *pVm,         /* Target VM */
 	const char *zFormat, /* Formatted message to output */
-	va_list ap           /* Variable list of arguments */
+	va_list ap           /* Variable list of arguments */ 
 	)
 {
 	jx9_output_consumer *pCons = &pVm->sVmConsumer;
@@ -45969,7 +45973,7 @@ JX9_PRIVATE int jx9VmIsCallable(jx9_vm *pVm, jx9_value *pValue)
  */
 static int vm_builtin_is_callable(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
-	jx9_vm *pVm;
+	jx9_vm *pVm;	
 	int res;
 	if( nArg < 1 ){
 		/* Missing arguments, return FALSE */
@@ -46008,8 +46012,8 @@ static int VmHashFuncStep(SyHashEntry *pEntry, void *pUserData)
  * Return
  *  Returns an multidimensional array containing a list of all defined functions
  *  both built-in (internal) and user-defined.
- *  The internal functions will be accessible via $arr["internal"], and the user
- *  defined ones using $arr["user"].
+ *  The internal functions will be accessible via $arr["internal"], and the user 
+ *  defined ones using $arr["user"]. 
  * Note:
  *  NULL is returned on failure.
  */
@@ -46065,7 +46069,7 @@ JX9_PRIVATE sxi32 jx9VmCallUserFunction(
 	/* Create a new operand stack */
 	aStack = VmNewOperandStack(&(*pVm), 1+nArg);
 	if( aStack == 0 ){
-		jx9VmThrowError(&(*pVm), 0, JX9_CTX_ERR,
+		jx9VmThrowError(&(*pVm), 0, JX9_CTX_ERR, 
 			"JX9 is running out of memory while invoking user callback");
 		if( pResult ){
 			/* Assume a null return value */
@@ -46108,7 +46112,7 @@ JX9_PRIVATE sxi32 jx9VmCallUserFunctionAp(
 	jx9_vm *pVm,       /* Target VM */
 	jx9_value *pFunc,  /* Callback name */
 	jx9_value *pResult, /* Store callback return value here. NULL otherwise */
-	...                /* 0 (Zero) or more Callback arguments */
+	...                /* 0 (Zero) or more Callback arguments */ 
 	)
 {
 	jx9_value *pArg;
@@ -46374,7 +46378,7 @@ static int vm_builtin_print(jx9_context *pCtx, int nArg,jx9_value **apArg)
  *   Output a message and terminate program execution.
  * Parameter
  *  If status is a string, this function prints the status just before exiting.
- *  If status is an integer, that value will be used as the exit status
+ *  If status is an integer, that value will be used as the exit status 
  *  and not printed
  * Return
  *  NULL
@@ -46413,7 +46417,7 @@ JX9_PRIVATE sxi32 jx9VmUnsetMemObj(jx9_vm *pVm,sxu32 nObjIdx)
 		sFree.nIdx = nObjIdx;
 		sFree.pUserData = 0;
 		SySetPut(&pVm->aFreeObj, (const void *)&sFree);
-	}
+	}				
 	return SXRET_OK;
 }
 /*
@@ -46442,7 +46446,7 @@ static int vm_builtin_gettype(jx9_context *pCtx, int nArg, jx9_value **apArg)
  *  $handle
  *  The evaluated resource handle.
  * Return
- *  If the given handle is a resource, this function will return a string
+ *  If the given handle is a resource, this function will return a string 
  *  representing its type. If the type is not identified by this function
  *  the return value will be the string Unknown.
  *  This function will return FALSE and generate an error if handle
@@ -46783,22 +46787,22 @@ static int VmExtractCallback(jx9_value *pKey, jx9_value *pValue, void *pUserData
  *  The way invalid/numeric keys and collisions are treated is determined by the extract_type.
  *  It can be one of the following values:
  *   EXTR_OVERWRITE
- *       If there is a collision, overwrite the existing variable.
+ *       If there is a collision, overwrite the existing variable. 
  *   EXTR_SKIP
- *       If there is a collision, don't overwrite the existing variable.
+ *       If there is a collision, don't overwrite the existing variable. 
  *   EXTR_PREFIX_SAME
- *       If there is a collision, prefix the variable name with prefix.
+ *       If there is a collision, prefix the variable name with prefix. 
  *   EXTR_PREFIX_ALL
- *       Prefix all variable names with prefix.
+ *       Prefix all variable names with prefix. 
  *   EXTR_PREFIX_INVALID
- *       Only prefix invalid/numeric variable names with prefix.
+ *       Only prefix invalid/numeric variable names with prefix. 
  *   EXTR_IF_EXISTS
  *       Only overwrite the variable if it already exists in the current symbol table
  *       otherwise do nothing.
  *       This is useful for defining a list of valid variables and then extracting only those
- *       variables you have defined out of $_REQUEST, for example.
+ *       variables you have defined out of $_REQUEST, for example. 
  *   EXTR_PREFIX_IF_EXISTS
- *       Only create prefixed variable names if the non-prefixed version of the same variable exists in
+ *       Only create prefixed variable names if the non-prefixed version of the same variable exists in 
  *      the current symbol table.
  * $prefix
  *  Note that prefix is only required if extract_type is EXTR_PREFIX_SAME, EXTR_PREFIX_ALL
@@ -46861,12 +46865,12 @@ static int VmExtractCallback(jx9_value *pKey, jx9_value *pValue, void *pUserData
 	}
 	sVar.nByte = 0; /* cc warning */
 	if( (iFlags & 0x08/*EXTR_PREFIX_ALL*/ ) && pAux->Prefixlen > 0 ){
-		sVar.nByte = (sxu32)SyBufferFormat(pAux->zWorker, sizeof(pAux->zWorker), "%.*s_%.*s",
-			pAux->Prefixlen, pAux->zPrefix,
+		sVar.nByte = (sxu32)SyBufferFormat(pAux->zWorker, sizeof(pAux->zWorker), "%.*s_%.*s", 
+			pAux->Prefixlen, pAux->zPrefix, 
 			SyBlobLength(&pKey->sBlob), SyBlobData(&pKey->sBlob)
 			);
 	}else{
-		sVar.nByte = (sxu32) SyMemcpy(SyBlobData(&pKey->sBlob), pAux->zWorker,
+		sVar.nByte = (sxu32) SyMemcpy(SyBlobData(&pKey->sBlob), pAux->zWorker, 
 			SXMIN(SyBlobLength(&pKey->sBlob), sizeof(pAux->zWorker)));
 	}
 	sVar.zString = pAux->zWorker;
@@ -46884,8 +46888,8 @@ static int VmExtractCallback(jx9_value *pKey, jx9_value *pValue, void *pUserData
 			}
 			sVar.nByte = SyBufferFormat(
 				pAux->zWorker, sizeof(pAux->zWorker),
-				"%.*s_%.*s",
-				pAux->Prefixlen, pAux->zPrefix,
+				"%.*s_%.*s", 
+				pAux->Prefixlen, pAux->zPrefix, 
 				SyBlobLength(&pKey->sBlob), SyBlobData(&pKey->sBlob)
 				);
 			pObj = VmExtractMemObj(pVm, &sVar, TRUE, TRUE);
@@ -46910,7 +46914,7 @@ static int VmExtractCallback(jx9_value *pKey, jx9_value *pValue, void *pUserData
 static sxi32 VmEvalChunk(
 	jx9_vm *pVm,        /* Underlying Virtual Machine */
 	jx9_context *pCtx,  /* Call Context */
-	SyString *pChunk,   /* JX9 chunk to evaluate */
+	SyString *pChunk,   /* JX9 chunk to evaluate */ 
 	int iFlags,         /* Compile flag */
 	int bTrueReturn     /* TRUE to return execution result */
 	)
@@ -47073,7 +47077,7 @@ static sxi32 VmExecIncludedFile(
 	/* Extract the associated stream */
 	pStream = jx9VmGetStreamDevice(pVm, &pPath->zString, pPath->nByte);
 	/*
-	 * Open the file or the URL [i.e: http://jx9.symisc.net/example/hello.jx9.txt"]
+	 * Open the file or the URL [i.e: http://jx9.symisc.net/example/hello.jx9.txt"] 
 	 * in a read-only mode.
 	 */
 	pHandle = jx9StreamOpenHandle(pVm, pStream,pPath->zString, JX9_IO_OPEN_RDONLY, TRUE, 0, TRUE, &isNew);
@@ -47101,12 +47105,9 @@ static sxi32 VmExecIncludedFile(
 	/* Release the working buffer */
 	SyBlobRelease(&sContents);
 #else
-	//pCtx = 0; /* cc warning */
-        (void) pCtx;
-        (void) pPath;
-        (void) IncludeOnce;
-	//pPath = 0;
-	//IncludeOnce = 0;
+	pCtx = 0; /* cc warning */
+	pPath = 0;
+	IncludeOnce = 0;
 	rc = SXERR_IO;
 #endif /* JX9_DISABLE_BUILTIN_FUNC */
 	return rc;
@@ -47128,7 +47129,7 @@ static sxi32 VmExecIncludedFile(
  *  When a file is included, the code it contains inherits the variable scope
  *  of the line on which the include occurs. Any variables available at that line
  *  in the calling file will be available within the called file, from that point forward.
- *  However, all functions and objectes defined in the included file have the global scope.
+ *  However, all functions and objectes defined in the included file have the global scope. 
  */
 static int vm_builtin_include(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -47159,7 +47160,7 @@ static int vm_builtin_include(jx9_context *pCtx, int nArg, jx9_value **apArg)
  * import:
  *  According to the JX9 reference manual.
  *   The import() statement includes and evaluates the specified file during
- *   the execution of the script. This is a behavior similar to the include()
+ *   the execution of the script. This is a behavior similar to the include() 
  *   statement, with the only difference being that if the code from a file has already
  *   been included, it will not be included again. As the name suggests, it will be included
  *   just once.
@@ -47278,7 +47279,7 @@ static void VmExtractOptArgValue(
 {
 	jx9_value_bool(pWorker, 0);
 	if( !need_val ){
-		/*
+		/* 
 		 * Option does not need arguments.
 		 * Insert the option name and a boolean FALSE.
 		 */
@@ -47389,10 +47390,10 @@ static void VmExtractOptArgValue(
  *   An array of options. Each element in this array will be used as option
  *   strings and matched against options passed to the script starting with
  *   two hyphens (--). For example, an longopts element "opt" recognizes an
- *   option --opt.
+ *   option --opt. 
  * Return
  *  This function will return an array of option / argument pairs or FALSE
- *  on failure.
+ *  on failure. 
  */
 static int vm_builtin_getopt(jx9_context *pCtx, int nArg, jx9_value **apArg)
 {
@@ -47423,7 +47424,7 @@ static int vm_builtin_getopt(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	if( SyBlobLength(pArg) < 1 ){
 		/* Empty command line, return the empty array*/
 		jx9_result_value(pCtx, pArray);
-		/* Everything will be released automatically when we return
+		/* Everything will be released automatically when we return 
 		 * from this function.
 		 */
 		return JX9_OK;
@@ -47460,7 +47461,7 @@ static int vm_builtin_getopt(jx9_context *pCtx, int nArg, jx9_value **apArg)
 			continue;
 		}
 		/* Extract option argument value */
-		VmExtractOptArgValue(pArray, pWorker, zArg, zArgEnd, need_val, pCtx, (const char *)&c);
+		VmExtractOptArgValue(pArray, pWorker, zArg, zArgEnd, need_val, pCtx, (const char *)&c);	
 	}
 	if( nArg > 1 && jx9_value_is_json_array(apArg[1]) && jx9_array_count(apArg[1]) > 0 ){
 		/* Process long options */
@@ -47468,7 +47469,7 @@ static int vm_builtin_getopt(jx9_context *pCtx, int nArg, jx9_value **apArg)
 	}
 	/* Return the option array */
 	jx9_result_value(pCtx, pArray);
-	/*
+	/* 
 	 * Don't worry about freeing memory, everything will be released
 	 * automatically as soon we return from this foreign function.
 	 */
@@ -47593,7 +47594,7 @@ static int vm_builtin_utf8_encode(jx9_context *pCtx, int nArg, jx9_value **apArg
 			jx9_result_string(pCtx, (const char *)&e, (int)sizeof(char));
 			e = 0x80 + (c & 0x3F);
 			jx9_result_string(pCtx, (const char *)&e, (int)sizeof(char));
-		}
+		} 
 	}
 	/* All done */
 	return JX9_OK;
@@ -47608,14 +47609,14 @@ static int vm_builtin_utf8_encode(jx9_context *pCtx, int nArg, jx9_value **apArg
 ** a multi-byte UTF8 character.
 */
 static const unsigned char UtfTrans1[] = {
-  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-  0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-  0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-  0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
-  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-  0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
-  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-  0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x00, 0x00,
+  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+  0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 
+  0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
+  0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 
+  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+  0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 
+  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+  0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x00, 0x00, 
 };
 /*
 ** Translate a single UTF-8 character.  Return the unicode value.
@@ -47766,44 +47767,44 @@ static const jx9_builtin_func aVmFunc[] = {
 	{ "json_encode",     vm_builtin_json_encode   },
 	{ "json_decode",     vm_builtin_json_decode   },
 	     /* Functions calls */
-	{ "func_num_args"  , vm_builtin_func_num_args },
-	{ "func_get_arg"   , vm_builtin_func_get_arg  },
-	{ "func_get_args"  , vm_builtin_func_get_args },
-	{ "function_exists", vm_builtin_func_exists   },
-	{ "is_callable"    , vm_builtin_is_callable   },
-	{ "get_defined_functions", vm_builtin_get_defined_func },
+	{ "func_num_args"  , vm_builtin_func_num_args }, 
+	{ "func_get_arg"   , vm_builtin_func_get_arg  }, 
+	{ "func_get_args"  , vm_builtin_func_get_args }, 
+	{ "function_exists", vm_builtin_func_exists   }, 
+	{ "is_callable"    , vm_builtin_is_callable   }, 
+	{ "get_defined_functions", vm_builtin_get_defined_func },  
 	    /* Constants management */
-	{ "defined",  vm_builtin_defined              },
-	{ "get_defined_constants", vm_builtin_get_defined_constants },
+	{ "defined",  vm_builtin_defined              }, 
+	{ "get_defined_constants", vm_builtin_get_defined_constants }, 
 	   /* Random numbers/strings generators */
-	{ "rand",          vm_builtin_rand            },
-	{ "rand_str",      vm_builtin_rand_str        },
-	{ "getrandmax",    vm_builtin_getrandmax      },
+	{ "rand",          vm_builtin_rand            }, 
+	{ "rand_str",      vm_builtin_rand_str        }, 
+	{ "getrandmax",    vm_builtin_getrandmax      }, 
 	   /* Language constructs functions */
-	{ "print", vm_builtin_print                   },
-	{ "exit",  vm_builtin_exit                    },
-	{ "die",   vm_builtin_exit                    },
-	  /* Variable handling functions */
-	{ "gettype",   vm_builtin_gettype              },
+	{ "print", vm_builtin_print                   }, 
+	{ "exit",  vm_builtin_exit                    }, 
+	{ "die",   vm_builtin_exit                    },  
+	  /* Variable handling functions */ 
+	{ "gettype",   vm_builtin_gettype              }, 
 	{ "get_resource_type", vm_builtin_get_resource_type},
 	 /* Variable dumping */
 	{ "dump",     vm_builtin_dump                 },
 	  /* Release info */
-	{"jx9_version",       vm_builtin_jx9_version  },
-	{"jx9_credits",       vm_builtin_jx9_version  },
+	{"jx9_version",       vm_builtin_jx9_version  }, 
+	{"jx9_credits",       vm_builtin_jx9_version  }, 
 	{"jx9_info",          vm_builtin_jx9_version  },
-	{"jx9_copyright",     vm_builtin_jx9_version  },
+	{"jx9_copyright",     vm_builtin_jx9_version  }, 
 	  /* hashmap */
-	{"extract",          vm_builtin_extract       },
+	{"extract",          vm_builtin_extract       }, 
 	  /* URL related function */
-	{"parse_url",        vm_builtin_parse_url     },
+	{"parse_url",        vm_builtin_parse_url     }, 
 	   /* UTF-8 encoding/decoding */
-	{"utf8_encode",    vm_builtin_utf8_encode},
-	{"utf8_decode",    vm_builtin_utf8_decode},
+	{"utf8_encode",    vm_builtin_utf8_encode}, 
+	{"utf8_decode",    vm_builtin_utf8_decode}, 
 	   /* Command line processing */
-	{"getopt",         vm_builtin_getopt     },
+	{"getopt",         vm_builtin_getopt     }, 
 	   /* Files/URI inclusion facility */
-	{ "include",      vm_builtin_include          },
+	{ "include",      vm_builtin_include          }, 
 	{ "import", vm_builtin_import     }
 };
 /*
@@ -47890,7 +47891,7 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
  *    Copyright (C) Symisc Systems, http://jx9.symisc.net
  * Status:
  *    Stable.
- */
+ */ 
  /*
   * URI Parser: Split an URI into components [i.e: Host, Path, Query, ...].
   * URI syntax: [method:/][/[user[:pwd]@]host[:port]/][document]
@@ -47907,7 +47908,7 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
  {
 	 const char *zEnd = &zUri[nLen];
 	 sxu8 bHostOnly = FALSE;
-	 sxu8 bIPv6 = FALSE	;
+	 sxu8 bIPv6 = FALSE	; 
 	 const char *zCur;
 	 SyString *pComp;
 	 sxu32 nPos = 0;
@@ -47929,13 +47930,13 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
 	 if( zUri != zCur && zCur[-1] == ':' ){
 		 /* Extract a scheme:
 		  * Not that we can get an invalid scheme here.
-		  * Fortunately the caller can discard any URI by comparing this scheme with its
+		  * Fortunately the caller can discard any URI by comparing this scheme with its 
 		  * registered schemes and will report the error as soon as his comparison function
 		  * fail.
 		  */
 	 	pComp = &pOut->sScheme;
 		SyStringInitFromBuf(pComp, zUri, (sxu32)(zCur - zUri - 1));
-		SyStringLeftTrim(pComp);
+		SyStringLeftTrim(pComp);		
 	 }
 	 if( zCur[1] != '/' ){
 		 if( zCur == zUri || zCur[-1] == ':' ){
@@ -47943,13 +47944,13 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
 		  goto PathSplit;
 		}
 		 /* There is something here , we will assume its an authority
-		  * and someone has forgot the two prefix slashes "//",
+		  * and someone has forgot the two prefix slashes "//", 
 		  * sooner or later we will detect if we are dealing with a malicious
 		  * user or not, but now assume we are dealing with an authority
 		  * and let the caller handle all the validation process.
 		  */
 		 goto ProcessHost;
-	 }
+	 }	 
 	 zUri = &zCur[2];
 	 zCur = zEnd;
 	 rc = SyByteFind(zUri, (sxu32)(zEnd - zUri), '/', &nPos);
@@ -47981,7 +47982,7 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
 	 pComp = &pOut->sHost;
 	 while( zUri < zCur && SyisSpace(zUri[0])){
 		 zUri++;
-	 }
+	 }	
 	 SyStringInitFromBuf(pComp, zUri, (sxu32)(zCur - zUri));
 	 if( pComp->zString[0] == '[' ){
 		 /* An IPv6 Address: Make a simple naive test
@@ -48003,7 +48004,7 @@ JX9_PRIVATE const jx9_io_stream * jx9VmGetStreamDevice(
 			 pComp->nByte = (sxu32)(&zUri[nPos] - zUri);
 		 }
 		 pComp = &pOut->sPort;
-		 SyStringInitFromBuf(pComp, &zUri[nPos+1], (sxu32)(zCur - &zUri[nPos+1]));
+		 SyStringInitFromBuf(pComp, &zUri[nPos+1], (sxu32)(zCur - &zUri[nPos+1]));	
 	 }
 	 if( bHostOnly == TRUE ){
 		 return SXRET_OK;
@@ -48042,9 +48043,9 @@ PathSplit:
  * and SXERR_MORE when more input is needed.
  */
 static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
-{
+{ 
   	const char *zIn;
-  	sxu32 nPos;
+  	sxu32 nPos; 
 	/* Jump leading white spaces */
 	SyStringLeftTrim(pCursor);
 	if( pCursor->nByte < 1 ){
@@ -48058,14 +48059,14 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 		return SXERR_MORE;
 	}
   	pCurrent->zString = zIn;
-  	pCurrent->nByte	= nPos;
+  	pCurrent->nByte	= nPos;	
   	/* advance the cursor so we can call this routine again */
   	pCursor->zString = &zIn[nPos];
   	pCursor->nByte -= nPos;
   	return SXRET_OK;
  }
  /*
-  * Split a single MIME header into a name value pair.
+  * Split a single MIME header into a name value pair. 
   * This function return SXRET_OK, SXERR_CONTINUE on success.
   * Otherwise SXERR_NEXT is returned when a malformed header
   * is encountered.
@@ -48210,7 +48211,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	 zPtr = zIn;
 	 while( zIn < zEnd && !SyisSpace(zIn[0]) ){
 		 zIn++;
-	 }
+	 } 
 	 if( zIn > zPtr ){
 		 nLen = (sxu32)(zIn-zPtr);
 		 /* Split raw URI to it's fields */
@@ -48236,7 +48237,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	 return SXRET_OK;
  }
  /*
-  * Tokenize, decode and split a raw query encoded as: "x-www-form-urlencoded"
+  * Tokenize, decode and split a raw query encoded as: "x-www-form-urlencoded" 
   * into a name value pair.
   * Note that this encoding is implicit in GET based requests.
   * After the tokenization process, register the decoded queries
@@ -48298,7 +48299,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 				  SyUriDecode(zIn, (sxu32)(zPtr-zIn), jx9VmBlobConsumer, pWorker, TRUE);
 				  sValue.zString = (const char *)SyBlobDataAt(pWorker, nBlobOfft);
 				  sValue.nByte = SyBlobLength(pWorker) - nBlobOfft;
-
+				 
 			 }
 			 /* Synchronize pointers */
 			 zIn = zPtr;
@@ -48306,14 +48307,14 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 		 sName.zString = (const char *)SyBlobData(pWorker);
 		 /* Install the decoded query in the $_GET/$_REQUEST array */
 		 if( pGet && (pGet->iFlags & MEMOBJ_HASHMAP) ){
-			 VmHashmapInsert((jx9_hashmap *)pGet->x.pOther,
-				 sName.zString, (int)sName.nByte,
+			 VmHashmapInsert((jx9_hashmap *)pGet->x.pOther, 
+				 sName.zString, (int)sName.nByte, 
 				 sValue.zString, (int)sValue.nByte
 				 );
 		 }
 		 if( pRequest && (pRequest->iFlags & MEMOBJ_HASHMAP) ){
-			 VmHashmapInsert((jx9_hashmap *)pRequest->x.pOther,
-				 sName.zString, (int)sName.nByte,
+			 VmHashmapInsert((jx9_hashmap *)pRequest->x.pOther, 
+				 sName.zString, (int)sName.nByte, 
 				 sValue.zString, (int)sValue.nByte
 					 );
 		 }
@@ -48361,7 +48362,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	 if( pCookie == 0 || (pCookie->iFlags & MEMOBJ_HASHMAP) == 0 ){
 		 /* $_COOKIE superglobal not available */
 		 return SXERR_NOTFOUND;
-	 }
+	 }	
 	 for(;;){
 		  /* Jump leading white spaces */
 		 while( zIn < zEnd && SyisSpace(zIn[0]) ){
@@ -48373,7 +48374,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 		  /* Reset the working buffer */
 		 SyBlobReset(pWorker);
 		 zDelimiter = zIn;
-		 /* Delimit the name[=value]; pair */
+		 /* Delimit the name[=value]; pair */ 
 		 while( zDelimiter < zEnd && zDelimiter[0] != ';' ){
 			 zDelimiter++;
 		 }
@@ -48397,8 +48398,8 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 		 zIn = &zDelimiter[1];
 		 /* Perform the insertion */
 		 sName.zString = (const char *)SyBlobData(pWorker);
-		 VmHashmapInsert((jx9_hashmap *)pCookie->x.pOther,
-			 sName.zString, (int)sName.nByte,
+		 VmHashmapInsert((jx9_hashmap *)pCookie->x.pOther, 
+			 sName.zString, (int)sName.nByte, 
 			 sValue.zString, (int)sValue.nByte
 			 );
 	 }
@@ -48407,7 +48408,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
  /*
   * Process a full HTTP request and populate the appropriate arrays
   * such as $_SERVER, $_GET, $_POST, $_COOKIE, $_REQUEST, ... with the information
-  * extracted from the raw HTTP request. As an extension Symisc introduced
+  * extracted from the raw HTTP request. As an extension Symisc introduced 
   * the $_HEADER array which hold a copy of the processed HTTP MIME headers
   * and their associated values. [i.e: $_HEADER['Server'], $_HEADER['User-Agent'], ...].
   * This function return SXRET_OK on success. Any other return value indicates
@@ -48437,32 +48438,32 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	 /* Process MIME headers */
 	 VmHttpExtractHeaders(&sRequest, &sHeader);
 	 /*
-	  * Setup $_SERVER environments
+	  * Setup $_SERVER environments 
 	  */
 	 /* 'SERVER_PROTOCOL': Name and revision of the information protocol via which the page was requested */
-	 jx9_vm_config(pVm,
-		 JX9_VM_CONFIG_SERVER_ATTR,
-		 "SERVER_PROTOCOL",
-		 iVer == HTTP_PROTO_10 ? "HTTP/1.0" : "HTTP/1.1",
+	 jx9_vm_config(pVm, 
+		 JX9_VM_CONFIG_SERVER_ATTR, 
+		 "SERVER_PROTOCOL", 
+		 iVer == HTTP_PROTO_10 ? "HTTP/1.0" : "HTTP/1.1", 
 		 sizeof("HTTP/1.1")-1
 		 );
 	 /* 'REQUEST_METHOD':  Which request method was used to access the page */
-	 jx9_vm_config(pVm,
-		 JX9_VM_CONFIG_SERVER_ATTR,
-		 "REQUEST_METHOD",
-		 iMethod == HTTP_METHOD_GET ?   "GET" :
+	 jx9_vm_config(pVm, 
+		 JX9_VM_CONFIG_SERVER_ATTR, 
+		 "REQUEST_METHOD", 
+		 iMethod == HTTP_METHOD_GET ?   "GET" : 
 		 (iMethod == HTTP_METHOD_POST ? "POST":
 		 (iMethod == HTTP_METHOD_PUT  ? "PUT" :
-		 (iMethod == HTTP_METHOD_HEAD ?  "HEAD" : "OTHER"))),
+		 (iMethod == HTTP_METHOD_HEAD ?  "HEAD" : "OTHER"))), 
 		 -1 /* Compute attribute length automatically */
 		 );
 	 if( SyStringLength(&sUri.sQuery) > 0 && iMethod == HTTP_METHOD_GET ){
 		 pValue = &sUri.sQuery;
 		 /* 'QUERY_STRING': The query string, if any, via which the page was accessed */
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "QUERY_STRING",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "QUERY_STRING", 
+			 pValue->zString, 
 			 pValue->nByte
 			 );
 		 /* Decoded the raw query */
@@ -48470,110 +48471,110 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	 }
 	 /* REQUEST_URI: The URI which was given in order to access this page; for instance, '/index.html' */
 	 pValue = &sUri.sRaw;
-	 jx9_vm_config(pVm,
-		 JX9_VM_CONFIG_SERVER_ATTR,
-		 "REQUEST_URI",
-		 pValue->zString,
+	 jx9_vm_config(pVm, 
+		 JX9_VM_CONFIG_SERVER_ATTR, 
+		 "REQUEST_URI", 
+		 pValue->zString, 
 		 pValue->nByte
 		 );
 	 /*
 	  * 'PATH_INFO'
-	  * 'ORIG_PATH_INFO'
+	  * 'ORIG_PATH_INFO' 
       * Contains any client-provided pathname information trailing the actual script filename but preceding
 	  * the query string, if available. For instance, if the current script was accessed via the URL
 	  * http://www.example.com/jx9/path_info.jx9/some/stuff?foo=bar, then $_SERVER['PATH_INFO'] would contain
-	  * /some/stuff.
+	  * /some/stuff. 
 	  */
 	 pValue = &sUri.sPath;
-	 jx9_vm_config(pVm,
-		 JX9_VM_CONFIG_SERVER_ATTR,
-		 "PATH_INFO",
-		 pValue->zString,
+	 jx9_vm_config(pVm, 
+		 JX9_VM_CONFIG_SERVER_ATTR, 
+		 "PATH_INFO", 
+		 pValue->zString, 
 		 pValue->nByte
 		 );
-	 jx9_vm_config(pVm,
-		 JX9_VM_CONFIG_SERVER_ATTR,
-		 "ORIG_PATH_INFO",
-		 pValue->zString,
+	 jx9_vm_config(pVm, 
+		 JX9_VM_CONFIG_SERVER_ATTR, 
+		 "ORIG_PATH_INFO", 
+		 pValue->zString, 
 		 pValue->nByte
 		 );
 	 /* 'HTTP_ACCEPT': Contents of the Accept: header from the current request, if there is one */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Accept", sizeof("Accept")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_ACCEPT",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_ACCEPT", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_ACCEPT_CHARSET': Contents of the Accept-Charset: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Accept-Charset", sizeof("Accept-Charset")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_ACCEPT_CHARSET",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_ACCEPT_CHARSET", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_ACCEPT_ENCODING': Contents of the Accept-Encoding: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Accept-Encoding", sizeof("Accept-Encoding")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_ACCEPT_ENCODING",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_ACCEPT_ENCODING", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	  /* 'HTTP_ACCEPT_LANGUAGE': Contents of the Accept-Language: header from the current request, if there is one */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Accept-Language", sizeof("Accept-Language")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_ACCEPT_LANGUAGE",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_ACCEPT_LANGUAGE", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_CONNECTION': Contents of the Connection: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Connection", sizeof("Connection")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_CONNECTION",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_CONNECTION", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_HOST': Contents of the Host: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Host", sizeof("Host")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_HOST",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_HOST", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_REFERER': Contents of the Referer: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Referer", sizeof("Referer")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_REFERER",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_REFERER", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
 	 /* 'HTTP_USER_AGENT': Contents of the Referer: header from the current request, if there is one. */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "User-Agent", sizeof("User-Agent")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "HTTP_USER_AGENT",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "HTTP_USER_AGENT", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
@@ -48582,16 +48583,16 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 	   */
 	 pValue = VmHttpExtractHeaderValue(&sHeader, "Authorization", sizeof("Authorization")-1);
 	 if( pValue ){
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "JX9_AUTH_DIGEST",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "JX9_AUTH_DIGEST", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
-		 jx9_vm_config(pVm,
-			 JX9_VM_CONFIG_SERVER_ATTR,
-			 "JX9_AUTH",
-			 pValue->zString,
+		 jx9_vm_config(pVm, 
+			 JX9_VM_CONFIG_SERVER_ATTR, 
+			 "JX9_AUTH", 
+			 pValue->zString, 
 			 pValue->nByte
 		 );
 	 }
@@ -48605,12 +48606,12 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 		 pValue = &pHeader->sValue;
 		 if( pHeaderArray && (pHeaderArray->iFlags & MEMOBJ_HASHMAP)){
 			 /* Insert the MIME header and it's associated value */
-			 VmHashmapInsert((jx9_hashmap *)pHeaderArray->x.pOther,
-				 pName->zString, (int)pName->nByte,
+			 VmHashmapInsert((jx9_hashmap *)pHeaderArray->x.pOther, 
+				 pName->zString, (int)pName->nByte, 
 				 pValue->zString, (int)pValue->nByte
 				 );
 		 }
-		 if( pName->nByte == sizeof("Cookie")-1 && SyStrnicmp(pName->zString, "Cookie", sizeof("Cookie")-1) == 0
+		 if( pName->nByte == sizeof("Cookie")-1 && SyStrnicmp(pName->zString, "Cookie", sizeof("Cookie")-1) == 0 
 			 && pValue->nByte > 0){
 				 /* Process the name=value pair and insert them in the $_COOKIE superglobal array */
 				 VmHttpPorcessCookie(&(*pVm), &sWorker, pValue->zString, pValue->nByte);
@@ -48666,7 +48667,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
 #ifndef UNQLITE_AMALGAMATION
 #include "unqliteInt.h"
 #endif
-/*
+/* 
  * This file implements disk based hashtable using the linear hashing algorithm.
  * This implementation is the one decribed in the paper:
  *  LINEAR HASHING : A NEW TOOL FOR FILE AND TABLE ADDRESSING. Witold Litwin. I. N. Ft. I. A.. 78 150 Le Chesnay, France.
@@ -48679,7 +48680,7 @@ static sxi32 VmGetNextLine(SyString *pCursor, SyString *pCurrent)
  */
 #define L_HASH_WORD "chm@symisc"
 /*
- * Cell size on disk.
+ * Cell size on disk. 
  */
 #define L_HASH_CELL_SZ (4/*Hash*/+4/*Key*/+8/*Data*/+2/* Offset of the next cell */+8/*Overflow*/)
 /*
@@ -48730,7 +48731,7 @@ struct lhcell
 ** structure.
 */
 typedef struct lhphdr lhphdr;
-struct lhphdr
+struct lhphdr 
 {
   sxu16 iOfft; /* Offset of the first cell */
   sxu16 iFree; /* Offset of the first free block*/
@@ -48764,7 +48765,7 @@ struct lhash_bmap_rec
 {
 	pgno iLogic;                   /* Logical bucket number */
 	pgno iReal;                    /* Real bucket number */
-	lhash_bmap_rec *pNext,*pPrev;  /* Link to other bucket map */
+	lhash_bmap_rec *pNext,*pPrev;  /* Link to other bucket map */     
 	lhash_bmap_rec *pNextCol,*pPrevCol; /* Collision links */
 };
 typedef struct lhash_bmap_page lhash_bmap_page;
@@ -48860,7 +48861,7 @@ static int lhMapInstallBucket(lhash_kv_engine *pEngine,pgno iLogic,pgno iReal)
 		lhash_bmap_rec *pEntry;
 		lhash_bmap_rec **apNew;
 		sxu32 n;
-
+		
 		apNew = (lhash_bmap_rec **)SyMemBackendAlloc(&pEngine->sAllocator, nNewSize * sizeof(lhash_bmap_rec *));
 		if( apNew ){
 			/* Zero the new table */
@@ -48933,7 +48934,7 @@ static int lhMapLoadPage(lhash_kv_engine *pEngine,lhash_bmap_page *pMap,const un
 	/* All done */
 	return UNQLITE_OK;
 }
-/*
+/* 
  * Allocate a new cell instance.
  */
 static lhcell * lhNewCell(lhash_kv_engine *pEngine,lhpage *pPage)
@@ -48955,8 +48956,8 @@ static lhcell * lhNewCell(lhash_kv_engine *pEngine,lhpage *pPage)
  */
 static void lhCellDiscard(lhcell *pCell)
 {
-	lhpage *pPage = pCell->pPage->pMaster;
-
+	lhpage *pPage = pCell->pPage->pMaster;	
+	
 	if( pCell->pPrevCol ){
 		pCell->pPrevCol->pNextCol = pCell->pNextCol;
 	}else{
@@ -49013,7 +49014,7 @@ static int lhInstallCell(lhcell *pCell)
 		lhcell *pEntry;
 		lhcell **apNew;
 		sxu32 n;
-
+		
 		apNew = (lhcell **)SyMemBackendAlloc(&pPage->pHash->sAllocator, nNewSize * sizeof(lhcell *));
 		if( apNew ){
 			/* Zero the new table */
@@ -49141,10 +49142,10 @@ static int lhParseOneCell(lhpage *pPage,const unsigned char *zRaw,const unsigned
 	iOfft = (sxu16)(zRaw - (const unsigned char *)pPage->pRaw->zData);
 	/* 4 byte hash number */
 	SyBigEndianUnpack32(zRaw,&iHash);
-	zRaw += 4;
+	zRaw += 4;	
 	/* 4 byte key length  */
 	SyBigEndianUnpack32(zRaw,&nKey);
-	zRaw += 4;
+	zRaw += 4;	
 	/* 8 byte data length */
 	SyBigEndianUnpack64(zRaw,&nData);
 	zRaw += 8;
@@ -49863,7 +49864,7 @@ static int lhPageDefragment(lhpage *pPage)
 **
 ** If the page contains nBytes of free space but does not contain
 ** nBytes of contiguous free space, then this routine automatically
-** calls defragementPage() to consolidate all free space before
+** calls defragementPage() to consolidate all free space before 
 ** allocating the new chunk.
 */
 static int lhAllocateSpace(lhpage *pPage,sxu64 nAmount,sxu16 *pOfft)
@@ -50250,14 +50251,14 @@ static lhcell * lhFindSibeling(lhcell *pCell)
 {
 	lhpage *pPage = pCell->pPage->pMaster;
 	lhcell *pEntry;
-	pEntry = pPage->pFirst;
+	pEntry = pPage->pFirst; 
 	while( pEntry ){
 		if( pEntry->pPage == pCell->pPage && pEntry->iNext == pCell->iStart ){
 			/* Sibeling found */
 			return pEntry;
 		}
 		/* Point to the previous entry */
-		pEntry = pEntry->pPrev;
+		pEntry = pEntry->pPrev; 
 	}
 	/* Last inserted cell */
 	return 0;
@@ -50337,7 +50338,7 @@ static int lhRecordOverwrite(
 			rc = lhAllocateSpace(pPage,L_HASH_CELL_SZ + pCell->nKey + nByte,&iOfft);
 			if( rc != UNQLITE_OK ){
 				/* Transfer the payload to an overflow page */
-				rc = lhCellWriteOvflPayload(pCell,&pPage->pRaw->zData[pCell->iStart + L_HASH_CELL_SZ],pCell->nKey,pData,nByte,0);
+				rc = lhCellWriteOvflPayload(pCell,&pPage->pRaw->zData[pCell->iStart + L_HASH_CELL_SZ],pCell->nKey,pData,nByte,(const void *)0);
 				if( rc != UNQLITE_OK ){
 					return rc;
 				}
@@ -50476,7 +50477,7 @@ static int lhRecordAppend(
 				&pPage->pRaw->zData[pCell->iStart + L_HASH_CELL_SZ],pCell->nKey,
 				(const void *)&pPage->pRaw->zData[pCell->iStart + L_HASH_CELL_SZ + pCell->nKey],pCell->nData,
 				pData,nByte,
-				0);
+				(const void *)0);
 			if( rc != UNQLITE_OK ){
 				return rc;
 			}
@@ -50702,7 +50703,7 @@ static int lhStoreCell(
 	}
 	/* Write the payload */
 	if( iNeedOvfl ){
-		rc = lhCellWriteOvflPayload(pCell,pKey,nKeyLen,pData,nDataLen,0);
+		rc = lhCellWriteOvflPayload(pCell,pKey,nKeyLen,pData,nDataLen,(const void *)0);
 		if( rc != UNQLITE_OK ){
 			lhCellDiscard(pCell);
 			return rc;
@@ -50773,7 +50774,7 @@ static int lhFindSlavePage(lhpage *pPage,sxu64 nAmount,sxu16 *pOfft,lhpage **ppS
 		if( UNQLITE_OK != lhAllocateSpace(pNew,L_HASH_CELL_SZ+nAmount,&iOfft) ){
 			/* Cell header only */
 			lhAllocateSpace(pNew,L_HASH_CELL_SZ,&iOfft); /* Never fail */
-		}
+		}	
 		*pOfft = iOfft;
 	}
 	/* Link this page to the previous slave page */
@@ -50867,7 +50868,7 @@ static int lhPageSplit(
 	lhcell *pCell,*pNext;
 	SyBlob sWorker;
 	pgno iBucket;
-	int rc;
+	int rc; 
 	SyBlobInit(&sWorker,&pOld->pHash->sAllocator);
 	/* Perform the split */
 	pCell = pOld->pList;
@@ -51271,7 +51272,7 @@ static sxu32 lhash_bin_hash(const void *pSrc,sxu32 nLen)
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
-	}
+	}	
 	return nH;
 }
 /*
@@ -51377,7 +51378,7 @@ struct lhash_kv_cursor
 	unqlite_page *pRaw;   /* Raw disk page */
 	lhash_bmap_rec *pRec; /* Logical to real bucket map */
 };
-/*
+/* 
  * Possible state of the cursor
  */
 #define L_HASH_CURSOR_STATE_NEXT_PAGE 1 /* Next page in the list */
@@ -51585,7 +51586,7 @@ static int lhCursorKeyLength(unqlite_kv_cursor *pCursor,int *pLen)
 {
 	lhash_kv_cursor *pCur = (lhash_kv_cursor *)pCursor;
 	lhcell *pCell;
-
+	
 	if( pCur->iState != L_HASH_CURSOR_STATE_CELL || pCur->pCell == 0 ){
 		/* Invalid state */
 		return UNQLITE_INVALID;
@@ -51603,7 +51604,7 @@ static int lhCursorDataLength(unqlite_kv_cursor *pCursor,unqlite_int64 *pLen)
 {
 	lhash_kv_cursor *pCur = (lhash_kv_cursor *)pCursor;
 	lhcell *pCell;
-
+	
 	if( pCur->iState != L_HASH_CURSOR_STATE_CELL || pCur->pCell == 0 ){
 		/* Invalid state */
 		return UNQLITE_INVALID;
@@ -51722,7 +51723,7 @@ UNQLITE_PRIVATE const unqlite_kv_methods * unqliteExportDiskKvStorage(void)
 		lhCursorDataLength,         /* xDataLength */
 		lhCursorData,               /* xData */
 		lhCursorReset,              /* xReset */
-		0                           /* xRelease */
+		0                           /* xRelease */                        
 	};
 	return &sDiskStore;
 }
@@ -51748,7 +51749,7 @@ UNQLITE_PRIVATE const unqlite_kv_methods * unqliteExportDiskKvStorage(void)
 #ifndef UNQLITE_AMALGAMATION
 #include "unqliteInt.h"
 #endif
-/*
+/* 
  * This file implements an in-memory key value storage engine for unQLite.
  * Note that this storage engine does not support transactions.
  *
@@ -51808,7 +51809,7 @@ static mem_hash_record * MemHashNewRecord(
 	void *pDupData;
 	sxu32 nByte;
 	char *zPtr;
-
+	
 	/* Total number of bytes to alloc */
 	nByte = sizeof(mem_hash_record) + nKey;
 	/* Allocate a new instance */
@@ -51897,7 +51898,7 @@ static mem_hash_record * MemHashGetEntry(
 		if( pEntry == 0 ){
 			break;
 		}
-		if( pEntry->nHash == nHash && pEntry->nKeyLen == (sxu32)nKeyLen &&
+		if( pEntry->nHash == nHash && pEntry->nKeyLen == (sxu32)nKeyLen && 
 			pEngine->xCmp(pEntry->pKey,pKey,pEntry->nKeyLen) == 0 ){
 				return pEntry;
 		}
@@ -51927,7 +51928,7 @@ static int MemHashGrowTable(mem_hash_kv_engine *pEngine)
 	n = 0;
 	pEntry = pEngine->pLast;
 	for(;;){
-
+		
 		/* Loop one */
 		if( n >= pEngine->nRecord ){
 			break;
@@ -52185,7 +52186,7 @@ static sxu32 MemHashFunc(const void *pSrc,sxu32 nLen)
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
 		if( zIn >= zEnd ){ break; } nH = nH * 33 + zIn[0] ; zIn++;
-	}
+	}	
 	return nH;
 }
 /* Default bucket size */
@@ -52198,7 +52199,7 @@ static sxu32 MemHashFunc(const void *pSrc,sxu32 nLen)
 static int MemHashInit(unqlite_kv_engine *pKvEngine,int iPageSize)
 {
 	mem_hash_kv_engine *pEngine = (mem_hash_kv_engine *)pKvEngine;
-	/* Note that this instance is already zeroed */
+	/* Note that this instance is already zeroed */	
 	/* Memory backend */
 	SyMemBackendInitFromParent(&pEngine->sAlloc,unqliteExportMemBackend());
 #if defined(UNQLITE_ENABLE_THREADS)
@@ -52361,7 +52362,7 @@ static int MemHashAppend(
 		/* Append data to the existing record */
 		if( nNew > SXU32_HIGH ){
 			/* Overflow */
-			pEngine->pIo->xErr(pEngine->pIo->pHandle,"Append operation will cause data overflow");
+			pEngine->pIo->xErr(pEngine->pIo->pHandle,"Append operation will cause data overflow");	
 			return UNQLITE_LIMIT;
 		}
 		nData = (sxu32)nNew;
@@ -52406,7 +52407,7 @@ UNQLITE_PRIVATE const unqlite_kv_methods * unqliteExportMemKvStorage(void)
 		MemHashCursorDataLength,    /* xDataLength */
 		MemHashCursorData,          /* xData */
 		MemHashCursorReset,         /* xReset */
-		0        /* xRelease */
+		0        /* xRelease */                        
 	};
 	return &sMemStore;
 }
@@ -52485,9 +52486,9 @@ UNQLITE_PRIVATE int unqliteOsSectorSize(unqlite_file *id)
 UNQLITE_PRIVATE int unqliteOsOpen(
   unqlite_vfs *pVfs,
   SyMemBackend *pAlloc,
-  const char *zPath,
-  unqlite_file **ppOut,
-  unsigned int flags
+  const char *zPath, 
+  unqlite_file **ppOut, 
+  unsigned int flags 
 )
 {
 	unqlite_file *pFile;
@@ -52526,9 +52527,9 @@ UNQLITE_PRIVATE int unqliteOsDelete(unqlite_vfs *pVfs, const char *zPath, int di
   return pVfs->xDelete(pVfs, zPath, dirSync);
 }
 UNQLITE_PRIVATE int unqliteOsAccess(
-  unqlite_vfs *pVfs,
-  const char *zPath,
-  int flags,
+  unqlite_vfs *pVfs, 
+  const char *zPath, 
+  int flags, 
   int *pResOut
 ){
   return pVfs->xAccess(pVfs, zPath, flags, pResOut);
@@ -52555,7 +52556,7 @@ UNQLITE_PRIVATE int unqliteOsAccess(
 #ifndef UNQLITE_AMALGAMATION
 #include "unqliteInt.h"
 #endif
-/*
+/* 
  * Omit the whole layer from the build if compiling for platforms other than Unix (Linux, BSD, Solaris, OS X, etc.).
  * Note: Mostly SQLite3 source tree.
  */
@@ -52587,7 +52588,7 @@ UNQLITE_PRIVATE int unqliteOsAccess(
 #include <time.h>
 #include <sys/time.h>
 #include <errno.h>
-#if defined(__APPLE__)
+#if defined(__APPLE__) 
 # include <sys/mount.h>
 #endif
 /*
@@ -52612,7 +52613,7 @@ UNQLITE_PRIVATE int unqliteOsAccess(
 */
 #define MAX_PATHNAME 512
 /*
-** Only set the lastErrno if the error code is a real error and not
+** Only set the lastErrno if the error code is a real error and not 
 ** a normal expected return code of UNQLITE_BUSY or UNQLITE_OK
 */
 #define IS_LOCK_ERROR(x)  ((x != UNQLITE_OK) && (x != UNQLITE_BUSY))
@@ -52667,11 +52668,11 @@ struct unixFile {
 /*
 ** Helper functions to obtain and relinquish the global mutex. The
 ** global mutex is used to protect the unixInodeInfo and
-** vxworksFileId objects used by this file, all of which may be
+** vxworksFileId objects used by this file, all of which may be 
 ** shared by multiple threads.
 **
-** Function unixMutexHeld() is used to assert() that the global mutex
-** is held when required. This function is only used as part of assert()
+** Function unixMutexHeld() is used to assert() that the global mutex 
+** is held when required. This function is only used as part of assert() 
 ** statements. e.g.
 **
 **   unixEnterMutex()
@@ -52700,44 +52701,44 @@ static void unixLeaveMutex(void){
 ** This routine translates a standard POSIX errno code into something
 ** useful to the clients of the unqlite3 functions.  Specifically, it is
 ** intended to translate a variety of "try again" errors into UNQLITE_BUSY
-** and a variety of "please close the file descriptor NOW" errors into
+** and a variety of "please close the file descriptor NOW" errors into 
 ** UNQLITE_IOERR
-**
+** 
 ** Errors during initialization of locks, or file system support for locks,
 ** should handle ENOLCK, ENOTSUP, EOPNOTSUPP separately.
 */
 static int unqliteErrorFromPosixError(int posixError, int unqliteIOErr) {
   switch (posixError) {
-  case 0:
+  case 0: 
     return UNQLITE_OK;
-
+    
   case EAGAIN:
   case ETIMEDOUT:
   case EBUSY:
   case EINTR:
-  case ENOLCK:
-    /* random NFS retry error, unless during file system support
+  case ENOLCK:  
+    /* random NFS retry error, unless during file system support 
      * introspection, in which it actually means what it says */
     return UNQLITE_BUSY;
-
-  case EACCES:
+ 
+  case EACCES: 
     /* EACCES is like EAGAIN during locking operations, but not any other time*/
       return UNQLITE_BUSY;
-
-  case EPERM:
+    
+  case EPERM: 
     return UNQLITE_PERM;
-
+    
   case EDEADLK:
     return UNQLITE_IOERR;
-
+    
 #if EOPNOTSUPP!=ENOTSUP
-  case EOPNOTSUPP:
-    /* something went terribly awry, unless during file system support
+  case EOPNOTSUPP: 
+    /* something went terribly awry, unless during file system support 
      * introspection, in which it actually means what it says */
 #endif
 #ifdef ENOTSUP
-  case ENOTSUP:
-    /* invalid fd, unless during file system support introspection, in which
+  case ENOTSUP: 
+    /* invalid fd, unless during file system support introspection, in which 
      * it actually means what it says */
 #endif
   case EIO:
@@ -52750,8 +52751,8 @@ static int unqliteErrorFromPosixError(int posixError, int unqliteIOErr) {
   case ESTALE:
   case ENOSYS:
     /* these should force the client to close the file and reconnect */
-
-  default:
+    
+  default: 
     return unqliteIOErr;
   }
 }
@@ -52804,7 +52805,7 @@ static int unqliteErrorFromPosixError(int posixError, int unqliteIOErr) {
 ** cnt>0 means there are cnt shared locks on the file.
 **
 ** Any attempt to lock or unlock a file first checks the locking
-** structure.  The fcntl() system call is only invoked to set a
+** structure.  The fcntl() system call is only invoked to set a 
 ** POSIX lock if the internal lock structure transitions between
 ** a locked and an unlocked state.
 **
@@ -52889,9 +52890,9 @@ static void unqlite_free(void *p)
 ** cleared and UNQLITE_OK returned.
 **
 ** Otherwise, if an error occurs, then successfully closed file descriptor
-** entries are removed from the list, and UNQLITE_IOERR_CLOSE returned.
+** entries are removed from the list, and UNQLITE_IOERR_CLOSE returned. 
 ** not deleted and UNQLITE_IOERR_CLOSE returned.
-*/
+*/ 
 static int closePendingFds(unixFile *pFile){
   int rc = UNQLITE_OK;
   unixInodeInfo *pInode = pFile->pInode;
@@ -53029,7 +53030,7 @@ static int unixCheckReservedLock(unqlite_file *id, int *pResOut){
   int reserved = 0;
   unixFile *pFile = (unixFile*)id;
 
-
+ 
   unixEnterMutex(); /* Because pFile->pInode is shared across threads */
 
   /* Check if a thread in this process holds such a lock */
@@ -53053,9 +53054,9 @@ static int unixCheckReservedLock(unqlite_file *id, int *pResOut){
       reserved = 1;
     }
   }
-
+  
   unixLeaveMutex();
-
+ 
   *pResOut = reserved;
   return rc;
 }
@@ -53101,7 +53102,7 @@ static int unixLock(unqlite_file *id, int eFileLock){
   **
   ** A process may only obtain a RESERVED lock after it has a SHARED lock.
   ** A RESERVED lock is implemented by grabbing a write-lock on the
-  ** 'reserved byte'.
+  ** 'reserved byte'. 
   **
   ** A process may only obtain a PENDING lock after it has obtained a
   ** SHARED lock. A PENDING lock is implemented by obtaining a write-lock
@@ -53115,7 +53116,7 @@ static int unixLock(unqlite_file *id, int eFileLock){
   ** implemented by obtaining a write-lock on the entire 'shared byte
   ** range'. Since all other locks require a read-lock on one of the bytes
   ** within this range, this ensures that no other locks are held on the
-  ** database.
+  ** database. 
   **
   ** The reason a single byte cannot be used instead of the 'shared byte
   ** range' is that some versions of unixdows do not support read-locks. By
@@ -53144,7 +53145,7 @@ static int unixLock(unqlite_file *id, int eFileLock){
   /* If some thread using this PID has a lock via a different unixFile*
   ** handle that precludes the requested lock, return BUSY.
   */
-  if( (pFile->eFileLock!=pInode->eFileLock &&
+  if( (pFile->eFileLock!=pInode->eFileLock && 
           (pInode->eFileLock>=PENDING_LOCK || eFileLock>SHARED_LOCK))
   ){
     rc = UNQLITE_BUSY;
@@ -53155,7 +53156,7 @@ static int unixLock(unqlite_file *id, int eFileLock){
   ** has a SHARED or RESERVED lock, then increment reference counts and
   ** return UNQLITE_OK.
   */
-  if( eFileLock==SHARED_LOCK &&
+  if( eFileLock==SHARED_LOCK && 
       (pInode->eFileLock==SHARED_LOCK || pInode->eFileLock==RESERVED_LOCK) ){
     pFile->eFileLock = SHARED_LOCK;
     pInode->nShared++;
@@ -53168,7 +53169,7 @@ static int unixLock(unqlite_file *id, int eFileLock){
   */
   lock.l_len = 1L;
   lock.l_whence = SEEK_SET;
-  if( eFileLock==SHARED_LOCK
+  if( eFileLock==SHARED_LOCK 
       || (eFileLock==EXCLUSIVE_LOCK && pFile->eFileLock<PENDING_LOCK)
   ){
     lock.l_type = (eFileLock==SHARED_LOCK?F_RDLCK:F_WRLCK);
@@ -53200,8 +53201,8 @@ static int unixLock(unqlite_file *id, int eFileLock){
     if( fcntl(pFile->h, F_SETLK, &lock)!=0 ){
       if( s != -1 ){
         /* This could happen with a network mount */
-        tErrno = errno;
-        rc = unqliteErrorFromPosixError(tErrno, UNQLITE_LOCKERR);
+        tErrno = errno; 
+        rc = unqliteErrorFromPosixError(tErrno, UNQLITE_LOCKERR); 
         if( IS_LOCK_ERROR(rc) ){
           pFile->lastErrno = tErrno;
         }
@@ -53278,11 +53279,11 @@ static void setPendingFd(unixFile *pFile){
 **
 ** If the locking level of the file descriptor is already at or below
 ** the requested locking level, this routine is a no-op.
-**
+** 
 ** If handleNFSUnlock is true, then on downgrading an EXCLUSIVE_LOCK to SHARED
 ** the byte range is divided into 2 parts and the first part is unlocked then
-** set to a read lock, then the other part is simply unlocked.  This works
-** around a bug in BSD NFS lockd (also seen on MacOSX 10.3+) that fails to
+** set to a read lock, then the other part is simply unlocked.  This works 
+** around a bug in BSD NFS lockd (also seen on MacOSX 10.3+) that fails to 
 ** remove the write lock on a region when a read lock is set.
 */
 static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
@@ -53297,14 +53298,14 @@ static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
     return UNQLITE_OK;
   }
   unixEnterMutex();
-
+  
   h = pFile->h;
   pInode = pFile->pInode;
-
+  
   if( pFile->eFileLock>SHARED_LOCK ){
     /* downgrading to a shared lock on NFS involves clearing the write lock
     ** before establishing the readlock - to avoid a race condition we downgrade
-    ** the lock in 2 blocks, so that part of the range will be covered by a
+    ** the lock in 2 blocks, so that part of the range will be covered by a 
     ** write lock until the rest is covered by a read lock:
     **  1:   [WWWWW]
     **  2:   [....W]
@@ -53314,7 +53315,7 @@ static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
     if( eFileLock==SHARED_LOCK ){
       if( handleNFSUnlock ){
         off_t divSize = SHARED_SIZE - 1;
-
+        
         lock.l_type = F_UNLCK;
         lock.l_whence = SEEK_SET;
         lock.l_start = SHARED_FIRST;
@@ -53391,7 +53392,7 @@ static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
       lock.l_type = F_UNLCK;
       lock.l_whence = SEEK_SET;
       lock.l_start = lock.l_len = 0L;
-
+      
       if( fcntl(h, F_SETLK, &lock)!=(-1) ){
         pInode->eFileLock = NO_LOCK;
       }else{
@@ -53410,7 +53411,7 @@ static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
     ** was deferred because of outstanding locks.
     */
     pInode->nLock--;
-
+ 
     if( pInode->nLock==0 ){
       int rc2 = closePendingFds(pFile);
       if( rc==UNQLITE_OK ){
@@ -53418,11 +53419,11 @@ static int _posixUnlock(unqlite_file *id, int eFileLock, int handleNFSUnlock){
       }
     }
   }
-
+	
 end_unlock:
 
   unixLeaveMutex();
-
+  
   if( rc==UNQLITE_OK ) pFile->eFileLock = eFileLock;
   return rc;
 }
@@ -53437,7 +53438,7 @@ static int unixUnlock(unqlite_file *id, int eFileLock){
   return _posixUnlock(id, eFileLock, 0);
 }
 /*
-** This function performs the parts of the "close file" operation
+** This function performs the parts of the "close file" operation 
 ** common to all locking schemes. It closes the directory and file
 ** handles, if they are valid, and sets all fields of the unixFile
 ** structure to 0.
@@ -53479,7 +53480,7 @@ static int unixClose(unqlite_file *id){
     if( pFile->pInode && pFile->pInode->nLock ){
       /* If there are outstanding locks, do not actually close the file just
       ** yet because that would clear those locks.  Instead, add the file
-      ** descriptor to pInode->pUnused list.  It will be automatically closed
+      ** descriptor to pInode->pUnused list.  It will be automatically closed 
       ** when the last lock is cleared.
       */
       setPendingFd(pFile);
@@ -53494,14 +53495,14 @@ static int unixClose(unqlite_file *id){
 ******************************************************************************/
 /*
 **
-** The next division contains implementations for all methods of the
+** The next division contains implementations for all methods of the 
 ** unqlite_file object other than the locking methods.  The locking
 ** methods were defined in divisions above (one locking method per
 ** division).  Those methods that are common to all locking modes
 ** are gather together into this division.
 */
 /*
-** Seek to the offset passed as the second argument, then read cnt
+** Seek to the offset passed as the second argument, then read cnt 
 ** bytes into pBuf. Return the number of bytes actually read.
 **
 ** NB:  If you define USE_PREAD or USE_PREAD64, then it might also
@@ -53518,19 +53519,19 @@ static int seekAndRead(unixFile *id, unqlite_int64 offset, void *pBuf, int cnt){
 #if (!defined(USE_PREAD) && !defined(USE_PREAD64))
   unqlite_int64 newOffset;
 #endif
-
+ 
 #if defined(USE_PREAD)
   got = pread(id->h, pBuf, cnt, offset);
 #elif defined(USE_PREAD64)
   got = pread64(id->h, pBuf, cnt, offset);
 #else
   newOffset = lseek(id->h, offset, SEEK_SET);
-
+  
   if( newOffset!=offset ){
     if( newOffset == -1 ){
       ((unixFile*)id)->lastErrno = errno;
     }else{
-      ((unixFile*)id)->lastErrno = 0;
+      ((unixFile*)id)->lastErrno = 0;			
     }
     return -1;
   }
@@ -53547,14 +53548,14 @@ static int seekAndRead(unixFile *id, unqlite_int64 offset, void *pBuf, int cnt){
 ** wrong.
 */
 static int unixRead(
-  unqlite_file *id,
-  void *pBuf,
+  unqlite_file *id, 
+  void *pBuf, 
   unqlite_int64 amt,
   unqlite_int64 offset
 ){
   unixFile *pFile = (unixFile *)id;
   int got;
-
+  
   got = seekAndRead(pFile, offset, pBuf, (int)amt);
   if( got==(int)amt ){
     return UNQLITE_OK;
@@ -53580,7 +53581,7 @@ static int seekAndWrite(unixFile *id, unqlite_int64 offset, const void *pBuf, un
 #if (!defined(USE_PREAD) && !defined(USE_PREAD64))
   unqlite_int64 newOffset;
 #endif
-
+  
 #if defined(USE_PREAD)
   got = pwrite(id->h, pBuf, cnt, offset);
 #elif defined(USE_PREAD64)
@@ -53591,7 +53592,7 @@ static int seekAndWrite(unixFile *id, unqlite_int64 offset, const void *pBuf, un
     if( newOffset == -1 ){
       ((unixFile*)id)->lastErrno = errno;
     }else{
-      ((unixFile*)id)->lastErrno = 0;
+      ((unixFile*)id)->lastErrno = 0;			
     }
     return -1;
   }
@@ -53607,10 +53608,10 @@ static int seekAndWrite(unixFile *id, unqlite_int64 offset, const void *pBuf, un
 ** or some other error code on failure.
 */
 static int unixWrite(
-  unqlite_file *id,
-  const void *pBuf,
+  unqlite_file *id, 
+  const void *pBuf, 
   unqlite_int64 amt,
-  unqlite_int64 offset
+  unqlite_int64 offset 
 ){
   unixFile *pFile = (unixFile*)id;
   int wrote = 0;
@@ -53620,7 +53621,7 @@ static int unixWrite(
     offset += wrote;
     pBuf = &((char*)pBuf)[wrote];
   }
-
+  
   if( amt>0 ){
     if( wrote<0 ){
       /* lastErrno set by seekAndWrite */
@@ -53660,8 +53661,8 @@ static int unixWrite(
 **
 ** SQLite sets the dataOnly flag if the size of the file is unchanged.
 ** The idea behind dataOnly is that it should only write the file content
-** to disk, not the inode.  We only set dataOnly if the file size is
-** unchanged since the file size is part of the inode.  However,
+** to disk, not the inode.  We only set dataOnly if the file size is 
+** unchanged since the file size is part of the inode.  However, 
 ** Ted Ts'o tells us that fdatasync() will also write the inode if the
 ** file size has changed.  The only real difference between fdatasync()
 ** and fsync(), Ted tells us, is that fdatasync() will not flush the
@@ -53690,11 +53691,11 @@ static int full_fsync(int fd, int fullSync, int dataOnly){
     rc = 1;
   }
   /* If the FULLFSYNC failed, fall back to attempting an fsync().
-  ** It shouldn't be possible for fullfsync to fail on the local
+  ** It shouldn't be possible for fullfsync to fail on the local 
   ** file system (on OSX), so failure indicates that FULLFSYNC
-  ** isn't supported for this file system. So, attempt an fsync
-  ** and (for now) ignore the overhead of a superfluous fcntl call.
-  ** It'd be better to detect fullfsync support once and avoid
+  ** isn't supported for this file system. So, attempt an fsync 
+  ** and (for now) ignore the overhead of a superfluous fcntl call.  
+  ** It'd be better to detect fullfsync support once and avoid 
   ** the fcntl call every time sync is called.
   */
   if( rc ) rc = fsync(fd);
@@ -53704,7 +53705,7 @@ static int full_fsync(int fd, int fullSync, int dataOnly){
   ** so currently we default to the macro that redefines fdatasync to fsync
   */
   rc = fsync(fd);
-#else
+#else 
   rc = fdatasync(fd);
 #endif /* ifdef UNQLITE_NO_SYNC elif HAVE_FULLFSYNC */
   if( rc!= -1 ){
@@ -53789,9 +53790,9 @@ static int unixTruncate(unqlite_file *id, sxi64 nByte){
 static int unixFileSize(unqlite_file *id,sxi64 *pSize){
   int rc;
   struct stat buf;
-
+  
   rc = fstat(((unixFile*)id)->h, &buf);
-
+  
   if( rc!=0 ){
     ((unixFile*)id)->lastErrno = errno;
     return UNQLITE_IOERR;
@@ -53861,7 +53862,7 @@ static int fillInUnixFile(
   unixFile *pNew = (unixFile *)pId;
   int rc = UNQLITE_OK;
 
-  /* Parameter isDelete is only used on vxworks. Express this explicitly
+  /* Parameter isDelete is only used on vxworks. Express this explicitly 
   ** here to prevent compiler warnings about unused parameters.
   */
   SXUNUSED(isDelete);
@@ -53872,7 +53873,7 @@ static int fillInUnixFile(
   pNew->dirfd = dirfd;
   pNew->fileFlags = 0;
   pNew->zPath = zFilename;
-
+  
   unixEnterMutex();
   rc = findInodeInfo(pNew, &pNew->pInode);
   if( rc!=UNQLITE_OK ){
@@ -53898,7 +53899,7 @@ static int fillInUnixFile(
       h = -1;
   }
   unixLeaveMutex();
-
+  
   pNew->lastErrno = 0;
   if( rc!=UNQLITE_OK ){
     if( dirfd>=0 ) close(dirfd); /* silent leak if fail, already in error */
@@ -53938,7 +53939,7 @@ static int openDirectory(const char *zFilename, int *pFd){
   return (fd>=0?UNQLITE_OK: UNQLITE_IOERR );
 }
 /*
-** Search for an unused file descriptor that was opened on the database
+** Search for an unused file descriptor that was opened on the database 
 ** file (not a journal or master-journal file) identified by pathname
 ** zPath with UNQLITE_OPEN_XXX flags matching those passed as the second
 ** argument to this function.
@@ -53947,7 +53948,7 @@ static int openDirectory(const char *zFilename, int *pFd){
 ** but the associated file descriptor could not be closed because some
 ** other file descriptor open on the same file is holding a file-lock.
 ** Refer to comments in the unixClose() function and the lengthy comment
-** describing "Posix Advisory Locking" at the start of this file for
+** describing "Posix Advisory Locking" at the start of this file for 
 ** further details. Also, ticket #4018.
 **
 ** If a suitable file descriptor is found, then it is returned. If no
@@ -53989,18 +53990,18 @@ static UnixUnusedFd *findReusableFd(const char *zPath, int flags){
 ** This function is called by unixOpen() to determine the unix permissions
 ** to create new files with. If no error occurs, then UNQLITE_OK is returned
 ** and a value suitable for passing as the third argument to open(2) is
-** written to *pMode. If an IO error occurs, an SQLite error code is
+** written to *pMode. If an IO error occurs, an SQLite error code is 
 ** returned and the value of *pMode is not modified.
 **
 ** If the file being opened is a temporary file, it is always created with
 ** the octal permissions 0600 (read/writable by owner only). If the file
-** is a database or master journal file, it is created with the permissions
+** is a database or master journal file, it is created with the permissions 
 ** mask UNQLITE_DEFAULT_FILE_PERMISSIONS.
 **
-** Finally, if the file being opened is a WAL or regular journal file, then
-** this function queries the file-system for the permissions on the
-** corresponding database file and sets *pMode to this value. Whenever
-** possible, WAL and journal files are created using the same permissions
+** Finally, if the file being opened is a WAL or regular journal file, then 
+** this function queries the file-system for the permissions on the 
+** corresponding database file and sets *pMode to this value. Whenever 
+** possible, WAL and journal files are created using the same permissions 
 ** as the associated database file.
 */
 static int findCreateFileMode(
@@ -54019,7 +54020,7 @@ static int findCreateFileMode(
 }
 /*
 ** Open the file zPath.
-**
+** 
 ** Previously, the SQLite OS layer used three functions in place of this
 ** one:
 **
@@ -54030,13 +54031,13 @@ static int findCreateFileMode(
 ** These calls correspond to the following combinations of flags:
 **
 **     ReadWrite() ->     (READWRITE | CREATE)
-**     ReadOnly()  ->     (READONLY)
+**     ReadOnly()  ->     (READONLY) 
 **     OpenExclusive() -> (READWRITE | CREATE | EXCLUSIVE)
 **
 ** The old OpenExclusive() accepted a boolean argument - "delFlag". If
 ** true, the file was configured to be automatically deleted when the
-** file handle closed. To achieve the same effect using this new
-** interface, add the DELETEONCLOSE flag to those specified above for
+** file handle closed. To achieve the same effect using this new 
+** interface, add the DELETEONCLOSE flag to those specified above for 
 ** OpenExclusive().
 */
 static int unixOpen(
@@ -54065,7 +54066,7 @@ static int unixOpen(
   const char *zName = zPath;
 
   SyZero(p,sizeof(unixFile));
-
+  
   pUnused = findReusableFd(zName, flags);
   if( pUnused ){
 	  fd = pUnused->fd;
@@ -54076,10 +54077,10 @@ static int unixOpen(
       }
   }
   p->pUnused = pUnused;
-
+  
   /* Determine the value of the flags parameter passed to POSIX function
   ** open(). These must be calculated even if open() is not called, as
-  ** they may be stored as part of the file handle and used by the
+  ** they may be stored as part of the file handle and used by the 
   ** 'conch file' locking functions later on.  */
   if( isReadonly )  openFlags |= O_RDONLY;
   if( isReadWrite ) openFlags |= O_RDWR;
@@ -54099,7 +54100,7 @@ static int unixOpen(
       goto open_finished;
     }
   }
-
+  
   if( p->pUnused ){
     p->pUnused->fd = fd;
     p->pUnused->flags = flags;
@@ -54127,7 +54128,7 @@ static int unixOpen(
 
   noLock = 0;
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) 
   struct statfs fsInfo;
   if( fstatfs(fd, &fsInfo) == -1 ){
     ((unixFile*)pFile)->lastErrno = errno;
@@ -54139,7 +54140,7 @@ static int unixOpen(
     ((unixFile*)pFile)->fsFlags |= UNQLITE_FSFLAGS_IS_MSDOS;
   }
 #endif
-
+  
   rc = fillInUnixFile(pVfs, fd, dirfd, pFile, zPath, noLock, isDelete);
 open_finished:
   if( rc!=UNQLITE_OK ){
@@ -54158,7 +54159,7 @@ static int unixDelete(
 ){
   int rc = UNQLITE_OK;
   SXUNUSED(NotUsed);
-
+  
   if( unlink(zPath)==(-1) && errno!=ENOENT ){
 	  return UNQLITE_IOERR;
   }
@@ -54259,9 +54260,9 @@ static int unixAccess(
 /*
 ** Turn a relative pathname into a full pathname. The relative path
 ** is stored as a nul-terminated string in the buffer pointed to by
-** zPath.
+** zPath. 
 **
-** zOut points to a buffer of at least unqlite_vfs.mxPathname bytes
+** zOut points to a buffer of at least unqlite_vfs.mxPathname bytes 
 ** (in this case, MAX_PATHNAME bytes). The full-path is written to
 ** this buffer before returning.
 */
@@ -54339,7 +54340,7 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 ** Some microsoft compilers lack this definition.
 */
 #ifndef INVALID_FILE_ATTRIBUTES
-# define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+# define INVALID_FILE_ATTRIBUTES ((DWORD)-1) 
 #endif
 /*
 ** WinCE lacks native support for file locking so we have to fake it
@@ -54372,14 +54373,14 @@ struct winFile {
   int szChunk;            /* Chunk size */
 #ifdef __WIN_CE__
   WCHAR *zDeleteOnClose;  /* Name of file to delete when closing */
-  HANDLE hMutex;          /* Mutex used to control access to shared lock */
+  HANDLE hMutex;          /* Mutex used to control access to shared lock */  
   HANDLE hShared;         /* Shared memory segment used for locking */
   winceLock local;        /* Locks obtained by this instance of winFile */
   winceLock *shared;      /* Global shared lock memory for the file  */
 #endif
 };
 /*
-** Convert a UTF-8 string to microsoft unicode (UTF-16?).
+** Convert a UTF-8 string to microsoft unicode (UTF-16?). 
 **
 ** Space to hold the returned string is obtained from HeapAlloc().
 */
@@ -54425,7 +54426,7 @@ static char *unicodeToUtf8(const WCHAR *zWideFilename){
 /*
 ** Convert an ansi string to microsoft unicode, based on the
 ** current codepage settings for file apis.
-**
+** 
 ** Space to hold the returned string is obtained
 ** from malloc.
 */
@@ -54470,8 +54471,8 @@ char *unqlite_win32_mbcs_to_utf8(const char *zFilename){
 #endif
 
 /*
-** Move the current position of the file handle passed as the first
-** argument to offset iOffset within the file. If successful, return 0.
+** Move the current position of the file handle passed as the first 
+** argument to offset iOffset within the file. If successful, return 0. 
 ** Otherwise, set pFile->lastErrno and return non-zero.
 */
 static int seekWinFile(winFile *pFile, unqlite_int64 iOffset){
@@ -54482,11 +54483,11 @@ static int seekWinFile(winFile *pFile, unqlite_int64 iOffset){
   upperBits = (LONG)((iOffset>>32) & 0x7fffffff);
   lowerBits = (LONG)(iOffset & 0xffffffff);
 
-  /* API oddity: If successful, SetFilePointer() returns a dword
+  /* API oddity: If successful, SetFilePointer() returns a dword 
   ** containing the lower 32-bits of the new file-offset. Or, if it fails,
-  ** it returns INVALID_SET_FILE_POINTER. However according to MSDN,
-  ** INVALID_SET_FILE_POINTER may also be a valid new offset. So to determine
-  ** whether an error has actually occured, it is also necessary to call
+  ** it returns INVALID_SET_FILE_POINTER. However according to MSDN, 
+  ** INVALID_SET_FILE_POINTER may also be a valid new offset. So to determine 
+  ** whether an error has actually occured, it is also necessary to call 
   ** GetLastError().
   */
   dwRet = SetFilePointer(pFile->h, lowerBits, &upperBits, FILE_BEGIN);
@@ -54941,8 +54942,8 @@ static int winDelete(
 	  && (Sleep(100), 1)
 	  );
 	HeapFree(GetProcessHeap(),0,zConverted);
-
-  return (   (rc == INVALID_FILE_ATTRIBUTES)
+ 
+  return (   (rc == INVALID_FILE_ATTRIBUTES) 
           && (error == ERROR_FILE_NOT_FOUND)) ? UNQLITE_OK : UNQLITE_IOERR;
 }
 /*
@@ -54966,13 +54967,13 @@ static int winAccess(
   }
   SyZero(&sAttrData,sizeof(sAttrData));
   if( GetFileAttributesExW((WCHAR*)zConverted,
-	  GetFileExInfoStandard,
+	  GetFileExInfoStandard, 
 	  &sAttrData) ){
       /* For an UNQLITE_ACCESS_EXISTS query, treat a zero-length file
       ** as if it does not exist.
       */
       if(    flags==UNQLITE_ACCESS_EXISTS
-          && sAttrData.nFileSizeHigh==0
+          && sAttrData.nFileSizeHigh==0 
           && sAttrData.nFileSizeLow==0 ){
         attr = INVALID_FILE_ATTRIBUTES;
       }else{
@@ -55079,7 +55080,7 @@ static int getSectorSize(
       bytesPerSector = UNQLITE_DEFAULT_SECTOR_SIZE;
     }
   }
-  return (int) bytesPerSector;
+  return (int) bytesPerSector; 
 }
 /*
 ** Sleep for a little while.  Return the amount of time slept.
@@ -55187,7 +55188,7 @@ static int winOpen(
   }else{
     dwDesiredAccess = GENERIC_READ;
   }
-  /* UNQLITE_OPEN_EXCLUSIVE is used to make sure that a new file is
+  /* UNQLITE_OPEN_EXCLUSIVE is used to make sure that a new file is 
   ** created.
   */
   if( isExclusive ){
@@ -55290,8 +55291,8 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **               +---------> READER-------+      |
 **               |              |                |
 **               |              V                |
-**               |<-------WRITER_LOCKED--------->|
-**               |              |                |
+**               |<-------WRITER_LOCKED--------->| 
+**               |              |                |  
 **               |              V                |
 **               |<------WRITER_CACHEMOD-------->|
 **               |              |                |
@@ -55300,7 +55301,7 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **               |              |                |
 **               |              V                |
 **               +<------WRITER_FINISHED-------->+
-**
+** 
 **  OPEN:
 **
 **    The pager starts up in this state. Nothing is guaranteed in this
@@ -55313,35 +55314,35 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **
 **  READER:
 **
-**    In this state all the requirements for reading the database in
+**    In this state all the requirements for reading the database in 
 **    rollback mode are met. Unless the pager is (or recently
-**    was) in exclusive-locking mode, a user-level read transaction is
+**    was) in exclusive-locking mode, a user-level read transaction is 
 **    open. The database size is known in this state.
-**
+** 
 **    * A read transaction may be active (but a write-transaction cannot).
 **    * A SHARED or greater lock is held on the database file.
-**    * The dbSize variable may be trusted (even if a user-level read
+**    * The dbSize variable may be trusted (even if a user-level read 
 **      transaction is not active). The dbOrigSize variables
 **      may not be trusted at this point.
-**    * Even if a read-transaction is not open, it is guaranteed that
+**    * Even if a read-transaction is not open, it is guaranteed that 
 **      there is no hot-journal in the file-system.
 **
 **  WRITER_LOCKED:
 **
 **    The pager moves to this state from READER when a write-transaction
-**    is first opened on the database. In WRITER_LOCKED state, all locks
-**    required to start a write-transaction are held, but no actual
+**    is first opened on the database. In WRITER_LOCKED state, all locks 
+**    required to start a write-transaction are held, but no actual 
 **    modifications to the cache or database have taken place.
 **
-**    In rollback mode, a RESERVED or (if the transaction was opened with
+**    In rollback mode, a RESERVED or (if the transaction was opened with 
 **    EXCLUSIVE flag) EXCLUSIVE lock is obtained on the database file when
-**    moving to this state, but the journal file is not written to or opened
-**    to in this state. If the transaction is committed or rolled back while
-**    in WRITER_LOCKED state, all that is required is to unlock the database
+**    moving to this state, but the journal file is not written to or opened 
+**    to in this state. If the transaction is committed or rolled back while 
+**    in WRITER_LOCKED state, all that is required is to unlock the database 
 **    file.
 **
 **    * A write transaction is active.
-**    * If the connection is open in rollback-mode, a RESERVED or greater
+**    * If the connection is open in rollback-mode, a RESERVED or greater 
 **      lock is held on the database file.
 **    * The dbSize and dbOrigSize variables are all valid.
 **    * The contents of the pager cache have not been modified.
@@ -55357,7 +55358,7 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **
 **    * A write transaction is active.
 **    * A RESERVED or greater lock is held on the database file.
-**    * The journal file is open and the first header has been written
+**    * The journal file is open and the first header has been written 
 **      to it, but the header has not been synced to disk.
 **    * The contents of the page cache have been modified.
 **
@@ -55368,7 +55369,7 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **
 **    * A write transaction is active.
 **    * An EXCLUSIVE or greater lock is held on the database file.
-**    * The journal file is open and the first header has been written
+**    * The journal file is open and the first header has been written 
 **      and synced to disk.
 **    * The contents of the page cache have been modified (and possibly
 **      written to disk).
@@ -55378,8 +55379,8 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **    A rollback-mode pager changes to WRITER_FINISHED state from WRITER_DBMOD
 **    state after the entire transaction has been successfully written into the
 **    database file. In this state the transaction may be committed simply
-**    by finalizing the journal file. Once in WRITER_FINISHED state, it is
-**    not possible to modify the database further. At this point, the upper
+**    by finalizing the journal file. Once in WRITER_FINISHED state, it is 
+**    not possible to modify the database further. At this point, the upper 
 **    layer must either commit or rollback the transaction.
 **
 **    * A write transaction is active.
@@ -55387,8 +55388,8 @@ UNQLITE_PRIVATE const unqlite_vfs * unqliteExportBuiltinVfs(void)
 **    * All writing and syncing of journal and database data has finished.
 **      If no error occured, all that remains is to finalize the journal to
 **      commit the transaction. If an error did occur, the caller will need
-**      to rollback the transaction.
-**
+**      to rollback the transaction. 
+**  
 **
 */
 #define PAGER_OPEN                  0
@@ -55409,7 +55410,7 @@ static const unsigned char aJournalMagic[] = {
   0xa6, 0xe8, 0xcd, 0x2b, 0x1c, 0x92, 0xdb, 0x9f,
 };
 /*
-** The journal header size for this pager. This is usually the same
+** The journal header size for this pager. This is usually the same 
 ** size as a single disk sector. See also setSectorSize().
 */
 #define JOURNAL_HDR_SZ(pPager) (pPager->iSectorSize)
@@ -55500,9 +55501,9 @@ struct Pager
 };
 /* Control flags */
 #define PAGER_CTRL_COMMIT_ERR   0x001 /* Commit error */
-#define PAGER_CTRL_DIRTY_COMMIT 0x002 /* Dirty commit has been applied */
+#define PAGER_CTRL_DIRTY_COMMIT 0x002 /* Dirty commit has been applied */ 
 /*
-** Read a 32-bit integer from the given file descriptor.
+** Read a 32-bit integer from the given file descriptor. 
 ** All values are stored on disk as big-endian.
 */
 static int ReadInt32(unqlite_file *pFd,sxu32 *pOut,sxi64 iOfft)
@@ -55517,7 +55518,7 @@ static int ReadInt32(unqlite_file *pFd,sxu32 *pOut,sxi64 iOfft)
 	return UNQLITE_OK;
 }
 /*
-** Read a 64-bit integer from the given file descriptor.
+** Read a 64-bit integer from the given file descriptor. 
 ** All values are stored on disk as big-endian.
 */
 static int ReadInt64(unqlite_file *pFd,sxu64 *pOut,sxi64 iOfft)
@@ -55554,7 +55555,7 @@ static int WriteInt64(unqlite_file *pFd,sxu64 iNum,sxi64 iOfft)
 	return rc;
 }
 /*
-** The maximum allowed sector size. 64KiB. If the xSectorsize() method
+** The maximum allowed sector size. 64KiB. If the xSectorsize() method 
 ** returns a value larger than this, then MAX_SECTOR_SIZE is used instead.
 ** This could conceivably cause corruption following a power failure on
 ** such a system. This is currently an undocumented limit.
@@ -55614,7 +55615,7 @@ static Page * pager_fetch_page(Pager *pPager,pgno page_num)
 static Page * pager_alloc_page(Pager *pPager,pgno num_page)
 {
 	Page *pNew;
-
+	
 	pNew = (Page *)SyMemBackendPoolAlloc(pPager->pAllocator,sizeof(Page)+pPager->iPageSize);
 	if( pNew == 0 ){
 		return 0;
@@ -56014,7 +56015,7 @@ static Page * pager_get_hot_pages(Pager *pPager)
 ** - 8 bytes: Initial database page count.
 ** - 4 bytes: Sector size used by the process that wrote this journal.
 ** - 4 bytes: Database page size.
-**
+** 
 ** Followed by (JOURNAL_HDR_SZ - 28) bytes of unused space.
 */
 /*
@@ -56092,21 +56093,21 @@ static int pager_read_journal_header(
 	}
 	/* Check that the values read from the page-size and sector-size fields
     ** are within range. To be 'in range', both values need to be a power
-    ** of two greater than or equal to 512 or 32, and not greater than their
+    ** of two greater than or equal to 512 or 32, and not greater than their 
     ** respective compile time maximum limits.
     */
     if( iPageSize < UNQLITE_MIN_PAGE_SIZE || iSectorSize<32
      || iPageSize > UNQLITE_MAX_PAGE_SIZE || iSectorSize>MAX_SECTOR_SIZE
-     || ((iPageSize-1)&iPageSize)!=0    || ((iSectorSize-1)&iSectorSize)!=0
+     || ((iPageSize-1)&iPageSize)!=0    || ((iSectorSize-1)&iSectorSize)!=0 
     ){
-      /* If the either the page-size or sector-size in the journal-header is
-      ** invalid, then the process that wrote the journal-header must have
-      ** crashed before the header was synced. In this case stop reading
+      /* If the either the page-size or sector-size in the journal-header is 
+      ** invalid, then the process that wrote the journal-header must have 
+      ** crashed before the header was synced. In this case stop reading 
       ** the journal file here.
       */
       return UNQLITE_DONE;
     }
-    /* Update the assumed sector-size to match the value used by
+    /* Update the assumed sector-size to match the value used by 
     ** the process that created this journal. If this journal was
     ** created by a process other than this one, then this routine
     ** is being called from within pager_playback(). The local value
@@ -56147,10 +56148,10 @@ static int pager_write_journal_header(Pager *pPager,unsigned char *zBuf)
 }
 /*
 ** Parameter aData must point to a buffer of pPager->pageSize bytes
-** of data. Compute and return a checksum based ont the contents of the
+** of data. Compute and return a checksum based ont the contents of the 
 ** page of data and the current value of pPager->cksumInit.
 **
-** This is not a real checksum. It is really just the sum of the
+** This is not a real checksum. It is really just the sum of the 
 ** random initial value (pPager->cksumInit) and every 200th byte
 ** of the page data, starting with byte offset (pPager->pageSize%200).
 ** Each byte is interpreted as an 8-bit unsigned integer.
@@ -56158,8 +56159,8 @@ static int pager_write_journal_header(Pager *pPager,unsigned char *zBuf)
 ** Changing the formula used to compute this checksum results in an
 ** incompatible journal file format.
 **
-** If journal corruption occurs due to a power failure, the most likely
-** scenario is that one end or the other of the record will be changed.
+** If journal corruption occurs due to a power failure, the most likely 
+** scenario is that one end or the other of the record will be changed. 
 ** It is much less likely that the two ends of the journal record will be
 ** correct and the middle be corrupt.  Thus, this "checksum" scheme,
 ** though fast and simple, catches the mostly likely kind of corruption.
@@ -56220,14 +56221,14 @@ static int pager_play_back_one_page(Pager *pPager,sxi64 *pOfft,unsigned char *zT
 }
 /*
 ** Playback the journal and thus restore the database file to
-** the state it was in before we started making changes.
+** the state it was in before we started making changes.  
 **
-** The journal file format is as follows:
+** The journal file format is as follows: 
 **
 **  (1)  8 byte prefix.  A copy of aJournalMagic[].
 **  (2)  4 byte big-endian integer which is the number of valid page records
-**       in the journal.
-**  (3)  4 byte big-endian integer which is the initial value for the
+**       in the journal. 
+**  (3)  4 byte big-endian integer which is the initial value for the 
 **       sanity checksum.
 **  (4)  8 byte integer which is the number of pages to truncate the
 **       database to during a rollback.
@@ -56290,7 +56291,7 @@ static int pager_playback(Pager *pPager)
 		return UNQLITE_NOMEM;
 	}
 	SyZero((void *)zTmp,(sxu32)pPager->iPageSize);
-	/* Copy original pages out of the journal and back into the
+	/* Copy original pages out of the journal and back into the 
     ** database file and/or page cache.
     */
 	iOfft = pPager->iJournalOfft;
@@ -56322,7 +56323,7 @@ end_playback:
 ** succeeds, set the Pager.iLock variable to match the (attempted) new lock.
 **
 ** Except, if Pager.iLock is set to NO_LOCK when this function is
-** called, do not modify it. See the comment above the #define of
+** called, do not modify it. See the comment above the #define of 
 ** NO_LOCK for an explanation of this.
 */
 static int pager_unlock_db(Pager *pPager, int eLock)
@@ -56337,11 +56338,11 @@ static int pager_unlock_db(Pager *pPager, int eLock)
 /*
 ** Lock the database file to level eLock, which must be either SHARED_LOCK,
 ** RESERVED_LOCK or EXCLUSIVE_LOCK. If the caller is successful, set the
-** Pager.eLock variable to the new locking state.
+** Pager.eLock variable to the new locking state. 
 **
-** Except, if Pager.eLock is set to NO_LOCK when this function is
-** called, do not modify it unless the new locking state is EXCLUSIVE_LOCK.
-** See the comment above the #define of NO_LOCK for an explanation
+** Except, if Pager.eLock is set to NO_LOCK when this function is 
+** called, do not modify it unless the new locking state is EXCLUSIVE_LOCK. 
+** See the comment above the #define of NO_LOCK for an explanation 
 ** of this.
 */
 static int pager_lock_db(Pager *pPager, int eLock){
@@ -56363,13 +56364,13 @@ static int pager_lock_db(Pager *pPager, int eLock){
 ** a similar or greater lock is already held, this function is a no-op
 ** (returning UNQLITE_OK immediately).
 **
-** Otherwise, attempt to obtain the lock using unqliteOsLock(). Invoke
-** the busy callback if the lock is currently not available. Repeat
-** until the busy callback returns false or until the attempt to
+** Otherwise, attempt to obtain the lock using unqliteOsLock(). Invoke 
+** the busy callback if the lock is currently not available. Repeat 
+** until the busy callback returns false or until the attempt to 
 ** obtain the lock succeeds.
 **
 ** Return UNQLITE_OK on success and an error code if we cannot obtain
-** the lock. If the lock is obtained successfully, set the Pager.state
+** the lock. If the lock is obtained successfully, set the Pager.state 
 ** variable to locktype before returning.
 */
 static int pager_wait_on_lock(Pager *pPager, int locktype){
@@ -56382,7 +56383,7 @@ static int pager_wait_on_lock(Pager *pPager, int locktype){
 /*
 ** This function is called after transitioning from PAGER_OPEN to
 ** PAGER_SHARED state. It tests if there is a hot journal present in
-** the file-system for the given pager. A hot journal is one that
+** the file-system for the given pager. A hot journal is one that 
 ** needs to be played back. According to this function, a hot-journal
 ** file exists if the following criteria are met:
 **
@@ -56397,7 +56398,7 @@ static int pager_wait_on_lock(Pager *pPager, int locktype){
 ** just deleted using OsDelete, *pExists is set to 0 and UNQLITE_OK
 ** is returned.
 **
-** If a hot-journal file is found to exist, *pExists is set to 1 and
+** If a hot-journal file is found to exist, *pExists is set to 1 and 
 ** UNQLITE_OK returned. If no hot-journal file is present, *pExists is
 ** set to 0 and UNQLITE_OK returned. If an IO error occurs while trying
 ** to determine whether or not a hot-journal file exists, the IO error
@@ -56415,7 +56416,7 @@ static int pager_has_hot_journal(Pager *pPager, int *pExists)
     int locked = 0;             /* True if some process holds a RESERVED lock */
 
     /* Race condition here:  Another process might have been holding the
-    ** the RESERVED lock and have a journal open at the unqliteOsAccess()
+    ** the RESERVED lock and have a journal open at the unqliteOsAccess() 
     ** call above, but then delete the journal and drop the lock before
     ** we get to the following unqliteOsCheckReservedLock() call.  If that
     ** is the case, this routine might think there is a hot journal when
@@ -56425,9 +56426,9 @@ static int pager_has_hot_journal(Pager *pPager, int *pExists)
     rc = unqliteOsCheckReservedLock(pPager->pfd, &locked);
     if( rc==UNQLITE_OK && !locked ){
       sxi64 n = 0;                    /* Size of db file in bytes */
-
+ 
       /* Check the size of the database file. If it consists of 0 pages,
-      ** then delete the journal file. See the header comment above for
+      ** then delete the journal file. See the header comment above for 
       ** the reasoning here.  Delete the obsolete journal file under
       ** a RESERVED lock to avoid race conditions.
       */
@@ -56476,12 +56477,12 @@ static int pager_journal_rollback(Pager *pPager,int check_hot)
       ** important that a RESERVED lock is not obtained on the way to the
       ** EXCLUSIVE lock. If it were, another process might open the
       ** database file, detect the RESERVED lock, and conclude that the
-      ** database is safe to read while this process is still rolling the
+      ** database is safe to read while this process is still rolling the 
       ** hot-journal back.
-      **
+      ** 
       ** Because the intermediate RESERVED lock is not requested, any
-      ** other process attempting to access the database file will get to
-      ** this point in the code and fail to obtain its own EXCLUSIVE lock
+      ** other process attempting to access the database file will get to 
+      ** this point in the code and fail to obtain its own EXCLUSIVE lock 
       ** on the database file.
       **
       ** Unless the pager is in locking_mode=exclusive mode, the lock is
@@ -56587,12 +56588,12 @@ static int pager_extract_header(Pager *pPager,const unsigned char *zRaw,sxu32 nB
 	zRaw += 4; /* 4 byte page size */
 	/* Check that the values read from the page-size and sector-size fields
     ** are within range. To be 'in range', both values need to be a power
-    ** of two greater than or equal to 512 or 32, and not greater than their
+    ** of two greater than or equal to 512 or 32, and not greater than their 
     ** respective compile time maximum limits.
     */
     if( pPager->iPageSize<UNQLITE_MIN_PAGE_SIZE || pPager->iSectorSize<32
      || pPager->iPageSize>UNQLITE_MAX_PAGE_SIZE || pPager->iSectorSize>MAX_SECTOR_SIZE
-     || ((pPager->iPageSize<-1)&pPager->iPageSize)!=0    || ((pPager->iSectorSize-1)&pPager->iSectorSize)!=0
+     || ((pPager->iPageSize<-1)&pPager->iPageSize)!=0    || ((pPager->iSectorSize-1)&pPager->iSectorSize)!=0 
     ){
       return UNQLITE_CORRUPT;
 	}
@@ -56711,10 +56712,10 @@ static int pager_create_header(Pager *pPager)
 **      on the database file), then an attempt is made to obtain a
 **      SHARED lock on the database file. Immediately after obtaining
 **      the SHARED lock, the file-system is checked for a hot-journal,
-**      which is played back if present.
+**      which is played back if present. 
 **
-** If everything is successful, UNQLITE_OK is returned. If an IO error
-** occurs while locking the database, checking for a hot-journal file or
+** If everything is successful, UNQLITE_OK is returned. If an IO error 
+** occurs while locking the database, checking for a hot-journal file or 
 ** rolling back a journal file, the IO error code is returned.
 */
 static int pager_shared_lock(Pager *pPager)
@@ -56782,12 +56783,12 @@ static int pager_shared_lock(Pager *pPager)
 			}
 		}else if( rc == UNQLITE_BUSY ){
 			unqliteGenError(pPager->pDb,"Another process or thread have a reserved or exclusive lock on this database");
-		}
+		}		
 	}
 	return rc;
 }
 /*
-** Begin a write-transaction on the specified pager object. If a
+** Begin a write-transaction on the specified pager object. If a 
 ** write-transaction has already been opened, this function is a no-op.
 */
 UNQLITE_PRIVATE int unqlitePagerBegin(Pager *pPager)
@@ -56840,7 +56841,7 @@ fail:
 }
 /*
 ** This function is called at the start of every write transaction.
-** There must already be a RESERVED or EXCLUSIVE lock on the database
+** There must already be a RESERVED or EXCLUSIVE lock on the database 
 ** file when this routine is called.
 **
 */
@@ -56942,7 +56943,7 @@ static int unqliteFinalizeJournal(Pager *pPager,int *pRetry,int close_jrnl)
 	return UNQLITE_OK;
 }
 /*
- * Mark a single data page as writeable. The page is written into the
+ * Mark a single data page as writeable. The page is written into the 
  * main journal as required.
  */
 static int page_write(Pager *pPager,Page *pPage)
@@ -56984,7 +56985,7 @@ static int page_write(Pager *pPager,Page *pPage)
 			unqliteGenError(pPager->pDb,"Database maximum page limit (64-bit) reached");
 			return UNQLITE_LIMIT;
 		}
-	}
+	}	
 	return UNQLITE_OK;
 }
 /*
@@ -57220,7 +57221,7 @@ static int pager_dirty_commit(Pager *pPager)
 ** This routine ensures that:
 **
 **   * the journal is synced,
-**   * all dirty pages are written to the database file,
+**   * all dirty pages are written to the database file, 
 **   * the database file is truncated (if required), and
 **   * the database file synced.
 **   * the journal file is deleted.
@@ -57322,20 +57323,20 @@ static int pager_reset_state(Pager *pPager,int bResetKvEngine)
 	return UNQLITE_OK;
 }
 /*
-** If a write transaction is open, then all changes made within the
+** If a write transaction is open, then all changes made within the 
 ** transaction are reverted and the current write-transaction is closed.
 ** The pager falls back to PAGER_READER state if successful.
 **
 ** Otherwise, in rollback mode, this function performs two functions:
 **
-**   1) It rolls back the journal file, restoring all database file and
+**   1) It rolls back the journal file, restoring all database file and 
 **      in-memory cache pages to the state they were in when the transaction
 **      was opened, and
 **
 **   2) It finalizes the journal file, so that it is not used for hot
 **      rollback at any point in the future (i.e. deletion).
 **
-** Finalization of the journal file (task 2) is only performed if the
+** Finalization of the journal file (task 2) is only performed if the 
 ** rollback is successful.
 **
 */
@@ -57403,9 +57404,9 @@ static int unqlitePagerDontWrite(unqlite_page *pMyPage)
 	return UNQLITE_OK;
 }
 /*
-** Mark a data page as writeable. This routine must be called before
-** making changes to a page. The caller must check the return value
-** of this function and be careful not to change any page data unless
+** Mark a data page as writeable. This routine must be called before 
+** making changes to a page. The caller must check the return value 
+** of this function and be careful not to change any page data unless 
 ** this routine returns UNQLITE_OK.
 */
 static int unqlitePageWrite(unqlite_page *pMyPage)
@@ -57443,10 +57444,10 @@ static int unqlitePageWrite(unqlite_page *pMyPage)
 }
 /*
 ** Acquire a reference to page number pgno in pager pPager (a page
-** reference has type unqlite_page*). If the requested reference is
+** reference has type unqlite_page*). If the requested reference is 
 ** successfully obtained, it is copied to *ppPage and UNQLITE_OK returned.
 **
-** If the requested page is already in the cache, it is returned.
+** If the requested page is already in the cache, it is returned. 
 ** Otherwise, a new page object is allocated and populated with data
 ** read from the database file.
 */
@@ -57510,11 +57511,11 @@ static int unqliteInMemory(const char *zFilename)
 		return TRUE;
 	}
 	n = SyStrlen(zFilename);
-	if( n == sizeof(":mem:") - 1 &&
+	if( n == sizeof(":mem:") - 1 && 
 		SyStrnicmp(zFilename,":mem:",sizeof(":mem:") - 1) == 0 ){
 			return TRUE;
 	}
-	if( n == sizeof(":memory:") - 1 &&
+	if( n == sizeof(":memory:") - 1 && 
 		SyStrnicmp(zFilename,":memory:",sizeof(":memory:") - 1) == 0 ){
 			return TRUE;
 	}
@@ -57855,7 +57856,7 @@ UNQLITE_PRIVATE sxu32 unqlitePagerRandomNum(Pager *pPager)
 	return iNum;
 }
 /* Exported KV IO Methods */
-/*
+/* 
  * Refer to [unqlitePagerAcquire()]
  */
 static int unqliteKvIoPageGet(unqlite_kv_handle pHandle,pgno iNum,unqlite_page **ppPage)
@@ -57864,7 +57865,7 @@ static int unqliteKvIoPageGet(unqlite_kv_handle pHandle,pgno iNum,unqlite_page *
 	rc = unqlitePagerAcquire((Pager *)pHandle,iNum,ppPage,0,0);
 	return rc;
 }
-/*
+/* 
  * Refer to [unqlitePagerAcquire()]
  */
 static int unqliteKvIoPageLookup(unqlite_kv_handle pHandle,pgno iNum,unqlite_page **ppPage)
@@ -57873,14 +57874,14 @@ static int unqliteKvIoPageLookup(unqlite_kv_handle pHandle,pgno iNum,unqlite_pag
 	rc = unqlitePagerAcquire((Pager *)pHandle,iNum,ppPage,1,0);
 	return rc;
 }
-/*
+/* 
  * Refer to [unqlitePagerAcquire()]
  */
 static int unqliteKvIoNewPage(unqlite_kv_handle pHandle,unqlite_page **ppPage)
 {
 	Pager *pPager = (Pager *)pHandle;
 	int rc;
-	/*
+	/* 
 	 * Acquire a reader-lock first so that pPager->dbSize get initialized.
 	 */
 	rc = pager_shared_lock(pPager);
@@ -57889,7 +57890,7 @@ static int unqliteKvIoNewPage(unqlite_kv_handle pHandle,unqlite_page **ppPage)
 	}
 	return rc;
 }
-/*
+/* 
  * Refer to [unqlitePageWrite()]
  */
 static int unqliteKvIopageWrite(unqlite_page *pPage)
@@ -57902,7 +57903,7 @@ static int unqliteKvIopageWrite(unqlite_page *pPage)
 	rc = unqlitePageWrite(pPage);
 	return rc;
 }
-/*
+/* 
  * Refer to [unqlitePagerDontWrite()]
  */
 static int unqliteKvIoPageDontWrite(unqlite_page *pPage)
@@ -57915,7 +57916,7 @@ static int unqliteKvIoPageDontWrite(unqlite_page *pPage)
 	rc = unqlitePagerDontWrite(pPage);
 	return rc;
 }
-/*
+/* 
  * Refer to [unqliteBitvecSet()]
  */
 static int unqliteKvIoPageDontJournal(unqlite_page *pRaw)
@@ -57934,13 +57935,13 @@ static int unqliteKvIoPageDontJournal(unqlite_page *pRaw)
 	}
 	return UNQLITE_OK;
 }
-/*
+/* 
  * Do not add a page to the hot dirty list.
  */
 static int unqliteKvIoPageDontMakeHot(unqlite_page *pRaw)
 {
 	Page *pPage = (Page *)pRaw;
-
+	
 	if( pPage == 0 ){
 		/* TICKET 1433-0348 */
 		return UNQLITE_OK;
@@ -57948,7 +57949,7 @@ static int unqliteKvIoPageDontMakeHot(unqlite_page *pRaw)
 	pPage->flags |= PAGE_DONT_MAKE_HOT;
 	return UNQLITE_OK;
 }
-/*
+/* 
  * Refer to [page_ref()]
  */
 static int unqliteKvIopage_ref(unqlite_page *pPage)
@@ -57958,7 +57959,7 @@ static int unqliteKvIopage_ref(unqlite_page *pPage)
 	}
 	return UNQLITE_OK;
 }
-/*
+/* 
  * Refer to [page_unref()]
  */
 static int unqliteKvIoPageUnRef(unqlite_page *pPage)
@@ -57968,28 +57969,28 @@ static int unqliteKvIoPageUnRef(unqlite_page *pPage)
 	}
 	return UNQLITE_OK;
 }
-/*
+/* 
  * Refer to the declaration of the [Pager] structure
  */
 static int unqliteKvIoReadOnly(unqlite_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->is_rdonly;
 }
-/*
+/* 
  * Refer to the declaration of the [Pager] structure
  */
 static int unqliteKvIoPageSize(unqlite_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->iPageSize;
 }
-/*
+/* 
  * Refer to the declaration of the [Pager] structure
  */
 static unsigned char * unqliteKvIoTempPage(unqlite_kv_handle pHandle)
 {
 	return ((Pager *)pHandle)->zTmpPage;
 }
-/*
+/* 
  * Set a page unpin callback.
  * Refer to the declaration of the [Pager] structure
  */
@@ -57998,7 +57999,7 @@ static void unqliteKvIoPageUnpin(unqlite_kv_handle pHandle,void (*xPageUnpin)(vo
 	Pager *pPager = (Pager *)pHandle;
 	pPager->xPageUnpin = xPageUnpin;
 }
-/*
+/* 
  * Set a page reload callback.
  * Refer to the declaration of the [Pager] structure
  */
@@ -58007,7 +58008,7 @@ static void unqliteKvIoPageReload(unqlite_kv_handle pHandle,void (*xPageReload)(
 	Pager *pPager = (Pager *)pHandle;
 	pPager->xPageReload = xPageReload;
 }
-/*
+/* 
  * Log an error.
  * Refer to the declaration of the [Pager] structure
  */
@@ -58023,12 +58024,12 @@ static int pager_kv_io_init(Pager *pPager,unqlite_kv_methods *pMethods,unqlite_k
 {
 	pIo->pHandle =  pPager;
 	pIo->pMethods = pMethods;
-
+	
 	pIo->xGet    = unqliteKvIoPageGet;
 	pIo->xLookup = unqliteKvIoPageLookup;
 	pIo->xNew    = unqliteKvIoNewPage;
-
-	pIo->xWrite     = unqliteKvIopageWrite;
+	
+	pIo->xWrite     = unqliteKvIopageWrite; 
 	pIo->xDontWrite = unqliteKvIoPageDontWrite;
 	pIo->xDontJournal = unqliteKvIoPageDontJournal;
 	pIo->xDontMkHot = unqliteKvIoPageDontMakeHot;
@@ -58051,7 +58052,7 @@ static int pager_kv_io_init(Pager *pPager,unqlite_kv_methods *pMethods,unqlite_k
 /*
  * ----------------------------------------------------------
  * File: unqlite_vm.c
- * MD5: 358e7f319791c11c8262b81573d3a90e
+ * MD5: 2a0c56efb2ab87d3e52d0d7c3147c53b
  * ----------------------------------------------------------
  */
 /*
@@ -58104,7 +58105,7 @@ static unqlite_col_record * CollectionCacheFetchRecord(
 	return 0;
 }
 /*
- * Install a freshly created record in a given collection.
+ * Install a freshly created record in a given collection. 
  */
 static int CollectionCacheInstallRecord(
 	unqlite_col *pCol, /* Target collection */
@@ -58149,7 +58150,7 @@ static int CollectionCacheInstallRecord(
 		unqlite_col_record *pEntry;
 		unqlite_col_record **apNew;
 		sxu32 n;
-
+		
 		apNew = (unqlite_col_record **)SyMemBackendAlloc(&pCol->pVm->sAlloc, nNewSize * sizeof(unqlite_col_record *));
 		if( apNew ){
 			/* Zero the new table */
@@ -58162,7 +58163,7 @@ static int CollectionCacheInstallRecord(
 				if( n >= pCol->nRec ){
 					break;
 				}
-				pEntry->pNext = pEntry->pPrevCol = 0;
+				pEntry->pNextCol = pEntry->pPrevCol = 0;
 				/* Install in the new bucket */
 				iBucket = COL_RECORD_HASH(pEntry->nId) & (nNewSize - 1);
 				pEntry->pNextCol = apNew[iBucket];
@@ -58261,7 +58262,7 @@ static int unqliteVmInstallCollection(
 		unqlite_col *pEntry;
 		unqlite_col **apNew;
 		sxu32 n;
-
+		
 		apNew = (unqlite_col **)SyMemBackendAlloc(&pVm->sAlloc, nNewSize * sizeof(unqlite_col *));
 		if( apNew ){
 			/* Zero the new table */
@@ -58625,7 +58626,7 @@ UNQLITE_PRIVATE jx9_int64 unqliteCollectionCurrentRecordId(unqlite_col *pCol)
 	return pCol->nCurid;
 }
 /*
- * Return the total number of records in a given collection.
+ * Return the total number of records in a given collection. 
  */
 UNQLITE_PRIVATE jx9_int64 unqliteCollectionTotalRecords(unqlite_col *pCol)
 {
@@ -58692,7 +58693,7 @@ UNQLITE_PRIVATE int unqliteCollectionFetchRecordById(
 }
 /*
  * Fetch the next record from a given collection.
- */
+ */ 
 UNQLITE_PRIVATE int unqliteCollectionFetchNextRecord(unqlite_col *pCol,jx9_value *pValue)
 {
 	int rc;
@@ -58757,7 +58758,7 @@ static int CollectionStore(
 	unqlite_kv_methods *pMethods;
 	unqlite_kv_engine *pEngine;
 	sxu32 nKeyLen;
-	int rc;
+	int rc;	
 	/* Point to the underlying KV store */
 	pEngine = unqlitePagerGetKvEngine(pCol->pVm->pDb);
 	pMethods = pEngine->pIo->pMethods;
@@ -58861,7 +58862,7 @@ UNQLITE_PRIVATE int unqliteCollectionDropRecord(
 	)
 {
 	SyBlob *pWorker = &pCol->sWorker;
-	int rc;
+	int rc;		
 	/* Reset the working buffer */
 	SyBlobReset(pWorker);
 	/* Prepare the unique ID for this record */
@@ -58970,9 +58971,9 @@ UNQLITE_PRIVATE int unqliteDropCollection(unqlite_col *pCol)
 #ifndef UNQLITE_AMALGAMATION
 #include "unqliteInt.h"
 #endif
-/*
+/* 
  * This file implements UnQLite functions (db_exists(), db_create(), db_put(), db_get(), etc.) for the
- * underlying Jx9 Virtual Machine.
+ * underlying Jx9 Virtual Machine. 
  */
 /*
  * string db_version(void)
@@ -59001,7 +59002,7 @@ static int unqliteBuiltin_db_errlog(jx9_context *pCtx,int argc,jx9_value **argv)
 {
 	unqlite_vm *pVm;
 	SyBlob *pErr;
-
+	
 	SXUNUSED(argc); /* cc warning */
 	SXUNUSED(argv);
 
@@ -59821,8 +59822,6 @@ static int unqliteBuiltin_db_get_schema(jx9_context *pCtx,int argc,jx9_value **a
  */
 static int unqliteBuiltin_db_begin(jx9_context *pCtx,int argc,jx9_value **argv)
 {
-	(void) argc;
-	(void) argv;
 	unqlite_vm *pVm;
 	unqlite *pDb;
 	int rc;
@@ -59848,8 +59847,6 @@ static int unqliteBuiltin_db_begin(jx9_context *pCtx,int argc,jx9_value **argv)
  */
 static int unqliteBuiltin_db_commit(jx9_context *pCtx,int argc,jx9_value **argv)
 {
-	(void) argc;
-	(void) argv;
 	unqlite_vm *pVm;
 	unqlite *pDb;
 	int rc;
@@ -59875,8 +59872,6 @@ static int unqliteBuiltin_db_commit(jx9_context *pCtx,int argc,jx9_value **argv)
  */
 static int unqliteBuiltin_db_rollback(jx9_context *pCtx,int argc,jx9_value **argv)
 {
-	(void) argc;
-	(void) argv;
 	unqlite_vm *pVm;
 	unqlite *pDb;
 	int rc;
@@ -59904,7 +59899,7 @@ UNQLITE_PRIVATE int unqliteRegisterJx9Functions(unqlite_vm *pVm)
 		{ "db_sig" ,     unqliteBuiltin_db_sig     },
 		{ "db_errlog",   unqliteBuiltin_db_errlog  },
 		{ "collection_exists", unqliteBuiltin_collection_exists },
-		{ "db_exists",         unqliteBuiltin_collection_exists },
+		{ "db_exists",         unqliteBuiltin_collection_exists }, 
 		{ "collection_create", unqliteBuiltin_collection_create },
 		{ "db_create",         unqliteBuiltin_collection_create },
 		{ "db_fetch",          unqliteBuiltin_db_fetch_next     },
@@ -59970,7 +59965,7 @@ UNQLITE_PRIVATE int unqliteRegisterJx9Functions(unqlite_vm *pVm)
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
