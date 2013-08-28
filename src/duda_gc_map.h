@@ -5,8 +5,8 @@
 #define DUDA_GC_CHUNK       16
 
 struct duda_gc_map {
-  int used;
-  int size;
+  int used;                     /* number of used cells */
+  int size;                     /* number of cells      */
 
   struct duda_gc_entry *cells;
 };

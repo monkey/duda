@@ -66,13 +66,13 @@ int duda_gc_add(duda_request_t *dr, void *p)
 
     /* add more cells if we are running out of space */
     if (dr->gc.used >= dr->gc.size) {
-        new_size = (dr->gc.size*DUDA_GC_ENTRIES +
+        new_size = (dr->gc.size * DUDA_GC_ENTRIES +
                     (sizeof(struct duda_gc_entry) * DUDA_GC_CHUNK));
 
         tmp = mk_api->mem_realloc(dr->gc.cells, new_size);
         if (tmp) {
             dr->gc.cells = tmp;
-            dr->gc.size  = new_size;
+            dr->gc.size  = dr->gc.size + DUDA_GC_CHUNK;
         }
         else {
             return -1;
