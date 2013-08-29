@@ -801,11 +801,17 @@ int duda_service_run(struct plugin *plugin,
 
         dr->socket = cs->socket;
         dr->cs = cs;
-        dr->sr = sr;
 
         /* Register */
         duda_dr_list_add(dr);
     }
+
+    /*
+     * set the new Monkey request contexts: if it comes from a keepalive
+     * session the previous session_request is not longer valid, we need
+     * to set the new one.
+     */
+    dr->sr = sr;
 
     /* method invoked */
     dr->_method = NULL;
