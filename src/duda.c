@@ -167,12 +167,15 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
             static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
-            static_cb->callback = duda_load_symbol(ws->handler, static_cb->cb_name);
             if (!static_cb->callback) {
-                mk_err("Static Map: you have set the callback '%s' through\n"
-                       "a static map, but the function could not be located. Aborting",
-                       static_cb->cb_name);
-                exit(EXIT_FAILURE);
+                static_cb->callback = duda_load_symbol(ws->handler, static_cb->cb_name);
+                if (!static_cb->callback) {
+                    mk_err("Static Map: you have set the callback '%s' through "
+                           "a static map, but the function could not be located. "
+                           "Aborting",
+                           static_cb->cb_name);
+                    exit(EXIT_FAILURE);
+                }
             }
         }
 
