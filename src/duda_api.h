@@ -41,7 +41,6 @@
 /* data types */
 typedef void * duda_callback_t;
 
-/* The basic web service information */
 struct duda_webservice {
     char *app_name;
     char *app_path;

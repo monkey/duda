@@ -26,10 +26,22 @@
 #include <sys/syscall.h>
 
 #include "MKPlugin.h"
-#include "duda_objects.h"
-#include "duda_global.h"
-#include "duda_log.h"
 #include "duda_api.h"
+#include "duda_map.h"
+#include "duda_global.h"
+#include "duda_package.h"
+#include "duda_param.h"
+#include "duda_session.h"
+#include "duda_cookie.h"
+#include "duda_data.h"
+#include "duda_conf.h"
+#include "duda_xtime.h"
+#include "duda_console.h"
+#include "duda_log.h"
+#include "duda_gc.h"
+#include "duda_objects.h"
+#include "duda_fconf.h"
+#include "duda_qs.h"
 
 struct duda_package {
     char *name;

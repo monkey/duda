@@ -19,6 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <sys/eventfd.h>
+
 #include "duda_event.h"
 
 /*
@@ -64,6 +66,7 @@ struct duda_api_event *duda_event_object()
     e->mode   = duda_event_mode;
     e->delete = duda_event_delete;
     e->signal = duda_event_signal;
+    e->create_signal_fd = duda_event_create_signal_fd;
 
     return e;
 };
@@ -278,6 +281,32 @@ int duda_event_fd_read(int fd, void *data)
     }
 
     return DUDA_EVENT_OWNED;
+}
+
+/*
+ * @METHOD_NAME: create_signal_fd
+ * @METHOD_DESC: It creates a file descriptor that will be used to receive events
+ * emited by the event->signal() method. This call is useful to be used in customized
+ * threads that have their own polling loop that want to get notifications as core
+ * threads do.
+ * @METHOD_RETURN: Upon successful completion it returns the file descriptor identifier.
+ */
+int duda_event_create_signal_fd()
+{
+    int event_fd;
+    struct duda_event_signal_channel *esc;
+
+    event_fd = eventfd(0, 0);
+    mk_api->socket_set_nonblocking(event_fd);
+    esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
+    esc->fd = event_fd;
+
+    /* Safe initialization */
+    pthread_mutex_lock(&duda_mutex_thctx);
+    mk_list_add(&esc->_head, &duda_event_signals_list);
+    pthread_mutex_unlock(&duda_mutex_thctx);
+
+    return event_fd;
 }
 
 /*

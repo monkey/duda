@@ -45,11 +45,13 @@
 #include "duda_fconf.h"
 #include "duda_qs.h"
 
-struct duda_webservice ws;
+struct duda_webservice ws_info;
 duda_package_t *pkg_temp;
 
 /* Duda Macros */
-#define DUDA_REGISTER(app_name, app_path) struct duda_webservice ws = {app_name, app_path}
+#define DUDA_REGISTER(app_name, app_path)                 \
+    struct duda_webservice ws_info = {app_name, app_path}
+
 
 #define duda_load_package(object, package)                \
     pkg_temp = api->duda->package_load(package, api);     \

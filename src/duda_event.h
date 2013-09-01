@@ -77,6 +77,7 @@ struct duda_api_event {
     int (*mode) (int, int, int);
     int (*delete) (int);
     int (*signal) (uint64_t);
+    int (*create_signal_fd) ();
 };
 
 /* Export an API object */
@@ -103,6 +104,7 @@ int duda_event_delete(int sockfd);
 
 /* Emit a signal to all workers */
 int duda_event_signal(uint64_t val);
+int duda_event_create_signal_fd();
 
 
 static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
