@@ -128,6 +128,7 @@ int duda_map_static_add(const char *path,  const char *cb_name, struct mk_list *
     st->path     = mk_api->str_dup(path);
     st->path_len = strlen(path);
     st->cb_name  = mk_api->str_dup(cb_name);
+    st->callback = NULL;
 
     mk_list_add(&st->_head, list);
 
