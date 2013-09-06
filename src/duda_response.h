@@ -25,6 +25,7 @@
 /* RESPONSE object: response->x() */
 struct duda_api_response {
     int (*send_headers)  (duda_request_t *);
+    int (*headers_off)   (duda_request_t *);
     int (*http_status)   (duda_request_t *, int);
     int (*http_header)   (duda_request_t *, char *);
     int (*http_header_n) (duda_request_t *, char *, int);

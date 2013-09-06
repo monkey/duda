@@ -40,6 +40,19 @@
 
 
 /*
+ * @METHOD_NAME: headers_off
+ * @METHOD_DESC: It tells Duda I/O Core that no headers will be send as part
+ * of the response.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_RETURN: It always return zero.
+ */
+int duda_response_headers_off(duda_request_t *dr)
+{
+    dr->_st_http_headers_off = MK_TRUE;
+    return 0;
+}
+
+/*
  * @METHOD_NAME: send_headers
  * @METHOD_DESC: Send the HTTP response headers
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
@@ -48,6 +61,11 @@
 int duda_response_send_headers(duda_request_t *dr)
 {
     int r;
+
+    if (dr->_st_http_headers_off == MK_TRUE) {
+        dr->_st_http_headers_sent = MK_TRUE;
+        return 0;
+    }
 
     if (dr->_st_http_headers_sent == MK_TRUE) {
         return -1;
@@ -306,7 +324,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     int ret;
 
     /* Make sure the caller set a valid HTTP response code */
-    if (dr->sr->headers.status == 0) {
+    if (dr->sr->headers.status == 0 && dr->_st_http_headers_off == MK_FALSE) {
         duda_api_exception(dr, "Callback did not set the HTTP response status");
         abort();
     }
@@ -376,6 +394,7 @@ struct duda_api_response *duda_response_object()
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_response));
     obj->send_headers        = duda_response_send_headers;
+    obj->headers_off         = duda_response_headers_off;
     obj->http_status         = duda_response_http_status;
     obj->http_header         = duda_response_http_header;
     obj->http_header_n       = duda_response_http_header_n;
