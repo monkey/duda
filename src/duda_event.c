@@ -211,6 +211,7 @@ int duda_event_delete(int sockfd)
 {
     struct mk_list *head, *tmp, *event_list;
     struct duda_event_handler *eh;
+    duda_request_t *dr;
 
     event_list = pthread_getspecific(duda_events_list);
     if (!event_list) {
@@ -222,6 +223,16 @@ int duda_event_delete(int sockfd)
         if (eh->sockfd == sockfd) {
             mk_list_del(&eh->_head);
             mk_api->mem_free(eh);
+
+            /* Check if the event socket belongs to an active duda_request_t */
+            dr = duda_dr_list_get(sockfd);
+            if (!dr) {
+                mk_api->event_del(sockfd);
+            }
+            else if (sockfd != dr->socket) {
+                    mk_api->event_del(sockfd);
+            }
+
             return 0;
         }
     }
