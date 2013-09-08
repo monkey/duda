@@ -99,6 +99,7 @@ int duda_event_add(int sockfd,
                    int (*cb_on_timeout) (int, void *),
                    void *data)
 {
+    int rc = -1;
     struct mk_list *event_list;
     struct duda_event_handler *eh;
     static duda_request_t *dr;
@@ -132,17 +133,17 @@ int duda_event_add(int sockfd,
     dr = duda_dr_list_get(sockfd);
     if (dr) {
         if (sockfd != dr->socket) {
-            mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
+            rc = mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
         }
         else {
-            mk_api->event_socket_change_mode(sockfd, init_mode, behavior);
+            rc = mk_api->event_socket_change_mode(sockfd, init_mode, behavior);
         }
     }
     else {
-        mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
+        rc = mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
     }
 
-    return 0;
+    return rc;
 }
 
 /*

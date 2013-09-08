@@ -388,9 +388,16 @@ int _mkp_event_timeout(int sockfd)
     return MK_PLUGIN_RET_EVENT_CONTINUE;
 }
 
-/* Thread context initialization */
+/*
+ * Thread context initialization: for each thread worker, this function
+ * is invoked, including the workers defined through the worker->spawn() method.
+ *
+ * When running in a user-defined thread, some things will not be initialized
+ * properly such as the event file descriptor. Not an issue.
+ */
 void _mkp_core_thctx()
 {
+    int rc;
     int event_fd;
     char *logger_fmt_cache;
     struct mk_list *head_vs, *head_ws, *head_gl;
@@ -402,7 +409,6 @@ void _mkp_core_thctx()
     struct duda_event_signal_channel *esc;
     duda_global_t *entry_gl;
     void *data;
-
 
     /* Events write list */
     list_events_write = mk_api->mem_alloc(sizeof(struct mk_list));
@@ -424,18 +430,24 @@ void _mkp_core_thctx()
 
    /* Register a Linux eventfd into the Events interface */
     event_fd = eventfd(0, 0);
-    mk_api->socket_set_nonblocking(event_fd);
-    esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
-    esc->fd = event_fd;
-
-    /* Safe initialization */
-    pthread_mutex_lock(&duda_mutex_thctx);
-    mk_list_add(&esc->_head, &duda_event_signals_list);
-    pthread_mutex_unlock(&duda_mutex_thctx);
 
     /* Register the event file descriptor in the events interface */
-    duda_event_add(event_fd, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
-                   duda_event_fd_read, NULL, NULL, NULL, NULL, NULL);
+    rc = duda_event_add(event_fd, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
+                        duda_event_fd_read, NULL, NULL, NULL, NULL, NULL);
+    if (rc == 0) {
+        mk_api->socket_set_nonblocking(event_fd);
+        esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
+        esc->fd = event_fd;
+
+        /* Safe initialization */
+        pthread_mutex_lock(&duda_mutex_thctx);
+        mk_list_add(&esc->_head, &duda_event_signals_list);
+        pthread_mutex_unlock(&duda_mutex_thctx);
+    }
+    else {
+        close(event_fd);
+    }
+
 
     /*
      * Load global data if applies, this is toooo recursive, we need to go through
