@@ -46,6 +46,7 @@ struct duda_api_request *duda_request_object()
     r->content_length = duda_request_content_length;
     r->header_get = duda_request_header_get;
     r->header_cmp = duda_request_header_cmp;
+    r->header_contains = duda_request_header_contains;
 
     return r;
 }
@@ -302,10 +303,57 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val
     for (i = 0; i < toc->length; i++) {
         /* Compare header key */
         if (strncasecmp(row[i].init, key, key_len) == 0) {
-            /* Create new buffer */
+            /* Match the value */
             if (strncmp(row[i].init + key_len + 1, val, val_len) == 0) {
                 return 0;
             }
+        }
+    }
+
+    return -1;
+}
+
+/*
+ * @METHOD_NAME: header_contains
+ * @METHOD_DESC: It checks if a given header key contains on its value a
+ * specific string.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key HTTP header key
+ * @METHOD_PARAM: val the string to check in the value of the HTTP header key.
+ * @METHOD_RETURN: if the header value contains the string it returns 0, if it's not
+ * found it returns -1.
+ */
+int duda_request_header_contains(duda_request_t *dr,
+                                 const char *key, const char *val)
+{
+    int i;
+    int ret;
+    int len;
+    int key_len;
+    struct headers_toc *toc;
+    struct header_toc_row *row;
+
+    /* Some silly but required validations */
+    if (!dr->cs || !dr->sr || !key) {
+        return -1;
+    }
+
+    key_len = strlen(key);
+
+    toc = &dr->sr->headers_toc;
+    row = toc->rows;
+
+    /* Loop around every request header */
+    for (i = 0; i < toc->length; i++) {
+        /* Compare header key */
+        if (strncasecmp(row[i].init, key, key_len) == 0) {
+            /* Match the value */
+            len = (row[i].end - row[i].init) - key_len - 1;
+            ret = mk_api->str_search_n(row[i].init + key_len + 1,
+                                       val,
+                                       MK_STR_INSENSITIVE,
+                                       len);
+            return ret;
         }
     }
 
