@@ -350,7 +350,6 @@ int _mkp_event_close(int sockfd)
     if (eh && eh->cb_on_close) {
         eh->cb_on_close(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
-        return MK_PLUGIN_RET_EVENT_OWNED;
     }
 
     dr = duda_dr_list_del(sockfd);
@@ -799,6 +798,14 @@ int duda_service_run(struct plugin *plugin,
 {
     struct duda_request *dr = duda_dr_list_get(cs->socket);
 
+    /*
+     * FIXME: there is a bug when for some reason a duda_request context
+     * was not deleted and it exists with previous CS and SR data references.
+     *
+     * I am still not able to reproduce the problem by hand so the workaround
+     * at the moment is to set 'cs' and 'sr' every time to the dr context.
+     */
+
     if (!dr) {
         dr = mk_api->mem_alloc(sizeof(duda_request_t));
         if (!dr) {
@@ -814,7 +821,6 @@ int duda_service_run(struct plugin *plugin,
         dr->plugin = plugin;
 
         dr->socket = cs->socket;
-        dr->cs = cs;
 
         /* Register */
         duda_dr_list_add(dr);
@@ -824,7 +830,9 @@ int duda_service_run(struct plugin *plugin,
      * set the new Monkey request contexts: if it comes from a keepalive
      * session the previous session_request is not longer valid, we need
      * to set the new one.
+     *
      */
+    dr->cs = cs;
     dr->sr = sr;
 
     /* method invoked */
