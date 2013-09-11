@@ -682,7 +682,6 @@ int duda_request_parse(struct session_request *sr,
     }
 
     if (last_field < MAP_WS_METHOD) {
-        console_debug(dr, "invalid method");
         return -1;
     }
 
