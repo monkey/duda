@@ -410,12 +410,12 @@ void _mkp_core_thctx()
     void *data;
 
     /* Events write list */
-    list_events_write = mk_api->mem_alloc(sizeof(struct mk_list));
+    list_events_write = mk_api->mem_alloc_z(sizeof(struct mk_list));
     mk_list_init(list_events_write);
     pthread_setspecific(duda_global_events_write, (void *) list_events_write);
 
     /* Events */
-    events_list = mk_api->mem_alloc(sizeof(struct mk_list));
+    events_list = mk_api->mem_alloc_z(sizeof(struct mk_list));
     mk_list_init(events_list);
     pthread_setspecific(duda_events_list, (void *) events_list);
 
@@ -424,7 +424,7 @@ void _mkp_core_thctx()
     pthread_setspecific(duda_global_dr_list, (void *) dr_list);
 
     /* Logger FMT cache */
-    logger_fmt_cache = mk_api->mem_alloc(512);
+    logger_fmt_cache = mk_api->mem_alloc_z(512);
     pthread_setspecific(duda_logger_fmt_cache, (void *) logger_fmt_cache);
 
     /* Register a Linux pipe into the Events interface */
