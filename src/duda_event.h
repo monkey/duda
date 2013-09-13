@@ -43,7 +43,8 @@
 pthread_key_t duda_events_list;
 
 struct duda_event_signal_channel {
-    int fd;
+    int fd_r;
+    int fd_w;
     struct mk_list _head;
 };
 

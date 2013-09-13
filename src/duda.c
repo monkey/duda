@@ -21,7 +21,6 @@
 
 #define _GNU_SOURCE
 #include <dlfcn.h>
-#include <sys/eventfd.h>
 
 #include "MKPlugin.h"
 #include "duda.h"
@@ -350,6 +349,7 @@ int _mkp_event_close(int sockfd)
     if (eh && eh->cb_on_close) {
         eh->cb_on_close(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
+        return MK_PLUGIN_RET_EVENT_OWNED;
     }
 
     dr = duda_dr_list_del(sockfd);
@@ -397,7 +397,7 @@ int _mkp_event_timeout(int sockfd)
 void _mkp_core_thctx()
 {
     int rc;
-    int event_fd;
+    int fds[2];
     char *logger_fmt_cache;
     struct mk_list *head_vs, *head_ws, *head_gl;
     struct mk_list *list_events_write;
@@ -427,16 +427,20 @@ void _mkp_core_thctx()
     logger_fmt_cache = mk_api->mem_alloc(512);
     pthread_setspecific(duda_logger_fmt_cache, (void *) logger_fmt_cache);
 
-   /* Register a Linux eventfd into the Events interface */
-    event_fd = eventfd(0, 0);
+    /* Register a Linux pipe into the Events interface */
+    if (pipe(fds) == -1) {
+        mk_err("Error creating thread signal pipe. Aborting.");
+        exit(EXIT_FAILURE);
+    }
 
     /* Register the event file descriptor in the events interface */
-    rc = duda_event_add(event_fd, DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
+    rc = duda_event_add(fds[0], DUDA_EVENT_READ, DUDA_EVENT_LEVEL_TRIGGERED,
                         duda_event_fd_read, NULL, NULL, NULL, NULL, NULL);
     if (rc == 0) {
-        mk_api->socket_set_nonblocking(event_fd);
+        mk_api->socket_set_nonblocking(fds[1]);
         esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
-        esc->fd = event_fd;
+        esc->fd_r = fds[0];
+        esc->fd_w = fds[1];
 
         /* Safe initialization */
         pthread_mutex_lock(&duda_mutex_thctx);
@@ -444,7 +448,8 @@ void _mkp_core_thctx()
         pthread_mutex_unlock(&duda_mutex_thctx);
     }
     else {
-        close(event_fd);
+        close(fds[0]);
+        close(fds[1]);
     }
 
 
@@ -681,6 +686,7 @@ int duda_request_parse(struct session_request *sr,
     }
 
     if (last_field < MAP_WS_METHOD) {
+        console_debug(dr, "invalid method");
         return -1;
     }
 
@@ -798,14 +804,6 @@ int duda_service_run(struct plugin *plugin,
 {
     struct duda_request *dr = duda_dr_list_get(cs->socket);
 
-    /*
-     * FIXME: there is a bug when for some reason a duda_request context
-     * was not deleted and it exists with previous CS and SR data references.
-     *
-     * I am still not able to reproduce the problem by hand so the workaround
-     * at the moment is to set 'cs' and 'sr' every time to the dr context.
-     */
-
     if (!dr) {
         dr = mk_api->mem_alloc(sizeof(duda_request_t));
         if (!dr) {
@@ -821,6 +819,7 @@ int duda_service_run(struct plugin *plugin,
         dr->plugin = plugin;
 
         dr->socket = cs->socket;
+        dr->cs = cs;
 
         /* Register */
         duda_dr_list_add(dr);
@@ -830,9 +829,7 @@ int duda_service_run(struct plugin *plugin,
      * set the new Monkey request contexts: if it comes from a keepalive
      * session the previous session_request is not longer valid, we need
      * to set the new one.
-     *
      */
-    dr->cs = cs;
     dr->sr = sr;
 
     /* method invoked */

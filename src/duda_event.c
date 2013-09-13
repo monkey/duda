@@ -19,8 +19,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <sys/eventfd.h>
-
 #include "duda_event.h"
 
 /*
@@ -49,9 +47,10 @@
  *
  * Besides the callbacks and handlers, this interface also support notifications. When a
  * worker is created, Duda also creates a notification interface for that main loop event,
- * internally this is done through the Linux eventfd(2) system call. So if you create your
+ * internally this is done through the Linux pipe(2) system call. So if you create your
  * own threads and wants to send some notification to the default workers, you can issue it
- * using the method event->signal().
+ * using the method event->signal(). The signaling system only allow to distribute unsigned
+ * 64 bits values (uint64_t).
  *
  */
 
@@ -256,7 +255,7 @@ int duda_event_signal(uint64_t val)
 
     mk_list_foreach(head, &duda_event_signals_list) {
         esc = mk_list_entry(head, struct duda_event_signal_channel, _head);
-        write(esc->fd, &val, sizeof(uint64_t));
+        write(esc->fd_w, &val, sizeof(uint64_t));
     }
 
     return 0;
@@ -265,7 +264,7 @@ int duda_event_signal(uint64_t val)
 /*
  * This call aims to be the proxy for notification coming from some
  * signal writer. Once we get here, the next step is to identify which
- * service have defined it callbacks for it. This eventfd function is
+ * service have defined it callbacks for it. This pipe read function is
  * intended to be used from a server HTTP worker context. It can be used
  * to wake up some pending HTTP response sleeping connection.
  */
@@ -280,7 +279,7 @@ int duda_event_fd_read(int fd, void *data)
     /* read the value */
     s = read(fd, &val, sizeof(uint64_t));
     if (s != sizeof(uint64_t)) {
-        msg->warn("Could not read signal");
+        msg->warn("Error reading signal value");
         return -1;
     }
 
@@ -301,24 +300,30 @@ int duda_event_fd_read(int fd, void *data)
  * emited by the event->signal() method. This call is useful to be used in customized
  * threads that have their own polling loop that want to get notifications as core
  * threads do.
- * @METHOD_RETURN: Upon successful completion it returns the file descriptor identifier.
+ * @METHOD_RETURN: Upon successful completion it returns the file descriptor that works
+ * in read-only mode.
  */
 int duda_event_create_signal_fd()
 {
-    int event_fd;
+    int fds[2];
     struct duda_event_signal_channel *esc;
 
-    event_fd = eventfd(0, 0);
-    mk_api->socket_set_nonblocking(event_fd);
+    if (pipe(fds) == -1) {
+        msg->err("Error creating pipe");
+        return -1;
+    }
+
+    mk_api->socket_set_nonblocking(fds[1]);
     esc = mk_api->mem_alloc(sizeof(struct duda_event_signal_channel));
-    esc->fd = event_fd;
+    esc->fd_r = fds[0];
+    esc->fd_w = fds[1];
 
     /* Safe initialization */
     pthread_mutex_lock(&duda_mutex_thctx);
     mk_list_add(&esc->_head, &duda_event_signals_list);
     pthread_mutex_unlock(&duda_mutex_thctx);
 
-    return event_fd;
+    return esc->fd_r;
 }
 
 /*
