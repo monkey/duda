@@ -545,17 +545,17 @@ int _mkp_init(struct plugin_api **api, char *confdir)
 {
     mk_api = *api;
 
-    /* Load configuration */
-    duda_conf_main_init(confdir);
-    duda_conf_vhost_init();
-    duda_load_services();
-
     /* Global data / Thread scope */
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
     pthread_key_create(&duda_global_dr_list, NULL);
 
     mk_list_init(&duda_event_signals_list);
+
+    /* Load configuration */
+    duda_conf_main_init(confdir);
+    duda_conf_vhost_init();
+    duda_load_services();
 
     /* Initialize Logger internals */
     duda_logger_init();
