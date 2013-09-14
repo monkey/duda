@@ -35,13 +35,22 @@
  */
 static void *duda_worker_step(void *arg)
 {
+    void *ret;
     struct duda_worker *wk = (struct duda_worker *) arg;
 
     /* initialize same data as done for server workers */
     _mkp_core_thctx();
 
     /* call the target function */
-    return wk->func(wk->arg);
+    ret = wk->func(wk->arg);
+    mk_warn("User defined worker thread #%lu has ended",
+            syscall(__NR_gettid));
+
+    /* We do not handle threads exit, just put the thread to sleep */
+    while (1) {
+        sleep(60);
+    }
+
 }
 
 /* Spawn each registered worker */
