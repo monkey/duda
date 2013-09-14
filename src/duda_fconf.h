@@ -19,6 +19,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "mk_string.h"
 #include "duda_api.h"
 
 #ifndef MK_DUDA_FCONF_H
@@ -29,6 +30,8 @@
 #define DUDA_CONFIG_NUM    MK_CONFIG_VAL_NUM
 #define DUDA_CONFIG_BOOL   MK_CONFIG_VAL_BOOL
 #define DUDA_CONFIG_LIST   MK_CONFIG_VAL_LIST
+
+#define duda_string_line   mk_string_line
 
 /* Remap configuration structures from Monkey core */
 struct duda_config
