@@ -39,7 +39,7 @@
  * is to read incoming messages from Logger pipes, wait until the pipe buffer
  * reach some % of it capacity and flush the content to the proper file on disk.
  */
-static void duda_logger_writer(void *arg)
+void duda_logger_writer(void *arg)
 {
     (void) arg;
     int sec = 3;

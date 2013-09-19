@@ -555,6 +555,7 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     /* Load configuration */
     duda_conf_main_init(confdir);
     duda_conf_vhost_init();
+
     duda_load_services();
 
     /* Initialize Logger internals */
@@ -686,7 +687,6 @@ int duda_request_parse(struct session_request *sr,
     }
 
     if (last_field < MAP_WS_METHOD) {
-        console_debug(dr, "invalid method");
         return -1;
     }
 
