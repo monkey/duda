@@ -64,6 +64,9 @@ struct duda_api_conf {
 
     #define bind_messages() _bind_messages(self)
     void (*_bind_messages) (struct web_service *);
+
+    #define service_name(n) _service_name(self, n)
+    void (*_service_name) (struct web_service *, const char *);
 };
 
 struct duda_api_conf *duda_conf_object();

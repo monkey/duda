@@ -266,7 +266,14 @@ int duda_conf_vhost_init()
                 if (app_name && mk_is_bool(app_enabled)) {
                     ws = mk_api->mem_alloc_z(sizeof(struct web_service));
 
-                    /* name */
+                    /* fixed name */
+                    ws->fixed_name.data = mk_api->str_dup(app_name);
+                    ws->fixed_name.len  = strlen(app_name);
+
+                    /*
+                     * name: we duplicate this from fixed name as it later can be
+                     * changed from the web service through conf->service_name()
+                     */
                     ws->name.data = mk_api->str_dup(app_name);
                     ws->name.len  = strlen(app_name);
 
@@ -429,6 +436,21 @@ void duda_conf_bind_messages(struct web_service *ws)
     ws->bind_messages = MK_TRUE;
 }
 
+/*
+ * @METHOD_NAME: service_name
+ * @METHOD_DESC: It overrides the default web service name inside the stack, this
+ * will affect the URI starter string to identify the access to the service. If the
+ * service name is 'abc' it usually is accessed by URI /abc, but using this method
+ * it will override, e.g: setting service_name('efg') will map now URI /efg.
+ * @METHOD_PROTO: void service_name(const char *name)
+ * @METHOD_RETURN: This method do not return any value.
+ */
+void duda_conf_service_name(struct web_service *ws, const char *name)
+{
+    ws->name.data = strdup(name);
+    ws->name.len  = strlen(name);
+}
+
 struct duda_api_conf *duda_conf_object()
 {
     struct duda_api_conf *c;
@@ -436,6 +458,7 @@ struct duda_api_conf *duda_conf_object()
     c = mk_api->mem_alloc(sizeof(struct duda_api_conf));
     c->_force_redirect = duda_conf_force_redirect;
     c->_bind_messages   = duda_conf_bind_messages;
+    c->_service_name    = duda_conf_service_name;
 
     return c;
 }
