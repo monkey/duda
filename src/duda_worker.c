@@ -51,6 +51,7 @@ static void *duda_worker_step(void *arg)
         sleep(60);
     }
 
+    return ret;
 }
 
 /* Spawn each registered worker */
