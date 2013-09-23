@@ -37,10 +37,13 @@ struct duda_worker {
 /* Worker object: worker->x() */
 struct duda_api_worker {
     int (*_spawn) (void *(start_routine) (void *), void *, struct mk_list *);
+    pid_t (*gettid) ();
 };
 
 int duda_worker_spawn_all(struct mk_list *list);
 int duda_worker_spawn(void *(start_routine) (void *), void *arg, struct mk_list *list);
+pid_t duda_worker_gettid();
+
 struct duda_api_worker *duda_worker_object();
 
 #define spawn(routine, arg) _spawn(routine, arg, &duda_worker_list)

@@ -93,6 +93,7 @@ struct duda_api_worker *duda_worker_object()
 
     wk = mk_api->mem_alloc(sizeof(struct duda_api_worker));
     wk->_spawn = duda_worker_spawn;
+    wk->gettid = duda_worker_gettid;
 
     return wk;
 }
@@ -122,4 +123,24 @@ int duda_worker_spawn(void *(start_routine) (void *), void *arg, struct mk_list 
     mk_list_add(&wk->_head, list);
 
     return 0;
+}
+
+/*
+ * @METHOD_NAME: gettid
+ * @METHOD_DESC: It returns the thread ID assigned by the operating system. In a
+ * single-threaded process, the thread ID is equal to the process ID (PID). In a
+ * multi-threaded process, all threads have the same PID, but each one has a unique TID.
+ * When running a Duda I/O service you can try a <code>ps -LA</code> from the command line, compare
+ * the PID and LWP columns output.
+ * @METHOD_PROTO: pid_t gettid()
+ * @METHOD_RETURN: Upon successful completion, it returns the thread ID of the calling
+ * process.
+ */
+pid_t duda_worker_gettid()
+{
+    /*
+     * There is no wrapper for this system call by glibc, we need to perform a direct
+     * syscall(2) to obtain the value.
+     */
+    return syscall(__NR_gettid);
 }
