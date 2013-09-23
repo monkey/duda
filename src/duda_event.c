@@ -46,11 +46,16 @@
  *   DUDA_EVENT_WAKEUP: wake up a sleeping socket.
  *
  * Besides the callbacks and handlers, this interface also support notifications. When a
- * worker is created, Duda also creates a notification interface for that main loop event,
- * internally this is done through the Linux pipe(2) system call. So if you create your
- * own threads and wants to send some notification to the default workers, you can issue it
- * using the method event->signal(). The signaling system only allow to distribute unsigned
- * 64 bits values (uint64_t).
+ * worker is created, Duda also creates a notification interface for that main loop
+ * event, internally this is done through the Linux pipe(2) system call. So if you
+ * create your own threads and wants to send some notification to the default workers,
+ * you can issue it using the method event->signal(). The signaling system only allow to
+ * distribute unsigned 64 bits values (uint64_t).
+ *
+ * @OBJ_REST: the methods add(), lookup(), mode() and delete() can be used only inside
+ * your callback functions. The method create_signalfd() is intended to be used inside
+ * your own and customized worker/thread context, and signal() method can be used from
+ * anywhere.
  *
  */
 

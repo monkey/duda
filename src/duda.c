@@ -452,7 +452,6 @@ void _mkp_core_thctx()
         close(fds[1]);
     }
 
-
     /*
      * Load global data if applies, this is toooo recursive, we need to go through
      * every virtual host and check the services loaded for each one, then lookup
