@@ -39,6 +39,7 @@ struct duda_api_kv *get_kv_api()
     /* Alloc object */
     kv = malloc(sizeof(struct duda_api_kv));
     kv->init           = kv_init;
+    kv->close          = unqlite_close;
     kv->store          = unqlite_kv_store;
     kv->store_fmt      = unqlite_kv_store_fmt;
     kv->append         = unqlite_kv_append;
