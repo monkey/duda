@@ -66,12 +66,9 @@ struct duda_api_sha1 *get_sha1_api()
     return sha1;
 }
 
-duda_package_t *duda_package_main(struct duda_api_objects *api)
+duda_package_t *duda_package_main()
 {
     duda_package_t *dpkg;
-
-    /* Initialize package internals */
-    duda_package_init();
 
     /* Package object */
     dpkg = monkey->mem_alloc(sizeof(duda_package_t));

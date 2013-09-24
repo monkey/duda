@@ -24,7 +24,9 @@
 #include "duda_conf.h"
 #include "duda_package.h"
 
-duda_package_t *duda_package_load(const char *pkgname, struct duda_api_objects *api)
+duda_package_t *duda_package_load(const char *pkgname,
+                                  struct duda_api_objects *api,
+                                  struct web_service *ws)
 {
     int ret;
     char *package = NULL;
@@ -56,13 +58,13 @@ duda_package_t *duda_package_load(const char *pkgname, struct duda_api_objects *
         return NULL;
     }
 
-    package_main = duda_load_symbol(handler, "duda_package_main");
+    package_main = duda_load_symbol(handler, "_duda_package_bootstrap");
     if (!package_main) {
         mk_err("Duda: the package '%s' is broken", pkgname);
         exit(EXIT_FAILURE);
     }
 
-    package_info = package_main(api);
+    package_info = package_main(api, ws);
     package_info->handler = handler;
     mk_api->mem_free(package);
 
