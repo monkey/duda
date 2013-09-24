@@ -38,12 +38,11 @@ struct duda_api_base64 *get_base64_api()
     return base64;
 }
 
-duda_package_t *duda_package_main(struct duda_api_objects *api)
+duda_package_t *duda_package_main()
 {
     duda_package_t *dpkg;
 
-    /* Initialize package internals */
-    duda_package_init();
+    printf("--->SELF=%p\n", self);
 
     /* Package object */
     dpkg = monkey->mem_alloc(sizeof(duda_package_t));

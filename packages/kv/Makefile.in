@@ -1,7 +1,7 @@
 _PATH   = $(patsubst $(monkey_root)/%, %, $(CURDIR))
 CC      = @echo "  CC   $(_PATH)/$@"; $CC
 CC_QUIET= @echo -n; $CC
-CFLAGS  = $CFLAGS
+CFLAGS  = $CFLAGS -Wunused-variable
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS -DJX9_DISABLE_BUILTIN_FUNC -DJX9_DISABLE_DISK_IO -DUNQLITE_ENABLE_THREADS
 INCDIR  = ../../../../src/include -I../../src

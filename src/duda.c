@@ -147,7 +147,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     struct duda_map_static_cb *static_cb;
 
     /* Load and invoke duda_main() */
-    service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap");
+    service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap_main");
     if (!service_init) {
         mk_err("Duda: invalid web service %s", ws->name.data);
         exit(EXIT_FAILURE);
@@ -451,6 +451,7 @@ void _mkp_core_thctx()
         close(fds[0]);
         close(fds[1]);
     }
+
 
     /*
      * Load global data if applies, this is toooo recursive, we need to go through

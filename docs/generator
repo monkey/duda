@@ -112,7 +112,6 @@ class DudaObject:
     OBJ_MENU      = ' * @OBJ_MENU:'
     OBJ_DESC      = ' * @OBJ_DESC:'
     OBJ_COMM      = ' * @OBJ_COMM:'
-    OBJ_REST      = ' * @OBJ_REST:'
     PKG_HEADER    = ' * @PKG_HEADER:'
     PKG_INIT      = ' * @PKG_INIT:'
     METHOD_NAME   = ' * @METHOD_NAME:'
@@ -127,7 +126,6 @@ class DudaObject:
         self.desc = ''
         self.menu = ''
         self.comm = ''
-        self.rest = ''
         self.pkg_header = ''
         self.pkg_init = ''
         self.methods = []
@@ -175,12 +173,6 @@ class DudaObject:
                 self.comm = arr[1].strip() + '\n'
                 last = self.OBJ_COMM
 
-            # @OBJ_REST
-            elif line.startswith(self.OBJ_REST):
-                arr = line.split(self.OBJ_REST)
-                self.rest = arr[1].strip() + '\n'
-                last = self.OBJ_REST
-
             # @PKG_HEADER
             elif line.startswith(self.PKG_HEADER):
                 arr = line.split(self.PKG_HEADER)
@@ -212,8 +204,6 @@ class DudaObject:
                     self.desc += row
                 elif last == self.OBJ_COMM:
                     self.comm += row
-                elif last == self.OBJ_REST:
-                    self.rest += row
                 elif last == self.PKG_HEADER:
                     self.pkg_header += row
                 elif last == self.PKG_INIT:
@@ -484,10 +474,6 @@ class WriteObject:
         if len(obj.comm) > 1:
             comm = obj.comm.replace('\n\n', '<br><br>')
             f.write('  <p><strong>Comments</strong>: %s</p>\n' % (comm))
-
-        if len(obj.rest) > 1:
-            rest = obj.rest.replace('\n\n', '<br><br>')
-            f.write('  <p><strong>Restrictions</strong>: %s</p>\n' % (rest))
 
         if (len(obj.pkg_header) > 0):
             f.write('  <p><strong>Initialization</strong></p>')

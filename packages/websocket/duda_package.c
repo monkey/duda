@@ -45,12 +45,9 @@ struct duda_api_websockets *get_websockets_api()
     return ws;
 }
 
-duda_package_t *duda_package_main(struct duda_api_objects *api)
+duda_package_t *duda_package_main()
 {
     duda_package_t *dpkg;
-
-    /* Initialize package internals */
-    duda_package_init();
 
     /* Package default configuration */
     ws_config = monkey->mem_alloc(sizeof(struct ws_config_t));

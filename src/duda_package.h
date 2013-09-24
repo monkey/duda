@@ -52,43 +52,54 @@ struct duda_package {
     struct mk_list _head;
 };
 
-/* Reference and set Duda API object */
-#define duda_package_init()                                             \
-    monkey   = api->monkey;                                             \
-    map      = api->map;                                                \
-    msg      = api->msg;                                                \
-    request  = api->request;                                            \
-    response = api->response;                                           \
-    debug    = api->debug;                                              \
-    event    = api->event;                                              \
-    gc       = api->gc;                                                 \
-    console  = api->console;                                            \
-    logger   = api->logger;                                             \
-    param    = api->param;                                              \
-    session  = api->session;                                            \
-    cookie   = api->cookie;                                             \
-    global   = api->global;                                             \
-    qs       = api->qs;                                                 \
-    fconf    = api->fconf;                                              \
-    conf     = api->conf;                                               \
-    data     = api->data;                                               \
-    worker   = api->worker;                                             \
-    xtime    = api->xtime;                                              \
-    mk_list_init(&duda_map_interfaces);                                 \
-    mk_list_init(&duda_map_urls);                                       \
-    mk_list_init(&duda_global_dist);                                    \
-    mk_list_init(&duda_ws_packages);                                    \
-    mk_list_init(&duda_worker_list);                                    \
-    mk_list_init(&duda_logger_main_list);                               \
-    mk_list_init(&duda_logger_worker_list);
-
 /* Data type */
 typedef struct duda_package duda_package_t;
 
-/* Define package loader */
-duda_package_t *duda_package_load(const char *pkgname, struct duda_api_objects *api);
-
 /* Hook defines for packages */
-duda_package_t MK_EXPORT *duda_package_main(struct duda_api_objects *api);
+duda_package_t MK_EXPORT *_duda_package_main();
+
+/* Reference and set Duda API object */
+#define duda_package_main()                                             \
+    _duda_package_bootstrap(struct duda_api_objects *api,               \
+                            struct web_service *ws) {                   \
+        monkey   = api->monkey;                                         \
+        map      = api->map;                                            \
+        msg      = api->msg;                                            \
+        request  = api->request;                                        \
+        response = api->response;                                       \
+        debug    = api->debug;                                          \
+        event    = api->event;                                          \
+        gc       = api->gc;                                             \
+        console  = api->console;                                        \
+        logger   = api->logger;                                         \
+        param    = api->param;                                          \
+        session  = api->session;                                        \
+        cookie   = api->cookie;                                         \
+        global   = api->global;                                         \
+        qs       = api->qs;                                             \
+        fconf    = api->fconf;                                          \
+        conf     = api->conf;                                           \
+        data     = api->data;                                           \
+        worker   = api->worker;                                         \
+        xtime    = api->xtime;                                          \
+        mk_list_init(&duda_map_interfaces);                             \
+        mk_list_init(&duda_map_urls);                                   \
+        mk_list_init(&duda_global_dist);                                \
+        mk_list_init(&duda_ws_packages);                                \
+        mk_list_init(&duda_worker_list);                                \
+        mk_list_init(&duda_logger_main_list);                           \
+        mk_list_init(&duda_logger_worker_list);                         \
+                                                                        \
+        self = ws;                                                      \
+                                                                        \
+        return _duda_package_main();                                    \
+    }                                                                   \
+    duda_package_t *_duda_package_main()
+
+
+/* Define package loader */
+duda_package_t *duda_package_load(const char *pkgname,
+                                  struct duda_api_objects *api,
+                                  struct web_service *ws);
 
 #endif
