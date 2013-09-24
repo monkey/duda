@@ -41,7 +41,8 @@ typedef unqlite           kv_conn_t;
 typedef unqlite_kv_cursor kv_cursor_t;
 
 struct duda_api_kv {
-    int (*init) (unqlite **);
+    int (*init)  (unqlite **);
+    int (*close) (unqlite *);
     int (*store) (unqlite *, const void *, int, const void *, unqlite_int64);
     int (*store_fmt) (unqlite *, const void *, int, const char *, ...);
     int (*append) (unqlite *, const void *, int, const void *, unqlite_int64);
