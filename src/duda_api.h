@@ -111,8 +111,7 @@ struct duda_api_objects *duda_api_master();
 
 /* MAP specific Duda calls */
 struct duda_api_main {
-    struct duda_package *(*package_load) (const char *, struct duda_api_objects *,
-                                          struct web_service *);
+    struct duda_package *(*package_load) (const char *, struct duda_api_objects *);
 };
 
 

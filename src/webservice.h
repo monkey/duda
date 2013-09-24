@@ -53,9 +53,9 @@ duda_package_t *pkg_temp;
     struct duda_webservice ws_info = {app_name, app_path}
 
 
-#define duda_load_package(object, package)                     \
-    pkg_temp = api->duda->package_load(package, api, self);    \
-    mk_list_add(&pkg_temp->_head, &duda_ws_packages);          \
+#define duda_load_package(object, package)                \
+    pkg_temp = api->duda->package_load(package, api);     \
+    mk_list_add(&pkg_temp->_head, &duda_ws_packages);     \
     object = pkg_temp->api;
 
 #define duda_service_add_interface(iface) do {              \
@@ -90,8 +90,8 @@ int _duda_main(struct duda_api_objects *api);
  * initialization, then it invoke the end-user routine under _duda_main()
  */
 #define duda_main()                                                     \
-    _duda_bootstrap_main(struct duda_api_objects *api,                  \
-                         struct web_service *ws) {                      \
+    _duda_bootstrap(struct duda_api_objects *api,                       \
+                    struct web_service *ws) {                           \
         /* API Objects */                                               \
         monkey   = api->monkey;                                         \
         map      = api->map;                                            \
