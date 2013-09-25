@@ -819,7 +819,6 @@ int duda_service_run(struct plugin *plugin,
         dr->plugin = plugin;
 
         dr->socket = cs->socket;
-        dr->cs = cs;
 
         /* Register */
         duda_dr_list_add(dr);
@@ -830,6 +829,7 @@ int duda_service_run(struct plugin *plugin,
      * session the previous session_request is not longer valid, we need
      * to set the new one.
      */
+    dr->cs = cs;
     dr->sr = sr;
 
     /* method invoked */
