@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "mk_mimetype.h"
+
 #include "duda.h"
 #include "duda_api.h"
 #include "duda_queue.h"
@@ -148,6 +150,33 @@ int duda_response_http_content_length(duda_request_t *dr, long length)
     return 0;
 }
 
+/*
+ * @METHOD_NAME: http_content_type
+ * @METHOD_DESC: Given a known mime extension, it lookup the mime type associated and
+ * compose the HTTP Content-Type header.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: extension the mime extension. e.g: 'jpg'.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_response_http_content_type(duda_request_t *dr, char *extension)
+{
+    int len;
+    char *header;
+    struct mimetype *m;
+
+    m = mk_api->mimetype_lookup(extension);
+    if (!m) {
+        return -1;
+    }
+
+    header = mk_api->mem_alloc(32);
+    len = snprintf(header, 32, "Content-Type: %s", m->type.data);
+    duda_response_http_header_n(dr, header, len - 2);
+    duda_gc_add(dr, header);
+
+    return 0;
+}
+
 /* Compose the body_buffer */
 static int _print(duda_request_t *dr, char *raw, int len, int free)
 {
@@ -271,6 +300,7 @@ int duda_response_sendfile(duda_request_t *dr, char *path)
 
     return 0;
 }
+
 
 /*
  * @METHOD_NAME: wait
@@ -399,6 +429,7 @@ struct duda_api_response *duda_response_object()
     obj->http_header         = duda_response_http_header;
     obj->http_header_n       = duda_response_http_header_n;
     obj->http_content_length = duda_response_http_content_length;
+    obj->http_content_type   = duda_response_http_content_type;
     obj->print               = duda_response_print;
     obj->printf              = duda_response_printf;
     obj->sendfile            = duda_response_sendfile;
