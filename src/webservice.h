@@ -53,10 +53,24 @@ duda_package_t *pkg_temp;
     struct duda_webservice ws_info = {app_name, app_path}
 
 
-#define duda_load_package(object, package)                     \
-    pkg_temp = api->duda->package_load(package, api, self);    \
-    mk_list_add(&pkg_temp->_head, &duda_ws_packages);          \
-    object = pkg_temp->api;
+#define duda_load_package(object, package)                          \
+    /* Check if this package was already loaded */                  \
+    int loaded = MK_FALSE;                                          \
+    struct mk_list *head;                                           \
+                                                                    \
+    mk_list_foreach(head, &duda_ws_packages) {                      \
+        pkg_temp = mk_list_entry(head, duda_package_t, _head);      \
+        if (strcmp(pkg_temp->name, package) == 0) {                 \
+            loaded = MK_TRUE;                                       \
+            break;                                                  \
+        }                                                           \
+    }                                                               \
+                                                                    \
+    if (loaded == MK_FALSE) {                                       \
+        pkg_temp = dapi->duda->package_load(package, dapi, self);   \
+        mk_list_add(&pkg_temp->_head, &duda_ws_packages);           \
+        object = pkg_temp->api;                                     \
+    }
 
 #define duda_service_add_interface(iface) do {              \
         mk_list_add(&iface->_head,  &duda_map_interfaces);  \
@@ -81,7 +95,7 @@ struct duda_api_objects *duda_new_api_objects();
 
 
 /* We declare the hidden _duda_main() function to avoid some warnings */
-int _duda_main(struct duda_api_objects *api);
+int _duda_main(struct duda_api_objects *dapi);
 
 /*
  * This is the tricky initialization for the web service in question,
@@ -90,29 +104,29 @@ int _duda_main(struct duda_api_objects *api);
  * initialization, then it invoke the end-user routine under _duda_main()
  */
 #define duda_main()                                                     \
-    _duda_bootstrap_main(struct duda_api_objects *api,                  \
+    _duda_bootstrap_main(struct duda_api_objects *dapi,                 \
                          struct web_service *ws) {                      \
         /* API Objects */                                               \
-        monkey   = api->monkey;                                         \
-        map      = api->map;                                            \
-        msg      = api->msg;                                            \
-        request  = api->request;                                        \
-        response = api->response;                                       \
-        debug    = api->debug;                                          \
-        event    = api->event;                                          \
-        console  = api->console;                                        \
-        logger   = api->logger;                                         \
-        gc       = api->gc;                                             \
-        param    = api->param;                                          \
-        session  = api->session;                                        \
-        cookie   = api->cookie;                                         \
-        global   = api->global;                                         \
-        qs       = api->qs;                                             \
-        data     = api->data;                                           \
-        conf     = api->conf;                                           \
-        fconf    = api->fconf;                                          \
-        worker   = api->worker;                                         \
-        xtime    = api->xtime;                                          \
+        monkey   = dapi->monkey;                                        \
+        map      = dapi->map;                                           \
+        msg      = dapi->msg;                                           \
+        request  = dapi->request;                                       \
+        response = dapi->response;                                      \
+        debug    = dapi->debug;                                         \
+        event    = dapi->event;                                         \
+        console  = dapi->console;                                       \
+        logger   = dapi->logger;                                        \
+        gc       = dapi->gc;                                            \
+        param    = dapi->param;                                         \
+        session  = dapi->session;                                       \
+        cookie   = dapi->cookie;                                        \
+        global   = dapi->global;                                        \
+        qs       = dapi->qs;                                            \
+        data     = dapi->data;                                          \
+        conf     = dapi->conf;                                          \
+        fconf    = dapi->fconf;                                         \
+        worker   = dapi->worker;                                        \
+        xtime    = dapi->xtime;                                         \
                                                                         \
         /* Reference to this web service */                             \
         self = ws;                                                      \
@@ -140,8 +154,8 @@ int _duda_main(struct duda_api_objects *api);
         global->init = duda_global_init;                                \
                                                                         \
         /* Invoke end-user main routine */                              \
-        return _duda_main(api);                                         \
+        return _duda_main(dapi);                                        \
     }                                                                   \
-    int _duda_main(struct duda_api_objects *api)
+    int _duda_main(struct duda_api_objects *dapi)
 
 #endif

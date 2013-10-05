@@ -56,32 +56,32 @@ struct duda_package {
 typedef struct duda_package duda_package_t;
 
 /* Hook defines for packages */
-duda_package_t MK_EXPORT *_duda_package_main();
+duda_package_t MK_EXPORT *_duda_package_main(struct duda_api_objects *dapi);
 
 /* Reference and set Duda API object */
 #define duda_package_main()                                             \
-    _duda_package_bootstrap(struct duda_api_objects *api,               \
+    _duda_package_bootstrap(struct duda_api_objects *dapi,              \
                             struct web_service *ws) {                   \
-        monkey   = api->monkey;                                         \
-        map      = api->map;                                            \
-        msg      = api->msg;                                            \
-        request  = api->request;                                        \
-        response = api->response;                                       \
-        debug    = api->debug;                                          \
-        event    = api->event;                                          \
-        gc       = api->gc;                                             \
-        console  = api->console;                                        \
-        logger   = api->logger;                                         \
-        param    = api->param;                                          \
-        session  = api->session;                                        \
-        cookie   = api->cookie;                                         \
-        global   = api->global;                                         \
-        qs       = api->qs;                                             \
-        fconf    = api->fconf;                                          \
-        conf     = api->conf;                                           \
-        data     = api->data;                                           \
-        worker   = api->worker;                                         \
-        xtime    = api->xtime;                                          \
+        monkey   = dapi->monkey;                                        \
+        map      = dapi->map;                                           \
+        msg      = dapi->msg;                                           \
+        request  = dapi->request;                                       \
+        response = dapi->response;                                      \
+        debug    = dapi->debug;                                         \
+        event    = dapi->event;                                         \
+        gc       = dapi->gc;                                            \
+        console  = dapi->console;                                       \
+        logger   = dapi->logger;                                        \
+        param    = dapi->param;                                         \
+        session  = dapi->session;                                       \
+        cookie   = dapi->cookie;                                        \
+        global   = dapi->global;                                        \
+        qs       = dapi->qs;                                            \
+        fconf    = dapi->fconf;                                         \
+        conf     = dapi->conf;                                          \
+        data     = dapi->data;                                          \
+        worker   = dapi->worker;                                        \
+        xtime    = dapi->xtime;                                         \
         mk_list_init(&duda_map_interfaces);                             \
         mk_list_init(&duda_map_urls);                                   \
         mk_list_init(&duda_global_dist);                                \
@@ -92,9 +92,9 @@ duda_package_t MK_EXPORT *_duda_package_main();
                                                                         \
         self = ws;                                                      \
                                                                         \
-        return _duda_package_main();                                    \
+        return _duda_package_main(dapi);                                \
     }                                                                   \
-    duda_package_t *_duda_package_main()
+    duda_package_t *_duda_package_main(struct duda_api_objects *dapi)
 
 
 /* Define package loader */
@@ -102,4 +102,9 @@ duda_package_t *duda_package_load(const char *pkgname,
                                   struct duda_api_objects *api,
                                   struct web_service *ws);
 
+/*
+#define duda_load_package(obj, pkg)                             \
+    duda_package_t *p = duda_package_load(pkg, dapi, self); \
+    obj = p->api;
+*/
 #endif
