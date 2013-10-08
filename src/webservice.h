@@ -45,6 +45,9 @@
 #include "duda_fconf.h"
 #include "duda_qs.h"
 
+int __ws_loaded;
+struct mk_list *__ws_head;
+
 struct duda_webservice ws_info;
 duda_package_t *pkg_temp;
 
@@ -55,18 +58,17 @@ duda_package_t *pkg_temp;
 
 #define duda_load_package(object, package)                          \
     /* Check if this package was already loaded */                  \
-    int loaded = MK_FALSE;                                          \
-    struct mk_list *head;                                           \
+    __ws_loaded = MK_FALSE;                                         \
                                                                     \
-    mk_list_foreach(head, &duda_ws_packages) {                      \
-        pkg_temp = mk_list_entry(head, duda_package_t, _head);      \
+    mk_list_foreach(__ws_head, &duda_ws_packages) {                 \
+        pkg_temp = mk_list_entry(__ws_head, duda_package_t, _head); \
         if (strcmp(pkg_temp->name, package) == 0) {                 \
-            loaded = MK_TRUE;                                       \
+            __ws_loaded = MK_TRUE;                                  \
             break;                                                  \
         }                                                           \
     }                                                               \
                                                                     \
-    if (loaded == MK_FALSE) {                                       \
+    if (__ws_loaded == MK_FALSE) {                                  \
         pkg_temp = dapi->duda->package_load(package, dapi, self);   \
         mk_list_add(&pkg_temp->_head, &duda_ws_packages);           \
         object = pkg_temp->api;                                     \
