@@ -654,7 +654,6 @@ int duda_request_parse(struct session_request *sr,
             dr->method.len     = val_len;
             last_field = MAP_WS_PARAM;
             if(duda_request_set_method(dr) == -1) {
-                console_debug(dr, "Error: unknown method");
                 return -1;
             }
             allowed_params = dr->_method->num_params;
