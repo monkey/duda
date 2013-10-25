@@ -29,6 +29,7 @@
 #include "mk_memory.h"
 
 typedef struct {
+    int enabled;
     duda_global_t global_key;
     char *name;
 } duda_logger_t;
@@ -99,6 +100,7 @@ static inline int duda_logger_create(duda_logger_t *log, char *name)
     mk_list_add(&ctx->_head, &duda_logger_main_list);
 
     memset(log, 0, sizeof(duda_logger_t));
+    log->enabled = MK_TRUE;
     duda_global_init(&log->global_key, _duda_logger_cb_create, (void *) ctx);
     return 0;
 }
