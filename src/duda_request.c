@@ -47,6 +47,8 @@ struct duda_api_request *duda_request_object()
     r->header_get = duda_request_header_get;
     r->header_cmp = duda_request_header_cmp;
     r->header_contains = duda_request_header_contains;
+    r->validate_socket  = duda_request_validate_socket;
+    r->validate_request = duda_request_validate_request;
 
     return r;
 }
@@ -358,5 +360,47 @@ int duda_request_header_contains(duda_request_t *dr,
     }
 
     return -1;
+}
+
+/*
+ * @METHOD_NAME: validate_socket
+ * @METHOD_DESC: Validate if a given socket number belongs to a Duda request.
+ * @METHOD_PARAM: socket the socket file descriptor number.
+ * @METHOD_RETURN: If there is a Duda request holding the given socket number, it
+ * return MK_TRUE, otherwise MK_FALSE.
+ */
+int duda_request_validate_socket(int socket)
+{
+    duda_request_t *dr;
+
+    dr = duda_dr_list_get(socket);
+    if (dr) {
+        return MK_TRUE;
+    }
+
+    return MK_FALSE;
+}
+
+/*
+ * @METHOD_NAME: validate_request
+ * @METHOD_DESC: Validate if a given Duda request context is an active connection.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type.
+ * @METHOD_RETURN: If the Duda request context is valid it return MK_TRUE, otherwise
+ * MK_FALSE.
+ */
+int duda_request_validate_request(duda_request_t *dr)
+{
+    duda_request_t *tmp;
+
+    tmp = duda_dr_list_get(dr->socket);
+    if (!tmp) {
+        return MK_FALSE;
+    }
+
+    if (tmp != dr || tmp->socket != dr->socket) {
+        return MK_FALSE;
+    }
+
+    return MK_TRUE;
 }
 

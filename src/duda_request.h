@@ -39,6 +39,8 @@ struct duda_api_request {
     int (*header_contains) (duda_request_t *dr,
                             const char *key,
                             const char *val);
+    int (*validate_socket) (int);
+    int (*validate_request) (duda_request_t *);
 };
 
 /* functions */
@@ -57,5 +59,7 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key,
                             const char *val);
 int duda_request_header_contains(duda_request_t *dr, const char *key,
                                  const char *val);
+int duda_request_validate_socket(int socket);
+int duda_request_validate_request(duda_request_t *dr);
 
 #endif
