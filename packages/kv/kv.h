@@ -28,17 +28,18 @@
 #include "webservice.h"
 
 /* fetch return values */
-#define KV_OK         UNQLITE_OK
-#define KV_BUSY       UNQLITE_BUSY
-#define KV_NOTFOUND   UNQLITE_NOTFOUND
-#define KV_IOERR      UNQLITE_IOERR
-#define KV_NOMEM      UNQLITE_NOMEM
+#define DUDA_KV_OK         UNQLITE_OK
+#define DUDA_KV_BUSY       UNQLITE_BUSY
+#define DUDA_KV_NOTFOUND   UNQLITE_NOTFOUND
+#define DUDA_KV_IOERR      UNQLITE_IOERR
+#define DUDA_KV_NOMEM      UNQLITE_NOMEM
 
 #define KV_CURSOR_FOREACH(c) \
     for (kv->cursor_first(c); c && kv->cursor_valid(c); kv->cursor_next(c))
 
 typedef unqlite           kv_conn_t;
 typedef unqlite_kv_cursor kv_cursor_t;
+typedef unqlite_int64     kv_int_t;
 
 struct duda_api_kv {
     int (*init)  (unqlite **);

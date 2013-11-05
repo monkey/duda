@@ -18,6 +18,7 @@ src/duda_worker.c
 src/duda_xtime.c
 packages/base64
 packages/json
+packages/kv
 packages/sha1
 packages/sha256
 packages/sqlite

@@ -24,13 +24,123 @@
 #include "unqlite.h"
 #include "kv.h"
 
+
 /*
- * Initialize the Key-Value store engine in memory
+ * @OBJ_NAME: kv
+ * @OBJ_MENU: Key/Value Store
+ * @OBJ_DESC: This object provides an in memory Key/Value (KV) store engine. It allow
+ * the creation of many instances across the service, is thread safe and can be used
+ * inside any callback or customized worker. This package is a wrapper of the third party
+ * Unqlite KV store which is distributed with Duda I/O stack.
+ * @PKG_HEADER: #include "packages/kv/kv.h"
+ * @PKG_INIT: duda_load_package(kv, "kv");
  */
+
+
+/*
+ * @METHOD_NAME: init
+ * @METHOD_DESC: It initialize a KV store in memory. This method must be invoked from
+ * duda_main().
+ * @METHOD_PROTO: int init(kv_conn_t *store);
+ * @METHOD_PARAM: store a pointer of the KV store connection type. It must be passed
+ * as a reference.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK, any other return value means an
+ * error allocating memory for the store (unlikely).
+ */
+
 int kv_init(unqlite **conx)
 {
     return unqlite_open(conx, ":mem:", UNQLITE_OPEN_IN_MEMORY);
 }
+
+/*
+ * @METHOD_NAME: close
+ * @METHOD_DESC: It release all resources associated to a KV store and perform a clean
+ * close.
+ * @METHOD_PROTO: int close(kv_conn_t *store);
+ * @METHOD_PARAM: store a pointer of the KV store connection type.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
+
+/*
+ * @METHOD_NAME: store
+ * @METHOD_DESC: Create a new record into the database, if it already exist, the new data
+ * will overwrite the old one.
+ * @METHOD_PROTO: int store(kv_conn_t *store, void *key, int key_len, void *data, kv_int_t data_len)
+ * @METHOD_PARAM: store    a pointer of the KV store connection type.
+ * @METHOD_PARAM: key      the key name. It cannot be NULL.
+ * @METHOD_PARAM: key_len  the key string length, if is unknown a -1 can be passed.
+ * @METHOD_PARAM: data     the data that will be associated to the key.
+ * @METHOD_PARAM: data_len the data length in bytes.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
+
+/*
+ * @METHOD_NAME: store_fmt
+ * @METHOD_DESC: Create a new record into the database, if it already exist, the new data
+ * will overwrite the old one. Very similar to store() method but this uses a printf-like
+ * style to format a data string.
+ * @METHOD_PROTO: int store_fmt(kv_conn_t *store, void *key, int key_len, char *format, ...)
+ * @METHOD_PARAM: store    a pointer of the KV store connection type.
+ * @METHOD_PARAM: key      the key name. It cannot be NULL.
+ * @METHOD_PARAM: key_len  the key string length, if is unknown a -1 can be passed.
+ * @METHOD_PARAM: format   the format string, similar to printf.
+ * @METHOD_PARAM: ...      the format arguments.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
+
+/*
+ * @METHOD_NAME: append
+ * @METHOD_DESC: It appends a bytes of data to the given key. If the key do not exists it's
+ * created.
+ * @METHOD_PROTO: int append(kv_conn_t *store, void *key, int key_len, char *format, ...)
+ * @METHOD_PARAM: store    a pointer of the KV store connection type.
+ * @METHOD_PARAM: key      the key name. It cannot be NULL.
+ * @METHOD_PARAM: key_len  the key string length, if is unknown a -1 can be passed.
+ * @METHOD_PARAM: data     the data that will be associated to the key.
+ * @METHOD_PARAM: data_len the data length in bytes.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
+
+/*
+ * @METHOD_NAME: append_fmt
+ * @METHOD_DESC: It appends a bytes of data to the given key. If the key do not exists it's
+ * created. Very similar to append() method, but this uses a printf-like style to format a
+ * data string.
+ * @METHOD_PROTO: int append_fmt(kv_conn_t *store, void *key, int key_len, char *format, ...)
+ * @METHOD_PARAM: store    a pointer of the KV store connection type.
+ * @METHOD_PARAM: key      the key name. It cannot be NULL.
+ * @METHOD_PARAM: key_len  the key string length, if is unknown a -1 can be passed.
+ * @METHOD_PARAM: format   the format string, similar to printf.
+ * @METHOD_PARAM: ...      the format arguments.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
+
+/*
+ * @METHOD_NAME: fetch
+ * @METHOD_DESC: It appends a bytes of data to the given key. If the key do not exists it's
+ * created. Very similar to append() method, but this uses a printf-like style to format a
+ * data string.
+ * @METHOD_PROTO: int append_fmt(kv_conn_t *store, void *key, int key_len, char *format, ...)
+ * @METHOD_PARAM: store    a pointer of the KV store connection type.
+ * @METHOD_PARAM: key      the key name. It cannot be NULL.
+ * @METHOD_PARAM: key_len  the key string length, if is unknown a -1 can be passed.
+ * @METHOD_PARAM: format   the format string, similar to printf.
+ * @METHOD_PARAM: ...      the format arguments.
+ * @METHOD_RETURN: On success it returns DUDA_KV_OK or: DUDA_KV_BUSY when the store is busy
+ * due to a previous lock, DUDA_KV_IOERR due to specific OS error or DUDA_KV_ABORT when
+ * another thread have already released the store handle.
+ */
 
 struct duda_api_kv *get_kv_api()
 {
