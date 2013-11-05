@@ -197,13 +197,18 @@ int duda_logger_init()
  * section from the virtual host definition. If you are using Duda Client Manager (DudaC)
  * this is automatically configured when the 'logs' directory exists in the web service
  * source code tree.
+ *
+ * As an additional feature, each log context can be enabled/disabled on run time, to
+ * accomplish this just change the field 'enabled' to MK_TRUE or MK_FALSE,
+ * e.g: context.enabled = MK_FALSE.
+ *
  */
 
 /*
  * @METHOD_NAME: duda_logger_create
- * @METHOD_DESC: This function initialize a Log Writter context for the web service, it can
- * be used many times as required to initialize multiple contexts. It must be used ONLY
- * inside duda_main().
+ * @METHOD_DESC: This function initialize a Log Writter context for the web service,
+ * it can be used many times as required to initialize multiple contexts. It must be
+ * used ONLY inside duda_main().
  * @METHOD_PROTO: int duda_logger_create(duda_logger_t *context, char *name)
  * @METHOD_PARAM: context the Log Writer context, this is the unique identifier for logs
  * associated to 'name'.
@@ -213,8 +218,9 @@ int duda_logger_init()
 
 /*
  * @METHOD_NAME: print
- * @METHOD_DESC: It format and prints a customized message to the given Log Writer context. At
- * the moment the only restriction of this method is that it cannot be used from duda_main().
+ * @METHOD_DESC: It format and prints a customized message to the given Log Writer
+ * context. At the moment the only restriction of this method is that it cannot be used
+ * from duda_main().
  * @METHOD_PROTO: int print(duda_logger_t *context, char *fmt, ...)
  * @METHOD_PARAM: context the Log Writer context initialized previously from duda_main().
  * @METHOD_PARAM: fmt it specifies the string format, much like printf works.
@@ -231,6 +237,10 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
     va_list ap;
     duda_global_t *gl = &key->global_key;
     duda_logger_context_t *ctx;
+
+    if (key->enabled == MK_FALSE) {
+        return 0;
+    }
 
     ctx = duda_global_get(*gl);
     if (!ctx) {
