@@ -447,7 +447,7 @@ void duda_conf_bind_messages(struct web_service *ws)
  */
 void duda_conf_service_name(struct web_service *ws, const char *name)
 {
-    ws->name.data = strdup(name);
+    ws->name.data = mk_api->str_dup(name);
     ws->name.len  = strlen(name);
 }
 
