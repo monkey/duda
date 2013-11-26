@@ -83,7 +83,11 @@ struct duda_config *duda_fconf_read_conf(struct web_service *ws, const char *pat
 
     /* Compose full path */
     mk_api->str_build(&tmp, &len, "%s/%s", ws->confdir.data, path);
-    mk_api->file_get_info(tmp, &finfo);
+    if (mk_api->file_get_info(tmp, &finfo) == -1) {
+        mk_api->mem_free(tmp);
+        return NULL;
+    }
+
 
     if (finfo.is_file == MK_FALSE) {
         mk_api->mem_free(tmp);
