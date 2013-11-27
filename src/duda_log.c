@@ -271,7 +271,7 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
 
         size *= 2;  /* twice the old size */
         if ((np = realloc (p, size)) == NULL) {
-            free(p);
+            monkey->mem_free(p);
             return -1;
         } else {
             p = np;
