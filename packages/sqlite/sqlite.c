@@ -2,7 +2,7 @@
 
 /*  Duda I/O
  *  --------
- *  Copyright (C) 2012, Eduardo Silva P. <edsiper@gmail.com>
+ *  Copyright (C) 2013, Eduardo Silva P. <edsiper@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ int sql_init()
  * @METHOD_DESC: It open a connection to a SQLite database file. This function
  * must be invoked from duda_main() as the connection is persistent as long as
  * the service runs.
- * @METHOD_PROTO: sqlite3 open(const char *path);
+ * @METHOD_PROTO: sqlite3 open(const char *path)
  * @METHOD_PARAM: path the SQLite database file path
  * @METHOD_RETURN: On success it returns the connection handler. On
  * error it perform an explicit exit.
