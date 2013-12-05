@@ -87,7 +87,7 @@ int sql_dump(sqlite3 *db, const char *query, sqlite3_stmt **handle)
  * @METHOD_DESC: Executes a SQL query and set a callback function to be invoked
  * per row retrieved.
  * @METHOD_PROTO: int exec(duda_request_t *dr, sqlite3 *db, const char *query,
- *          int (*callback) (void *, int char **, char **), void *data)
+ *          int (*callback) (void *, int, char **, char **), void *data)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: db the database connection handler
  * @METHOD_PARAM: query the SQL query
