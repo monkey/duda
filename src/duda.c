@@ -929,8 +929,8 @@ int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
     if (sr->uri_processed.len > 1) {
 
         /* Check for a DDR request */
-        if (document_root && strncmp(sr->uri_processed.data, "/ddr", 4) == 0) {
-            duda_override_docroot(sr, 4, document_root, strlen(document_root));
+        if (document_root.data && strncmp(sr->uri_processed.data, "/ddr", 4) == 0) {
+            duda_override_docroot(sr, 4, document_root.data, document_root.len);
             return MK_PLUGIN_RET_NOT_ME;
         }
 

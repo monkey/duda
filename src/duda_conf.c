@@ -121,6 +121,7 @@ int duda_conf_main_init(const char *confdir)
 {
     int ret = 0;
     unsigned long len;
+    char *tmp;
     char *conf_path = NULL;
     struct mk_config_section *section;
     struct mk_config *conf;
@@ -165,8 +166,17 @@ int duda_conf_main_init(const char *confdir)
         }
 
         /* Duda Document Root (aka '/ddr') */
-        document_root = mk_api->config_section_getval(section, "DocumentRoot",
-                                                      MK_CONFIG_VAL_STR);
+        tmp = mk_api->config_section_getval(section, "DocumentRoot",
+                                            MK_CONFIG_VAL_STR);
+        if (tmp) {
+            document_root.data = tmp;
+            document_root.len  = strlen(tmp);
+        }
+        else {
+            document_root.data = NULL;
+            document_root.len  = 0;
+        }
+
         if (mk_api->file_get_info(packages_root, &finfo) != 0) {
             mk_err("Duda: Invalid document root path");
             exit(EXIT_FAILURE);
