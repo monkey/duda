@@ -58,7 +58,7 @@ struct duda_api_sha1 *get_sha1_api()
     struct duda_api_sha1 *sha1;
 
     /* Alloc object */
-    sha1 = malloc(sizeof(struct duda_api_sha1));
+    sha1 = monkey->mem_alloc(sizeof(struct duda_api_sha1));
 
     /* Map API calls */
     sha1->encode = sha1_encode;
