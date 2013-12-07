@@ -56,7 +56,7 @@ struct duda_package {
 typedef struct duda_package duda_package_t;
 
 /* Hook defines for packages */
-duda_package_t MK_EXPORT *_duda_package_main(struct duda_api_objects *dapi);
+duda_package_t MK_EXPORT *_duda_package_main();
 
 /* Reference and set Duda API object */
 #define duda_package_main()                                             \
@@ -92,9 +92,9 @@ duda_package_t MK_EXPORT *_duda_package_main(struct duda_api_objects *dapi);
                                                                         \
         self = ws;                                                      \
                                                                         \
-        return _duda_package_main(dapi);                                \
+        return _duda_package_main();                                    \
     }                                                                   \
-    duda_package_t *_duda_package_main(struct duda_api_objects *dapi)
+    duda_package_t *_duda_package_main()
 
 
 /* Define package loader */
