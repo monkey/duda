@@ -507,6 +507,12 @@ int _mkp_core_prctx(struct server_config *config)
     struct web_service *ws;
     struct plugin *mk_plugin;
 
+    /* Load web services */
+    duda_load_services();
+
+    /* Initialize Logger internals */
+    duda_logger_init();
+
     /*
      * lookup this plugin instance in Monkey internals and create a
      * assign the reference to the global reference 'duda_plugin'.
@@ -555,11 +561,6 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     /* Load configuration */
     duda_conf_main_init(confdir);
     duda_conf_vhost_init();
-
-    duda_load_services();
-
-    /* Initialize Logger internals */
-    duda_logger_init();
 
     return 0;
 }
