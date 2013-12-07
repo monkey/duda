@@ -378,7 +378,6 @@ void duda_conf_messages_to(struct web_service *ws)
 {
     int buf_size = 1024;
     char path[buf_size];
-
     time_t now;
     struct tm *current;
 

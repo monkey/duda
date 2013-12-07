@@ -63,7 +63,8 @@ struct duda_api_request *duda_request_object()
  */
 int duda_request_is_data(duda_request_t *dr)
 {
-    if (dr->sr->method != HTTP_METHOD_POST && dr->sr->method != HTTP_METHOD_PUT) {
+    if (dr->sr->method != MK_HTTP_METHOD_POST &&
+        dr->sr->method != MK_HTTP_METHOD_PUT) {
         return MK_FALSE;
     }
 
@@ -82,7 +83,7 @@ int duda_request_is_data(duda_request_t *dr)
  */
 int duda_request_is_get(duda_request_t *dr)
 {
-    if (dr->sr->method == HTTP_METHOD_GET) {
+    if (dr->sr->method == MK_HTTP_METHOD_GET) {
         return MK_TRUE;
     }
 
@@ -97,7 +98,7 @@ int duda_request_is_get(duda_request_t *dr)
  */
 int duda_request_is_post(duda_request_t *dr)
 {
-    if (dr->sr->method == HTTP_METHOD_POST) {
+    if (dr->sr->method == MK_HTTP_METHOD_POST) {
         return MK_TRUE;
     }
 
@@ -112,7 +113,7 @@ int duda_request_is_post(duda_request_t *dr)
  */
 int duda_request_is_head(duda_request_t *dr)
 {
-    if (dr->sr->method == HTTP_METHOD_HEAD) {
+    if (dr->sr->method == MK_HTTP_METHOD_HEAD) {
         return MK_TRUE;
     }
 
@@ -127,7 +128,7 @@ int duda_request_is_head(duda_request_t *dr)
  */
 int duda_request_is_put(duda_request_t *dr)
 {
-    if (dr->sr->method == HTTP_METHOD_PUT) {
+    if (dr->sr->method == MK_HTTP_METHOD_PUT) {
         return MK_TRUE;
     }
 
@@ -142,7 +143,7 @@ int duda_request_is_put(duda_request_t *dr)
  */
 int duda_request_is_delete(duda_request_t *dr)
 {
-    if (dr->sr->method == HTTP_METHOD_DELETE) {
+    if (dr->sr->method == MK_HTTP_METHOD_DELETE) {
         return MK_TRUE;
     }
 
