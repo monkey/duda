@@ -250,12 +250,16 @@ int duda_event_delete(int sockfd)
  */
 int duda_event_signal(uint64_t val)
 {
+    int r;
     struct mk_list *head;
     struct duda_event_signal_channel *esc;
 
     mk_list_foreach(head, &duda_event_signals_list) {
         esc = mk_list_entry(head, struct duda_event_signal_channel, _head);
-        write(esc->fd_w, &val, sizeof(uint64_t));
+        r = write(esc->fd_w, &val, sizeof(uint64_t));
+        if (r <= 0) {
+            perror("write");
+        }
     }
 
     return 0;
