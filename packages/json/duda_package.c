@@ -338,7 +338,7 @@ struct duda_api_json *get_json_api()
     struct duda_api_json *json;
 
     /* Alloc object */
-    json = malloc(sizeof(struct duda_api_json));
+    json = monkey->mem_alloc(sizeof(struct duda_api_json));
 
     /* Map API calls */
     json->create_null          = json_create_null;
