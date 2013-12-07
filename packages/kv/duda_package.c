@@ -147,7 +147,7 @@ struct duda_api_kv *get_kv_api()
     struct duda_api_kv *kv;
 
     /* Alloc object */
-    kv = malloc(sizeof(struct duda_api_kv));
+    kv = monkey->mem_alloc(sizeof(struct duda_api_kv));
     kv->init           = kv_init;
     kv->close          = unqlite_close;
     kv->store          = unqlite_kv_store;
