@@ -202,7 +202,7 @@ void ws_broadcast_worker(void *args)
     efd = epoll_create(100);
     event.data.fd = br->pipe[0];
     event.events = EPOLLERR | EPOLLHUP | EPOLLIN;
-    events = malloc(n_events * sizeof(struct epoll_event));
+    events = monkey->mem_alloc(n_events * sizeof(struct epoll_event));
     epoll_ctl(efd, EPOLL_CTL_ADD, br->pipe[0], &event);
 
     /* loop! */

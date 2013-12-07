@@ -34,7 +34,7 @@ struct duda_api_websockets *get_websockets_api()
     struct duda_api_websockets *ws;
 
     /* Alloc object */
-    ws = malloc(sizeof(struct duda_api_websockets));
+    ws = monkey->mem_alloc(sizeof(struct duda_api_websockets));
     ws->handshake     = ws_handshake;
     ws->write         = ws_write;
     ws->broadcast     = ws_broadcast;
