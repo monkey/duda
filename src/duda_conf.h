@@ -29,7 +29,7 @@
 
 char *services_root;  /* Location of web services   */
 char *packages_root;  /* Duda packages path         */
-char *document_root;  /* Duda Document Root (/ddr)  */
+mk_pointer document_root;  /* Duda Document Root (/ddr)  */
 
 /*
  * List that contains memory references to each service

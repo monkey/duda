@@ -87,12 +87,15 @@ int sql_dump(sqlite3 *db, const char *query, sqlite3_stmt **handle)
  * @METHOD_DESC: Executes a SQL query and set a callback function to be invoked
  * per row retrieved.
  * @METHOD_PROTO: int exec(duda_request_t *dr, sqlite3 *db, const char *query,
- *          int (*callback) (void *, int char **, char **), void *data)
+ *          int (*callback) (void *, int, char **, char **), void *data)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: db the database connection handler
  * @METHOD_PARAM: query the SQL query
  * @METHOD_PARAM: callback the callback function to be called when a row is fetched
- * @METHOD_PARAM: data any user data that wants to pass to the callback
+ * @METHOD_PARAM: data user data to be passed to the callback function. Once
+ * the callback is invoked, the data that you refered is packaged in a new
+ * structure of type 'struct sqlite_cb_data' that contains reference fields named
+ * 'dr' and 'data' respectively.
  * @METHOD_RETURN: On success it returns zero, otherwise it returns -1 on error
  */
 int sql_exec(duda_request_t *dr, sqlite3 *db, const char *query,
