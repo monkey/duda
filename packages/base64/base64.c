@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "duda_package.h"
 #include "base64.h"
 
 static const unsigned char base64_table[64] =
@@ -64,7 +65,7 @@ unsigned char *base64_encode(const unsigned char *src, size_t len,
 	olen = len * 4 / 3 + 4; /* 3-byte blocks to 4-byte */
 	olen += olen / 72; /* line feeds */
 	olen++; /* nul termination */
-	out = malloc(olen);
+	out = monkey->mem_alloc(olen);
 	if (out == NULL)
 		return NULL;
 
@@ -146,7 +147,7 @@ unsigned char *base64_decode(const unsigned char *src, size_t len,
     if (count % 4)
         return NULL;
 
-    pos = out = malloc(count);
+    pos = out = monkey->mem_alloc(count);
     if (out == NULL)
         return NULL;
 
