@@ -270,7 +270,7 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
             break;
 
         size *= 2;  /* twice the old size */
-        if ((np = realloc (p, size)) == NULL) {
+        if ((np = mk_api->mem_realloc(p, size)) == NULL) {
             monkey->mem_free(p);
             return -1;
         } else {

@@ -224,7 +224,7 @@ void duda_console_write(duda_request_t *dr,
             break;
 
         size *= 2;  /* twice the old size */
-        if ((np = realloc (p, size)) == NULL) {
+        if ((np = mk_api->mem_realloc (p, size)) == NULL) {
             free(p);
             return;
         } else {
