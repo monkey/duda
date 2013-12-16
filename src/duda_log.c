@@ -33,6 +33,7 @@
 #include "duda_map.h"
 #include "duda_api.h"
 #include "duda_conf.h"
+#include "duda_stats.h"
 
 /*
  * Logger writer: this function runs in a separate thread and its main job
@@ -52,7 +53,6 @@ void duda_logger_writer(void *arg)
 
     duda_logger_context_t *ctx;
 
-
     int efd, max_events = 256;
     int i, bytes, err;
     int flog;
@@ -61,6 +61,7 @@ void duda_logger_writer(void *arg)
     int timeout;
 
     mk_api->worker_rename("duda:logwriter");
+    duda_stats_worker_init();
 
     /* pipe_size:
      * ----------

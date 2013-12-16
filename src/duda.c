@@ -28,6 +28,7 @@
 #include "duda_qs.h"
 #include "duda_map.h"
 #include "duda_conf.h"
+#include "duda_stats.h"
 #include "duda_event.h"
 #include "duda_queue.h"
 #include "duda_console.h"
@@ -189,7 +190,11 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         /* app/console/map */
         cs_method = api->map->method_builtin_new("map", duda_console_cb_map, 0);
         api->map->interface_add_method(cs_method, cs_iface);
+        //mk_list_add(&cs_iface->_head, ws->map_interfaces);
 
+        /* app/console/stats */
+        cs_method = api->map->method_builtin_new("stats", duda_stats_cb, 0);
+        api->map->interface_add_method(cs_method, cs_iface);
         mk_list_add(&cs_iface->_head, ws->map_interfaces);
 
         /* Lookup callback functions for each registered method */
@@ -409,6 +414,8 @@ void _mkp_core_thctx()
     duda_global_t *entry_gl;
     void *data;
 
+    duda_stats_worker_init();
+
     /* Events write list */
     list_events_write = mk_api->mem_alloc_z(sizeof(struct mk_list));
     mk_list_init(list_events_write);
@@ -506,6 +513,9 @@ int _mkp_core_prctx(struct server_config *config)
     struct mk_list *head;
     struct web_service *ws;
     struct plugin *mk_plugin;
+
+    /* Initialize stats context */
+    duda_stats_init();
 
     /* Load web services */
     duda_load_services();
