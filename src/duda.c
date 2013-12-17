@@ -740,22 +740,30 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
     new_path_len = (sr->uri_processed.len + len);
 
     /*
-     * Is the new path length minor than MK_PATH_BASE ?, sr->real_path_static
-     * have a length of MK_PATH_BASE
+     * Each session request (sr) have two important fields on this context: 
+     *
+     *  - real_path_static
+     *  - real_path
+     *
+     * real_path_static is a fixed size string buffer of MK_PATH_BASE size,
+     * as of now this is 128 bytes. In the other side real_path points to 
+     * real_path_static, if for some reason we need more than MK_PATH_BASE size 
+     * and also the current buffer content is less than new_path_len, we need to
+     * allocate a dynamic buffer on real_path. This last one is used everywhere 
+     * on Monkey and Duda.
      */
-    if (new_path_len < MK_PATH_BASE) {
+    if (new_path_len > sr->real_path.len && new_path_len > MK_PATH_BASE) {
         if (sr->real_path.data != sr->real_path_static) {
-            mk_api->mem_free(sr->real_path.data);
-            sr->real_path.data = sr->real_path_static;
+            tmp = mk_api->mem_realloc(sr->real_path.data, new_path_len + 1);
+            sr->real_path.data = tmp;
+        }
+        else {
+            sr->real_path.data = mk_api->mem_alloc(new_path_len + 1);
         }
     }
-    else {
-        if (new_path_len >= sr->real_path.len) {
-            tmp = mk_api->mem_realloc(sr->real_path.data, new_path_len + 1);
-            if (tmp) {
-                sr->real_path.data = tmp;
-            }
-        }
+
+    if (!sr->real_path.data) {
+        return -1;
     }
 
     /* Compose new file path */
