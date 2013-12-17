@@ -23,8 +23,9 @@
 #define DUDA_QS_H
 
 struct duda_api_qs {
-    int (*count) (duda_request_t *);
-    char *(*get) (duda_request_t *, const char *);
+    int (*count)    (duda_request_t *);
+    char *(*get)    (duda_request_t *, const char *);
+    char *(*get_id) (duda_request_t *, int);
     int (*cmp) (duda_request_t *, const char *, const char *);
 };
 
@@ -32,6 +33,7 @@ struct duda_api_qs {
 int duda_qs_parse(duda_request_t *dr);
 int duda_qs_count(duda_request_t *dr);
 char *duda_qs_get(duda_request_t *dr, const char *key);
+char *duda_qs_get_id(duda_request_t *dr, int idx);
 int duda_qs_cmp(duda_request_t *dr, const char *key, const char *value);
 
 struct duda_api_qs *duda_qs_object();

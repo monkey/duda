@@ -37,9 +37,10 @@ struct duda_api_qs *duda_qs_object()
     struct duda_api_qs *qs;
 
     qs = mk_api->mem_alloc(sizeof(struct duda_api_qs));
-    qs->count = duda_qs_count;
-    qs->get   = duda_qs_get;
-    qs->cmp   = duda_qs_cmp;
+    qs->count  = duda_qs_count;
+    qs->get    = duda_qs_get;
+    qs->get_id = duda_qs_get_id;
+    qs->cmp    = duda_qs_cmp;
 
     return qs;
 };
@@ -62,6 +63,7 @@ int duda_qs_count(duda_request_t *dr)
  * @METHOD_DESC: Return a new buffer with the value of the given key from the
  * query string. The new buffer is automatically freed once the service finish it
  * works.
+ * @METHOD_PROTO: char *get(duda_request_t *dr, const char *key);
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: key the name of the key
  * @METHOD_RETURN: Upon successful completion it returns the new memory buffer
@@ -91,6 +93,37 @@ char *duda_qs_get(duda_request_t *dr, const char *key)
     }
 
     return NULL;
+}
+
+/*
+ * @METHOD_NAME: get_id
+ * @METHOD_DESC: Lookup a query string variable given it ID or numeric position
+ * (starting from zero). It will return a new buffer with the value of the given
+ * key. The new buffer is automatically freed once the service finish it works.
+ * @METHOD_PROTO: char *get_id(duda_request_t *dr, int idx);
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: idx the variable ID or numeric position.
+ * @METHOD_RETURN: Upon successful completion it returns the new memory buffer
+ * with the value of the key specified, on error returns NULL.
+ */
+char *duda_qs_get_id(duda_request_t *dr, int idx)
+{
+    char *value = NULL;
+
+    if (dr->qs.count <= 0) {
+        return NULL;
+    }
+
+    if (idx >= dr->qs.count) {
+        return NULL;
+    }
+
+    value = mk_api->str_copy_substr(dr->qs.entries[idx].value.data, 0,
+                                    (int) dr->qs.entries[idx].value.len);
+
+    /* Register the new memory buffer into the garbage collector */
+    duda_gc_add(dr, value);
+    return value;
 }
 
 /*
