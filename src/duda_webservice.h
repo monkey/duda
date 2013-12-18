@@ -67,6 +67,9 @@ struct web_service {
 
     /* node entry associated with services_loaded */
     struct mk_list _head_loaded;
+
+    /* Callbacks */
+    void (*exit_cb) ();
 };
 
 #endif

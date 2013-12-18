@@ -22,6 +22,7 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
 
+#include "mk_list.h"
 #include "MKPlugin.h"
 #include "duda.h"
 #include "duda_gc.h"
@@ -138,6 +139,24 @@ void *duda_load_symbol(void *handle, const char *symbol)
     return s;
 }
 
+/*
+ * get specific symbol from the library in passive mode, do not
+ * warn if the symbol do not exists.
+ */
+void *duda_load_symbol_passive(void *handle, const char *symbol)
+{
+    void *s;
+    char *err;
+
+    dlerror();
+    s = dlsym(handle, symbol);
+    if ((err = dlerror()) != NULL) {
+        return NULL;
+    }
+
+    return s;
+}
+
 /* Register the service interfaces into the main list of web services */
 int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 {
@@ -163,6 +182,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
         ws->loggers  = duda_load_symbol(ws->handler, "duda_logger_main_list");
         ws->setup    = duda_load_symbol(ws->handler, "_setup");
+        ws->exit_cb  = duda_load_symbol_passive(ws->handler, "duda_exit");
 
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
@@ -740,16 +760,16 @@ int duda_override_docroot(struct session_request *sr, int uri_offset, char *path
     new_path_len = (sr->uri_processed.len + len);
 
     /*
-     * Each session request (sr) have two important fields on this context: 
+     * Each session request (sr) have two important fields on this context:
      *
      *  - real_path_static
      *  - real_path
      *
      * real_path_static is a fixed size string buffer of MK_PATH_BASE size,
-     * as of now this is 128 bytes. In the other side real_path points to 
-     * real_path_static, if for some reason we need more than MK_PATH_BASE size 
+     * as of now this is 128 bytes. In the other side real_path points to
+     * real_path_static, if for some reason we need more than MK_PATH_BASE size
      * and also the current buffer content is less than new_path_len, we need to
-     * allocate a dynamic buffer on real_path. This last one is used everywhere 
+     * allocate a dynamic buffer on real_path. This last one is used everywhere
      * on Monkey and Duda.
      */
     if (new_path_len > sr->real_path.len && new_path_len > MK_PATH_BASE) {
@@ -928,10 +948,33 @@ struct web_service *duda_get_service_from_uri(struct session_request *sr,
     return NULL;
 }
 
-
+/* Hook for when Monkey core start exiting: SIGTERM */
 void _mkp_exit()
 {
+    struct mk_list *head_vh;
+    struct mk_list *head_ws, *head_temp_ws;
+    struct vhost_services *entry_vs;
+    struct web_service *entry_ws;
+    struct host_alias *alias;
 
+    mk_info("Duda: exiting, shutting down services");
+
+    mk_list_foreach(head_vh, &services_list) {
+        entry_vs = mk_list_entry(head_vh, struct vhost_services, _head);
+
+        alias = mk_list_entry_first(&entry_vs->host->server_names,
+                                    struct host_alias,
+                                    _head);
+        mk_info("      [-] virtual host '%s'", alias->name);
+
+        mk_list_foreach_safe(head_ws, head_temp_ws, &entry_vs->services) {
+            entry_ws = mk_list_entry(head_ws, struct web_service, _head);
+            mk_info("          [-] shutdown service: %s", entry_ws->name.data);
+            if (entry_ws->exit_cb) {
+                entry_ws->exit_cb();
+            }
+        }
+    }
 }
 
 /*
