@@ -638,7 +638,8 @@ int duda_request_set_method(duda_request_t *dr)
 }
 
 
-int duda_request_parse(struct session_request *sr,
+int duda_request_parse(struct web_service *web_service,
+                       struct session_request *sr,
                        struct duda_request *dr)
 {
     short int last_field = MAP_WS_APP_NAME;
@@ -668,11 +669,18 @@ int duda_request_parse(struct session_request *sr,
             val_len = len - i;
             end = len;
         }
-
         switch (last_field) {
         case MAP_WS_APP_NAME:
-            dr->appname.data = sr->uri_processed.data + i;
-            dr->appname.len  = val_len;
+            if (web_service->is_root == MK_FALSE) {
+                dr->appname.data = sr->uri_processed.data + i;
+                dr->appname.len  = val_len;
+            }
+            else {
+                dr->appname.data = web_service->name.data;
+                dr->appname.len  = web_service->name.len;
+                last_field = MAP_WS_METHOD;
+                end = i - 1;
+            }
             last_field = MAP_WS_INTERFACE;
             break;
         case MAP_WS_INTERFACE:
@@ -684,6 +692,7 @@ int duda_request_parse(struct session_request *sr,
             dr->method.data    = sr->uri_processed.data + i;
             dr->method.len     = val_len;
             last_field = MAP_WS_PARAM;
+
             if(duda_request_set_method(dr) == -1) {
                 return -1;
             }
@@ -893,8 +902,7 @@ int duda_service_run(struct plugin *plugin,
     duda_qs_parse(dr);
 
     /* Parse request for 'Duda Map' format */
-    if ((duda_request_parse(sr, dr) != 0) || (!dr->_method)) {
-
+    if ((duda_request_parse(web_service, sr, dr) != 0) || (!dr->_method)) {
         /* Static Map */
         if (duda_map_static_check(dr) == 0) {
             return 0;
@@ -987,38 +995,58 @@ int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
     struct vhost_services *vs_entry, *vs_match=NULL;
     struct web_service *web_service;
 
+    /* Match virtual host */
+    mk_list_foreach(head, &services_list) {
+        vs_entry = mk_list_entry(head, struct vhost_services, _head);
+        if (sr->host_conf == vs_entry->host) {
+            vs_match = vs_entry;
+            break;
+        }
+    }
+
+    if (!vs_match) {
+        return MK_PLUGIN_RET_NOT_ME;
+    }
+
+    /*
+     * Check for a DDR request: a DDR is a fixed path for generic static files
+     * distributed by Duda I/O, as an example we can mention Twitter Bootstrap
+     * that is used to render the console interfaces.
+     */
+    if (document_root.data && strncmp(sr->uri_processed.data, "/ddr", 4) == 0) {
+        duda_override_docroot(sr, 4, document_root.data, document_root.len);
+        return MK_PLUGIN_RET_NOT_ME;
+    }
+
+    /*
+     * Check if the current Virtual Host contains a service who wants to
+     * be Root
+     */
+    if (vs_match->root_service != NULL) {
+
+        /* Run the service directly */
+        if (duda_service_run(plugin, cs, sr, vs_match->root_service) == 0) {
+            return MK_PLUGIN_RET_CONTINUE;
+        }
+        else {
+            return MK_PLUGIN_RET_NOT_ME;
+        }
+    }
+
     /* we don't care about '/' request */
     if (sr->uri_processed.len > 1) {
-
-        /* Check for a DDR request */
-        if (document_root.data && strncmp(sr->uri_processed.data, "/ddr", 4) == 0) {
-            duda_override_docroot(sr, 4, document_root.data, document_root.len);
-            return MK_PLUGIN_RET_NOT_ME;
-        }
-
-        /* Match virtual host */
-        mk_list_foreach(head, &services_list) {
-            vs_entry = mk_list_entry(head, struct vhost_services, _head);
-            if (sr->host_conf == vs_entry->host) {
-                vs_match = vs_entry;
-                break;
-            }
-        }
-
-        if (!vs_match) {
-            return MK_PLUGIN_RET_NOT_ME;
-        }
-
-        /* Match web service */
+        /* Match web service by URI lookup */
         web_service = duda_get_service_from_uri(sr, vs_match);
         if (!web_service) {
             return MK_PLUGIN_RET_NOT_ME;
         }
 
+        /* Run the web service */
         if (duda_service_run(plugin, cs, sr, web_service) == 0) {
             return MK_PLUGIN_RET_CONTINUE;
         }
     }
 
+    /* There is nothing we can do... */
     return MK_PLUGIN_RET_NOT_ME;
 }

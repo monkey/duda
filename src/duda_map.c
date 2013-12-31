@@ -33,11 +33,12 @@
 
 int duda_map_static_check(duda_request_t *dr)
 {
+    int len;
+    int offset = 0;
+    int port_redirect = 0;
     char *buf;
     char *host;
     char *location = 0;
-    int port_redirect = 0;
-    int len;
     struct mk_list *head;
     struct session_request *sr = dr->sr;
     struct duda_map_static_cb *st;
@@ -49,7 +50,12 @@ int duda_map_static_check(duda_request_t *dr)
             continue;
         }
 
-        if (strncmp(sr->uri_processed.data + dr->ws_root->name.len + 1,
+        /* Check URI offset for name matching */
+        if (dr->ws_root->is_root == MK_FALSE) {
+            offset = dr->ws_root->name.len + 1;
+        }
+
+        if (strncmp(sr->uri_processed.data + offset,
                     st->path, st->path_len) == 0) {
 
             /*
