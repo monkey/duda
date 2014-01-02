@@ -206,10 +206,12 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
 
     /* Link data */
     if (free == MK_TRUE) {
-        mk_api->iov_add_entry(body_buffer->buf, raw, len, dd_iov_none, MK_IOV_FREE_BUF);
+        mk_api->iov_add_entry(body_buffer->buf, raw, len,
+                              dd_iov_none, MK_IOV_FREE_BUF);
     }
     else {
-        mk_api->iov_add_entry(body_buffer->buf, raw, len, dd_iov_none, MK_IOV_NOT_FREE_BUF);
+        mk_api->iov_add_entry(body_buffer->buf, raw, len,
+                              dd_iov_none, MK_IOV_NOT_FREE_BUF);
     }
 
     return 0;

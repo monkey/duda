@@ -19,6 +19,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#define  _GNU_SOURCE
+#include <limits.h>
+
 #include "MKPlugin.h"
 
 #include "duda_event.h"
@@ -55,6 +58,13 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
     unsigned int bytes_sent, bytes_to;
     int reset_to = -1;
     struct mk_iov *buf = bb->buf;
+
+    /* FIXME: Temporal Check */
+    if (mk_unlikely(buf->iov_idx > IOV_MAX)) {
+        mk_err("Boddy buffer flush: enqueued data is larger than IOV_MAX (%i)\n",
+                IOV_MAX);
+        exit(EXIT_FAILURE);
+    }
 
     bytes_sent = mk_api->socket_sendv(sock, buf);
     PLUGIN_TRACE("body_flush: %i/%i", bytes_sent, buf->total_len);
