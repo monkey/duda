@@ -208,6 +208,8 @@ int duda_conf_vhost_init()
     char *app_datadir;
     char *app_logdir;
     int   app_enabled;
+    int   app_is_root;
+
     struct file_info finfo;
 
     /* vhost services list */
@@ -231,8 +233,9 @@ int duda_conf_vhost_init()
         entry_host = mk_list_entry(head_host, struct host, _head);
 
         vs = mk_api->mem_alloc(sizeof(struct vhost_services));
-        vs->host = entry_host;              /* link virtual host entry */
-        mk_list_init(&vs->services);        /* init services list */
+        vs->host         = entry_host;      /* link virtual host entry     */
+        vs->root_service = NULL;            /* root web service (optional) */
+        mk_list_init(&vs->services);        /* init services list          */
 
         /*
          * check vhost 'config' and look for [WEB_SERVICE] sections, we don't use
@@ -243,8 +246,10 @@ int duda_conf_vhost_init()
             section = mk_list_entry(head_section, struct mk_config_section, _head);
 
             if (strcasecmp(section->name, "WEB_SERVICE") == 0) {
-                app_name = NULL;
+                /* Initialize temporal keys */
+                app_name    = NULL;
                 app_enabled = MK_FALSE;
+                app_is_root = MK_FALSE;
                 app_docroot = NULL;
                 app_confdir = NULL;
                 app_logdir  = NULL;
@@ -253,8 +258,13 @@ int duda_conf_vhost_init()
                 app_name = mk_api->config_section_getval(section,
                                                          "Name",
                                                          MK_CONFIG_VAL_STR);
+
                 app_enabled = (size_t) mk_api->config_section_getval(section,
                                                                      "Enabled",
+                                                                     MK_CONFIG_VAL_BOOL);
+
+                app_is_root = (size_t) mk_api->config_section_getval(section,
+                                                                     "Root",
                                                                      MK_CONFIG_VAL_BOOL);
 
                 app_docroot = mk_api->config_section_getval(section,
@@ -338,6 +348,22 @@ int duda_conf_vhost_init()
                             exit(EXIT_FAILURE);
                         }
                     }
+
+                    /*
+                     * If this web service wants to be Root (the only one who serves
+                     * everything on this virtual host, let the parent head know about
+                     * it.
+                     */
+                    if (app_is_root == MK_TRUE) {
+                        ws->is_root = MK_TRUE;
+                        vs->root_service = ws;
+                    }
+                    else {
+                        ws->is_root = MK_FALSE;
+                    }
+
+                    /* Set a reference to the parent vhost_services */
+                    ws->vh_parent = vs;
 
                     /* link data to the web services list */
                     mk_list_add(&ws->_head, &vs->services);
@@ -471,14 +497,32 @@ void duda_conf_service_name(struct web_service *ws, const char *name)
     ws->name.len  = strlen(name);
 }
 
+/*
+ * @METHOD_NAME: service_root
+ * @METHOD_DESC: By default when starting a web service, the way to access it is
+ * through it shortname in the URL. Defining a web service as Root, means that it
+ * owns a Virtual Host, so all further incoming request arriving to the Virtual
+ * Host will be handled by the web service in question. On using this call, the
+ * service will be accessed through the root URI '/' (the short name prefix is
+ * not longer required).
+ * @METHOD_PROTO: void service_root()
+ * @METHOD_RETURN: This method do not return any value.
+ */
+void duda_conf_service_root(struct web_service *ws)
+{
+    ws->is_root = MK_TRUE;
+    ws->vh_parent->root_service = ws;
+}
+
 struct duda_api_conf *duda_conf_object()
 {
     struct duda_api_conf *c;
 
     c = mk_api->mem_alloc(sizeof(struct duda_api_conf));
-    c->_force_redirect = duda_conf_force_redirect;
+    c->_force_redirect  = duda_conf_force_redirect;
     c->_bind_messages   = duda_conf_bind_messages;
     c->_service_name    = duda_conf_service_name;
+    c->_service_root    = duda_conf_service_root;
 
     return c;
 }

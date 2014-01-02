@@ -38,6 +38,7 @@ struct web_service {
     mk_pointer logdir;     /* directory to store logs          */
 
     int  enabled;
+    int  is_root;
     int  url_force_redirect;
     int  bind_messages;
 
@@ -64,6 +65,9 @@ struct web_service {
 
     /* node entry associated with services_list */
     struct mk_list _head;
+
+    /* reference to the parent vhost_services entry */
+    struct vhost_services *vh_parent;
 
     /* node entry associated with services_loaded */
     struct mk_list _head_loaded;

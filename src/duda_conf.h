@@ -44,9 +44,10 @@ struct mk_list services_list;
 struct mk_list services_loaded;
 
 struct vhost_services {
-    struct host *host;
-    struct mk_list services;
-    struct mk_list _head;
+    struct host *host;                 /* virtual host reference with Monkey */
+    struct web_service *root_service;  /* optional root service              */
+    struct mk_list services;           /* list of web services under this VH */
+    struct mk_list _head;              /* head for services_loaded HEAD      */
 };
 
 int duda_conf_set_confdir(struct web_service *ws, const char *dir);
@@ -67,6 +68,9 @@ struct duda_api_conf {
 
     #define service_name(n) _service_name(self, n)
     void (*_service_name) (struct web_service *, const char *);
+
+    #define service_root(n) _service_root(self)
+    void (*_service_root) (struct web_service *);
 };
 
 struct duda_api_conf *duda_conf_object();
