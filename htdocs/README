@@ -5,4 +5,7 @@ by the built-in API packages for web page rendering.
 
 This path is specified in duda.conf under '[DUDA] > DocumentRoot'.
 
-At the moment only Twitter-Bootstrap is included
+At the moment only Twitter-Bootstrap is included (v3.0.3)
+
+
+
