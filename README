@@ -7,7 +7,7 @@ It mainly purpose is to interface over Monkey HTTP server to
 implement fast services through asynchronous callbacks, where is
 possible to map specific URL routes against local functions.
 
-Duda do not require extra dependencies besides libc, but depending
+Duda do not requires extra dependencies besides libc, but depending
 of the service needs, it can load on runtime packages to import
 specific objects with third party features. Some packages available
 are:
@@ -15,6 +15,7 @@ are:
    - WebSocket
    - JSON
    - SQLite
+   - SHA1
    - SHA256
    - Base64
    - Redis
@@ -87,7 +88,7 @@ on what it was made for.
       +---------------+    +--------------+   +-----------------+
 
 
-Many web services can be registered with Duda, internally talking about the 
+Many web services can be registered with Duda, internally talking about the
 web service, this web services can be mapped to different virtual hosts, this
 provides a huge flexibility in terms of what is required to do.
 
@@ -111,15 +112,25 @@ entry:
   [WEB_SERVICE]
       Name          hello
       Enabled       on
+      Root          off                                      <- optional
       DocumentRoot  /home/foo/monkey/services/hello/html/    <- optional
       ConfDir       /home/foo/monkey/services/hello/conf/    <- optional
+      LogDir        /home/foo/monkey/services/hello/logs/    <- optional
+      DataDir       /home/foo/monkey/services/hello/data/    <- optional
 
 we have instructed to load service "hello", so Duda will try to locate
 the service file 'hello.duda' under ServicesRoot directory and load it.
+
+Links
+=====
+Project site: http://duda.io
+Bug Tracker : http://bugs.duda.io
+Mailing list: http://lists.monkey-project.com/listinfo/duda
+IRC         : irc.freenode.net #monkey
 
 Author
 ======
 Eduardo Silva P <edsiper@gmail.com>
 http://edsiper.linuxchile.cl
-http://monkey-project.com
-http://duda.io
+
+
