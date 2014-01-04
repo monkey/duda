@@ -55,6 +55,85 @@ void duda_stats_cb(duda_request_t *dr)
 {
     char *hr;
     uint64_t total;
+    uint64_t total_all = 0;
+    struct mk_list *head;
+    struct duda_stats_worker *st;
+
+    duda_response_http_status(dr, 200);
+    duda_response_http_header(dr, "Content-Type: text/html");
+
+    /* Header */
+    duda_response_printf(dr, DD_HTML_HEADER, "Console Stats", DD_HTML_CSS);
+    duda_response_printf(dr, DD_HTML_NAVBAR_BASIC, "console stats");
+
+    duda_response_printf(dr,
+                         "<div class=\"container\">"
+                         "  <div class=\"duda-template\">"
+                         "  <h1>%s/</h1>\n"
+                         "  <address>\n"
+                         "    Statistics for <strong>%s</strong> web service<br>\n"
+                         "  </address>\n",
+                         dr->ws_root->name.data,
+                         dr->ws_root->name.data);
+
+    /* <ul> */
+    duda_response_printf(dr, "<hr>\n");
+    duda_response_printf(dr, "<h2>Memory Usage</h2>\n");
+    duda_response_printf(dr, "<p class=\"muted\">\n"
+                             "   the following section list every built-in or custom"
+                             "   worker ID and it's actual memory usage.\n"
+                             "</p>\n");
+
+
+    duda_response_printf(dr,
+                         "<table class=\"table table-bordered table-hover table-condensed\">\n"
+                         "<thead>\n"
+                         "<tr>\n"
+                         "  <th>Task ID</th>\n"
+                         "  <th>Memory <small>(bytes)</small></th>\n"
+                         "  <th>Memory <small>(Human Readable)</small></th>\n"
+                         "</tr>\n"
+                         "</thead>\n"
+                         "<tbody>\n");
+
+
+    mk_list_foreach(head, &duda_stats.mem) {
+        st = mk_list_entry(head, struct duda_stats_worker, _head);
+
+        total = (*st->mem_allocated - *st->mem_deallocated);
+        hr    = human_readable_size(total);
+
+        duda_response_printf(dr,
+                             "    <tr>\n"
+                             "        <td>%lu</td>\n"
+                             "        <td>%lu</td>\n"
+                             "        <td>%s</td>\n"
+                             "    </tr>\n",
+                             st->task_id, total, hr
+                             );
+        total_all += total;
+        api->mem_free(hr);
+    }
+
+    hr    = human_readable_size(total_all);
+    duda_response_printf(dr,
+                         "    <tr class=\"success\">\n"
+                         "        <td>total</td>\n"
+                         "        <td>%lu</td>\n"
+                         "        <td>%s</td>\n"
+                         "    </tr>\n",
+                         total_all,
+                         hr
+                         );
+    api->mem_free(hr);
+    duda_response_printf(dr, "</tbody></table>\n\n");
+    duda_response_end(dr, NULL);
+}
+
+void duda_stats_txt_cb(duda_request_t *dr)
+{
+    char *hr;
+    uint64_t total;
     struct mk_list *head;
     struct duda_stats_worker *st;
 

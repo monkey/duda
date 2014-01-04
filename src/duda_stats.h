@@ -45,6 +45,7 @@ pthread_mutex_t duda_mutex_stats;
 struct duda_statistics duda_stats;
 
 void duda_stats_cb(duda_request_t *dr);
+void duda_stats_txt_cb(duda_request_t *dr);
 int  duda_stats_worker_init();
 int  duda_stats_init();
 
