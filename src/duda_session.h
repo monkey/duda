@@ -24,10 +24,14 @@
 
 #include "duda.h"
 
-#define SESSION_STORE_PATH     "/dev/shm/duda_sessions"
-#define SESSION_DEFAULT_PERM   0700
-#define SESSION_UUID_SIZE      128  /* 128 bytes */
-#define SESSION_KEY            "DUDA_SESSION"
+#define SESSION_STORE_PATH_DEV  "/dev/shm/duda_sessions"
+#define SESSION_STORE_PATH_RUN  "/run/shm/duda_sessions"
+
+#define SESSION_DEFAULT_PERM    0700
+#define SESSION_UUID_SIZE       128  /* 128 bytes */
+#define SESSION_KEY             "DUDA_SESSION"
+
+char *session_store_path;
 
 struct mk_list session_list;
 

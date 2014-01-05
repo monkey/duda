@@ -87,14 +87,32 @@ int duda_session_init(char *store_name)
     unsigned long len;
     struct file_info finfo;
 
-    ret = mk_api->file_get_info(SESSION_STORE_PATH, &finfo);
+    session_store_path = NULL;
+
+    /*
+     * the 'shm' mount point can be located now on /dev/ or in the new
+     * interface /run/ depending of the Linux distribution. We need to
+     * check which one is being used by the system.
+     */
+    ret = mk_api->file_get_info("/dev/shm", &finfo);
+    if (ret == 0) {
+        session_store_path = SESSION_STORE_PATH_DEV;
+    }
+    else {
+        ret = mk_api->file_get_info("/run/shm", &finfo);
+        if (ret == 0) {
+            session_store_path = SESSION_STORE_PATH_RUN;
+        }
+    }
+
+    ret = mk_api->file_get_info(session_store_path, &finfo);
     if (ret != 0) {
-        if (_duda_session_create_store(SESSION_STORE_PATH) != 0) {
+        if (_duda_session_create_store(session_store_path) != 0) {
             return -1;
         }
     }
 
-    mk_api->str_build(&path, &len, "%s/%s", SESSION_STORE_PATH, store_name);
+    mk_api->str_build(&path, &len, "%s/%s", session_store_path, store_name);
     ret = mk_api->file_get_info(path, &finfo);
     if (ret != 0) {
         if (_duda_session_create_store(path) != 0) {
@@ -128,10 +146,13 @@ static inline int _rand(int entropy)
 int duda_session_create(duda_request_t *dr, char *name, char *value, int expires)
 {
     /* FIXME: It must check for duplicates */
+    int n;
+    int fd;
+    int len;
     long e;
-    int n, fd, len;
     char *uuid;
     char session[SESSION_UUID_SIZE];
+
     //struct web_service *ws = dr->ws_root;
 
     /*
@@ -152,7 +173,7 @@ int duda_session_create(duda_request_t *dr, char *name, char *value, int expires
 
     /* session format: expire_time.name.UUID.duda_session */
     snprintf(session, SESSION_UUID_SIZE, "%s/%s.%s.%d",
-             SESSION_STORE_PATH, name, uuid, expires);
+             session_store_path, name, uuid, expires);
     fd = open(session, O_CREAT | O_WRONLY, 0600);
     if (fd == -1) {
         perror("open");
@@ -188,7 +209,7 @@ int _duda_session_get_path(duda_request_t *dr, char *name, char **buffer, int bu
     }
 
     /* Open store path */
-    if (!(dir = opendir(SESSION_STORE_PATH))) {
+    if (!(dir = opendir(session_store_path))) {
         return -1;
     }
 
@@ -213,7 +234,7 @@ int _duda_session_get_path(duda_request_t *dr, char *name, char **buffer, int bu
 
         /* try to match the file name */
         if (strncmp(ent->d_name, buf, buf_len) == 0) {
-            snprintf(*buffer, buf_size, "%s/%s", SESSION_STORE_PATH, ent->d_name);
+            snprintf(*buffer, buf_size, "%s/%s", session_store_path, ent->d_name);
             closedir(dir);
             return 0;
         }
@@ -298,7 +319,7 @@ int duda_session_isset(duda_request_t *dr, char *name)
     }
 
     /* Open store path */
-    if (!(dir = opendir(SESSION_STORE_PATH))) {
+    if (!(dir = opendir(session_store_path))) {
         return -1;
     }
 
