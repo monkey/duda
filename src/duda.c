@@ -765,7 +765,8 @@ int duda_service_end(duda_request_t *dr)
  * It override the initial session_request real path set by the virtual
  * host document root path.
  */
-int duda_override_docroot(struct session_request *sr, int uri_offset, char *path, int len)
+int duda_override_docroot(struct session_request *sr, int uri_offset,
+                          char *path, int len)
 {
     unsigned int new_path_len;
     char *tmp;
@@ -833,18 +834,28 @@ int duda_service_html(duda_request_t *dr)
     }
 
     /* Check the web service name in the URI */
-    if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
-                dr->ws_root->name.len) != 0) {
-        return -1;
+    if (dr->ws_root->is_root == MK_FALSE) {
+        if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
+                    dr->ws_root->name.len) != 0) {
+            return -1;
+        }
+
+        /*
+         * We need to override the document root set by the virtual host
+         * logic in the session_request using the service name plus the
+         * the web service document root.
+         */
+        ret = duda_override_docroot(sr, dr->ws_root->name.len + 1,
+                                    dr->ws_root->docroot.data,
+                                    dr->ws_root->docroot.len);
+    }
+    else {
+        /* Direct override */
+        ret = duda_override_docroot(sr, 1,
+                                    dr->ws_root->docroot.data,
+                                    dr->ws_root->docroot.len);
     }
 
-    /*
-     * We need to override the document root set by the virtual host
-     * logic in the session_request struct by the web service document root
-     */
-    ret = duda_override_docroot(sr, dr->ws_root->name.len + 1,
-                                dr->ws_root->docroot.data,
-                                dr->ws_root->docroot.len);
     return ret;
 }
 
