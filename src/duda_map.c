@@ -36,6 +36,7 @@ int duda_map_static_check(duda_request_t *dr)
     int len;
     int offset = 0;
     int port_redirect = 0;
+    int redirect_size;
     char *buf;
     char *host;
     char *location = 0;
@@ -74,7 +75,10 @@ int duda_map_static_check(duda_request_t *dr)
                     }
                 }
 
-                buf = duda_gc_alloc(dr, DUDA_MAP_REDIR_SIZE);
+                redirect_size = (DUDA_MAP_REDIR_SIZE + dr->sr->host.len +
+                                 dr->sr->uri_processed.len + 2);
+
+                buf = duda_gc_alloc(dr, redirect_size);
                 host = mk_api->pointer_to_buf(dr->sr->host);
                 duda_gc_add(dr, host);
 
@@ -92,12 +96,12 @@ int duda_map_static_check(duda_request_t *dr)
                 location[dr->sr->uri_processed.len + 1] = '\0';
 
                 if (port_redirect > 0) {
-                    len = snprintf(buf, DUDA_MAP_REDIR_SIZE,
+                    len = snprintf(buf, redirect_size,
                                    "Location: %s://%s:%i%s",
                                    mk_api->config->transport, host, port_redirect, location);
                 }
                 else {
-                    len = snprintf(buf, DUDA_MAP_REDIR_SIZE,
+                    len = snprintf(buf, redirect_size,
                                    "Location: %s://%s%s",
                                    mk_api->config->transport, host, location);
                 }
