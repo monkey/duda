@@ -184,6 +184,10 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->setup    = duda_load_symbol(ws->handler, "_setup");
         ws->exit_cb  = duda_load_symbol_passive(ws->handler, "duda_exit");
 
+        if (ws->map_root_name) {
+            ws->map_root_cb = duda_load_symbol(ws->handler, ws->map_root_name);
+        }
+
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
             static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
@@ -915,6 +919,22 @@ int duda_service_run(struct plugin *plugin,
 
     /* Parse the query string */
     duda_qs_parse(dr);
+
+    /* Check if a root URI is requested (only '/') */
+    if (web_service->map_root_cb) {
+        /* If the service is declared as owner */
+        if (web_service->is_root == MK_TRUE && sr->uri_processed.len == 1) {
+            web_service->map_root_cb(dr);
+            return 0;
+        }
+        /* the URI contains the web service name with or without ending slash */
+        else if (web_service->is_root == MK_FALSE &&
+                 (sr->uri_processed.len == web_service->fixed_name.len + 1 ||
+                  sr->uri_processed.len == web_service->fixed_name.len + 2)) {
+            web_service->map_root_cb(dr);
+            return 0;
+        }
+    }
 
     /* Parse request for 'Duda Map' format */
     if ((duda_request_parse(web_service, sr, dr) != 0) || (!dr->_method)) {

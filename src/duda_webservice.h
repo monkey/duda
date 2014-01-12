@@ -44,7 +44,10 @@ struct web_service {
 
     void *handler;
 
-    /* Specifics data when registering the service */
+    /* Routing/Map callbacks */
+    char *map_root_name;
+    void (*map_root_cb) (void *);
+
     struct mk_list *map_interfaces;
     struct mk_list *map_urls;
 

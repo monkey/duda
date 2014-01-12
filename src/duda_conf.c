@@ -300,6 +300,9 @@ int duda_conf_vhost_init()
                     /* enable */
                     ws->enabled = app_enabled;
 
+                    /* Disable map root by default */
+                    ws->map_root_name = NULL;
+
                     /* document root */
                     if (app_docroot) {
                         ret = mk_api->file_get_info(app_docroot, &finfo);

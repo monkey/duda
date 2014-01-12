@@ -81,9 +81,11 @@ struct duda_api_map {
     /* Static stuff */
     #define static_add(p, cb) _static_add(p, cb, &duda_map_urls)
     #define static_add_ref(p, cb) _static_add_ref(p, cb, &duda_map_urls)
+    #define static_root(cb) _static_root(self, cb)
 
     int (*_static_add) (const char *, const char *, struct mk_list *);
     int (*_static_add_ref) (const char *, void (*) (duda_request_t *), struct mk_list *);
+    int (*_static_root) (struct web_service *, const char *);
 
     /* interface_ */
     #define add_interface(i)  _add_interface(i, &duda_map_interfaces)

@@ -146,6 +146,21 @@ int duda_map_static_add(const char *path,  const char *cb_name, struct mk_list *
 }
 
 /*
+ * @METHOD_NAME: static_root
+ * @METHOD_DESC: It maps the root URL to a specific callback function
+ * @METHOD_PARAM: cb_name the callback function name, e.g: "cb_something"
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_map_static_root(struct web_service *ws, const char *cb_name)
+{
+    if (ws->map_root_name) {
+        monkey->mem_free(ws->map_root_name);
+    }
+    ws->map_root_name = mk_api->str_dup(cb_name);
+    return 0;
+}
+
+/*
  * @METHOD_NAME: static_add_ref
  * @METHOD_DESC: It maps a static URL address to a specific callback function by reference
  * @METHOD_PARAM: path    the URL path, e.g: "/something".
@@ -308,8 +323,9 @@ struct duda_api_map *duda_map_object()
     struct duda_api_map *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_map));
-    obj->_static_add     = duda_map_static_add;
-    obj->_static_add_ref = duda_map_static_add_ref;
+    obj->_static_add      = duda_map_static_add;
+    obj->_static_add_ref  = duda_map_static_add_ref;
+    obj->_static_root     = duda_map_static_root;
     obj->_add_interface = duda_map_add_interface;
     obj->interface_new = duda_map_interface_new;
     obj->interface_add_method = duda_map_interface_add_method;
