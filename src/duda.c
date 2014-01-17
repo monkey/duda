@@ -342,6 +342,8 @@ int _mkp_event_read(int sockfd)
 {
     int ret;
 
+    PLUGIN_TRACE("[FD %i] Event READ", sockfd);
+
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     if (eh && eh->cb_on_read) {
         ret = eh->cb_on_read(eh->sockfd, eh->cb_data);
@@ -362,6 +364,8 @@ int _mkp_event_write(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
 
+    PLUGIN_TRACE("[FD %i] Event WRITE", sockfd);
+
     if (eh && eh->cb_on_write) {
         eh->cb_on_write(eh->sockfd, eh->cb_data);
         return MK_PLUGIN_RET_EVENT_OWNED;
@@ -378,6 +382,8 @@ int _mkp_event_close(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     duda_request_t *dr = NULL;
+
+    PLUGIN_TRACE("[FD %i] Event CLOSE", sockfd);
 
     if (eh && eh->cb_on_close) {
         eh->cb_on_close(eh->sockfd, eh->cb_data);
@@ -398,6 +404,8 @@ int _mkp_event_error(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
 
+    PLUGIN_TRACE("[FD %i] Event ERROR", sockfd);
+
     if (eh && eh->cb_on_error) {
         eh->cb_on_error(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
@@ -410,6 +418,8 @@ int _mkp_event_error(int sockfd)
 int _mkp_event_timeout(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
+
+    PLUGIN_TRACE("[FD %i] Event TIMEOUT", sockfd);
 
     if (eh && eh->cb_on_timeout) {
         eh->cb_on_timeout(eh->sockfd, eh->cb_data);
@@ -761,7 +771,6 @@ int duda_service_end(duda_request_t *dr)
 
     /* Finalize HTTP stuff with Monkey core */
     ret = mk_api->http_request_end(dr->socket);
-
     return ret;
 }
 

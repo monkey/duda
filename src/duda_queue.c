@@ -214,7 +214,6 @@ int duda_queue_event_write_callback(int sockfd)
             if (ret > 0) {
                 return MK_PLUGIN_RET_EVENT_OWNED;
             }
-
             if (duda_service_end(entry) == -1) {
                 return MK_PLUGIN_RET_EVENT_CLOSE;
             }

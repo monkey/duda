@@ -112,10 +112,10 @@ int duda_event_add(int sockfd,
     eh->sockfd = sockfd;
     eh->mode = init_mode;
     eh->behavior = behavior;
-    eh->cb_on_read = cb_on_read;
-    eh->cb_on_write = cb_on_write;
-    eh->cb_on_error = cb_on_error;
-    eh->cb_on_close = cb_on_close;
+    eh->cb_on_read    = cb_on_read;
+    eh->cb_on_write   = cb_on_write;
+    eh->cb_on_error   = cb_on_error;
+    eh->cb_on_close   = cb_on_close;
     eh->cb_on_timeout = cb_on_timeout;
     eh->cb_data = data;
 
