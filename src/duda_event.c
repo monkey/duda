@@ -350,3 +350,4 @@ int duda_event_create_signal_fd()
  */
 
 /* this is a static function defined in duda_event.h */
+

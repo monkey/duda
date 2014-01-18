@@ -59,7 +59,7 @@ struct duda_queue_item *duda_queue_last(struct mk_list *queue)
 
 unsigned long duda_queue_length(struct mk_list *queue)
 {
-    long int length = 0;
+    uint64_t length = 0;
     struct mk_list *head;
     struct duda_queue_item *entry;
     struct duda_sendfile *entry_sf;
@@ -71,7 +71,7 @@ unsigned long duda_queue_length(struct mk_list *queue)
             entry_bb = (struct duda_body_buffer *) entry->data;
             length += entry_bb->buf->total_len;
         }
-        else if(entry->type == DUDA_QTYPE_SENDFILE) {
+        else if (entry->type == DUDA_QTYPE_SENDFILE) {
             entry_sf = (struct duda_sendfile *) entry->data;
             length += entry_sf->pending_bytes;
         }
@@ -210,7 +210,6 @@ int duda_queue_event_write_callback(int sockfd)
         entry = mk_list_entry(head, duda_request_t, _head_events_write);
         if (entry->cs->socket == sockfd) {
             ret = duda_queue_flush(entry);
-
             if (ret > 0) {
                 return MK_PLUGIN_RET_EVENT_OWNED;
             }

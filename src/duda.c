@@ -374,7 +374,7 @@ int _mkp_event_write(int sockfd)
     return duda_queue_event_write_callback(sockfd);
 }
 
-int _mkp_event_close(int sockfd)
+int mkp_event_close(int sockfd)
 {
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     duda_request_t *dr = NULL;
@@ -394,30 +394,19 @@ int _mkp_event_close(int sockfd)
     return MK_PLUGIN_RET_EVENT_CONTINUE;
 }
 
+int _mkp_event_close(int sockfd)
+{
+    return mkp_event_close(sockfd);
+}
+
 int _mkp_event_error(int sockfd)
 {
-    struct duda_event_handler *eh = duda_event_lookup(sockfd);
-
-    if (eh && eh->cb_on_error) {
-        eh->cb_on_error(eh->sockfd, eh->cb_data);
-        duda_event_delete(sockfd);
-        return MK_PLUGIN_RET_EVENT_CLOSE;
-    }
-
-    return MK_PLUGIN_RET_EVENT_CONTINUE;
+    return mkp_event_close(sockfd);
 }
 
 int _mkp_event_timeout(int sockfd)
 {
-    struct duda_event_handler *eh = duda_event_lookup(sockfd);
-
-    if (eh && eh->cb_on_timeout) {
-        eh->cb_on_timeout(eh->sockfd, eh->cb_data);
-        duda_event_delete(sockfd);
-        return MK_PLUGIN_RET_EVENT_CLOSE;
-    }
-
-    return MK_PLUGIN_RET_EVENT_CONTINUE;
+    return mkp_event_close(sockfd);
 }
 
 /*
@@ -761,7 +750,6 @@ int duda_service_end(duda_request_t *dr)
 
     /* Finalize HTTP stuff with Monkey core */
     ret = mk_api->http_request_end(dr->socket);
-
     return ret;
 }
 

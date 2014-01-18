@@ -47,6 +47,12 @@ struct duda_sendfile *duda_sendfile_new(char *path)
     }
 
     file->fd = open(path, O_RDONLY | O_NONBLOCK);
+    if (file->fd < 0) {
+        mk_warn("%s:%i %s", __FILE__, __LINE__, strerror(errno));
+        mk_api->mem_free(file);
+        return NULL;
+    }
+
     file->offset = 0;
     file->pending_bytes = file->info.size;
     return file;
@@ -63,7 +69,8 @@ int duda_sendfile_flush(int socket, struct duda_sendfile *sf)
         sf->pending_bytes -= bytes;
     }
     else if (bytes == -1) {
-        return -1;
+        sf->pending_bytes = 0;
+        return 0;
     }
 
     return sf->pending_bytes;

@@ -72,7 +72,7 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
     /*
      * If the call sent less data than total, we must modify the mk_iov struct
      * to mark the buffers already processed and set them with with length = zero,
-     * so on the next calls to this function the Monkey will skip buffers with bytes
+     * so on the next calls to this function Monkey will skip buffers with bytes
      * length = 0.
      */
     if (bytes_sent < buf->total_len) {

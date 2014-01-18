@@ -90,7 +90,6 @@ typedef struct duda_request {
 
 } duda_request_t;
 
-//typedef struct duda_request duda_request_t;
 
 /* self identifier for the plugin context inside Monkey internals */
 struct plugin *duda_plugin;
