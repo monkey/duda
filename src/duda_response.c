@@ -306,12 +306,14 @@ int duda_response_sendfile(duda_request_t *dr, char *path)
 /*
  * @METHOD_NAME: sendfile_range
  * @METHOD_DESC: It enqueue a bytes range from a file to be send to the HTTP client as
- * response body. Multiple files can be enqueued, all of them are send in order.
+ * response body. Multiple files can be enqueued, all of them are send in order. This
+ * method requires an offset and the total number of bytes to send after that. Both values must be equal or greater than zero.
  * @METHOD_PROTO: int sendfile_range(duda_request_t *dr, char *path, off_t offset, size_t count)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: path the absolute path of the file to be send.
  * @METHOD_PARAM: offset set the offset in bytes.
- * @METHOD_PARAM: count number of bytes to send.
+ * @METHOD_PARAM: count number of bytes to send. Specifying this value as zero, it
+ * will try to send the whole remaining bytes availables on the file after the offset.
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
 int duda_response_sendfile_range(duda_request_t *dr, char *path,
