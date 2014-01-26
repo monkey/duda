@@ -166,6 +166,10 @@ struct duda_event_handler *duda_event_lookup(int sockfd)
         return NULL;
     }
 
+    if (mk_list_is_empty(event_list) == 0) {
+        return NULL;
+    }
+
     mk_list_foreach(head, event_list) {
         eh = mk_list_entry(head, struct duda_event_handler, _head);
         if (eh->sockfd == sockfd) {
