@@ -290,8 +290,37 @@ int duda_response_sendfile(duda_request_t *dr, char *path)
     struct duda_sendfile *sf;
     struct duda_queue_item *item;
 
-    sf = duda_sendfile_new(path);
+    sf = duda_sendfile_new(path, 0, 0);
+    if (!sf) {
+        return -1;
+    }
 
+    item = duda_queue_item_new(DUDA_QTYPE_SENDFILE);
+    item->data = sf;
+    duda_queue_add(item, &dr->queue_out);
+
+    return 0;
+}
+
+
+/*
+ * @METHOD_NAME: sendfile_range
+ * @METHOD_DESC: It enqueue a bytes range from a file to be send to the HTTP client as
+ * response body. Multiple files can be enqueued, all of them are send in order.
+ * @METHOD_PROTO: int sendfile_range(duda_request_t *dr, char *path, off_t offset, size_t count)
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: path the absolute path of the file to be send.
+ * @METHOD_PARAM: offset set the offset in bytes.
+ * @METHOD_PARAM: count number of bytes to send.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_response_sendfile_range(duda_request_t *dr, char *path,
+                                 off_t offset, size_t count)
+{
+    struct duda_sendfile *sf;
+    struct duda_queue_item *item;
+
+    sf = duda_sendfile_new(path, offset, count);
     if (!sf) {
         return -1;
     }
@@ -324,9 +353,9 @@ int duda_response_wait(duda_request_t *dr)
 
 /*
  * @METHOD_NAME: cont
- * @METHOD_PROTO: int cont(duda_request_t *dr)
  * @METHOD_DESC: It restore and continue the context of a previous wait() call, all events
  * are restored.
+ * @METHOD_PROTO: int cont(duda_request_t *dr)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
@@ -435,6 +464,7 @@ struct duda_api_response *duda_response_object()
     obj->print               = duda_response_print;
     obj->printf              = duda_response_printf;
     obj->sendfile            = duda_response_sendfile;
+    obj->sendfile_range      = duda_response_sendfile_range;
     obj->wait                = duda_response_wait;
     obj->cont                = duda_response_continue;
     obj->_end                = duda_response_end;

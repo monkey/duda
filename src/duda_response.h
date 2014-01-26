@@ -34,7 +34,8 @@ struct duda_api_response {
     int (*http_content_type) (duda_request_t *, char *);
     int (*print)  (duda_request_t *, char *, int);
     int (*printf) (duda_request_t *, const char *, ...);
-    int (*sendfile)    (duda_request_t *, char *);
+    int (*sendfile)       (duda_request_t *, char *);
+    int (*sendfile_range) (duda_request_t *, char *, off_t offset, size_t count);
 
     int (*wait) (duda_request_t *);
     int (*cont) (duda_request_t *);

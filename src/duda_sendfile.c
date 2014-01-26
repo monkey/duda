@@ -26,10 +26,16 @@
 #include "MKPlugin.h"
 #include "duda_sendfile.h"
 
-struct duda_sendfile *duda_sendfile_new(char *path)
+struct duda_sendfile *duda_sendfile_new(char *path, off_t offset,
+                                        size_t count)
 {
     int ret;
+    uint64_t fsize;
     struct duda_sendfile *file;
+
+    if (offset < 0) {
+        return NULL;
+    }
 
     file = mk_api->mem_alloc(sizeof(struct duda_sendfile));
     file->fd = -1;
@@ -40,8 +46,15 @@ struct duda_sendfile *duda_sendfile_new(char *path)
         return NULL;
     }
 
+    fsize = file->info.size;
+    if ((unsigned) offset > fsize ||
+        count > fsize ||
+        ((unsigned) offset + count) > fsize) {
+        mk_api->mem_free(file);
+        return NULL;
+    }
+
     if (file->info.read_access == MK_FALSE) {
-        mk_warn("Cannot read %s", path);
         mk_api->mem_free(file);
         return NULL;
     }
@@ -53,8 +66,14 @@ struct duda_sendfile *duda_sendfile_new(char *path)
         return NULL;
     }
 
-    file->offset = 0;
-    file->pending_bytes = file->info.size;
+    file->offset = offset;
+    if (count == 0) {
+        file->pending_bytes = file->info.size - file->offset;
+    }
+    else {
+        file->pending_bytes = count;
+    }
+
     return file;
 }
 
