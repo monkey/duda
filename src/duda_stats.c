@@ -170,7 +170,7 @@ void duda_stats_txt_cb(duda_request_t *dr)
  */
 int duda_stats_worker_init()
 {
-    uint64_t sz;
+    size_t sz;
     struct duda_stats_worker *st;
 
     st = api->mem_alloc(sizeof(struct duda_stats_worker));
