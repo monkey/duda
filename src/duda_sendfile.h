@@ -31,7 +31,7 @@ struct duda_sendfile {
 };
 
 struct duda_sendfile *duda_sendfile_new(char *path, off_t offset,
-                                        unsigned long count);
+                                        size_t count);
 int duda_sendfile_flush(int socket, struct duda_sendfile *sf);
 
 #endif
