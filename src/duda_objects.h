@@ -55,6 +55,7 @@ struct duda_api_event *event;
 struct duda_api_console *console;
 struct duda_api_logger *logger;
 struct duda_api_gc *gc;
+struct duda_api_mem *mem;
 struct duda_api_param *param;
 struct duda_api_session *session;
 struct duda_api_cookie *cookie;

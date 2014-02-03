@@ -119,6 +119,7 @@ int _duda_main(struct duda_api_objects *dapi);
         console  = dapi->console;                                       \
         logger   = dapi->logger;                                        \
         gc       = dapi->gc;                                            \
+        mem      = dapi->mem;                                           \
         param    = dapi->param;                                         \
         session  = dapi->session;                                       \
         cookie   = dapi->cookie;                                        \

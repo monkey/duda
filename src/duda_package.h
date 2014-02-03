@@ -70,6 +70,7 @@ duda_package_t MK_EXPORT *_duda_package_main();
         debug    = dapi->debug;                                         \
         event    = dapi->event;                                         \
         gc       = dapi->gc;                                            \
+        mem      = dapi->mem;                                           \
         console  = dapi->console;                                       \
         logger   = dapi->logger;                                        \
         param    = dapi->param;                                         \
