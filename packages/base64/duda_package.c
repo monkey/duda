@@ -42,8 +42,6 @@ duda_package_t *duda_package_main()
 {
     duda_package_t *dpkg;
 
-    printf("--->SELF=%p\n", self);
-
     /* Package object */
     dpkg = monkey->mem_alloc(sizeof(duda_package_t));
     dpkg->name = "base64";
