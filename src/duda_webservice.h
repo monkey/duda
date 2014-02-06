@@ -30,12 +30,12 @@ struct duda_setup {
 
 /* Web service information */
 struct web_service {
-    mk_pointer name;       /* web service name                 */
-    mk_pointer fixed_name; /* service name given by vhost/file */
-    mk_pointer docroot;    /* document root for static content */
-    mk_pointer confdir;    /* configuration directory          */
-    mk_pointer datadir;    /* data store                       */
-    mk_pointer logdir;     /* directory to store logs          */
+    mk_ptr_t name;       /* web service name                 */
+    mk_ptr_t fixed_name; /* service name given by vhost/file */
+    mk_ptr_t docroot;    /* document root for static content */
+    mk_ptr_t confdir;    /* configuration directory          */
+    mk_ptr_t datadir;    /* data store                       */
+    mk_ptr_t logdir;     /* directory to store logs          */
 
     int  enabled;
     int  is_root;

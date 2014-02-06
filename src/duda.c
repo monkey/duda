@@ -304,7 +304,7 @@ void duda_mem_init()
     time_t expire = COOKIE_EXPIRE_TIME;
     struct tm *gmt;
 
-    /* Init mk_pointer's */
+    /* Init mk_ptr_t's */
     mk_api->pointer_set(&dd_iov_none, "");
     mk_api->pointer_set(&dd_cookie_crlf,      COOKIE_CRLF);
     mk_api->pointer_set(&dd_cookie_equal,     COOKIE_EQUAL);

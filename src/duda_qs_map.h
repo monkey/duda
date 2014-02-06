@@ -32,8 +32,8 @@
 #define QS_ENTRIES_SIZE 32
 
 struct duda_qs_entry {
-    mk_pointer key;
-    mk_pointer value;
+    mk_ptr_t key;
+    mk_ptr_t value;
 };
 
 struct duda_qs_map {

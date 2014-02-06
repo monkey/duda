@@ -59,7 +59,7 @@ struct duda_api_cookie *duda_cookie_object()
 int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
                     char *val, int val_len, int expires)
 {
-    mk_pointer exp;
+    mk_ptr_t exp;
 
     /*
      * Ugly hack: every session_request.headers contains a _extra_rows mk_iov

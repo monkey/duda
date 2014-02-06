@@ -47,10 +47,10 @@ typedef struct duda_request {
     /* web service details */
     struct web_service *ws_root;
 
-    mk_pointer appname;
-    mk_pointer interface;
-    mk_pointer method;
-    mk_pointer params[MAP_WS_MAX_PARAMS];
+    mk_ptr_t appname;
+    mk_ptr_t interface;
+    mk_ptr_t method;
+    mk_ptr_t params[MAP_WS_MAX_PARAMS];
     short int n_params;
 
     /* Monkey request data: plugin, client_session & session_request */
@@ -98,7 +98,7 @@ pthread_key_t duda_global_events_write;
 pthread_key_t duda_global_dr_list;
 pthread_mutex_t duda_mutex_thctx;
 
-mk_pointer dd_iov_none;
+mk_ptr_t dd_iov_none;
 
 void *duda_load_library(const char *path);
 void *duda_load_symbol(void *handle, const char *symbol);

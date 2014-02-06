@@ -200,7 +200,7 @@ void duda_console_write(duda_request_t *dr,
     int buf_size = 1024;
     char buf[buf_size];
     char path[buf_size];
-    mk_pointer *now;
+    mk_ptr_t *now;
 
     /* Guess we need no more than 128 bytes. */
     int n, size = 128;

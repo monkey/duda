@@ -234,7 +234,7 @@ int duda_logger_print(duda_logger_t *key, char *fmt, ...)
     int n, size = 128;
     char *p, *np;
     char *time_fmt;
-    mk_pointer *time_human;
+    mk_ptr_t *time_human;
     va_list ap;
     duda_global_t *gl = &key->global_key;
     duda_logger_context_t *ctx;
