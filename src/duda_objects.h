@@ -26,6 +26,7 @@
 
 #include "mk_macros.h"
 #include "duda_global.h"
+#include "duda_worker.h"
 
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
@@ -33,6 +34,7 @@
 struct mk_list MK_EXPORT duda_map_interfaces;
 struct mk_list MK_EXPORT duda_map_urls;
 struct mk_list MK_EXPORT duda_global_dist;
+struct mk_list MK_EXPORT duda_pre_loop;
 struct mk_list MK_EXPORT duda_ws_packages;
 struct mk_list MK_EXPORT duda_worker_list;
 struct mk_list MK_EXPORT duda_logger_main_list;
@@ -73,7 +75,8 @@ struct web_service *self;
 #include <unistd.h>
 #include <sys/syscall.h>   /* For SYS_xxx definitions */
 
-/* function that depends on webservice or package specific data */
+/* Static functions that depends on webservice or package specific data */
+
 static inline void duda_global_init(duda_global_t *global,
                                     void *(*callback)(void *),
                                     void *data)
@@ -83,5 +86,18 @@ static inline void duda_global_init(duda_global_t *global,
     global->data     = data;
     mk_list_add(&global->_head, &duda_global_dist);
 }
+
+static inline void duda_worker_pre_loop(void (*func) (void *), void *data)
+{
+    struct duda_worker_pre *pre;
+
+    mk_bug(!func);
+
+    pre = monkey->mem_alloc(sizeof(struct duda_worker_pre));
+    pre->func = func;
+    pre->data = data;
+    mk_list_add(&pre->_head, &duda_pre_loop);
+}
+
 
 #endif

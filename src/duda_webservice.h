@@ -54,6 +54,9 @@ struct web_service {
     /* global data */
     struct mk_list *global;
 
+    /* pre-worker-loop functions */
+    struct mk_list *pre_loop;
+
     /* workers list */
     struct mk_list *workers;
 

@@ -22,6 +22,13 @@
 #ifndef DUDA_API_WORKER_H
 #define DUDA_API_WORKER_H
 
+/* Defines a node for the pre-worker loop */
+struct duda_worker_pre {
+    void (*func) (void *);
+    void *data;
+    struct mk_list _head;
+};
+
 /*
  * A simple struct/node to store the information of a working
  * thread that must me run at once duda_main() have been finished
@@ -37,6 +44,7 @@ struct duda_worker {
 /* Worker object: worker->x() */
 struct duda_api_worker {
     int (*_spawn) (void *(start_routine) (void *), void *, struct mk_list *);
+    void (*pre_loop) (void (*func) (void *), void *);
 };
 
 int duda_worker_spawn_all(struct mk_list *list);

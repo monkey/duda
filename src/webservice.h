@@ -142,6 +142,7 @@ int _duda_main(struct duda_api_objects *dapi);
         mk_list_init(&duda_map_interfaces);                             \
         mk_list_init(&duda_map_urls);                                   \
         mk_list_init(&duda_global_dist);                                \
+        mk_list_init(&duda_pre_loop);                                   \
         mk_list_init(&duda_ws_packages);                                \
         mk_list_init(&duda_worker_list);                                \
                                                                         \

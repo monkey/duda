@@ -93,10 +93,22 @@ struct duda_api_worker *duda_worker_object()
 
     wk = mk_api->mem_alloc(sizeof(struct duda_api_worker));
     wk->_spawn = duda_worker_spawn;
+    wk->pre_loop = duda_worker_pre_loop;
 
     return wk;
 }
 
+
+/*
+ * @METHOD_NAME: pre_loop
+ * @METHOD_DESC: Instruct the core to call a given function inside each server
+ * thread before they enter in the server loop. This method must only be used inside
+ * duda_main().
+ * @METHOD_PROTO: void pre_loop(void (*func) (void *), void *data)
+ * @METHOD_PARAM: func function to invoke before enter the thread server loop
+ * @METHOD_PARAM: data reference to data to pass to the called function
+ * @METHOD_RETURN: This method do not return any value
+ */
 
 /*
  * @METHOD_NAME: spawn

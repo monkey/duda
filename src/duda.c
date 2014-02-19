@@ -34,6 +34,7 @@
 #include "duda_queue.h"
 #include "duda_console.h"
 #include "duda_log.h"
+#include "duda_worker.h"
 #include "duda_package.h"
 
 MONKEY_PLUGIN("duda",                                     /* shortname */
@@ -178,6 +179,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->map_interfaces = duda_load_symbol(ws->handler, "duda_map_interfaces");
         ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
+        ws->pre_loop = duda_load_symbol(ws->handler, "duda_pre_loop");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
         ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
         ws->loggers  = duda_load_symbol(ws->handler, "duda_logger_main_list");
@@ -415,6 +417,41 @@ int _mkp_event_timeout(int sockfd)
     return mkp_event_close(sockfd);
 }
 
+static void _thread_globals_init(struct mk_list *list)
+{
+    struct mk_list *head;
+    duda_global_t *entry_gl;
+    void *data;
+
+    /* go around each global variable */
+    mk_list_foreach(head, list) {
+        entry_gl = mk_list_entry(head, duda_global_t, _head);
+
+        /*
+         * If a global variable was defined we need to check if was requested
+         * to initialize it with a specific data returned by a callback
+         */
+        data = NULL;
+        if (entry_gl->callback) {
+            data = entry_gl->callback(entry_gl->data);
+        }
+        pthread_setspecific(entry_gl->key, data);
+    }
+}
+
+static void _thread_worker_pre_loop(struct mk_list *list)
+{
+    struct mk_list *head;
+    struct duda_worker_pre *pre;
+
+    /* go around each global variable */
+    mk_list_foreach(head, list) {
+        pre = mk_list_entry(head, struct duda_worker_pre, _head);
+        pre->func(pre->data);
+    }
+}
+
+
 /*
  * Thread context initialization: for each thread worker, this function
  * is invoked, including the workers defined through the worker->spawn() method.
@@ -427,15 +464,13 @@ void _mkp_core_thctx()
     int rc;
     int fds[2];
     char *logger_fmt_cache;
-    struct mk_list *head_vs, *head_ws, *head_gl;
+    struct mk_list *head_vs, *head_ws;
     struct mk_list *list_events_write;
     struct mk_list *events_list;
     struct rb_root *dr_list;
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
     struct duda_event_signal_channel *esc;
-    duda_global_t *entry_gl;
-    void *data;
 
     duda_stats_worker_init();
 
@@ -493,39 +528,23 @@ void _mkp_core_thctx()
 
         mk_list_foreach(head_ws, &entry_vs->services) {
             entry_ws = mk_list_entry(head_ws, struct web_service, _head);
-
-            /* go around each global variable */
-            mk_list_foreach(head_gl, entry_ws->global) {
-                entry_gl = mk_list_entry(head_gl, duda_global_t, _head);
-                /*
-                 * If a global variable was defined we need to check if was requested
-                 * to initialize it with a specific data returned by a callback
-                 */
-                data = NULL;
-                if (entry_gl->callback) {
-                    data = entry_gl->callback(entry_gl->data);
-                }
-                pthread_setspecific(entry_gl->key, data);
-            }
+            _thread_globals_init(entry_ws->global);
+            _thread_worker_pre_loop(entry_ws->pre_loop);
 
             /*
              * Now go around each package and check for thread context callbacks
              */
             struct mk_list *head_pkg;
             struct mk_list *global_list;
+            struct mk_list *pre_loop_list;
             struct duda_package *entry_pkg;
             mk_list_foreach(head_pkg, entry_ws->packages) {
                 entry_pkg = mk_list_entry(head_pkg, struct duda_package, _head);
                 global_list = duda_load_symbol(entry_pkg->handler, "duda_global_dist");
+                pre_loop_list = duda_load_symbol(entry_pkg->handler, "duda_pre_loop");
 
-                mk_list_foreach(head_gl, global_list) {
-                    entry_gl = mk_list_entry(head_gl, duda_global_t, _head);
-                    data = NULL;
-                    if (entry_gl->callback) {
-                        data = entry_gl->callback(entry_gl->data);
-                    }
-                    pthread_setspecific(entry_gl->key, data);
-                }
+                _thread_globals_init(global_list);
+                _thread_worker_pre_loop(pre_loop_list);
             }
         }
     }
