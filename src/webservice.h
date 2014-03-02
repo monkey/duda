@@ -45,6 +45,7 @@
 #include "duda_objects.h"
 #include "duda_fconf.h"
 #include "duda_qs.h"
+#include "duda_worker.h"
 
 int __ws_loaded;
 struct mk_list *__ws_head;
@@ -157,6 +158,7 @@ int _duda_main(struct duda_api_objects *dapi);
          * package definitions (local data)                             \
          */                                                             \
         global->init = duda_global_init;                                \
+        worker->pre_loop = duda_worker_pre_loop;                        \
                                                                         \
         /* Invoke end-user main routine */                              \
         return _duda_main(dapi);                                        \

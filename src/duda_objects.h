@@ -27,6 +27,7 @@
 #include "mk_macros.h"
 #include "duda_global.h"
 #include "duda_worker.h"
+#include "duda_mem.h"
 
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
@@ -93,7 +94,7 @@ static inline void duda_worker_pre_loop(void (*func) (void *), void *data)
 
     mk_bug(!func);
 
-    pre = monkey->mem_alloc(sizeof(struct duda_worker_pre));
+    pre = mem->alloc(sizeof(struct duda_worker_pre));
     pre->func = func;
     pre->data = data;
     mk_list_add(&pre->_head, &duda_pre_loop);

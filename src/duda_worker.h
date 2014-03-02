@@ -19,6 +19,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "mk_list.h"
+
 #ifndef DUDA_API_WORKER_H
 #define DUDA_API_WORKER_H
 
