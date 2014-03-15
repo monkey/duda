@@ -444,6 +444,10 @@ static void _thread_worker_pre_loop(struct mk_list *list)
     struct mk_list *head;
     struct duda_worker_pre *pre;
 
+    if (mk_list_is_empty(list) == 0) {
+        return;
+    }
+
     /* go around each global variable */
     mk_list_foreach(head, list) {
         pre = mk_list_entry(head, struct duda_worker_pre, _head);
