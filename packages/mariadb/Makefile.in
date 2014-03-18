@@ -1,0 +1,29 @@
+_PATH   = $(patsubst $(monkey_root)/%, %, $(CURDIR))
+CC      = @echo "  CC   $(_PATH)/$@"; $CC
+CC_QUIET= @echo -n; $CC
+CFLAGS  = $CFLAGS
+LDFLAGS = $LDFLAGS
+DEFS    = $DEFS
+INCDIR  = ../../../../src/include -I../../src -Ideps/libmariadbclient/include -Ideps/libmariadbclient/obj/include
+OBJECTS = duda_package.o mariadb.o connection.o query.o pool.o async.o
+SOURCES = duda_package.c mariadb.c connection.c query.c pool.c async.c
+
+all: libmariadbclient.a ../mariadb.dpkg
+
+-include $(OBJECTS:.o=.d)
+
+../mariadb.dpkg: $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFS) -shared -o $@ $^ deps/libmariadbclient/obj/libmysql/libmysqlclient.a -lc
+
+.c.o: $(SOURCES)
+	$(CC) $(CFLAGS) $(DEFS) -I$(INCDIR) -fPIC -c $<
+	$(CC_QUIET) -MM -MP $(CFLAGS) $(DEFS) -I$(INCDIR) $*.c -o $*.d > /dev/null &2>&1
+
+libmariadbclient.a:
+	@(cd deps/libmariadbclient/ &&  mkdir -p obj && cd obj \
+		&& cmake -DBUILD_CONFIG=mysql_release -DCMAKE_BUILD_TYPE=Release -DWITHOUT_SERVER=on .. \
+		&& make mysqlclient && cd ../../../)
+
+clean:
+	rm -rf *~ *.o
+	rm -rf deps/libmariadbclient/obj/
