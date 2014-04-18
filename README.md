@@ -1,5 +1,4 @@
-Duda I/O: Web Services Framework
-================================
+# Duda I/O: Web Services Framework
 Duda is an event-driven web services framework which exposes a
 friendly C API.
 
@@ -12,13 +11,15 @@ of the service needs, it can load on runtime packages to import
 specific objects with third party features. Some packages available
 are:
 
-   - WebSocket
-   - JSON
-   - SQLite
-   - SHA1
-   - SHA256
-   - Base64
-   - Redis
+ * WebSocket
+ * JSON
+ * SQLite
+ * SHA1
+ * SHA256
+ * Base64
+ * Redis
+ * In-Memory Key/Value store
+ * much more!
 
 Being implemented on top of Monkey stack, its fully compatible for
 projects targetting Embedded Linux, as well it's natively made for
@@ -29,24 +30,22 @@ official project site:
 
    http://duda.io
 
+## Quick Start with Duda Client Manager (aka DudaC)
 
-Quick Start with Duda Client Manager (aka DudaC)
-------------------------------------------------
 DudaC is a separate program that takes care of setup a development
 environment for Duda web services. For more details about it please
 refer to the following guide:
 
-          http://duda.io/documentation/dudac
+   http://duda.io/documentation/dudac
 
 In order to get some services examples refer to this repository:
 
-          http://git.monkey-project.com/?p=duda-examples
+   https://github.com/monkey/duda-examples
 
 Then you can play with DudaC and duda-examples/NNN.
 
+## Duda Internals and Workflow
 
-Duda Internals and Workflow
----------------------------
 Before to describe how Duda works we need to describe the internals
 of Monkey HTTP server.
 
@@ -93,11 +92,11 @@ web service, this web services can be mapped to different virtual hosts, this
 provides a huge flexibility in terms of what is required to do.
 
 
-Manually setup of a web service
--------------------------------
-- Enable the duda plugin in conf/plugins.load.
+## Manually setup of a web service
 
-- Edit conf/plugins/duda/duda.conf configuration file and set the key
+* Enable the duda plugin in conf/plugins.load.
+
+*  Edit conf/plugins/duda/duda.conf configuration file and set the key
 ServicesRoot with the absolute path where the services files are
 located, e.g:
 
@@ -105,7 +104,7 @@ located, e.g:
       ServicesRoot /home/foo/monkey/services/
       PackagesRoot /home/foo/monkey/plugins/duda/packages/
 
-- Edit the virtual host configuration file where the service will work,
+* Edit the virtual host configuration file where the service will work,
 as an example edit conf/sites/default and add the following
 entry:
 
@@ -121,16 +120,14 @@ entry:
 we have instructed to load service "hello", so Duda will try to locate
 the service file 'hello.duda' under ServicesRoot directory and load it.
 
-Links
-=====
+## Links
+
 Project site: http://duda.io
 Bug Tracker : http://bugs.duda.io
 Mailing list: http://lists.monkey-project.com/listinfo/duda
 IRC         : irc.freenode.net #monkey
 
-Author
-======
+## Author
+
 Eduardo Silva P <edsiper@gmail.com>
 http://edsiper.linuxchile.cl
-
-
