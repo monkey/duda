@@ -117,6 +117,8 @@ int duda_session_init(char *store_name)
             return -1;
         }
     }
+    
+    session_store_path = path;
 
     return 0;
 }
