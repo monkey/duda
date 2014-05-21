@@ -33,13 +33,12 @@
 
 /*
  * @METHOD_NAME: encode
- * @METHOD_DESC: It encodes an input data stream with SHA1 algorithm and writes
- * the output to data_out buffer. Finally it stores the encoded data length in
- * the length variable.
+ * @METHOD_DESC: It encodes an input data stream of specified length with SHA1 
+ * algorithm and writes the output to data_out buffer. 
  * @METHOD_PROTO: void encode(const void *data_in, unsigned char *data_out, unsigned long length)
  * @METHOD_PARAM: data_in the source data to be encoded
  * @METHOD_PARAM: data_out the buffer where the encoded data is written
- * @METHOD_PARAM: length the length of data_out
+ * @METHOD_PARAM: length the length of data_in
  * @METHOD_RETURN: None
  */
 static void sha1_encode (const void *data_in, unsigned char *data_out,
