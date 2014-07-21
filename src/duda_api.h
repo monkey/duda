@@ -22,8 +22,9 @@
 
 #include <pthread.h>
 
-#include "MKPlugin.h"
-#include "mk_list.h"
+#include <monkey/mk_api.h>
+#include <monkey/mk_list.h>
+
 #include "duda.h"
 #include "duda_gc.h"
 #include "duda_map.h"

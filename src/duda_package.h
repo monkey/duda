@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <sys/syscall.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda_api.h"
 #include "duda_map.h"
 #include "duda_global.h"

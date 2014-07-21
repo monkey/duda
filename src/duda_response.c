@@ -19,8 +19,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-
-#include "mk_mimetype.h"
+#include <monkey/mk_mimetype.h>
 
 #include "duda.h"
 #include "duda_api.h"

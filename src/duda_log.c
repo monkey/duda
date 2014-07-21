@@ -26,7 +26,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda.h"
 #include "duda_map.h"
 #include "duda_api.h"

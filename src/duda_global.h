@@ -20,7 +20,7 @@
 #ifndef DUDA_GLOBAL_H
 #define DUDA_GLOBAL_H
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include <pthread.h>
 
 typedef struct {

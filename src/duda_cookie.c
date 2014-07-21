@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda_cookie.h"
 #include "duda.h"
 

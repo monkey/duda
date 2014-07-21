@@ -20,8 +20,9 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
 
-#include "mk_list.h"
-#include "MKPlugin.h"
+#include <monkey/mk_list.h>
+#include <monkey/mk_api.h>
+
 #include "duda.h"
 #include "duda_gc.h"
 #include "duda_qs.h"

@@ -4,7 +4,7 @@ CC_QUIET= @echo -n; $CC
 CFLAGS	= $CFLAGS
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS
-INCDIR  = ../../../src/include
+INCDIR  = ../../../include/
 
 OBJECTS = duda.o duda_gc.o duda_mem.o duda_conf.o duda_api.o duda_event.o \
 	duda_body_buffer.o duda_sendfile.o duda_debug.o duda_global.o \

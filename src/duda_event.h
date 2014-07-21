@@ -20,7 +20,7 @@
 #ifndef DUDA_EVENT_H
 #define DUDA_EVENT_H
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda.h"
 #include "duda_objects.h"
 

@@ -3,7 +3,7 @@ CFLAGS	= $CFLAGS
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS
 DIRS    = src packages docs
-INCDIR  = ../../src/include
+INCDIR  = ../../include/
 
 all:
 	@(for d in $(DIRS); do $(MAKE) -C $$d ; done)

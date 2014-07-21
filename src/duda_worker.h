@@ -17,10 +17,11 @@
  *  limitations under the License.
  */
 
-#include "mk_list.h"
-
 #ifndef DUDA_API_WORKER_H
 #define DUDA_API_WORKER_H
+
+#include <monkey/mk_list.h>
+
 
 /* Defines a node for the pre-worker loop */
 struct duda_worker_pre {

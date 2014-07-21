@@ -20,7 +20,7 @@
 #define  _GNU_SOURCE
 #include <limits.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 
 #include "duda_event.h"
 #include "duda_body_buffer.h"

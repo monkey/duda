@@ -24,7 +24,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda_session.h"
 #include "duda.h"
 #include "webservice.h"

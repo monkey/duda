@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 
 #ifndef DUDA_DWEBSERVICE_H
 #define DUDA_DWEBSERVICE_H

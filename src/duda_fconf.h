@@ -17,11 +17,11 @@
  *  limitations under the License.
  */
 
-#include "mk_string.h"
-#include "duda_api.h"
-
 #ifndef MK_DUDA_FCONF_H
 #define MK_DUDA_FCONF_H
+
+#include <monkey/mk_string.h>
+#include "duda_api.h"
 
 /* config constants */
 #define DUDA_CONFIG_STR    MK_CONFIG_VAL_STR

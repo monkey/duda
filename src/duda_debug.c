@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "webservice.h"
 
 #include <stdio.h>

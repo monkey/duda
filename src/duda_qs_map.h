@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 
 #ifndef DUDA_QS_MAP_H
 #define DUDA_QS_MAP_H

@@ -20,11 +20,13 @@
 #ifndef DUDA_LOG_H
 #define DUDA_LOG_H
 
+#include <monkey/mk_memory.h>
+
 #include "duda_conf.h"
 #include "duda.h"
 #include "duda_global.h"
 #include "duda_objects.h"
-#include "mk_memory.h"
+
 
 typedef struct {
     int enabled;

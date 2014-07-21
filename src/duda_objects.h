@@ -22,7 +22,7 @@
  * the framework, like web services or packages.
  */
 
-#include "mk_macros.h"
+#include <monkey/mk_macros.h>
 #include "duda_global.h"
 #include "duda_worker.h"
 #include "duda_mem.h"

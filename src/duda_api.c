@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 
 #include "duda_debug.h"
 #include "duda_console.h"

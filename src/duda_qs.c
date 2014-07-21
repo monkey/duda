@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-#include "MKPlugin.h"
+#include <monkey/mk_api.h>
 #include "duda.h"
 #include "duda_gc.h"
 #include "duda_qs.h"
