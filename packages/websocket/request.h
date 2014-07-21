@@ -21,9 +21,9 @@
 #define WEBSOCKET_REQUEST_H
 
 #include <stdint.h>
+#include <monkey/mk_macros.h>
+#include <monkey/mk_list.h>
 #include "duda_api.h"
-#include "mk_macros.h"
-#include "mk_list.h"
 #include "protocol.h"
 
 struct ws_request

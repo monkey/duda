@@ -30,7 +30,7 @@
 #include <float.h>
 #include <limits.h>
 #include <ctype.h>
-#include "mk_memory.h"
+#include <monkey/mk_memory.h>
 #include "cJSON.h"
 
 static const char *ep;

@@ -4,7 +4,7 @@ CC_QUIET= @echo -n; $CC
 CFLAGS  = $CFLAGS
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS
-INCDIR  = ../../../../src/include -I../../src
+INCDIR  = ../../../../include/ -I../../src
 OBJECTS = duda_package.o base64.o sha1.o websocket.o request.o broadcast.o callbacks.o
 SOURCES = duda_package.c base64.c sha1.c websocket.c request.c broadcast.c callbacks.c
 
