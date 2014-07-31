@@ -1,0 +1,7 @@
+*.o
+*.d
+*.dpkg
+*.so
+Makefile
+docs/html/*
+
