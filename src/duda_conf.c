@@ -240,6 +240,9 @@ int duda_conf_vhost_init()
          * mk_config_section_get() because we can have multiple [WEB_SERVICE]
          * sections.
          */
+        if (!entry_host->config) {
+            continue;
+        }
         mk_list_foreach(head_section, &entry_host->config->sections) {
             section = mk_list_entry(head_section, struct mk_config_section, _head);
 
