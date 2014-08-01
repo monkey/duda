@@ -42,6 +42,7 @@
 #include "duda_fconf.h"
 #include "duda_qs.h"
 #include "duda_worker.h"
+#include "duda_dthread.h"
 #include "webservice.h"
 
 struct duda_api_objects *duda_api_master()
@@ -83,6 +84,7 @@ struct duda_api_objects *duda_api_master()
     objs->conf     = duda_conf_object();
     objs->fconf    = duda_fconf_object();
     objs->worker   = duda_worker_object();
+    objs->dthread  = duda_dthread_object();
 
     /* FIXME - DEBUG object */
 #ifdef DEBUG
