@@ -130,6 +130,7 @@ int _duda_main(struct duda_api_objects *dapi);
         fconf    = dapi->fconf;                                         \
         worker   = dapi->worker;                                        \
         xtime    = dapi->xtime;                                         \
+        dthread  = dapi->dthread;                                       \
                                                                         \
         /* Reference to this web service */                             \
         self = ws;                                                      \

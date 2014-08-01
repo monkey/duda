@@ -36,6 +36,7 @@
 #include "duda_request.h"
 #include "duda_response.h"
 #include "duda_worker.h"
+#include "duda_dthread.h"
 
 /* data types */
 typedef void * duda_callback_t;
@@ -105,6 +106,7 @@ struct duda_api_objects {
     struct duda_api_fconf *fconf;
     struct duda_api_worker *worker;
     struct duda_api_xtime *xtime;
+    struct duda_api_dthread *dthread;
 };
 
 struct duda_api_objects *duda_api_master();

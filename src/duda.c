@@ -34,6 +34,7 @@
 #include "duda_console.h"
 #include "duda_log.h"
 #include "duda_worker.h"
+#include "duda_dthread.h"
 #include "duda_package.h"
 
 MONKEY_PLUGIN("duda",                                     /* shortname */
@@ -610,6 +611,7 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     pthread_key_create(&duda_events_list, NULL);
     pthread_key_create(&duda_global_events_write, NULL);
     pthread_key_create(&duda_global_dr_list, NULL);
+    pthread_key_create(&duda_dthread_scheduler, NULL);
 
     mk_list_init(&duda_event_signals_list);
 
