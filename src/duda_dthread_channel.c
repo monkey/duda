@@ -43,15 +43,13 @@ static void duda_dthread_channel_elem_free(duda_dthread_channel_elem_t *elem)
     mk_api->mem_free(elem);
 }
 
-duda_dthread_channel_t *duda_dthread_channel_create(int size,
-        duda_dthread_channel_elem_destructor *elem_destructor)
+duda_dthread_channel_t *duda_dthread_channel_create(int size)
 {
     duda_dthread_channel_t *chan = mk_api->mem_alloc(sizeof(*chan));
     assert(chan);
 	chan->size = size + 1;
     chan->used = 0;
     mk_list_init(&chan->bufs);
-    chan->elem_destructor = elem_destructor;
     chan->sender = -1;
     chan->receiver = -1;
     chan->ended = 0;
@@ -62,18 +60,18 @@ duda_dthread_channel_t *duda_dthread_channel_create(int size,
 void duda_dthread_channel_free(duda_dthread_channel_t *chan)
 {
     assert(chan);
-    while (mk_list_is_empty(&chan->bufs) != 0) {
-        duda_dthread_channel_elem_t *elem = mk_list_entry_first(&chan->bufs,
-                duda_dthread_channel_elem_t, _head);
-        chan->elem_destructor(elem->data);
-        duda_dthread_channel_elem_free(elem);
+    if (chan->receiver != -1) {
+        mk_list_del(&chan->_head);
     }
     mk_api->mem_free(chan);
 }
 
-void duda_dthread_channel_send(duda_dthread_channel_t *chan, void *data)
+int duda_dthread_channel_send(duda_dthread_channel_t *chan, void *data)
 {
     assert(chan);
+    if (chan->receiver == -1) {
+        return DTHREAD_CHANNEL_BROKEN;
+    }
     if (chan->used == chan->size) {
         // channel is full
         duda_dthread_resume(chan->receiver);
@@ -81,6 +79,7 @@ void duda_dthread_channel_send(duda_dthread_channel_t *chan, void *data)
     duda_dthread_channel_elem_t *elem = duda_dthread_channel_elem_create(data);
     mk_list_add(&elem->_head, &chan->bufs);
     chan->used++;
+    return DTHREAD_CHANNEL_OK;
 }
 
 void *duda_dthread_channel_recv(duda_dthread_channel_t *chan)

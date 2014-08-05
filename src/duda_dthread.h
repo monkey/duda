@@ -39,8 +39,7 @@ struct duda_api_dthread {
     int (*status)(int id);
     void (*yield)();
     void (*resume)(int id);
-    duda_dthread_channel_t *(*chan_create)(int size,
-            duda_dthread_channel_elem_destructor *elem_destructor);
+    duda_dthread_channel_t *(*chan_create)(int size);
     void (*chan_free)(duda_dthread_channel_t *chan);
     int (*chan_get_sender)(duda_dthread_channel_t *chan);
     void (*chan_set_sender)(duda_dthread_channel_t *chan, int sender);
@@ -48,7 +47,7 @@ struct duda_api_dthread {
     void (*chan_set_receiver)(duda_dthread_channel_t *chan, int receiver);
     int (*chan_done)(duda_dthread_channel_t *chan);
     void (*chan_end)(duda_dthread_channel_t *chan);
-    void (*chan_send)(duda_dthread_channel_t *chan, void *data);
+    int (*chan_send)(duda_dthread_channel_t *chan, void *data);
     void *(*chan_recv)(duda_dthread_channel_t *chan);
 };
 
@@ -59,6 +58,8 @@ int duda_dthread_create(duda_dthread_func func, void *data);
 int duda_dthread_status(int id);
 void duda_dthread_yield();
 void duda_dthread_resume(int id);
+
+void duda_dthread_add_channel(int id, struct duda_dthread_channel_t *chan);
 
 struct duda_api_dthread *duda_dthread_object();
 
