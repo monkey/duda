@@ -612,6 +612,7 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     pthread_key_create(&duda_global_events_write, NULL);
     pthread_key_create(&duda_global_dr_list, NULL);
     pthread_key_create(&duda_dthread_scheduler, NULL);
+    pthread_key_create(&duda_logger_fmt_cache, NULL);
 
     mk_list_init(&duda_event_signals_list);
 
