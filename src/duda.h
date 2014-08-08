@@ -70,6 +70,7 @@ typedef struct duda_request {
     unsigned int _st_http_headers_sent;   /* HTTP headers sent ?           */
     unsigned int _st_http_headers_off;    /* should we send headers ?      */
     unsigned int _st_body_writes;         /* Number of body_writes invoked */
+    unsigned int _st_service_end;         /* Did a service_end() ran ?     */
 
     /* Query string */
     struct duda_qs_map qs;
