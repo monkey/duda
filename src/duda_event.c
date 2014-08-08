@@ -232,9 +232,8 @@ int duda_event_delete(int sockfd)
                 mk_api->event_del(sockfd);
             }
             else if (sockfd != dr->socket) {
-                    mk_api->event_del(sockfd);
+                mk_api->event_del(sockfd);
             }
-
             return 0;
         }
     }
@@ -352,4 +351,3 @@ int duda_event_create_signal_fd()
  */
 
 /* this is a static function defined in duda_event.h */
-

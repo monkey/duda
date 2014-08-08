@@ -378,24 +378,31 @@ int _mkp_event_write(int sockfd)
 
 int mkp_event_close(int sockfd)
 {
+    int ret;
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     duda_request_t *dr = NULL;
 
     PLUGIN_TRACE("[FD %i] Event CLOSE", sockfd);
 
+    ret =  MK_PLUGIN_RET_EVENT_CONTINUE;
+
     if (eh && eh->cb_on_close) {
         eh->cb_on_close(eh->sockfd, eh->cb_data);
         duda_event_delete(sockfd);
-        return MK_PLUGIN_RET_EVENT_OWNED;
+        ret = MK_PLUGIN_RET_EVENT_OWNED;
     }
 
     dr = duda_dr_list_del(sockfd);
     if (dr) {
+        if (dr->_st_service_end == MK_FALSE) {
+            duda_service_end(dr);
+        }
         duda_gc_free(dr);
         mk_api->mem_free(dr);
+        ret = MK_PLUGIN_RET_EVENT_OWNED;
     }
 
-    return MK_PLUGIN_RET_EVENT_CONTINUE;
+    return ret;;
 }
 
 int _mkp_event_close(int sockfd)
@@ -755,6 +762,9 @@ int duda_service_end(duda_request_t *dr)
 
     /* Finalize HTTP stuff with Monkey core */
     ret = mk_api->http_request_end(dr->socket);
+    if (ret < 0) {
+        dr->_st_service_end = MK_TRUE;
+    }
     return ret;
 }
 
