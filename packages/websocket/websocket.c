@@ -228,6 +228,13 @@ int cb_ws_close(int sockfd, void *data)
     if (wr->cb_on_close) {
         wr->cb_on_close(dr, wr);
     }
+
+    /*
+     * Make sure to remove any reference on the WebSocket context for this
+     * connection.
+     */
+    ws_request_delete(sockfd);
+
     return DUDA_EVENT_CLOSE;
 }
 
