@@ -42,6 +42,7 @@ typedef struct duda_dthread_t {
 #ifdef USE_VALGRIND
     unsigned int valgrind_stack_id;
 #endif
+    struct mk_list chan_list;
     char stack[DTHREAD_STACK_SIZE];
 } duda_dthread_t;
 
@@ -62,6 +63,12 @@ static void _duda_dthread_entry_point(duda_dthread_scheduler_t *sch)
     duda_dthread_t *dt = sch->dt[id];
     dt->func(dt->data);
     dt->status = DTHREAD_DEAD;
+    struct mk_list *head;
+    duda_dthread_channel_t *chan;
+    mk_list_foreach(head, &dt->chan_list) {
+        chan = mk_list_entry(head, duda_dthread_channel_t, _head);
+        chan->receiver = -1;
+    }
     sch->n_dthread--;
     sch->running_id = dt->parent_id;
 }
@@ -132,6 +139,7 @@ int duda_dthread_create(duda_dthread_func func, void *data)
 #ifdef USE_VALGRIND
     dt->valgrind_stack_id = VALGRIND_STACK_REGISTER(dt->stack, dt->stack + DTHREAD_STACK_SIZE);
 #endif
+    mk_list_init(&dt->chan_list);
     sch->dt[id] = dt;
     sch->n_dthread++;
     return id;
@@ -219,6 +227,16 @@ int duda_dthread_running()
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
     assert(sch);
     return sch->running_id;
+}
+
+void duda_dthread_add_channel(int id, duda_dthread_channel_t *chan)
+{
+    assert(chan);
+    duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
+    assert(sch);
+    assert(id >= 0 && id < sch->cap);
+    duda_dthread_t *dt = sch->dt[id];
+    mk_list_add(&chan->_head, &dt->chan_list);
 }
 
 struct duda_api_dthread *duda_dthread_object()
