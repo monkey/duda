@@ -38,23 +38,54 @@ typedef struct duda_dthread_channel_t {
     struct mk_list _head;
 } duda_dthread_channel_t;
 
+/*
+ * @METHOD_NAME: chan_get_sender
+ * @METHOD_DESC: get sender of the given channel.
+ * @METHOD_PROTO: int chan_get_sender(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_RETURN: the dthread id of sender of the channel.
+ */
 static inline int duda_dthread_channel_get_sender(duda_dthread_channel_t *chan)
 {
     return chan->sender;
 }
 
+/*
+ * @METHOD_NAME: chan_set_sender
+ * @METHOD_DESC: set sender of the given channel.
+ * @METHOD_PROTO: void chan_set_sender(duda_dthread_channel_t *chan, int sender)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_PARAM: sender the dthread id of target sender.
+ * @METHOD_RETURN: this method do not return any value.
+ */
 static inline void duda_dthread_channel_set_sender(duda_dthread_channel_t *chan,
         int sender)
 {
     chan->sender = sender;
 }
 
+/*
+ * @METHOD_NAME: chan_get_receiver
+ * @METHOD_DESC: get receiver of the given channel.
+ * @METHOD_PROTO: int chan_get_receiver(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_RETURN: the dthread id of receiver of the channel.
+ */
 static inline int duda_dthread_channel_get_receiver(duda_dthread_channel_t *chan)
 {
     return chan->receiver;
 }
 
 void duda_dthread_add_channel(int id, struct duda_dthread_channel_t *chan);
+
+/*
+ * @METHOD_NAME: chan_set_receiver
+ * @METHOD_DESC: set receiver of the given channel.
+ * @METHOD_PROTO: void chan_set_receiver(duda_dthread_channel_t *chan, int receiver)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_PARAM: receiver the dthread id of target receiver.
+ * @METHOD_RETURN: this method do not return any value.
+ */
 static inline void duda_dthread_channel_set_receiver(duda_dthread_channel_t *chan,
         int receiver)
 {
@@ -62,11 +93,27 @@ static inline void duda_dthread_channel_set_receiver(duda_dthread_channel_t *cha
     duda_dthread_add_channel(receiver, chan);
 }
 
+/*
+ * @METHOD_NAME: chan_done
+ * @METHOD_DESC: whether the channel is no longer necessary(this will be the case
+ * that a channel is empty and the sender won't send any more).
+ * @METHOD_PROTO: int chan_done(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_RETURN: returns 1 if the channel is no longer necessary, otherwise 0.
+ */
 static inline int duda_dthread_channel_done(duda_dthread_channel_t *chan)
 {
     return chan->done;
 }
 
+/*
+ * @METHOD_NAME: chan_end
+ * @METHOD_DESC: it is used by the sender to tell the channel no more data will be
+ * sent.
+ * @METHOD_PROTO: void chan_end(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel.
+ * @METHOD_RETURN: this method do not return any value.
+ */
 static inline void duda_dthread_channel_end(duda_dthread_channel_t *chan)
 {
     chan->ended = 1;
