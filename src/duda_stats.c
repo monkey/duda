@@ -168,7 +168,6 @@ void duda_stats_txt_cb(duda_request_t *dr)
  */
 int duda_stats_worker_init()
 {
-    size_t sz;
     struct duda_stats_worker *st;
 
     st = api->mem_alloc(sizeof(struct duda_stats_worker));
@@ -178,11 +177,16 @@ int duda_stats_worker_init()
     /* Protect this section as it needs to be atomic */
     pthread_mutex_lock(&duda_mutex_stats);
 
-    sz = sizeof(st->mem_allocated);
-
+#ifdef MALLOC_JEMALLOC
     /* Get pointers to memory counters */
+    size_t sz;
+    sz = sizeof(st->mem_allocated);
     je_mallctl("thread.allocatedp", &st->mem_allocated, &sz, NULL, 0);
     je_mallctl("thread.deallocatedp", &st->mem_deallocated, &sz, NULL, 0);
+#else
+    st->mem_allocated = 0;
+    st->mem_deallocated = 0;
+#endif
 
     /* Link the worker info into the global list */
     mk_list_add(&st->_head, &duda_stats.mem);
