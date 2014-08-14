@@ -43,6 +43,13 @@ static void duda_dthread_channel_elem_free(duda_dthread_channel_elem_t *elem)
     mk_api->mem_free(elem);
 }
 
+/*
+ * @METHOD_NAME: chan_create
+ * @METHOD_DESC: create a channel(pipe) for dthread communication.
+ * @METHOD_PROTO: duda_dthread_channel_t *chan_create(int size)
+ * @METHOD_PARAM: size the buffered size of the channel.
+ * @METHOD_RETURN: returns a new channel.
+ */
 duda_dthread_channel_t *duda_dthread_channel_create(int size)
 {
     duda_dthread_channel_t *chan = mk_api->mem_alloc(sizeof(*chan));
@@ -57,6 +64,13 @@ duda_dthread_channel_t *duda_dthread_channel_create(int size)
 	return chan;
 }
 
+/*
+ * @METHOD_NAME: chan_free
+ * @METHOD_DESC: release a given channel.
+ * @METHOD_PROTO: void chan_free(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel to be released.
+ * @METHOD_RETURN: this method do not return any value.
+ */
 void duda_dthread_channel_free(duda_dthread_channel_t *chan)
 {
     assert(chan);
@@ -66,6 +80,15 @@ void duda_dthread_channel_free(duda_dthread_channel_t *chan)
     mk_api->mem_free(chan);
 }
 
+/*
+ * @METHOD_NAME: chan_send
+ * @METHOD_DESC: add a new element to the given channel.
+ * @METHOD_PROTO: int chan_send(duda_dthread_channel_t *chan, void *data)
+ * @METHOD_PARAM: chan the target channel to send.
+ * @METHOD_PARAM: data the new element to be sent to channel.
+ * @METHOD_RETURN: return DTHREAD_CHANNEL_BROKEN if the other side of the pipe
+ * is closed, otherwise return DTHREAD_CHANNEL_OK.
+ */
 int duda_dthread_channel_send(duda_dthread_channel_t *chan, void *data)
 {
     assert(chan);
@@ -82,6 +105,13 @@ int duda_dthread_channel_send(duda_dthread_channel_t *chan, void *data)
     return DTHREAD_CHANNEL_OK;
 }
 
+/*
+ * @METHOD_NAME: chan_recv
+ * @METHOD_DESC: remove an element from a given channel.
+ * @METHOD_PROTO: void *chan_recv(duda_dthread_channel_t *chan)
+ * @METHOD_PARAM: chan the target channel to receive.
+ * @METHOD_RETURN: the front element of the channel.
+ */
 void *duda_dthread_channel_recv(duda_dthread_channel_t *chan)
 {
     assert(chan);

@@ -17,6 +17,9 @@ src/duda_request.c
 src/duda_session.c
 src/duda_worker.c
 src/duda_xtime.c
+src/duda_dthread.c
+src/duda_dthread_channel.h
+src/duda_dthread_channel.c
 packages/base64
 packages/json
 packages/kv

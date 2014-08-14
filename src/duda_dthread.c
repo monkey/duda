@@ -25,6 +25,20 @@
 #include "duda_api.h"
 #include "duda_dthread.h"
 
+/*
+ * @OBJ_NAME: dthread
+ * @OBJ_MENU: Dthread
+ * @OBJ_DESC: The dthread object provides a set of methods to handle user space cooperative thread, namely dthread(duda thread).
+ * A dthread can be suspended when it encounters something that will block(in other
+ * words, something will be available in the future), while another dthread that
+ * is ready to run is awakened. Back and forth, all dthreads within the same pthread
+ * work collaboratively. This means dthread is non-preemptive and requires the user
+ * to explicitly give up control when necessary.
+ * Dthreads communicate with each other by using channel, a channel is like a pipe,
+ * one dthread feeds data to the channel while another cosumes from it.
+ *
+ */
+
 #ifdef USE_VALGRIND
 #include <valgrind/valgrind.h>
 #endif
@@ -100,6 +114,15 @@ void duda_dthread_close(duda_dthread_scheduler_t *sch)
     mk_api->mem_free(sch);
 }
 
+/*
+ * @METHOD_NAME: create
+ * @METHOD_DESC: create a new dthread.
+ * @METHOD_PROTO: int create(duda_dthread_func func, void *data)
+ * @METHOD_PARAM: func the function to be executed when the newly created dthread
+ * is started.
+ * @METHOD_PARAM: data user specific data that will be passed to func.
+ * @METHOD_RETURN: the dthread id associated with the new dthread.
+ */
 int duda_dthread_create(duda_dthread_func func, void *data)
 {
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
@@ -154,6 +177,14 @@ static void _duda_dthread_release(duda_dthread_t *dt)
     mk_api->mem_free(dt);
 }
 
+/*
+ * @METHOD_NAME: status
+ * @METHOD_DESC: get the status of a given dthread.
+ * @METHOD_PROTO: int status(int id)
+ * @METHOD_PARAM: id the dthread id of the target dthread.
+ * @METHOD_RETURN: it returns one of the following status: DTHREAD_DEAD, DTHREAD_READY,
+ * DTHREAD_RUNNING, DTHREAD_SUSPEND.
+ */
 int duda_dthread_status(int id)
 {
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
@@ -163,6 +194,13 @@ int duda_dthread_status(int id)
     return sch->dt[id]->status;
 }
 
+/*
+ * @METHOD_NAME: yield
+ * @METHOD_DESC: require the currently running dthread explicitly to give up control
+ * back to the dthread scheduler.
+ * @METHOD_PROTO: void yield()
+ * @METHOD_RETURN: this method do not return any value.
+ */
 void duda_dthread_yield()
 {
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
@@ -175,6 +213,13 @@ void duda_dthread_yield()
     swapcontext(&dt->context, &sch->main);
 }
 
+/*
+ * @METHOD_NAME: resume
+ * @METHOD_DESC: resume a given dthread and suspend the currently running dthread.
+ * @METHOD_PROTO: void resume(int id)
+ * @METHOD_PARAM: id the dthread id of the target dthread.
+ * @METHOD_RETURN: this method do not return any value.
+ */
 void duda_dthread_resume(int id)
 {
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
@@ -222,6 +267,12 @@ void duda_dthread_resume(int id)
     }
 }
 
+/*
+ * @METHOD_NAME: running
+ * @METHOD_DESC: get the id of the currently running dthread.
+ * @METHOD_PROTO: int running()
+ * @METHOD_RETURN: the dthread id associated with the currently running dthread.
+ */
 int duda_dthread_running()
 {
     duda_dthread_scheduler_t *sch = pthread_getspecific(duda_dthread_scheduler);
@@ -251,6 +302,7 @@ struct duda_api_dthread *duda_dthread_object()
     obj->status = duda_dthread_status;
     obj->yield  = duda_dthread_yield;
     obj->resume = duda_dthread_resume;
+    obj->running = duda_dthread_running;
     obj->chan_create = duda_dthread_channel_create;
     obj->chan_free = duda_dthread_channel_free;
     obj->chan_get_sender = duda_dthread_channel_get_sender;

@@ -49,6 +49,7 @@ struct duda_api_dthread {
     void (*chan_end)(duda_dthread_channel_t *chan);
     int (*chan_send)(duda_dthread_channel_t *chan, void *data);
     void *(*chan_recv)(duda_dthread_channel_t *chan);
+    int (*running)();
 };
 
 duda_dthread_scheduler_t *duda_dthread_open();
@@ -58,6 +59,7 @@ int duda_dthread_create(duda_dthread_func func, void *data);
 int duda_dthread_status(int id);
 void duda_dthread_yield();
 void duda_dthread_resume(int id);
+int duda_dthread_running();
 
 void duda_dthread_add_channel(int id, struct duda_dthread_channel_t *chan);
 
