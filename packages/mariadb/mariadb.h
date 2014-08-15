@@ -40,6 +40,7 @@
 #include "common.h"
 #include "query.h"
 #include "connection.h"
+#include "dthread.h"
 
 duda_global_t mariadb_conn_list;
 
@@ -61,6 +62,12 @@ typedef struct duda_api_mariadb {
     int (*query)(mariadb_conn_t *, const char *, mariadb_query_result_cb *,
                  mariadb_query_row_cb *, mariadb_query_end_cb *, void *);
     void (*abort)(mariadb_query_t *);
+    int (*dthread_connect)(mariadb_conn_t *);
+    mariadb_result_t *(*dthread_query)(mariadb_conn_t *conn, const char *);
+    char **(*dthread_get_row)(mariadb_conn_t *, mariadb_result_t *, int *);
+    void (*dthread_disconnect)(mariadb_conn_t *conn);
+    char **(*dthread_get_fields)(mariadb_result_t *);
+    int (*dthread_get_field_num)(mariadb_result_t *);
 } mariadb_object_t;
 
 mariadb_object_t *mariadb;

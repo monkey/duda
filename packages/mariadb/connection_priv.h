@@ -31,6 +31,7 @@ typedef enum {
     CONN_STATE_ROW_FETCHING, CONN_STATE_ROW_FETCHED,
     CONN_STATE_NEXT_RESULTING, CONN_STATE_NEXT_RESULTED,
     CONN_STATE_RESULT_FREEING, CONN_STATE_RESULT_FREED,
+    CONN_STATE_ERROR
 } mariadb_conn_state_t;
 
 #define DEFAULT_CIPHER "ECDHE-RSA-AES128-SHA256:AES128-GCM-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH"
@@ -67,6 +68,7 @@ struct mariadb_conn {
     mariadb_query_t *current_query;
     int disconnect_on_finish;
     int is_pooled;
+    int dthread_id;
     struct mariadb_pool *pool;
     struct mk_list queries;
     struct mk_list _head;

@@ -70,6 +70,7 @@ mariadb_conn_t *mariadb_conn_create(duda_request_t *dr, const char *user,
     conn->current_query        = NULL;
     conn->disconnect_on_finish = 0;
     conn->is_pooled            = 0;
+    conn->dthread_id           = -1;
     conn->pool                 = NULL;
     mysql_init(&conn->mysql);
 

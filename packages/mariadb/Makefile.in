@@ -4,9 +4,9 @@ CC_QUIET= @echo -n; $CC
 CFLAGS  = $CFLAGS
 LDFLAGS = $LDFLAGS
 DEFS    = $DEFS
-INCDIR  = ../../../../src/include -I../../src -Ideps/libmariadbclient/include -Ideps/libmariadbclient/obj/include
-OBJECTS = duda_package.o mariadb.o connection.o query.o pool.o async.o
-SOURCES = duda_package.c mariadb.c connection.c query.c pool.c async.c
+INCDIR  = ../../../../include -I../../src -Ideps/libmariadbclient/include -Ideps/libmariadbclient/obj/include
+OBJECTS = duda_package.o mariadb.o connection.o query.o pool.o async.o dthread.o
+SOURCES = duda_package.c mariadb.c connection.c query.c pool.c async.c dthread.c
 
 all: libmariadbclient.a ../mariadb.dpkg
 
