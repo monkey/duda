@@ -173,6 +173,7 @@ static void mariadb_dthread_handle_result(mariadb_conn_t *conn, mariadb_result_t
     assert(conn);
     assert(result);
     result->result = mysql_use_result(&conn->mysql);
+    if (!result->result) return;
     result->n_fields = mysql_num_fields(result->result);
     result->fields = monkey->mem_alloc(sizeof(char *) * result->n_fields);
     MYSQL_FIELD *fields = mysql_fetch_fields(result->result);
@@ -203,7 +204,12 @@ mariadb_result_t *mariadb_dthread_query(mariadb_conn_t *conn, const char *query_
             // handle result
             result = mariadb_dthread_result_create();
             mariadb_dthread_handle_result(conn, result);
-            return result;
+            if (!result->result) {
+                monkey->mem_free(result);
+                return NULL;
+            } else {
+                return result;
+            }
         }
     }
 
@@ -230,7 +236,12 @@ mariadb_result_t *mariadb_dthread_query(mariadb_conn_t *conn, const char *query_
                 // handle result
                 result = mariadb_dthread_result_create();
                 mariadb_dthread_handle_result(conn, result);
-                return result;
+                if (!result->result) {
+                    monkey->mem_free(result);
+                    return NULL;
+                } else {
+                    return result;
+                }
             }
         }
     }
