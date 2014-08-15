@@ -40,6 +40,7 @@
 #include "duda_objects.h"
 #include "duda_fconf.h"
 #include "duda_qs.h"
+#include "duda_dthread.h"
 
 struct duda_package {
     char *name;
@@ -81,6 +82,7 @@ duda_package_t MK_EXPORT *_duda_package_main();
         data     = dapi->data;                                          \
         worker   = dapi->worker;                                        \
         xtime    = dapi->xtime;                                         \
+        dthread  = dapi->dthread;                                       \
         mk_list_init(&duda_map_interfaces);                             \
         mk_list_init(&duda_map_urls);                                   \
         mk_list_init(&duda_global_dist);                                \
