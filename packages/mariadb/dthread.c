@@ -47,6 +47,13 @@ static inline mariadb_conn_t *mariadb_get_conn(int fd)
     return conn;
 }
 
+/*
+ * @METHOD_NAME: dthread_connect
+ * @METHOD_DESC: Similar to `maraidb->connect` except it won't return until the connection is established or some errors occur on the connection.
+ * @METHOD_PROTO: int dthread_connect(mariadb_conn_t *conn)
+ * @METHOD_PARAM: conn The MariaDB connection handle, it must be a newly allocated one.
+ * @METHOD_RETURN: MAIRADB_OK on success, or MARIADB_ERR on failure.
+ */
 int mariadb_dthread_connect(mariadb_conn_t *conn)
 {
     assert(conn);
@@ -183,6 +190,14 @@ static void mariadb_dthread_handle_result(mariadb_conn_t *conn, mariadb_result_t
     }
 }
 
+/*
+ * @METHOD_NAME: dthread_query
+ * @METHOD_DESC: Send a new query to a MariaDB connection and wait for result.
+ * @METHOD_PROTO: mariadb_result_t *dthread_query(mariadb_conn_t *conn, const char *query_str)
+ * @METHOD_PARAM: conn The MariaDB connection handle.
+ * @METHOD_PARAM: query_str The SQL statement string of this query.
+ * @METHOD_RETURN: result of the given query on success(result may be NULL), or NULL on failure.
+ */
 mariadb_result_t *mariadb_dthread_query(mariadb_conn_t *conn, const char *query_str)
 {
     assert(conn);
@@ -247,6 +262,17 @@ mariadb_result_t *mariadb_dthread_query(mariadb_conn_t *conn, const char *query_
     }
 }
 
+/*
+ * @METHOD_NAME: dthread_get_row
+ * @METHOD_DESC: Fetch result from a previous issued query.
+ * @METHOD_PROTO: char **dthread_get_row(mariadb_conn_t *conn, mariadb_result_t *result, int *error)
+ * @METHOD_PARAM: conn The MariaDB connection handle.
+ * @METHOD_PARAM: result The result of a previous SQL query.
+ * @METHOD_PARAM: error Used to determine whether errors occur when `mariadb->dthread_get_row` return NULL.
+ * @METHOD_RETURN: next row of the given query result on success, there're two
+ * situation will return NULL, use `error` to determine: if `*error` is 0 it means
+ * all the rows are consumed, otherwise some errors occur.
+ */
 char **mariadb_dthread_get_row(mariadb_conn_t *conn, mariadb_result_t *result, int *error)
 {
     assert(conn);
@@ -305,6 +331,13 @@ char **mariadb_dthread_get_row(mariadb_conn_t *conn, mariadb_result_t *result, i
     }
 }
 
+/*
+ * @METHOD_NAME: dthread_disconnect
+ * @METHOD_DESC: Disconnect a previous opened connection and release all the resource with it.
+ * @METHOD_PROTO: void dthread_disconnect(mariadb_conn_t *conn)
+ * @METHOD_PARAM: conn The MariaDB connection handle, it must be a valid, open connection.
+ * @METHOD_RETURN: None.
+ */
 void mariadb_dthread_disconnect(mariadb_conn_t *conn)
 {
     assert(conn);
@@ -313,12 +346,26 @@ void mariadb_dthread_disconnect(mariadb_conn_t *conn)
     mariadb_conn_free(conn);
 }
 
+/*
+ * @METHOD_NAME: dthread_get_fields
+ * @METHOD_DESC: Get fields of a given SQL query result.
+ * @METHOD_PROTO: char **dthread_get_fields(mariadb_result_t *result)
+ * @METHOD_PARAM: result The result of a previous SQL query.
+ * @METHOD_RETURN: A string array contains fields of a result.
+ */
 char **mariadb_dthread_get_fields(mariadb_result_t *result)
 {
     assert(result);
     return result->fields;
 }
 
+/*
+ * @METHOD_NAME: dthread_get_field_num
+ * @METHOD_DESC: Get field numbers of a given SQL query result.
+ * @METHOD_PROTO: int dthread_get_field_num(mariadb_result_t *result)
+ * @METHOD_PARAM: result The result of a previous SQL query.
+ * @METHOD_RETURN: Size of the fields array of a result.
+ */
 int mariadb_dthread_get_field_num(mariadb_result_t *result)
 {
     assert(result);
