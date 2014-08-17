@@ -273,6 +273,13 @@ mariadb_conn_t *mariadb_async_pool_get_conn(duda_global_t *pool_key, duda_reques
     return mariadb_pool_get_conn(pool_key, dr, cb, 1);
 }
 
+/*
+ * @METHOD_NAME: pool_get_conn
+ * @METHOD_DESC: Similar to `pool_get_conn_async`, except that it will block util an established connection is returned.
+ * @METHOD_PROTO: mariadb_conn_t *pool_get_conn(duda_global_t *pool_key)
+ * @METHOD_PARAM: pool_key The pointer that refers to the global key definition of a pool.
+ * @METHOD_RETURN: A MariaDB connection on success, or NULL on failure.
+ */
 mariadb_conn_t *mariadb_dthread_pool_get_conn(duda_global_t *pool_key)
 {
     return mariadb_pool_get_conn(pool_key, NULL, NULL, 0);
