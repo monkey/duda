@@ -42,22 +42,23 @@ mariadb_object_t *get_mariadb_api()
     mariadb = monkey->mem_alloc(sizeof(mariadb_object_t));
 
     /* Map API calls */
-    mariadb->create_conn      = mariadb_conn_create;
-    mariadb->create_pool      = mariadb_pool_create;
-    mariadb->pool_get_conn    = mariadb_pool_get_conn;
-    mariadb->set_ssl          = mariadb_conn_set_ssl;
-    mariadb->pool_set_ssl     = mariadb_pool_set_ssl;
-    mariadb->connect_async    = mariadb_async_handle_connect;
-    mariadb->disconnect_async = mariadb_async_handle_disconnect;
-    mariadb->escape           = mariadb_real_escape_string;
-    mariadb->query_async      = mariadb_async_handle_add_query;
-    mariadb->abort_async      = mariadb_query_abort;
-    mariadb->connect          = mariadb_dthread_connect;
-    mariadb->query            = mariadb_dthread_query;
-    mariadb->get_row          = mariadb_dthread_get_row;
-    mariadb->disconnect       = mariadb_dthread_disconnect;
-    mariadb->get_fields       = mariadb_dthread_get_fields;
-    mariadb->get_field_num    = mariadb_dthread_get_field_num;
+    mariadb->create_conn         = mariadb_conn_create;
+    mariadb->create_pool         = mariadb_pool_create;
+    mariadb->pool_get_conn_async = mariadb_async_pool_get_conn;
+    mariadb->set_ssl             = mariadb_conn_set_ssl;
+    mariadb->pool_set_ssl        = mariadb_pool_set_ssl;
+    mariadb->connect_async       = mariadb_async_handle_connect;
+    mariadb->disconnect_async    = mariadb_async_handle_disconnect;
+    mariadb->escape              = mariadb_real_escape_string;
+    mariadb->query_async         = mariadb_async_handle_add_query;
+    mariadb->abort_async         = mariadb_query_abort;
+    mariadb->connect             = mariadb_dthread_connect;
+    mariadb->query               = mariadb_dthread_query;
+    mariadb->get_row             = mariadb_dthread_get_row;
+    mariadb->disconnect          = mariadb_dthread_disconnect;
+    mariadb->get_fields          = mariadb_dthread_get_fields;
+    mariadb->get_field_num       = mariadb_dthread_get_field_num;
+    mariadb->pool_get_conn       = mariadb_dthread_pool_get_conn;
 
     return mariadb;
 }

@@ -55,7 +55,7 @@ typedef struct duda_api_mariadb {
                     const char *, const char *);
     int (*pool_set_ssl)(duda_global_t *, const char *, const char *, const char*,
                         const char *, const char *);
-    mariadb_conn_t *(*pool_get_conn)(duda_global_t *, duda_request_t *, mariadb_connect_cb *);
+    mariadb_conn_t *(*pool_get_conn_async)(duda_global_t *, duda_request_t *, mariadb_connect_cb *);
     int (*connect_async)(mariadb_conn_t *, mariadb_connect_cb *);
     void (*disconnect_async)(mariadb_conn_t *, mariadb_disconnect_cb *);
     unsigned long (*escape)(mariadb_conn_t *, char *, const char *, unsigned long);
@@ -68,6 +68,7 @@ typedef struct duda_api_mariadb {
     void (*disconnect)(mariadb_conn_t *conn);
     char **(*get_fields)(mariadb_result_t *);
     int (*get_field_num)(mariadb_result_t *);
+    mariadb_conn_t *(*pool_get_conn)(duda_global_t *);
 } mariadb_object_t;
 
 mariadb_object_t *mariadb;

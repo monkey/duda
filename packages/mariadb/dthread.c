@@ -116,8 +116,8 @@ int mariadb_dthread_connect(mariadb_conn_t *conn)
             if (conn->state == CONN_STATE_ERROR) {
                 msg->err("[FD %i] MariaDB Connect Error: %s", conn->fd,
                          mysql_error(&conn->mysql));
-                mk_list_del(&conn->_head);
-                mariadb_conn_free(conn);
+                conn->is_pooled = 0;
+                mariadb_dthread_disconnect(conn);
                 return MARIADB_ERR;
             }
 
@@ -129,8 +129,8 @@ int mariadb_dthread_connect(mariadb_conn_t *conn)
                 if (!conn->mysql_ret) {
                     msg->err("[FD %i] MariaDB Connect Error: %s", conn->fd,
                              mysql_error(&conn->mysql));
-                    mk_list_del(&conn->_head);
-                    mariadb_conn_free(conn);
+                    conn->is_pooled = 0;
+                    mariadb_dthread_disconnect(conn);
                     return MARIADB_ERR;
                 }
                 conn->state = CONN_STATE_CONNECTED;
@@ -165,6 +165,14 @@ static void mariadb_dthread_result_free(mariadb_conn_t *conn, mariadb_result_t *
     }
 
     while (1) {
+        if (conn->state == CONN_STATE_ERROR) {
+            msg->err("[FD %i] MariaDB Result Free Error: %s", conn->fd,
+                     mysql_error(&conn->mysql));
+            conn->is_pooled = 0;
+            mariadb_dthread_disconnect(conn);
+            return;
+        }
+
         status = mysql_free_result_cont(result->result, MYSQL_WAIT_READ);
         if (status) {
             conn->state = CONN_STATE_RESULT_FREEING;
@@ -233,8 +241,8 @@ mariadb_result_t *mariadb_dthread_query(mariadb_conn_t *conn, const char *query_
         if (conn->state == CONN_STATE_ERROR) {
             msg->err("[FD %i] MariaDB Query Error: %s", conn->fd,
                      mysql_error(&conn->mysql));
-            mk_list_del(&conn->_head);
-            mariadb_conn_free(conn);
+            conn->is_pooled = 0;
+            mariadb_dthread_disconnect(conn);
             return NULL;
         }
 
@@ -304,8 +312,8 @@ char **mariadb_dthread_get_row(mariadb_conn_t *conn, mariadb_result_t *result, i
             msg->err("[FD %i] MariaDB Query Error: %s", conn->fd,
                      mysql_error(&conn->mysql));
             mariadb_dthread_result_free(conn, result);
-            mk_list_del(&conn->_head);
-            mariadb_conn_free(conn);
+            conn->is_pooled = 0;
+            mariadb_dthread_disconnect(conn);
             *error = 1;
             return NULL;
         }
@@ -342,9 +350,15 @@ char **mariadb_dthread_get_row(mariadb_conn_t *conn, mariadb_result_t *result, i
 void mariadb_dthread_disconnect(mariadb_conn_t *conn)
 {
     assert(conn);
-    mysql_close(&conn->mysql);
-    mk_list_del(&conn->_head);
-    mariadb_conn_free(conn);
+    if (conn->is_pooled) {
+        mariadb_dthread_pool_reclaim_conn(conn);
+    } else {
+        if (conn->state != CONN_STATE_CLOSED) {
+            mysql_close(&conn->mysql);
+        }
+        mk_list_del(&conn->_head);
+        mariadb_conn_free(conn);
+    }
 }
 
 /*

@@ -300,9 +300,11 @@ void mariadb_async_handle_release(mariadb_conn_t* conn, int status)
     if (conn->is_pooled) {
         mariadb_pool_reclaim_conn(conn);
     } else {
+        if (conn->state != CONN_STATE_CLOSED) {
+            mysql_close(&conn->mysql);
+        }
         conn->state = CONN_STATE_CLOSED;
         mk_list_del(&conn->_head);
-        mysql_close(&conn->mysql);
         mariadb_conn_free(conn);
     }
 }
