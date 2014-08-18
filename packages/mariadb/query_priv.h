@@ -46,9 +46,9 @@ struct mariadb_query {
 };
 
 /*
- * @METHOD_NAME: abort
+ * @METHOD_NAME: abort_async
  * @METHOD_DESC: Abort a query.
- * @METHOD_PROTO: void abort(mariadb_query_t *query)
+ * @METHOD_PROTO: void abort_async(mariadb_query_t *query)
  * @METHOD_PARAM: query The query to be aborted.
  * @METHOD_RETURN: None.
  */

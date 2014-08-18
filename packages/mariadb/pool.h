@@ -44,7 +44,6 @@ typedef struct mariadb_pool {
     int free_size;
     mariadb_pool_config_t *config;
 
-    struct mk_list busy_conns;
     struct mk_list free_conns;
 } mariadb_pool_t;
 
@@ -56,9 +55,12 @@ int mariadb_pool_create(duda_global_t *pool_key, int min_size, int max_size,
 int mariadb_pool_set_ssl(duda_global_t *pool_key, const char *key, const char *cert,
                          const char *ca, const char *capath, const char *cipher);
 
-mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *dr,
-                                      mariadb_connect_cb *cb);
+mariadb_conn_t *mariadb_async_pool_get_conn(duda_global_t *pool_key, duda_request_t *dr,
+        mariadb_connect_cb *cb);
 
 void mariadb_pool_reclaim_conn(mariadb_conn_t *conn);
+
+mariadb_conn_t *mariadb_dthread_pool_get_conn(duda_global_t *pool_key);
+void mariadb_dthread_pool_reclaim_conn(mariadb_conn_t *conn);
 
 #endif

@@ -4,3 +4,4 @@ connection.c
 mariadb.c
 async.c
 pool.c
+dthread.c

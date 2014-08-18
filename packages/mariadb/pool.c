@@ -24,11 +24,12 @@
 #include "query.h"
 #include "connection_priv.h"
 #include "async.h"
+#include "dthread.h"
 #include "pool.h"
 
 static inline int  __mariadb_pool_spawn_conn(mariadb_pool_t *pool, int size)
 {
-    int i, ret;
+    int i;
     mariadb_conn_t *conn;
     mariadb_conn_config_t config = pool->config->conn_config;
 
@@ -45,11 +46,6 @@ static inline int  __mariadb_pool_spawn_conn(mariadb_pool_t *pool, int size)
                           config.ssl_ca, config.ssl_capath, config.ssl_cipher);
         }
 
-        ret = mariadb_async_handle_connect(conn, NULL);
-        if (ret != MARIADB_OK) {
-            break;
-        }
-
         conn->is_pooled = 1;
         conn->pool = pool;
         mk_list_add(&conn->_pool_head, &pool->free_conns);
@@ -64,7 +60,7 @@ static inline int  __mariadb_pool_spawn_conn(mariadb_pool_t *pool, int size)
     return MARIADB_OK;
 }
 
-static inline void __mariadb_pool_release_conn(mariadb_pool_t *pool, int size)
+static inline void __mariadb_pool_release_conn(mariadb_pool_t *pool, int size, int is_async)
 {
     int i;
     mariadb_conn_t *conn;
@@ -73,7 +69,11 @@ static inline void __mariadb_pool_release_conn(mariadb_pool_t *pool, int size)
         conn = mk_list_entry_first(&pool->free_conns, mariadb_conn_t, _pool_head);
         mk_list_del(&conn->_pool_head);
         conn->is_pooled = 0;
-        mariadb_async_handle_release(conn, MARIADB_OK);
+        if (is_async) {
+            mariadb_async_handle_release(conn, MARIADB_OK);
+        } else {
+            mariadb_dthread_disconnect(conn);
+        }
         pool->size--;
         pool->free_size--;
     }
@@ -177,18 +177,8 @@ int mariadb_pool_set_ssl(duda_global_t *pool_key, const char *key, const char *c
     return MARIADB_OK;
 }
 
-/*
- * @METHOD_NAME: pool_get_conn
- * @METHOD_DESC: Get a MariaDB connection from a connection pool. If all the connections in a pool are currently used, the pool will spawn more connections as long as the pool size don't exceed the maximum.
- * @METHOD_PROTO: mariadb_conn_t *pool_get_conn(duda_global_t *pool_key, duda_request_t *dr, mariadb_connect_cb *cb)
- * @METHOD_PARAM: pool_key The pointer that refers to the global key definition of a pool.
- * @METHOD_PARAM: dr The request context information hold by a duda_request_t type.
- * @METHOD_PARAM: cb The callback function that will take actions when a connection success or fail to establish.
- * @METHOD_RETURN: A MariaDB connection on success, or NULL on failure.
- */
-
 mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *dr,
-                                      mariadb_connect_cb *cb)
+        mariadb_connect_cb *cb, int is_async)
 {
     mariadb_pool_t *pool;
     mariadb_pool_config_t *config;
@@ -213,7 +203,6 @@ mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *d
         pool->free_size = 0;
         pool->config = config;
         mk_list_init(&pool->free_conns);
-        mk_list_init(&pool->busy_conns);
         global->set(*pool_key, (void *) pool);
     }
 
@@ -223,6 +212,7 @@ mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *d
     if (mk_list_is_empty(&pool->free_conns) == 0) {
         if (pool->size < config->max_size) {
             ret = __mariadb_pool_spawn_conn(pool, MARIADB_POOL_DEFAULT_SIZE);
+
             if (ret != MARIADB_OK) {
                 return NULL;
             }
@@ -235,7 +225,11 @@ mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *d
                 return NULL;
             }
 
-            ret = mariadb_async_handle_connect(conn, cb);
+            if (is_async) {
+                ret = mariadb_async_handle_connect(conn, cb);
+            } else {
+                ret = mariadb_dthread_connect(conn);
+            }
             if (ret != MARIADB_OK) {
                 return NULL;
             }
@@ -244,18 +238,51 @@ mariadb_conn_t *mariadb_pool_get_conn(duda_global_t *pool_key, duda_request_t *d
     }
 
     conn = mk_list_entry_first(&pool->free_conns, mariadb_conn_t, _pool_head);
-    conn->dr = dr;
-    conn->connect_cb = cb;
-
-    if (conn->connect_cb) {
-        conn->connect_cb(conn, MARIADB_OK, conn->dr);
-    }
-
     mk_list_del(&conn->_pool_head);
-    mk_list_add(&conn->_pool_head, &pool->busy_conns);
     pool->free_size--;
 
+    if (is_async) {
+        ret = mariadb_async_handle_connect(conn, NULL);
+        conn->dr = dr;
+        conn->connect_cb = cb;
+        if (conn->connect_cb) {
+            conn->connect_cb(conn, ret, conn->dr);
+        }
+    } else {
+        ret = mariadb_dthread_connect(conn);
+    }
+    if (ret != MARIADB_OK) {
+        return NULL;
+    }
+
     return conn;
+}
+
+/*
+ * @METHOD_NAME: pool_get_conn_async
+ * @METHOD_DESC: Get a MariaDB connection from a connection pool. If all the connections in a pool are currently used, the pool will spawn more connections as long as the pool size don't exceed the maximum.
+ * @METHOD_PROTO: mariadb_conn_t *pool_get_conn_async(duda_global_t *pool_key, duda_request_t *dr, mariadb_connect_cb *cb)
+ * @METHOD_PARAM: pool_key The pointer that refers to the global key definition of a pool.
+ * @METHOD_PARAM: dr The request context information hold by a duda_request_t type.
+ * @METHOD_PARAM: cb The callback function that will take actions when a connection success or fail to establish.
+ * @METHOD_RETURN: A MariaDB connection on success, or NULL on failure.
+ */
+mariadb_conn_t *mariadb_async_pool_get_conn(duda_global_t *pool_key, duda_request_t *dr,
+        mariadb_connect_cb *cb)
+{
+    return mariadb_pool_get_conn(pool_key, dr, cb, 1);
+}
+
+/*
+ * @METHOD_NAME: pool_get_conn
+ * @METHOD_DESC: Similar to `pool_get_conn_async`, except that it will block util an established connection is returned.
+ * @METHOD_PROTO: mariadb_conn_t *pool_get_conn(duda_global_t *pool_key)
+ * @METHOD_PARAM: pool_key The pointer that refers to the global key definition of a pool.
+ * @METHOD_RETURN: A MariaDB connection on success, or NULL on failure.
+ */
+mariadb_conn_t *mariadb_dthread_pool_get_conn(duda_global_t *pool_key)
+{
+    return mariadb_pool_get_conn(pool_key, NULL, NULL, 0);
 }
 
 void mariadb_pool_reclaim_conn(mariadb_conn_t *conn)
@@ -267,13 +294,26 @@ void mariadb_pool_reclaim_conn(mariadb_conn_t *conn)
     conn->disconnect_cb        = NULL;
     conn->disconnect_on_finish = 0;
 
-    mk_list_del(&conn->_pool_head);
     mk_list_add(&conn->_pool_head, &pool->free_conns);
     pool->free_size++;
 
     /* shrink the pool */
     while (pool->free_size * 2 > pool->size &&
            pool->size > MARIADB_POOL_DEFAULT_MIN_SIZE) {
-        __mariadb_pool_release_conn(pool, MARIADB_POOL_DEFAULT_SIZE);
+        __mariadb_pool_release_conn(pool, MARIADB_POOL_DEFAULT_SIZE, 1);
+    }
+}
+
+void mariadb_dthread_pool_reclaim_conn(mariadb_conn_t *conn)
+{
+    mariadb_pool_t *pool = conn->pool;
+    conn->state = CONN_STATE_CONNECTED;
+    mk_list_add(&conn->_pool_head, &pool->free_conns);
+    pool->free_size++;
+
+    /* shrink the pool */
+    while (pool->free_size * 2 > pool->size &&
+           pool->size > MARIADB_POOL_DEFAULT_MIN_SIZE) {
+        __mariadb_pool_release_conn(pool, MARIADB_POOL_DEFAULT_SIZE, 0);
     }
 }

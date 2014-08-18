@@ -27,9 +27,9 @@
 #include "async.h"
 
 /*
- * @METHOD_NAME: connect
+ * @METHOD_NAME: connect_async
  * @METHOD_DESC: Attempts to establish a connection using a MariaDB connection handle created by `mairadb->create_conn()'.
- * @METHOD_PROTO: int connect(mariadb_conn_t *conn, mariadb_connect_cb *cb)
+ * @METHOD_PROTO: int connect_async(mariadb_conn_t *conn, mariadb_connect_cb *cb)
  * @METHOD_PARAM: conn The MariaDB connection handle, it must be a newly allocated one.
  * @METHOD_PARAM: cb The callback function that will take actions when a connection success or fail to establish.
  * @METHOD_RETURN: MAIRADB_OK on success, or MARIADB_ERR on failure.
@@ -266,9 +266,9 @@ void mariadb_async_handle_next_result(mariadb_conn_t *conn)
 }
 
 /*
- * @METHOD_NAME: disconnect
+ * @METHOD_NAME: disconnect_async
  * @METHOD_DESC: Disconnect a previous opened connection and release all the resource with it. It will ensure that all previous enqueued queries of that connection are processed before it is disconnected.
- * @METHOD_PROTO: void disconnect(mariadb_conn_t *conn, mariadb_disconnect_cb *cb)
+ * @METHOD_PROTO: void disconnect_async(mariadb_conn_t *conn, mariadb_disconnect_cb *cb)
  * @METHOD_PARAM: conn The MariaDB connection handle, it must be a valid, open connection.
  * @METHOD_PARAM: cb The callback function that will take actions when a connection is disconnected.
  * @METHOD_RETURN: None.
@@ -300,17 +300,19 @@ void mariadb_async_handle_release(mariadb_conn_t* conn, int status)
     if (conn->is_pooled) {
         mariadb_pool_reclaim_conn(conn);
     } else {
+        if (conn->state != CONN_STATE_CLOSED) {
+            mysql_close(&conn->mysql);
+        }
         conn->state = CONN_STATE_CLOSED;
         mk_list_del(&conn->_head);
-        mysql_close(&conn->mysql);
         mariadb_conn_free(conn);
     }
 }
 
 /*
- * @METHOD_NAME: query
+ * @METHOD_NAME: query_async
  * @METHOD_DESC: Enqueue a new query to a MariaDB connection.
- * @METHOD_PROTO: int query(mariadb_conn_t *conn, const char *query_str, mariadb_query_result_cb *result_cb, mariadb_query_row_cb *row_cb, void *privdata, mariadb_query_end_cb *end_cb)
+ * @METHOD_PROTO: int query_async(mariadb_conn_t *conn, const char *query_str, mariadb_query_result_cb *result_cb, mariadb_query_row_cb *row_cb, void *privdata, mariadb_query_end_cb *end_cb)
  * @METHOD_PARAM: conn The MariaDB connection handle.
  * @METHOD_PARAM: query_str The SQL statement string of this query.
  * @METHOD_PARAM: result_cb The callback function that will take actions when the result set of this query is available.

@@ -40,6 +40,7 @@
 #include "common.h"
 #include "query.h"
 #include "connection.h"
+#include "dthread.h"
 
 duda_global_t mariadb_conn_list;
 
@@ -54,13 +55,20 @@ typedef struct duda_api_mariadb {
                     const char *, const char *);
     int (*pool_set_ssl)(duda_global_t *, const char *, const char *, const char*,
                         const char *, const char *);
-    mariadb_conn_t *(*pool_get_conn)(duda_global_t *, duda_request_t *, mariadb_connect_cb *);
-    int (*connect)(mariadb_conn_t *, mariadb_connect_cb *);
-    void (*disconnect)(mariadb_conn_t *, mariadb_disconnect_cb *);
+    mariadb_conn_t *(*pool_get_conn_async)(duda_global_t *, duda_request_t *, mariadb_connect_cb *);
+    int (*connect_async)(mariadb_conn_t *, mariadb_connect_cb *);
+    void (*disconnect_async)(mariadb_conn_t *, mariadb_disconnect_cb *);
     unsigned long (*escape)(mariadb_conn_t *, char *, const char *, unsigned long);
-    int (*query)(mariadb_conn_t *, const char *, mariadb_query_result_cb *,
+    int (*query_async)(mariadb_conn_t *, const char *, mariadb_query_result_cb *,
                  mariadb_query_row_cb *, mariadb_query_end_cb *, void *);
-    void (*abort)(mariadb_query_t *);
+    void (*abort_async)(mariadb_query_t *);
+    int (*connect)(mariadb_conn_t *);
+    mariadb_result_t *(*query)(mariadb_conn_t *conn, const char *);
+    char **(*get_row)(mariadb_conn_t *, mariadb_result_t *, int *);
+    void (*disconnect)(mariadb_conn_t *conn);
+    char **(*get_fields)(mariadb_result_t *);
+    int (*get_field_num)(mariadb_result_t *);
+    mariadb_conn_t *(*pool_get_conn)(duda_global_t *);
 } mariadb_object_t;
 
 mariadb_object_t *mariadb;
