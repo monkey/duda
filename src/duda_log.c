@@ -59,7 +59,10 @@ void duda_logger_writer(void *arg)
     int timeout;
 
     mk_api->worker_rename("duda:logwriter");
+
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     duda_stats_worker_init();
+#endif
 
     /* pipe_size:
      * ----------
