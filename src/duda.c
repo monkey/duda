@@ -219,13 +219,14 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         //mk_list_add(&cs_iface->_head, ws->map_interfaces);
 
         /* app/console/stats */
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
         cs_method = api->map->method_builtin_new("stats", duda_stats_cb, 0);
         api->map->interface_add_method(cs_method, cs_iface);
 
         cs_method = api->map->method_builtin_new("stats_txt", duda_stats_txt_cb, 0);
         api->map->interface_add_method(cs_method, cs_iface);
-
         mk_list_add(&cs_iface->_head, ws->map_interfaces);
+#endif
 
         /* Lookup callback functions for each registered method */
         mk_list_foreach(head_iface, ws->map_interfaces) {
@@ -483,7 +484,9 @@ void _mkp_core_thctx()
     struct web_service *entry_ws;
     struct duda_event_signal_channel *esc;
 
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     duda_stats_worker_init();
+#endif
 
     /* Events write list */
     list_events_write = mk_api->mem_alloc_z(sizeof(struct mk_list));
@@ -567,8 +570,10 @@ int _mkp_core_prctx(struct server_config *config)
     struct web_service *ws;
     struct plugin *mk_plugin;
 
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     /* Initialize stats context */
     duda_stats_init();
+#endif
 
     /* Load web services */
     duda_load_services();

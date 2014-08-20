@@ -17,6 +17,8 @@
  *  limitations under the License.
  */
 
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
+
 #include <string.h>
 
 #include "duda.h"
@@ -177,16 +179,11 @@ int duda_stats_worker_init()
     /* Protect this section as it needs to be atomic */
     pthread_mutex_lock(&duda_mutex_stats);
 
-#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     /* Get pointers to memory counters */
     size_t sz;
     sz = sizeof(st->mem_allocated);
-    je_mallctl("thread.allocatedp", &st->mem_allocated, &sz, NULL, 0);
-    je_mallctl("thread.deallocatedp", &st->mem_deallocated, &sz, NULL, 0);
-#else
-    st->mem_allocated = 0;
-    st->mem_deallocated = 0;
-#endif
+    mk_api->je_mallctl("thread.allocatedp", &st->mem_allocated, &sz, NULL, 0);
+    mk_api->je_mallctl("thread.deallocatedp", &st->mem_deallocated, &sz, NULL, 0);
 
     /* Link the worker info into the global list */
     mk_list_add(&st->_head, &duda_stats.mem);
@@ -206,3 +203,5 @@ int duda_stats_init()
     pthread_mutex_init(&duda_mutex_stats, (pthread_mutexattr_t *) NULL);
     return 0;
 }
+
+#endif /* defined JEMALLOC_STATS */
