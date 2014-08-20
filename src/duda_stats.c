@@ -27,7 +27,7 @@
 static char *human_readable_size(long size)
 {
     long u = 1024, i, len = 128;
-    char *buf = api->mem_alloc(len);
+    char *buf = mk_api->mem_alloc(len);
     static const char *__units[] = { "b", "K", "M", "G",
         "T", "P", "E", "Z", "Y", NULL
     };
@@ -110,7 +110,7 @@ void duda_stats_cb(duda_request_t *dr)
                              st->task_id, total, hr
                              );
         total_all += total;
-        api->mem_free(hr);
+        mk_api->mem_free(hr);
     }
 
     hr    = human_readable_size(total_all);
@@ -123,7 +123,7 @@ void duda_stats_cb(duda_request_t *dr)
                          total_all,
                          hr
                          );
-    api->mem_free(hr);
+    mk_api->mem_free(hr);
     duda_response_printf(dr, "</tbody></table>\n\n");
     duda_response_end(dr, NULL);
 }
@@ -155,7 +155,7 @@ void duda_stats_txt_cb(duda_request_t *dr)
 
         /* current memory in use */
         //drp(dr, "   memory usage: %lu (%s)\n", total, hr);
-        api->mem_free(hr);
+        mk_api->mem_free(hr);
     }
 
     drp(dr, "+-----------+-----------------+--------------+\n");
@@ -169,14 +169,15 @@ void duda_stats_txt_cb(duda_request_t *dr)
 int duda_stats_worker_init()
 {
     struct duda_stats_worker *st;
-    st = api->mem_alloc(sizeof(struct duda_stats_worker));
+
+    st = mk_api->mem_alloc(sizeof(struct duda_stats_worker));
     st->task_id     = syscall(__NR_gettid);
     st->worker_name = NULL;
 
     /* Protect this section as it needs to be atomic */
     pthread_mutex_lock(&duda_mutex_stats);
 
-#ifdef MALLOC_JEMALLOC
+#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     /* Get pointers to memory counters */
     size_t sz;
     sz = sizeof(st->mem_allocated);
