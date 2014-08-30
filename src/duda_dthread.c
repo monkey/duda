@@ -94,8 +94,8 @@ duda_dthread_scheduler_t *duda_dthread_open()
     sch->n_dthread = 0;
     sch->cap = DEFAULT_DTHREAD_NUM;
     sch->running_id = -1;
-    sch->dt = mk_api->mem_alloc(sizeof(duda_dthread_t *) * sch->cap);
-    memset(sch->dt, 0, sizeof(duda_dthread_t *) * sch->cap);
+    sch->dt = mk_api->mem_alloc_z(sizeof(duda_dthread_t *) * sch->cap);
+
     return sch;
 }
 
