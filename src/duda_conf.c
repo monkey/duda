@@ -409,9 +409,9 @@ void duda_conf_messages_to(struct web_service *ws)
     int buf_size = 1024;
     char path[buf_size];
     FILE *f;
-
     time_t now;
     struct tm *current;
+    struct mk_config_listen *listen;
 
     snprintf(path, buf_size, "/tmp/%s.duda.messages",
              ws->name.data);
@@ -439,7 +439,13 @@ void duda_conf_messages_to(struct web_service *ws)
            current->tm_sec,
            ws->name.data);
     printf("   version          : %s\n", VERSION);
-    printf("   server port      : %i\n", mk_api->config->serverport);
+
+    listen = &mk_api->config->listen;
+    while (listen) {
+        printf("   server port      : %s\n", listen->port);
+        listen = listen->next;
+    }
+
     printf("   number of workers: %i\n", mk_api->config->workers);
     fflush(stdout);
 
