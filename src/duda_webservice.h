@@ -46,6 +46,7 @@ struct web_service {
     char *map_root_name;
     void (*map_root_cb) (void *);
 
+    struct mk_list *router_list;
     struct mk_list *map_interfaces;
     struct mk_list *map_urls;
 

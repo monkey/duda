@@ -36,8 +36,22 @@ struct duda_router_rule {
 
 /* Object API */
 struct duda_api_router {
-    #define map(pattern, cb) _map(pattern, cb, duda_router_list)
-    int (*_map) (char *, void (*callback)(duda_request_t *), struct mk_list *);
+
+    /*
+     * The map() method allows to set a static or dynamic route,
+     * we implement this through a macro as we want to have registered
+     * the callback reference as well it name in string format. Also we
+     * need to pass the list head as it lives inside the service (library)
+     * context.
+     *
+     * The list head is read as a symbol later inside duda.c .
+     */
+    #define map(pattern, callback) \
+        _map(pattern, callback, #callback, &duda_router_list)
+    int (*_map) (char *,
+                 void (*callback)(duda_request_t *),
+                 char *callback_name, struct mk_list *);
+
     int (*console) (char *);
 };
 

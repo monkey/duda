@@ -114,6 +114,7 @@ int _duda_main(struct duda_api_objects *dapi);
         msg      = dapi->msg;                                           \
         request  = dapi->request;                                       \
         response = dapi->response;                                      \
+        router   = dapi->router;                                        \
         debug    = dapi->debug;                                         \
         event    = dapi->event;                                         \
         console  = dapi->console;                                       \

@@ -176,8 +176,13 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 
     if (service_init(api, ws) == 0) {
         PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
+        ws->router_list = duda_load_symbol(ws->handler, "duda_router_list");
+
+        /* FIXME: this part will be deprecated */
         ws->map_interfaces = duda_load_symbol(ws->handler, "duda_map_interfaces");
         ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
+        /* ---EOF --- */
+
         ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->pre_loop = duda_load_symbol(ws->handler, "duda_pre_loop");
         ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
@@ -190,6 +195,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
             ws->map_root_cb = duda_load_symbol(ws->handler, ws->map_root_name);
         }
 
+        /* FIXME: this code will be deprecated */
         /* Lookup mapped callbacks */
         mk_list_foreach(head_urls, ws->map_urls) {
             static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
@@ -204,6 +210,7 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
                 }
             }
         }
+        /* --- EOF ---*/
 
         /* Register Duda built-in interfaces: console */
         cs_iface  = api->map->interface_new("console");

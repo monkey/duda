@@ -22,6 +22,10 @@
 #include "duda.h"
 #include "duda_router.h"
 
+
+/* Router Internals */
+
+
 /*
  * @OBJ_NAME: router
  * @OBJ_MENU: Router
@@ -37,6 +41,7 @@
  */
 static int router_add_static(char *pattern,
                              void (*callback)(duda_request_t *),
+                             char *callback_name,
                              struct mk_list *list)
 {
     struct duda_router_rule *rule;
@@ -52,6 +57,7 @@ static int router_add_static(char *pattern,
 
 static int router_add_dynamic(char *pattern,
                               void (*callback)(duda_request_t *),
+                              char *callback_name,
                               struct mk_list *list)
 {
     (void) pattern;
@@ -73,17 +79,23 @@ static int router_add_dynamic(char *pattern,
  */
 int duda_router_map(char *pattern,
                     void (*callback)(duda_request_t *),
+                    char *callback_name,
                     struct mk_list *list)
 {
     int ret;
     char *tmp;
 
+    if (!pattern || !callback || !list) {
+        mk_err("Duda: invalid usage of map method.");
+        exit(EXIT_FAILURE);
+    }
+
     tmp = strstr(pattern, ":");
     if (!tmp) {
-        ret = router_add_static(pattern, callback, list);
+        ret = router_add_static(pattern, callback, callback_name, list);
     }
     else {
-        ret = router_add_dynamic(pattern, callback, list);
+        ret = router_add_dynamic(pattern, callback, callback_name, list);
     }
 
     return ret;

@@ -66,6 +66,7 @@ duda_package_t MK_EXPORT *_duda_package_main();
         msg      = dapi->msg;                                           \
         request  = dapi->request;                                       \
         response = dapi->response;                                      \
+        router   = dapi->router;                                        \
         debug    = dapi->debug;                                         \
         event    = dapi->event;                                         \
         gc       = dapi->gc;                                            \
