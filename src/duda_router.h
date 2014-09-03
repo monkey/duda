@@ -38,6 +38,7 @@ struct duda_router_rule {
 struct duda_api_router {
     #define map(pattern, cb) _map(pattern, cb, duda_router_list)
     int (*_map) (char *, void (*callback)(duda_request_t *), struct mk_list *);
+    int (*console) (char *);
 };
 
 struct duda_api_router *duda_router_object();

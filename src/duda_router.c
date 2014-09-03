@@ -89,12 +89,20 @@ int duda_router_map(char *pattern,
     return ret;
 }
 
+/* WIP: register a path to access Duda console for this service */
+int duda_router_console(char *pattern)
+{
+    (void) pattern;
+    return 0;
+}
+
 struct duda_api_router *duda_router_object()
 {
     struct duda_api_router *r;
 
     r = mk_api->mem_alloc(sizeof(struct duda_api_router));
-    r->_map = duda_router_map;
+    r->_map    = duda_router_map;
+    r->console = duda_router_console;
 
     return r;
 }
