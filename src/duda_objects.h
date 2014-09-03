@@ -69,6 +69,7 @@ struct duda_api_global *global;
 struct duda_api_worker *worker;
 struct duda_api_xtime *xtime;
 struct duda_api_dthread *dthread;
+struct duda_api_router *router;
 struct web_service *self;
 
 /* system headers */
