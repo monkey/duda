@@ -30,11 +30,14 @@ struct duda_router_rule {
     int pattern_len;
     char *pattern;
     void (*callback) (duda_request_t *);
+
+    struct mk_list _head;
 };
 
 /* Object API */
 struct duda_api_router {
-    int (*map) (char *, void (*callback)(duda_request_t *));
+    #define map(pattern, cb) _map(pattern, cb, duda_routing_map)
+    int (*_map) (char *, void (*callback)(duda_request_t *), struct mk_list *);
 };
 
 struct duda_api_router *duda_router_object();

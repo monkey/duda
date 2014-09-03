@@ -36,18 +36,26 @@
  * support dynamic parameters.
  */
 static int router_add_static(char *pattern,
-                            void (*callback)(duda_request_t *))
+                             void (*callback)(duda_request_t *),
+                             struct mk_list *list)
 {
     struct duda_router_rule *rule;
 
-    rule = mk_api->mem_alloc(sizeof(struct duda_router_rule));
-    rule->type = DUDA_ROUTER_STATIC;
+    rule           = mk_api->mem_alloc(sizeof(struct duda_router_rule));
+    rule->type     = DUDA_ROUTER_STATIC;
+    rule->pattern  = pattern;
+    rule->callback = callback;
+    mk_list_add(&rule->_head, list);
+
     return 0;
 }
 
 static int router_add_dynamic(char *pattern,
                               void (*callback)(duda_request_t *))
 {
+    (void) pattern;
+    (void) callback;
+
     return 0;
 }
 
@@ -61,7 +69,8 @@ static int router_add_dynamic(char *pattern,
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
 int duda_router_map(char *pattern,
-                    void (*callback)(duda_request_t *))
+                    void (*callback)(duda_request_t *),
+                    struct mk_list *list)
 {
     int ret;
     char *tmp;
@@ -69,7 +78,7 @@ int duda_router_map(char *pattern,
 
     tmp = strstr(pattern, ":");
     if (!tmp) {
-        ret = router_add_static(pattern, callback);
+        ret = router_add_static(pattern, callback, list);
     }
     else {
         ret = router_add_dynamic(pattern, callback);
@@ -83,7 +92,7 @@ struct duda_api_router *duda_router_object()
     struct duda_api_router *r;
 
     r = mk_api->mem_alloc(sizeof(struct duda_api_router));
-    r->map = duda_router_map;
+    r->_map = duda_router_map;
 
     return r;
 }
