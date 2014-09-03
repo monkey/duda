@@ -51,10 +51,12 @@ static int router_add_static(char *pattern,
 }
 
 static int router_add_dynamic(char *pattern,
-                              void (*callback)(duda_request_t *))
+                              void (*callback)(duda_request_t *),
+                              struct mk_list *list)
 {
     (void) pattern;
     (void) callback;
+    (void) list;
 
     return 0;
 }
@@ -81,7 +83,7 @@ int duda_router_map(char *pattern,
         ret = router_add_static(pattern, callback, list);
     }
     else {
-        ret = router_add_dynamic(pattern, callback);
+        ret = router_add_dynamic(pattern, callback, list);
     }
 
     return ret;

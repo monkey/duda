@@ -38,6 +38,7 @@ struct mk_list MK_EXPORT duda_ws_packages;
 struct mk_list MK_EXPORT duda_worker_list;
 struct mk_list MK_EXPORT duda_logger_main_list;
 struct mk_list MK_EXPORT duda_logger_worker_list;
+struct mk_list MK_EXPORT duda_router_list;
 
 /*
  * the _setup structure holds function references and flags

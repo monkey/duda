@@ -145,6 +145,7 @@ int _duda_main(struct duda_api_objects *dapi);
         mk_list_init(&duda_pre_loop);                                   \
         mk_list_init(&duda_ws_packages);                                \
         mk_list_init(&duda_worker_list);                                \
+        mk_list_init(&duda_router_list);                                \
                                                                         \
         /* logger main list: logger keys defined in duda_main() */      \
         mk_list_init(&duda_logger_main_list);                           \

@@ -91,6 +91,7 @@ duda_package_t MK_EXPORT *_duda_package_main();
         mk_list_init(&duda_worker_list);                                \
         mk_list_init(&duda_logger_main_list);                           \
         mk_list_init(&duda_logger_worker_list);                         \
+        mk_list_init(&duda_router_list);                                \
                                                                         \
         self = ws;                                                      \
                                                                         \
