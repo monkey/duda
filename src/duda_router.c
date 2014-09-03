@@ -66,8 +66,9 @@ static int router_add_dynamic(char *pattern,
  * @METHOD_NAME: map
  * @METHOD_DESC: It register a Router interface and pattern associating it
  * to a service callback.
- * @METHOD_PROTO: int set_path(const char *dir)
- * @METHOD_PARAM: dir directory path where the configuration files are located.
+ * @METHOD_PROTO: int map(char *pattern, void (*callback)(duda_request_t *))
+ * @METHOD_PARAM: pattern the string pattern representing the URL format.
+ * @METHOD_PARAM: callback the callback function invoked once the pattern matches.
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
 int duda_router_map(char *pattern,
@@ -76,7 +77,6 @@ int duda_router_map(char *pattern,
 {
     int ret;
     char *tmp;
-
 
     tmp = strstr(pattern, ":");
     if (!tmp) {
