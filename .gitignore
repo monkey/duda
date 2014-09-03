@@ -3,5 +3,4 @@
 *.dpkg
 *.so
 Makefile
-docs/html/*
-
+docs/html

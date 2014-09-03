@@ -411,7 +411,8 @@ void duda_conf_messages_to(struct web_service *ws)
     FILE *f;
     time_t now;
     struct tm *current;
-    struct mk_config_listen *listen;
+    struct mk_list *head;
+    struct mk_config_listener *listen;
 
     snprintf(path, buf_size, "/tmp/%s.duda.messages",
              ws->name.data);
@@ -440,10 +441,10 @@ void duda_conf_messages_to(struct web_service *ws)
            ws->name.data);
     printf("   version          : %s\n", VERSION);
 
-    listen = &mk_api->config->listen;
-    while (listen) {
+
+    mk_list_foreach(head, &mk_api->config->listeners) {
+        listen = mk_list_entry(head, struct mk_config_listener, _head);
         printf("   server port      : %s\n", listen->port);
-        listen = listen->next;
     }
 
     printf("   number of workers: %i\n", mk_api->config->workers);
