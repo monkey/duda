@@ -29,6 +29,7 @@ struct duda_router_rule {
     int type;            /* ROUTER_STATIC or ROUTER_DYNAMIC */
     int pattern_len;
     char *pattern;
+    char *callback_name;
     void (*callback) (duda_request_t *);
 
     struct mk_list _head;
@@ -51,6 +52,11 @@ struct duda_api_router {
     int (*_map) (char *,
                  void (*callback)(duda_request_t *),
                  char *callback_name, struct mk_list *);
+
+    #define root(callback) _root(self, callback, #callback)
+    int (*_root) (struct web_service *,
+                  void (*callback)(void *),
+                  char *);
 
     int (*console) (char *);
 };

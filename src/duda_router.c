@@ -46,10 +46,11 @@ static int router_add_static(char *pattern,
 {
     struct duda_router_rule *rule;
 
-    rule           = mk_api->mem_alloc(sizeof(struct duda_router_rule));
-    rule->type     = DUDA_ROUTER_STATIC;
-    rule->pattern  = pattern;
-    rule->callback = callback;
+    rule                = mk_api->mem_alloc(sizeof(struct duda_router_rule));
+    rule->type          = DUDA_ROUTER_STATIC;
+    rule->pattern       = pattern;
+    rule->callback      = callback;
+    rule->callback_name = callback_name;
     mk_list_add(&rule->_head, list);
 
     return 0;
@@ -62,6 +63,7 @@ static int router_add_dynamic(char *pattern,
 {
     (void) pattern;
     (void) callback;
+    (void) callback_name;
     (void) list;
 
     return 0;
@@ -101,6 +103,27 @@ int duda_router_map(char *pattern,
     return ret;
 }
 
+/*
+ * @METHOD_NAME: root
+ * @METHOD_DESC: It maps the root URL to a specific callback function.
+ * @METHOD_PROTO: int root(void (*callback)(duda_request_t *))
+ * @METHOD_PARAM: callback the callback function invoked once the pattern matches.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ */
+int duda_router_root(struct web_service *ws,
+                     void (*cb) (void *),
+                     char *name)
+{
+    if (!cb) {
+        return -1;
+    }
+
+    ws->router_root_name = name;
+    ws->router_root_cb   = cb;
+
+    return 0;
+}
+
 /* WIP: register a path to access Duda console for this service */
 int duda_router_console(char *pattern)
 {
@@ -114,7 +137,9 @@ struct duda_api_router *duda_router_object()
 
     r = mk_api->mem_alloc(sizeof(struct duda_api_router));
     r->_map    = duda_router_map;
-    r->console = duda_router_console;
+    r->_root   = duda_router_root;
+
+    //r->console = duda_router_console;
 
     return r;
 }

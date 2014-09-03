@@ -962,17 +962,17 @@ int duda_service_run(struct plugin *plugin,
     duda_qs_parse(dr);
 
     /* Check if a root URI is requested (only '/') */
-    if (web_service->map_root_cb) {
+    if (web_service->router_root_cb) {
         /* If the service is declared as owner */
         if (web_service->is_root == MK_TRUE && sr->uri_processed.len == 1) {
-            web_service->map_root_cb(dr);
+            web_service->router_root_cb(dr);
             return 0;
         }
         /* the URI contains the web service name with or without ending slash */
         else if (web_service->is_root == MK_FALSE &&
                  (sr->uri_processed.len == web_service->fixed_name.len + 1 ||
                   sr->uri_processed.len == web_service->fixed_name.len + 2)) {
-            web_service->map_root_cb(dr);
+            web_service->router_root_cb(dr);
             return 0;
         }
     }
