@@ -86,6 +86,7 @@ struct duda_api_router {
 
 struct duda_api_router *duda_router_object();
 
+int duda_router_redirect(duda_request_t *dr);
 int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr);
 int duda_router_path_lookup(struct web_service *ws,
                             duda_request_t *dr,

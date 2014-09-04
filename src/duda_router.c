@@ -73,7 +73,7 @@ static int router_add_dynamic(char *pattern,
  * Performs a HTTP redirection, the new Location will be the same
  * that arrived but plus and ending slash.
  */
-static int router_redirect(duda_request_t *dr)
+int duda_router_redirect(duda_request_t *dr)
 {
     int len;
     int port_redirect;
@@ -181,7 +181,7 @@ int duda_router_path_lookup(struct web_service *ws,
                 /* Check if we need to send back a redirection */
                 if (strncmp(uri_data, p->pattern, p->pattern_len - 1) == 0 &&
                     uri_len <= p->pattern_len) {
-                    router_redirect(dr);
+                    duda_router_redirect(dr);
                     return DUDA_ROUTER_REDIRECT;
                 }
             }

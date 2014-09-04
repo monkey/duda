@@ -753,7 +753,13 @@ int duda_service_run(struct plugin *plugin,
     /* Check if a root URI is requested (only '/') */
     if (web_service->router_root_cb) {
         if (duda_router_is_request_root(web_service, dr) == MK_TRUE) {
-            web_service->router_root_cb(dr);
+            /* Check if it needs redirection */
+            if (dr->sr->uri_processed.data[dr->sr->uri_processed.len - 1] != '/') {
+                duda_router_redirect(dr);
+            }
+            else {
+                web_service->router_root_cb(dr);
+            }
             return 0;
         }
     }
