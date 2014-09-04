@@ -27,7 +27,6 @@
 #include "duda.h"
 #include "duda_api.h"
 #include "duda_mem.h"
-#include "duda_map.h"
 #include "duda_param.h"
 #include "duda_session.h"
 #include "duda_xtime.h"
@@ -68,7 +67,6 @@ struct duda_api_objects *duda_api_master()
 
     /* Assign Objects */
     objs->global   = duda_global_object();
-    objs->map      = duda_map_object();
     objs->event    = duda_event_object();
     objs->gc       = duda_gc_object();
     objs->mem      = duda_mem_object();

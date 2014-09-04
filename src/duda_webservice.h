@@ -45,17 +45,7 @@ struct web_service {
     char *router_root_name;
     void (*router_root_cb) (void *);
 
-    /* FIXME: deprecate / Routing/Map callbacks */
-    char *map_root_name;
-    void (*map_root_cb) (void *);
-    /* --- EOF --- */
-
     struct mk_list *router_list;
-
-    /* FIXME: deprecate this */
-    struct mk_list *map_interfaces;
-    struct mk_list *map_urls;
-    /* ---EOF--- */
 
     /* global data */
     struct mk_list *global;

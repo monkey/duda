@@ -27,7 +27,6 @@
 /* Monkey specifics */
 #include <monkey/mk_api.h>
 #include "duda_api.h"
-#include "duda_map.h"
 #include "duda_mem.h"
 #include "duda_global.h"
 #include "duda_package.h"

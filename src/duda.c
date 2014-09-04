@@ -26,7 +26,6 @@
 #include "duda.h"
 #include "duda_gc.h"
 #include "duda_qs.h"
-#include "duda_map.h"
 #include "duda_conf.h"
 #include "duda_stats.h"
 #include "duda_event.h"
@@ -162,10 +161,6 @@ void *duda_load_symbol_passive(void *handle, const char *symbol)
 int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
 {
     int (*service_init) (struct duda_api_objects *, struct web_service *);
-    struct mk_list *head_iface, *head_method, *head_urls;
-    struct duda_interface *entry_iface, *cs_iface;
-    struct duda_method *entry_method, *cs_method;
-    struct duda_map_static_cb *static_cb;
 
     /* Load and invoke duda_main() */
     service_init = (int (*)()) duda_load_symbol(ws->handler, "_duda_bootstrap_main");
@@ -177,79 +172,13 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     if (service_init(api, ws) == 0) {
         PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
         ws->router_list = duda_load_symbol(ws->handler, "duda_router_list");
-
-        /* FIXME: this part will be deprecated */
-        ws->map_interfaces = duda_load_symbol(ws->handler, "duda_map_interfaces");
-        ws->map_urls       = duda_load_symbol(ws->handler, "duda_map_urls");
-        /* ---EOF --- */
-
-        ws->global   = duda_load_symbol(ws->handler, "duda_global_dist");
-        ws->pre_loop = duda_load_symbol(ws->handler, "duda_pre_loop");
-        ws->packages = duda_load_symbol(ws->handler, "duda_ws_packages");
-        ws->workers  = duda_load_symbol(ws->handler, "duda_worker_list");
-        ws->loggers  = duda_load_symbol(ws->handler, "duda_logger_main_list");
-        ws->setup    = duda_load_symbol(ws->handler, "_setup");
-        ws->exit_cb  = duda_load_symbol_passive(ws->handler, "duda_exit");
-
-        if (ws->map_root_name) {
-            ws->map_root_cb = duda_load_symbol(ws->handler, ws->map_root_name);
-        }
-
-        /* FIXME: this code will be deprecated */
-        /* Lookup mapped callbacks */
-        mk_list_foreach(head_urls, ws->map_urls) {
-            static_cb = mk_list_entry(head_urls, struct duda_map_static_cb, _head);
-            if (!static_cb->callback) {
-                static_cb->callback = duda_load_symbol(ws->handler, static_cb->cb_name);
-                if (!static_cb->callback) {
-                    mk_err("Static Map: you have set the callback '%s' through "
-                           "a static map, but the function could not be located. "
-                           "Aborting",
-                           static_cb->cb_name);
-                    exit(EXIT_FAILURE);
-                }
-            }
-        }
-        /* --- EOF ---*/
-
-        /* Register Duda built-in interfaces: console */
-        cs_iface  = api->map->interface_new("console");
-
-        /* app/console/messages */
-        cs_method = api->map->method_builtin_new("messages",
-                                                 duda_console_cb_messages, 0);
-        api->map->interface_add_method(cs_method, cs_iface);
-
-        /* app/console/map */
-        cs_method = api->map->method_builtin_new("map", duda_console_cb_map, 0);
-        api->map->interface_add_method(cs_method, cs_iface);
-        //mk_list_add(&cs_iface->_head, ws->map_interfaces);
-
-        /* app/console/stats */
-#if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
-        cs_method = api->map->method_builtin_new("stats", duda_stats_cb, 0);
-        api->map->interface_add_method(cs_method, cs_iface);
-
-        cs_method = api->map->method_builtin_new("stats_txt", duda_stats_txt_cb, 0);
-        api->map->interface_add_method(cs_method, cs_iface);
-        mk_list_add(&cs_iface->_head, ws->map_interfaces);
-#endif
-
-        /* Lookup callback functions for each registered method */
-        mk_list_foreach(head_iface, ws->map_interfaces) {
-            entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
-            mk_list_foreach(head_method, &entry_iface->methods) {
-                entry_method = mk_list_entry(head_method, struct duda_method, _head);
-                if (entry_method->callback) {
-                    entry_method->cb_webservice = duda_load_symbol(ws->handler,
-                                                                   entry_method->callback);
-                    if (!entry_method->cb_webservice) {
-                        mk_err("%s / callback not found '%s'", entry_method->uid, entry_method->uid);
-                        exit(EXIT_FAILURE);
-                    }
-                }
-            }
-        }
+        ws->global      = duda_load_symbol(ws->handler, "duda_global_dist");
+        ws->pre_loop    = duda_load_symbol(ws->handler, "duda_pre_loop");
+        ws->packages    = duda_load_symbol(ws->handler, "duda_ws_packages");
+        ws->workers     = duda_load_symbol(ws->handler, "duda_worker_list");
+        ws->loggers     = duda_load_symbol(ws->handler, "duda_logger_main_list");
+        ws->setup       = duda_load_symbol(ws->handler, "_setup");
+        ws->exit_cb     = duda_load_symbol_passive(ws->handler, "duda_exit");
 
         /* Spawn all workers set in duda_main() */
         duda_worker_spawn_all(ws->workers);
@@ -638,149 +567,6 @@ int _mkp_init(struct plugin_api **api, char *confdir)
     /* Load configuration */
     duda_conf_main_init(confdir);
     duda_conf_vhost_init();
-
-    return 0;
-}
-
-/* Sets the duda_method structure variable in duda_request */
-int duda_request_set_method(duda_request_t *dr)
-{
-    struct mk_list *head_iface, *head_method;
-    struct duda_interface *entry_iface;
-    struct duda_method *entry_method = NULL;
-
-    /* Finds the corresponding duda_method structure */
-    mk_list_foreach(head_iface, dr->ws_root->map_interfaces) {
-        entry_iface = mk_list_entry(head_iface, struct duda_interface, _head);
-
-        if (entry_iface->uid_len == dr->interface.len &&
-            strncmp(entry_iface->uid, dr->interface.data, dr->interface.len) == 0) {
-
-            mk_list_foreach(head_method, &entry_iface->methods) {
-                entry_method = mk_list_entry(head_method, struct duda_method, _head);
-                if (entry_method->uid_len == dr->method.len &&
-                    strncmp(entry_method->uid, dr->method.data, dr->method.len) == 0) {
-                    dr->_method = entry_method;
-                    break;
-                }
-            }
-            if(dr->_method) {
-                break;
-            }
-        }
-    }
-
-    if(!dr->_method) {
-        PLUGIN_TRACE("Invoked method not found");
-        return -1;
-    }
-
-#ifdef TRACE
-    if (entry_method) {
-        PLUGIN_TRACE("Method %s invoked", entry_method->uid);
-    }
-#endif
-
-    return 0;
-}
-
-
-int duda_request_parse(struct web_service *web_service,
-                       struct session_request *sr,
-                       struct duda_request *dr)
-{
-    short int last_field = MAP_WS_APP_NAME;
-    int i = 0, len, val_len;
-    int end;
-    short int allowed_params = 0;
-    struct mk_list *head_param = NULL;
-    struct duda_param *entry_param;
-
-    len = sr->uri_processed.len;
-
-    while (i < len) {
-        end = mk_api->str_search_n(sr->uri_processed.data + i, "/",
-                                   MK_STR_SENSITIVE, len - i);
-
-        if (end >= 0 && end + i < len) {
-            end += i;
-
-            if (i == end) {
-                i++;
-                continue;
-            }
-
-            val_len = end - i;
-        }
-        else {
-            val_len = len - i;
-            end = len;
-        }
-        switch (last_field) {
-        case MAP_WS_APP_NAME:
-            if (web_service->is_root == MK_FALSE) {
-                dr->appname.data = sr->uri_processed.data + i;
-                dr->appname.len  = val_len;
-            }
-            else {
-                dr->appname.data = web_service->name.data;
-                dr->appname.len  = web_service->name.len;
-                last_field = MAP_WS_METHOD;
-                end = i - 1;
-            }
-            last_field = MAP_WS_INTERFACE;
-            break;
-        case MAP_WS_INTERFACE:
-            dr->interface.data = sr->uri_processed.data + i;
-            dr->interface.len  = val_len;
-            last_field = MAP_WS_METHOD;
-            break;
-        case MAP_WS_METHOD:
-            dr->method.data    = sr->uri_processed.data + i;
-            dr->method.len     = val_len;
-            last_field = MAP_WS_PARAM;
-
-            if(duda_request_set_method(dr) == -1) {
-                return -1;
-            }
-            allowed_params = dr->_method->num_params;
-            break;
-        case MAP_WS_PARAM:
-            if (dr->n_params >= MAP_WS_MAX_PARAMS || dr->n_params >= allowed_params) {
-                PLUGIN_TRACE("too much parameters (max=%i)",
-                             (dr->n_params >= MAP_WS_MAX_PARAMS)?
-                             MAP_WS_MAX_PARAMS:allowed_params);
-                return -1;
-            }
-            if (dr->n_params == 0) {
-                head_param = (&dr->_method->params)->next;
-            }
-            entry_param = mk_list_entry(head_param, struct duda_param, _head);
-            if (val_len > entry_param->max_len && entry_param->max_len != 0) {
-                PLUGIN_TRACE("too long param (max=%i)", entry_param->max_len);
-                console_debug(dr, "Error: param %i is too long", dr->n_params);
-                return -1;
-            }
-            dr->params[dr->n_params].data = sr->uri_processed.data + i;
-            dr->params[dr->n_params].len  = val_len;
-            dr->n_params++;
-            last_field = MAP_WS_PARAM;
-            head_param = head_param->next;
-            break;
-        }
-
-        i = end + 1;
-    }
-
-    if (last_field < MAP_WS_METHOD) {
-        return -1;
-    }
-
-    if ((dr->n_params) != allowed_params) {
-        PLUGIN_TRACE("%i parameters required", allowed_params);
-        console_debug(dr, "Error: unexpected number of parameters");
-        return -1;
-    }
 
     return 0;
 }
