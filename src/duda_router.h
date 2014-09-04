@@ -25,13 +25,36 @@
 #define DUDA_ROUTER_STATIC    0
 #define DUDA_ROUTER_DYNAMIC   1
 
-struct duda_router_rule {
-    int type;            /* ROUTER_STATIC or ROUTER_DYNAMIC */
-    int pattern_len;
+#define DUDA_ROUTER_NOTFOUND  -1
+#define DUDA_ROUTER_MATCH      0
+#define DUDA_ROUTER_REDIRECT   1
+
+struct duda_router_path {
+    /* The type defines if is it a static or dynamic router rule */
+    int type;
+
+    /* The pattern to match in the URI */
     char *pattern;
+    int pattern_len;
+
+    /*
+     * If the pattern was defined with an ending slash (e.g: '/something/')
+     * and the incoming request do not contain the last slash, the server
+     * may perform a HTTP redirect request based on the value of this flag.
+     *
+     * This is auto set when creating a new static map. It can be MK_FALSE or
+     * MK_TRUE.
+     */
+    int redirect;
+
+    /* The target callback function and it's name */
     char *callback_name;
     void (*callback) (duda_request_t *);
 
+    /*
+     * Link to the list head located on struct web_service at
+     * duda_webservice.h.
+     */
     struct mk_list _head;
 };
 
@@ -62,5 +85,10 @@ struct duda_api_router {
 };
 
 struct duda_api_router *duda_router_object();
+
+int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr);
+int duda_router_path_lookup(struct web_service *ws,
+                            duda_request_t *dr,
+                            struct duda_router_path **path);
 
 #endif

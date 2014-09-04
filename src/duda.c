@@ -909,8 +909,11 @@ int duda_service_run(struct plugin *plugin,
                      struct session_request *sr,
                      struct web_service *web_service)
 {
-    struct duda_request *dr = duda_dr_list_get(cs->socket);
+    int ret;
+    struct duda_request *dr;
+    struct duda_router_path *path;
 
+    dr = duda_dr_list_get(cs->socket);
     if (!dr) {
         dr = mk_api->mem_alloc(sizeof(duda_request_t));
         if (!dr) {
@@ -963,44 +966,26 @@ int duda_service_run(struct plugin *plugin,
 
     /* Check if a root URI is requested (only '/') */
     if (web_service->router_root_cb) {
-        /* If the service is declared as owner */
-        if (web_service->is_root == MK_TRUE && sr->uri_processed.len == 1) {
-            web_service->router_root_cb(dr);
-            return 0;
-        }
-        /* the URI contains the web service name with or without ending slash */
-        else if (web_service->is_root == MK_FALSE &&
-                 (sr->uri_processed.len == web_service->fixed_name.len + 1 ||
-                  sr->uri_processed.len == web_service->fixed_name.len + 2)) {
+        if (duda_router_is_request_root(web_service, dr) == MK_TRUE) {
             web_service->router_root_cb(dr);
             return 0;
         }
     }
 
-    /* Parse request for 'Duda Map' format */
-    if ((duda_request_parse(web_service, sr, dr) != 0) || (!dr->_method)) {
-        /* Static Map */
-        if (duda_map_static_check(dr) == 0) {
-            return 0;
-        }
-
-        /* Static Content file */
-        if (duda_service_html(dr) == 0) {
-            return -1;
-        }
-    }
-    else {
-        if (dr->_method->cb_webservice) {
-            PLUGIN_TRACE("CB %s()", dr->_method->callback);
-            dr->_method->cb_webservice(dr);
-        }
-        else if (dr->_method->cb_builtin) {
-            dr->_method->cb_builtin(dr);
-        }
-        else {
-            return -1;
-        }
+    /* Lookup a Router path */
+    ret = duda_router_path_lookup(web_service, dr, &path);
+    if (ret == DUDA_ROUTER_MATCH) {
+        PLUGIN_TRACE("Router: %s()", path->callback_name);
+        path->callback(dr);
         return 0;
+    }
+    else if (ret == DUDA_ROUTER_REDIRECT) {
+        return 0;
+    }
+
+    /* Static Content file */
+    if (duda_service_html(dr) == 0) {
+        return -1;
     }
 
     return -1;
