@@ -25,24 +25,25 @@
 #define ROUTER_REDIR_SIZE 64
 
 /* Router Internals */
+
 /*
  * The STATIC 'way', aims to replace the old map->static_add() method used
  * to route fixed and static URL patterns to specific callbacks, it do not
  * support dynamic parameters.
  */
-static int router_add_static(char *pattern,
-                             void (*callback)(duda_request_t *),
-                             char *callback_name,
-                             struct mk_list *list)
+struct duda_router_path *router_new_path(char *pattern,
+                                         void (*callback)(duda_request_t *),
+                                         char *callback_name,
+                                         struct mk_list *list)
 {
     struct duda_router_path *path;
 
     path                = mk_api->mem_alloc(sizeof(struct duda_router_path));
-    path->type          = DUDA_ROUTER_STATIC;
     path->pattern       = pattern;
     path->pattern_len   = strlen(pattern);
     path->callback      = callback;
     path->callback_name = callback_name;
+    mk_list_init(&path->fields);
 
     /* Redirect flags, for details please read comments on duda_router.h */
     if (path->pattern[path->pattern_len - 1] == '/') {
@@ -53,7 +54,73 @@ static int router_add_static(char *pattern,
     }
 
     mk_list_add(&path->_head, list);
+    return path;
+}
+
+static int router_add_static(char *pattern,
+                             void (*callback)(duda_request_t *),
+                             char *callback_name,
+                             struct mk_list *list)
+{
+    struct duda_router_path *path;
+
+    path = router_new_path(pattern, callback, callback_name, list);
+    if (!path) {
+        return -1;
+    }
+    path->type = DUDA_ROUTER_STATIC;
+
     return 0;
+}
+
+
+/* For a string pattern, split each field and generate a linked list */
+static struct mk_list *router_split_pattern(char *pattern)
+{
+    int end;
+    unsigned int len;
+    unsigned int val_len;
+    unsigned int i = 0;
+    char *val;
+    struct mk_list *list;
+    struct mk_string_line *new;
+
+    list = mk_api->mem_alloc(sizeof(struct mk_list));
+    mk_list_init(list);
+
+    len = strlen(pattern);
+
+    while (i < len) {
+        end = mk_api->str_char_search(pattern + i, '/', len - i);
+
+        if (end >= 0 && end + i < len) {
+            end += i;
+
+            if (i == (unsigned int) end) {
+                i++;
+                continue;
+            }
+
+            val = mk_api->str_copy_substr(pattern, i, end);
+            val_len = end - i;
+        }
+        else {
+            val = mk_api->str_copy_substr(pattern, i, len);
+            val_len = len - i;
+            end = len;
+
+        }
+
+        /* Alloc node */
+        new = mk_api->mem_alloc(sizeof(struct mk_string_line));
+        new->val = val;
+        new->len = val_len;
+
+        mk_list_add(&new->_head, list);
+        i = end + 1;
+    }
+
+    return list;
 }
 
 static int router_add_dynamic(char *pattern,
@@ -61,11 +128,48 @@ static int router_add_dynamic(char *pattern,
                               char *callback_name,
                               struct mk_list *list)
 {
-    (void) pattern;
-    (void) callback;
-    (void) callback_name;
-    (void) list;
+    struct mk_list *head;
+    struct mk_list *plist;
+    struct mk_string_line *entry;
+    struct duda_router_path *path;
+    struct duda_router_field *field;
 
+    if (!pattern || !callback) {
+        return -1;
+    }
+
+    if (pattern[0] != '/') {
+        return -1;
+    }
+
+    plist = router_split_pattern(pattern);
+    if (!plist) {
+        return -1;
+    }
+
+    path = router_new_path(pattern, callback, callback_name, list);
+    if (!path) {
+        return -1;
+    }
+    path->type = DUDA_ROUTER_DYNAMIC;
+
+    mk_list_foreach(head, plist) {
+        entry = mk_list_entry(head, struct mk_string_line, _head);
+
+        /* allocate memory for the field, lookup the type and register */
+        field = mk_api->mem_alloc(sizeof(struct duda_router_field));
+        if (entry->val[0] == ':') {
+            field->type = DUDA_ROUTER_FVAR;
+        }
+        else {
+            field->type = DUDA_ROUTER_FKEY;
+        }
+        field->name = mk_api->str_dup(entry->val);
+        field->name_len = entry->len;
+
+        mk_list_add(&field->_head, &path->fields);
+    }
+    mk_api->str_split_free(plist);
     return 0;
 }
 

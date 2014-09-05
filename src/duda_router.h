@@ -22,12 +22,28 @@
 #ifndef MK_DUDA_ROUTER_H
 #define MK_DUDA_ROUTER_H
 
-#define DUDA_ROUTER_STATIC    0
-#define DUDA_ROUTER_DYNAMIC   1
+#define DUDA_ROUTER_STATIC     0
+#define DUDA_ROUTER_DYNAMIC    1
+
+#define DUDA_ROUTER_FKEY       0
+#define DUDA_ROUTER_FVAR       1
 
 #define DUDA_ROUTER_NOTFOUND  -1
 #define DUDA_ROUTER_MATCH      0
 #define DUDA_ROUTER_REDIRECT   1
+
+
+struct duda_router_field {
+    /* Field type: DUDA_ROUTER_FKEY or DUDA_ROUTER_FVAR */
+    int type;
+
+    /* The key or variable name */
+    int name_len;
+    char *name;
+
+    /* Link to the list head on duda_router_path->fields */
+    struct mk_list _head;
+};
 
 struct duda_router_path {
     /* The type defines if is it a static or dynamic router rule */
@@ -46,6 +62,9 @@ struct duda_router_path {
      * MK_TRUE.
      */
     int redirect;
+
+    /* List of fields found on pattern, only used on DYNAMIC routes */
+    struct mk_list fields;
 
     /* The target callback function and it's name */
     char *callback_name;
