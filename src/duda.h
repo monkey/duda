@@ -23,6 +23,7 @@
 #include "duda_conf.h"
 #include "duda_gc_map.h"
 #include "duda_qs_map.h"
+#include "duda_router_uri.h"
 
 #ifndef DUDA_MAIN_H
 #define DUDA_MAIN_H
@@ -57,9 +58,10 @@ typedef struct duda_request {
     struct client_session *cs;
     struct session_request *sr;
 
-    /* Static map */
+    /* Parsed URI based on Router format */
+    struct duda_router_uri router_uri;
 
-    /* Method structure */
+    /* Static map */
     struct duda_method *_method;
 
     /* Callback functions */
@@ -86,7 +88,6 @@ typedef struct duda_request {
 
     /* Head to red-black tree list that holds all DRs */
     struct rb_node _rb_head;
-
 } duda_request_t;
 
 

@@ -32,7 +32,7 @@
 #define DUDA_ROUTER_MATCH      0
 #define DUDA_ROUTER_REDIRECT   1
 
-
+/* each router path have a list of router fields */
 struct duda_router_field {
     /* Field type: DUDA_ROUTER_FKEY or DUDA_ROUTER_FVAR */
     int type;
@@ -45,6 +45,7 @@ struct duda_router_field {
     struct mk_list _head;
 };
 
+/* A static or dynamic path set by router->map() */
 struct duda_router_path {
     /* The type defines if is it a static or dynamic router rule */
     int type;
@@ -95,7 +96,7 @@ struct duda_api_router {
                  void (*callback)(duda_request_t *),
                  char *callback_name, struct mk_list *);
 
-    #define root(callback) _root(self, callback, #callback)
+    #define root(callback) _root(self, (void *) callback, #callback)
     int (*_root) (struct web_service *,
                   void (*callback)(void *),
                   char *);
@@ -107,6 +108,7 @@ struct duda_api_router *duda_router_object();
 
 int duda_router_redirect(duda_request_t *dr);
 int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr);
+int duda_router_uri_parse(duda_request_t *dr);
 int duda_router_path_lookup(struct web_service *ws,
                             duda_request_t *dr,
                             struct duda_router_path **path);
