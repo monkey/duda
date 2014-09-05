@@ -750,6 +750,9 @@ int duda_service_run(struct plugin *plugin,
     /* Parse the query string */
     duda_qs_parse(dr);
 
+    /* Parse the URI based on Duda Router format */
+    duda_router_uri_parse(dr);
+
     /* Check if a root URI is requested (only '/') */
     if (web_service->router_root_cb) {
         if (duda_router_is_request_root(web_service, dr) == MK_TRUE) {

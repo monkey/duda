@@ -246,6 +246,8 @@ int duda_router_path_lookup(struct web_service *ws,
                             struct duda_router_path **path)
 {
     int offset = 0;
+    int uri_len;
+    char *uri_data;
     struct mk_list *head;
     struct duda_router_path *p;
 
@@ -260,23 +262,15 @@ int duda_router_path_lookup(struct web_service *ws,
         offset = ws->name.len + 1;
     }
 
+    uri_len  = dr->sr->uri_processed.len - offset;
+    uri_data = dr->sr->uri_processed.data + offset;
+
     /* Go around each router rule */
     mk_list_foreach(head, ws->router_list) {
         p = mk_list_entry(head, struct duda_router_path, _head);
 
         /* Static processing */
         if (p->type == DUDA_ROUTER_STATIC) {
-            /*
-               request       rule      redirect
-               ================================
-               /aaa          /aaa      False
-               /aaa/         /aaa      False
-               /aaa          /aaa/     True
-               /aaa/         /aaa/     True
-             */
-            int uri_len    = dr->sr->uri_processed.len - offset;
-            char *uri_data = dr->sr->uri_processed.data + offset;
-
             if (strncmp(uri_data, p->pattern, p->pattern_len) == 0) {
                 *path = p;
                 return DUDA_ROUTER_MATCH;
@@ -288,6 +282,47 @@ int duda_router_path_lookup(struct web_service *ws,
                     duda_router_redirect(dr);
                     return DUDA_ROUTER_REDIRECT;
                 }
+            }
+        }
+        else if (p->type == DUDA_ROUTER_DYNAMIC) {
+            /* This is a very lazy lookup */
+            int i = 0;
+            int match = MK_FALSE;
+            struct mk_list *dhead;
+            struct duda_router_field *field;
+
+            mk_list_foreach(dhead, &p->fields) {
+                if (i == dr->router_uri.len) {
+                    match = MK_FALSE;
+                    break;
+                }
+
+                field = mk_list_entry(dhead, struct duda_router_field, _head);
+                if (field->type == DUDA_ROUTER_FKEY) {
+                    if (strncmp(field->name,
+                                dr->router_uri.fields[i].name,
+                                field->name_len) == 0 &&
+                        field->name_len == dr->router_uri.fields[i].name_len) {
+                        match = MK_TRUE;
+                    }
+                    else {
+                        match = MK_FALSE;
+                        break;
+                    }
+                }
+                else if (field->type == DUDA_ROUTER_FVAR) {
+                    i++;
+                    continue;
+                }
+                if (match == MK_FALSE) {
+                    break;
+                }
+                i++;
+            }
+
+            if (match == MK_TRUE) {
+                *path = p;
+                return DUDA_ROUTER_MATCH;
             }
         }
     }
@@ -323,6 +358,100 @@ int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr)
 
     return MK_FALSE;
 }
+
+static inline int uri_add(struct duda_router_uri *ruri, char *buf, int size)
+{
+    int idx;
+
+    if (ruri->len >= DUDA_ROUTER_URI_MAX) {
+        return -1;
+    }
+
+    idx = ruri->len;
+    ruri->len++;
+
+    ruri->fields[idx].name = buf;
+    ruri->fields[idx].name_len = size;
+
+    return 0;
+}
+
+
+/* For an incoming URI, parse it and store the results on dr->router_uri */
+int duda_router_uri_parse(duda_request_t *dr)
+{
+    int i;
+    int len;
+    int start = -1;
+    int end   = -1;
+    int size;
+    char *uri;
+
+    len = dr->sr->uri_processed.len;
+    uri = dr->sr->uri_processed.data;
+    dr->router_uri.len = 0;
+
+    if (dr->ws_root->is_root == MK_FALSE) {
+        i = dr->ws_root->name.len + 1;
+    }
+    else {
+        i = 0;
+    }
+
+    for (; i < len; i++) {
+        if (uri[i] != '/') {
+            continue;
+        }
+
+        if (start == -1) {
+            start = i;
+            end = -1;
+            continue;
+        }
+        else if (end == -1) {
+            end = i;
+            i--;
+        }
+
+        size = end - start - 1;
+        if (size <= 0) {
+            start = -1;
+            end   = -1;
+            continue;
+        }
+
+        uri_add(&dr->router_uri, uri + start + 1, size);
+        start = -1;
+        end = -1;
+    }
+
+    if (start >= 0 && end == -1) {
+        end = len;
+        size = end - start - 1;
+        if (size > 0) {
+            uri_add(&dr->router_uri, uri + start + 1, size);
+        }
+    }
+
+
+    /*
+     * Debug:
+     *
+    for (i = 0; i < dr->router_uri.len; i++) {
+        char buf[20];
+        memset(buf, '\0', sizeof(buf));
+
+        strncpy(buf, dr->router_uri.fields[i].name, dr->router_uri.fields[i].name_len);
+        printf("RURI=%i buf=%s len=%i\n",
+               i,
+               buf,
+               dr->router_uri.fields[i].name_len);
+    }
+    */
+
+    return 0;
+}
+
 
 /*
  * @OBJ_NAME: router
