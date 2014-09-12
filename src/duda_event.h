@@ -24,14 +24,14 @@
 #include "duda.h"
 #include "duda_objects.h"
 
-#define DUDA_EVENT_READ             MK_EPOLL_READ
-#define DUDA_EVENT_WRITE            MK_EPOLL_WRITE
-#define DUDA_EVENT_RW               MK_EPOLL_RW
-#define DUDA_EVENT_SLEEP            MK_EPOLL_SLEEP
-#define DUDA_EVENT_WAKEUP           MK_EPOLL_WAKEUP
+#define DUDA_EVENT_READ             MK_EVENT_READ
+#define DUDA_EVENT_WRITE            MK_EVENT_WRITE
+#define DUDA_EVENT_RW               (MK_EVENT_READ | MK_EVENT_WRITE)
+#define DUDA_EVENT_SLEEP            MK_EVENT_SLEEP
+#define DUDA_EVENT_WAKEUP           -1
 #define DUDA_EVENT_HANGUP           MK_EPOLL_HANGUP
-#define DUDA_EVENT_LEVEL_TRIGGERED  MK_EPOLL_LEVEL_TRIGGERED
-#define DUDA_EVENT_EDGE_TRIGGERED   MK_EPOLL_EDGE_TRIGGERED
+#define DUDA_EVENT_LEVEL_TRIGGERED  MK_EVENT_LEVEL
+#define DUDA_EVENT_EDGE_TRIGGERED   MK_EVENT_EDGE
 
 /* Return values for a given callback through events interface */
 #define DUDA_EVENT_OWNED            MK_PLUGIN_RET_EVENT_OWNED
