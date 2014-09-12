@@ -121,7 +121,7 @@ int duda_event_add(int sockfd,
     event_list = pthread_getspecific(duda_events_list);
     mk_list_add(&eh->_head, event_list);
 
-    if (init_mode < DUDA_EVENT_READ || init_mode > DUDA_EVENT_SLEEP) {
+    if (init_mode < DUDA_EVENT_READ) {
         mk_err("Duda: Invalid usage of duda_event_add()");
         exit(EXIT_FAILURE);
     }
