@@ -46,14 +46,16 @@ void duda_logger_writer(void *arg)
     struct mk_list *head;
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
-    struct epoll_event event = {0, {0}};
+    mk_event_loop_t *evl;
 
     duda_logger_context_t *ctx;
 
-    int efd, max_events = 256;
-    int i, bytes, err;
+    int i;
+    int bytes;
+    int err;
     int flog;
     int clk;
+    int max_events = 256;
     long slen;
     int timeout;
 
@@ -87,8 +89,7 @@ void duda_logger_writer(void *arg)
     buffer_limit = (pipe_size * 0.70);
 
     /* Creating poll */
-    efd = epoll_create(max_events);
-    fcntl(efd, F_SETFD, FD_CLOEXEC);
+    evl = mk_api->ev_loop_create(max_events);
 
     /* Lookup all loggers and grab the pipe's FDs */
     mk_list_foreach(head_vs, &services_list) {
@@ -100,11 +101,7 @@ void duda_logger_writer(void *arg)
             /* go around each Logger */
             mk_list_foreach(head, entry_ws->loggers) {
                 ctx = mk_list_entry(head, duda_logger_context_t, _head);
-
-                memset(&event, 0, sizeof(struct epoll_event));
-                event.data.ptr = ctx;
-                event.events  = EPOLLERR | EPOLLRDHUP | EPOLLIN;
-                epoll_ctl(efd, EPOLL_CTL_ADD, ctx->pipe_fd[0], &event);
+                mk_api->ev_add(evl, ctx->pipe_fd[0], MK_EVENT_READ, ctx);
             }
         }
     }
@@ -115,16 +112,15 @@ void duda_logger_writer(void *arg)
     /* Reading pipe buffer */
     while (1) {
         usleep(50000);
-
-        struct epoll_event events[max_events];
         int fd;
-        int num_fds = epoll_wait(efd, events, max_events, -1);
+        int num_fds = mk_api->ev_wait(evl);
 
         clk = mk_api->time_unix();
 
         for (i = 0; i < num_fds; i++) {
-            ctx = events[i].data.ptr;
-            fd = ctx->pipe_fd[0];
+            /* shortcut vars */
+            fd   = evl->events[i].fd;
+            ctx  = evl->events[i].data;
 
             err = ioctl(fd, FIONREAD, &bytes);
             if (mk_unlikely(err == -1)){
