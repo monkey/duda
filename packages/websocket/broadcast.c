@@ -173,16 +173,13 @@ int ws_broadcast_all(unsigned char *data, uint64_t len,
 void ws_broadcast_worker(void *args)
 {
     int i, n, fd;
-    int n_events = 50;
-    int efd;
     int num_fds;
-    struct epoll_event event = {0, {0}};
-    struct epoll_event *events;
     struct ws_request *wr;
     struct ws_broadcast_t *br = NULL;
     struct ws_broadcast_frame brf;
     struct ws_broadcast_worker *brw = (struct ws_broadcast_worker *) args;
     struct mk_list *head;
+    mk_event_loop_t *evl;
 
     monkey->worker_rename("duda: ws bc/N\n");
 
@@ -197,19 +194,17 @@ void ws_broadcast_worker(void *args)
     }
 
     /* Initialize epoll queue and register the file descriptor */
-    efd = epoll_create(100);
-    event.data.fd = br->pipe[0];
-    event.events = EPOLLERR | EPOLLHUP | EPOLLIN;
-    events = monkey->mem_alloc(n_events * sizeof(struct epoll_event));
-    epoll_ctl(efd, EPOLL_CTL_ADD, br->pipe[0], &event);
+    evl = monkey->ev_loop_create(100);
+    monkey->ev_add(evl, br->pipe[0], MK_EVENT_READ, NULL);
 
     /* loop! */
     while (1) {
-        num_fds = epoll_wait(efd, events, n_events, -1);
+        num_fds = monkey->ev_wait(evl);
         for (i = 0; i< num_fds; i++) {
-            if (events[i].events & EPOLLIN) {
-                fd = events[i].data.fd;
+            fd = evl->events[i].fd;
+            int mask = evl->events[i].mask;
 
+            if (mask & MK_EVENT_READ) {
                 /* Just read our capacity */
                 n = read(fd, &brf, sizeof(brf));
                 if (n <= 0) {

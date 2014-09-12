@@ -317,7 +317,7 @@ int ws_handshake(duda_request_t *dr, int channel)
             ws_invalid_upgrade(dr);
         }
 
-        monkey->event_socket_change_mode(dr->socket, MK_EPOLL_RW, MK_EPOLL_LEVEL_TRIGGERED);
+        monkey->event_socket_change_mode(dr->socket, MK_EVENT_READ | MK_EVENT_WRITE, -1);
 
         /* Ok Baby, Handshake time! */
         key_len = strlen(ws_key);
