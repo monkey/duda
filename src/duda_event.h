@@ -39,7 +39,7 @@
 #define DUDA_EVENT_CONTINUE         MK_PLUGIN_RET_EVENT_CONTINUE
 
 /* Thread key to map the event lists per worker */
-pthread_key_t duda_events_list;
+extern __thread struct mk_list *duda_events_list;
 
 struct duda_event_signal_channel {
     int fd_r;

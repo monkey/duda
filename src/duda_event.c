@@ -19,6 +19,8 @@
 
 #include "duda_event.h"
 
+__thread struct mk_list *duda_events_list;
+
 /*
  * @OBJ_NAME: event
  * @OBJ_MENU: Events
@@ -97,7 +99,6 @@ int duda_event_add(int sockfd,
                    void *data)
 {
     int rc = -1;
-    struct mk_list *event_list;
     struct duda_event_handler *eh;
     static duda_request_t *dr;
 
@@ -118,8 +119,7 @@ int duda_event_add(int sockfd,
     eh->cb_data = data;
 
     /* Link to thread list */
-    event_list = pthread_getspecific(duda_events_list);
-    mk_list_add(&eh->_head, event_list);
+    mk_list_add(&eh->_head, duda_events_list);
 
     if (init_mode < DUDA_EVENT_READ) {
         mk_err("Duda: Invalid usage of duda_event_add()");
@@ -156,19 +156,18 @@ int duda_event_add(int sockfd,
  */
 struct duda_event_handler *duda_event_lookup(int sockfd)
 {
-    struct mk_list *head, *event_list;
+    struct mk_list *head;
     struct duda_event_handler *eh;
 
-    event_list = pthread_getspecific(duda_events_list);
-    if (!event_list) {
+    if (!duda_events_list) {
         return NULL;
     }
 
-    if (mk_list_is_empty(event_list) == 0) {
+    if (mk_list_is_empty(duda_events_list) == 0) {
         return NULL;
     }
 
-    mk_list_foreach(head, event_list) {
+    mk_list_foreach(head, duda_events_list) {
         eh = mk_list_entry(head, struct duda_event_handler, _head);
         if (eh->sockfd == sockfd) {
             return eh;
@@ -211,16 +210,15 @@ int duda_event_mode(int sockfd, int mode, int behavior)
  */
 int duda_event_delete(int sockfd)
 {
-    struct mk_list *head, *tmp, *event_list;
+    struct mk_list *head, *tmp;
     struct duda_event_handler *eh;
     duda_request_t *dr;
 
-    event_list = pthread_getspecific(duda_events_list);
-    if (!event_list) {
+    if (!duda_events_list) {
         return -1;
     }
 
-    mk_list_foreach_safe(head, tmp, event_list) {
+    mk_list_foreach_safe(head, tmp, duda_events_list) {
         eh = mk_list_entry(head, struct duda_event_handler, _head);
         if (eh->sockfd == sockfd) {
             mk_list_del(&eh->_head);
