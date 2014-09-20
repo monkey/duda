@@ -6,3 +6,8 @@ body {
   padding: 40px 15px;
 
 }
+
+.navbar-fixed-top {
+    padding: 6px;
+    height:  56px;
+}

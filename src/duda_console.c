@@ -62,7 +62,7 @@ void duda_console_cb_map(duda_request_t *dr)
 
     /* Header */
     duda_response_printf(dr, DD_HTML_HEADER, "Console Map", DD_HTML_CSS);
-    duda_response_printf(dr, DD_HTML_NAVBAR_BASIC, "console map");
+    duda_response_printf(dr, DD_HTML_NAVBAR_BASIC, "", "Dashboard");
 
     duda_response_printf(dr, "<div class=\"container\">"
                              "  <div class=\"duda-template\">"
