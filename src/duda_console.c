@@ -155,9 +155,7 @@ void duda_console_write(duda_request_t *dr,
  * @METHOD_PROTO: int dashboard(char *uri)
  * @METHOD_PARAM: uri The URL pattern, e.g: '/dashboard'
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
- * @METHOD_RETURN: Do not return anything
  */
-
 int duda_console_dashboard(char *uri, struct web_service *ws)
 {
     if (!uri) {
