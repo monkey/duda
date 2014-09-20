@@ -83,8 +83,7 @@ duda_package_t MK_EXPORT *_duda_package_main();
         worker   = dapi->worker;                                        \
         xtime    = dapi->xtime;                                         \
         dthread  = dapi->dthread;                                       \
-        mk_list_init(&duda_map_interfaces);                             \
-        mk_list_init(&duda_map_urls);                                   \
+                                                                        \
         mk_list_init(&duda_global_dist);                                \
         mk_list_init(&duda_pre_loop);                                   \
         mk_list_init(&duda_ws_packages);                                \

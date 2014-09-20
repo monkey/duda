@@ -59,9 +59,14 @@
 struct duda_api_console {
     #define debug(dr, fmt, ...) _debug(dr, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
     void (*_debug) (duda_request_t *, char *, int, char *, ...);
+
+    #define dashboard(uri) _dashboard(uri, self);
+    int (*_dashboard) (char *uri, struct web_service *ws);
 };
 
 struct duda_api_console *duda_console_object();
+
+int duda_console_enable(char *map, struct mk_list *list);
 void duda_console_cb_messages(duda_request_t *dr);
 void duda_console_cb_map(duda_request_t *dr);
 void duda_console_write(duda_request_t *dr,

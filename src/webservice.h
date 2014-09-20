@@ -134,13 +134,13 @@ int _duda_main(struct duda_api_objects *dapi);
                                                                         \
         /* Reference to this web service */                             \
         self = ws;                                                      \
+        self->dashboard = NULL;                                         \
                                                                         \
         /* Setup initialization */                                      \
         _setup.event_signal_cb = NULL;                                  \
                                                                         \
-        /* Initialize global linked lists */                            \
-        mk_list_init(&duda_map_interfaces);                             \
-        mk_list_init(&duda_map_urls);                                   \
+                                                                        \
+        /* Initialize global data */                                    \
         mk_list_init(&duda_global_dist);                                \
         mk_list_init(&duda_pre_loop);                                   \
         mk_list_init(&duda_ws_packages);                                \

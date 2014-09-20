@@ -47,6 +47,8 @@ struct web_service {
 
     struct mk_list *router_list;
 
+    char *dashboard;
+
     /* global data */
     struct mk_list *global;
 

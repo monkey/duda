@@ -39,7 +39,7 @@ struct duda_router_path *router_new_path(char *pattern,
     struct duda_router_path *path;
 
     path                = mk_api->mem_alloc(sizeof(struct duda_router_path));
-    path->pattern       = pattern;
+    path->pattern       = mk_api->str_dup(pattern);
     path->pattern_len   = strlen(pattern);
     path->callback      = callback;
     path->callback_name = callback_name;

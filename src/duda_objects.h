@@ -30,8 +30,7 @@
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
 
-struct mk_list MK_EXPORT duda_map_interfaces;
-struct mk_list MK_EXPORT duda_map_urls;
+/* List of symbols that are populated by the web service on start */
 struct mk_list MK_EXPORT duda_global_dist;
 struct mk_list MK_EXPORT duda_pre_loop;
 struct mk_list MK_EXPORT duda_ws_packages;

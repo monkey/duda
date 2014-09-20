@@ -27,6 +27,8 @@
 #include "duda.h"
 #include "duda_api.h"
 #include "duda_conf.h"
+#include "duda_router.h"
+#include "duda_webservice.h"
 
 /*
  * @OBJ_NAME: console
@@ -35,15 +37,6 @@
  * to the console URL interface of the running web service.
  */
 
-struct duda_api_console *duda_console_object()
-{
-    struct duda_api_console *c;
-
-    c = mk_api->mem_alloc(sizeof(struct duda_api_console));
-    c->_debug = duda_console_write;
-
-    return c;
-}
 
 /* callback for /app/console/messages */
 void duda_console_cb_messages(duda_request_t *dr)
@@ -153,4 +146,59 @@ void duda_console_write(duda_request_t *dr,
     close(fd);
 
     mk_api->mem_free(p);
+}
+
+/*
+ * @METHOD_NAME: dashboard
+ * @METHOD_DESC: It enable the Console Web Interface and creates an URI association
+ * to access it following the pattern of the Router mechanism.
+ * @METHOD_PROTO: int dashboard(char *uri)
+ * @METHOD_PARAM: uri The URL pattern, e.g: '/dashboard'
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
+ * @METHOD_RETURN: Do not return anything
+ */
+
+int duda_console_dashboard(char *uri, struct web_service *ws)
+{
+    if (!uri) {
+        return -1;
+    }
+
+    if (uri[0] != '/') {
+        return -1;
+    }
+
+    if (strstr(uri, ":")) {
+        return -1;
+    }
+
+    ws->dashboard = uri;
+    return 0;
+}
+
+int duda_console_enable(char *map, struct mk_list *list)
+{
+    int len;
+    char buf[1024];
+
+    len = strlen(map);
+    memset(buf, '\0', sizeof(buf));
+    strncpy(buf, map, len);
+
+    if (buf[len - 1] != '/') {
+        buf[len] = '/';
+    }
+
+    return duda_router_map(buf, duda_console_cb_map, "internal", list);
+}
+
+struct duda_api_console *duda_console_object()
+{
+    struct duda_api_console *c;
+
+    c = mk_api->mem_alloc(sizeof(struct duda_api_console));
+    c->_dashboard = duda_console_dashboard;
+    c->_debug = duda_console_write;
+
+    return c;
 }

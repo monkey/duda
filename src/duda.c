@@ -180,6 +180,11 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->setup       = duda_load_symbol(ws->handler, "_setup");
         ws->exit_cb     = duda_load_symbol_passive(ws->handler, "duda_exit");
 
+        /* Console dashboard, enabled if the service used console->dashboard() */
+        if (ws->dashboard) {
+            duda_console_enable(ws->dashboard, ws->router_list);
+        }
+
         /* Spawn all workers set in duda_main() */
         duda_worker_spawn_all(ws->workers);
     }

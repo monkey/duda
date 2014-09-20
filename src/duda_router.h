@@ -112,5 +112,9 @@ int duda_router_uri_parse(duda_request_t *dr);
 int duda_router_path_lookup(struct web_service *ws,
                             duda_request_t *dr,
                             struct duda_router_path **path);
+int duda_router_map(char *pattern,
+                    void (*callback)(duda_request_t *),
+                    char *callback_name,
+                    struct mk_list *list);
 
 #endif
