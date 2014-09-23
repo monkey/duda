@@ -91,15 +91,6 @@ static void dashboard_panel_service_info(duda_request_t *dr)
     struct web_service *ws = dr->ws_root;
 
     duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Web Service Information");
-
-#if !defined(JEMALLOC_STATS)
-    duda_response_printf(dr,
-                         "The server have <strong>not</strong> been "
-                         "built with Memory Stats support\n");
-    duda_response_printf(dr, DD_HTML_PANEL_FOOTER, "");
-    return;
-#endif
-
     duda_response_printf(dr,
                          "<table class='table table-striped'>\n"
                          "  <tbody>\n");
