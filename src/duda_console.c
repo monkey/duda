@@ -29,6 +29,7 @@
 #include "duda_conf.h"
 #include "duda_router.h"
 #include "duda_webservice.h"
+#include "duda_stats.h"
 
 /*
  * @OBJ_NAME: console
@@ -54,6 +55,85 @@ void duda_console_cb_messages(duda_request_t *dr)
     duda_response_end(dr, NULL);
 }
 
+static char *human_readable_size(long size)
+{
+    long u = 1024, i, len = 128;
+    char *buf = mk_api->mem_alloc(len);
+    static const char *__units[] = { "b", "K", "M", "G",
+        "T", "P", "E", "Z", "Y", NULL
+    };
+
+    for (i = 0; __units[i] != NULL; i++) {
+        if ((size / u) == 0) {
+            break;
+        }
+        u *= 1024;
+    }
+    if (!i) {
+        snprintf(buf, len, "%ld %s", size, __units[0]);
+    }
+    else {
+        float fsize = (float) ((double) size / (u / 1024));
+        snprintf(buf, len, "%.2f%s", fsize, __units[i]);
+    }
+
+    return buf;
+}
+
+static void dashboard_panel_memory(duda_request_t *dr)
+{
+    char *hr;
+    uint64_t total;
+    uint64_t total_all = 0;
+    struct mk_list *head;
+    struct duda_stats_worker *st;
+
+    duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Memory Usage");
+
+#if !defined(JEMALLOC_STATS)
+    duda_response_printf(dr,
+                         "The server have <strong>not</strong> been "
+                         "built with Memory Stats support\n");
+    duda_response_printf(dr, DD_HTML_PANEL_FOOTER, "");
+    return;
+#endif
+
+    duda_response_printf(dr,
+                         "<table class='table table-striped'>\n"
+                         "  <thead>\n"
+                         "    <tr>\n"
+                         "      <th>Worker ID</th>\n"
+                         "      <th>Bytes</th>\n"
+                         "      <th>Total</th>\n"
+                         "    </tr>\n"
+                         "  </thead>\n"
+                         "  <tbody>\n");
+
+    mk_list_foreach(head, &duda_stats.mem) {
+        st = mk_list_entry(head, struct duda_stats_worker, _head);
+
+        total = (*st->mem_allocated - *st->mem_deallocated);
+        hr    = human_readable_size(total);
+
+        duda_response_printf(dr,
+                             "    <tr>\n"
+                             "        <td>%lu</td>\n"
+                             "        <td>%lu</td>\n"
+                             "        <td>%s</td>\n"
+                             "    </tr>\n",
+                             st->task_id, total, hr
+                             );
+        total_all += total;
+        mk_api->mem_free(hr);
+    }
+    duda_response_printf(dr,
+                         "</tbody>\n"
+                         "</table>\n");
+
+    duda_response_printf(dr, DD_HTML_PANEL_FOOTER,
+                         "the information above represents a global view of the server");
+}
+
 /* callback for /app/console/map */
 void duda_console_cb_map(duda_request_t *dr)
 {
@@ -66,12 +146,14 @@ void duda_console_cb_map(duda_request_t *dr)
 
     duda_response_printf(dr, "<div class=\"container\">"
                              "  <div class=\"duda-template\">"
-                                   "<h1>%s/</h1>\n"
+                                   "<h1>Dashboard: %s/</h1>\n"
                                        "<address>\n"
                                        "  Routing and URL maps for <strong>%s</strong> web service<br>\n"
                                        "</address>\n",
                          dr->ws_root->name.data,
                          dr->ws_root->name.data);
+
+    dashboard_panel_memory(dr);
 
     /* <ul> */
     duda_response_printf(dr, "<hr>\n");

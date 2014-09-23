@@ -54,6 +54,23 @@
 
 #define DD_HTML_FOOTER "</body></html>\n"
 
+#define DD_HTML_PANEL_HEADER                                        \
+    "<div class='panel panel-%s'>\n"                                \
+    "  <div class='panel-heading'>\n"                               \
+    "    <h3 class='panel-title'>\n"                                \
+    "       %s\n"                                                   \
+    "    </h3>\n"                                                   \
+    "  </div>\n"                                                    \
+    "  <div class='panel-body'>\n"
+
+#define DD_HTML_PANEL_FOOTER                                            \
+    "</div>\n"                                                          \
+    "<div class='panel-footer'>\n"                                      \
+    "    %s\n"                                                          \
+    "</div>\n"                                                          \
+    "</div>"
+
+
 #define console_debug(dr, fmt, ...) duda_console_write(dr, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 struct duda_api_console {
