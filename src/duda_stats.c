@@ -60,6 +60,7 @@ struct duda_proc_task *duda_stats_proc_stat(pid_t pid)
         perror("read");
         exit(EXIT_FAILURE);
     }
+    close(fd);
 
     sscanf(buf, "%d", &t->pid);
     mk_api->mem_free(buf);

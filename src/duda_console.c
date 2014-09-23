@@ -80,6 +80,43 @@ static char *human_readable_size(long size)
     return buf;
 }
 
+static inline void service_info_row(duda_request_t *dr, char *title, char *value)
+{
+    duda_response_printf(dr, "<tr><td><strong>%s</strong></td><td>%s</td></tr>\n",
+                         title, !value ? "": value);
+}
+
+static void dashboard_panel_service_info(duda_request_t *dr)
+{
+    duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Web Service Information");
+
+#if !defined(JEMALLOC_STATS)
+    duda_response_printf(dr,
+                         "The server have <strong>not</strong> been "
+                         "built with Memory Stats support\n");
+    duda_response_printf(dr, DD_HTML_PANEL_FOOTER, "");
+    return;
+#endif
+
+    duda_response_printf(dr,
+                         "<table class='table table-striped'>\n"
+                         "  <tbody>\n");
+
+    service_info_row(dr, "Name",  dr->ws_root->name.data);
+    service_info_row(dr, "Internal Name", dr->ws_root->fixed_name.data);
+    service_info_row(dr, "Document", dr->ws_root->docroot.data);
+    service_info_row(dr, "Config", dr->ws_root->confdir.data);
+    service_info_row(dr, "Data", dr->ws_root->datadir.data);
+    service_info_row(dr, "Logs", dr->ws_root->logdir.data);
+
+    duda_response_printf(dr,
+                         "</tbody>\n"
+                         "</table>\n");
+
+    duda_response_printf(dr, DD_HTML_PANEL_FOOTER,
+                         "");
+}
+
 static void dashboard_panel_memory(duda_request_t *dr)
 {
     char *hr;
@@ -88,7 +125,7 @@ static void dashboard_panel_memory(duda_request_t *dr)
     struct mk_list *head;
     struct duda_stats_worker *st;
 
-    duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Memory Usage");
+    duda_response_printf(dr, DD_HTML_PANEL_HEADER, "info", "Memory Usage per Worker");
 
 #if !defined(JEMALLOC_STATS)
     duda_response_printf(dr,
@@ -102,7 +139,7 @@ static void dashboard_panel_memory(duda_request_t *dr)
                          "<table class='table table-striped'>\n"
                          "  <thead>\n"
                          "    <tr>\n"
-                         "      <th>Worker ID</th>\n"
+                         "      <th>WID</th>\n"
                          "      <th>Name</th>\n"
                          "      <th>Bytes</th>\n"
                          "      <th>Total</th>\n"
@@ -136,8 +173,8 @@ static void dashboard_panel_memory(duda_request_t *dr)
                          "the information above represents a global view of the server");
 }
 
-/* callback for /app/console/map */
-void duda_console_cb_map(duda_request_t *dr)
+/* callback for Dashboard home */
+void duda_console_dash_home(duda_request_t *dr)
 {
     duda_response_http_status(dr, 200);
     duda_response_http_header(dr, "Content-Type: text/html");
@@ -146,18 +183,29 @@ void duda_console_cb_map(duda_request_t *dr)
     duda_response_printf(dr, DD_HTML_HEADER, "Console Map", DD_HTML_CSS);
     duda_response_printf(dr, DD_HTML_NAVBAR_BASIC, "", "Dashboard");
 
-    duda_response_printf(dr, "<div class=\"container\">"
-                             "  <div class=\"duda-template\">"
-                                   "<h1>Dashboard: %s/</h1>\n"
-                                       "<address>\n"
-                                       "  Routing and URL maps for <strong>%s</strong> web service<br>\n"
-                                       "</address>\n",
+    duda_response_printf(dr,
+                         "<div class=\"container\">"
+                         "  <div class=\"duda-template\">"
+                         "    <h1>Dashboard: %s/</h1>\n"
+                         "      <address>\n"
+                         "        General information of <strong>%s</strong> web service\n"
+                         "      </address>\n",
                          dr->ws_root->name.data,
                          dr->ws_root->name.data);
 
-    dashboard_panel_memory(dr);
+    /* First row: service info and memory usage */
+    duda_response_printf(dr, "<div class='row'>");
+    duda_response_printf(dr, "<div class='col-md-7'>");
+    dashboard_panel_service_info(dr);
+    duda_response_printf(dr, "</div>");
 
-    /* <ul> */
+    duda_response_printf(dr, "<div class='col-md-5'>");
+    dashboard_panel_memory(dr);
+    duda_response_printf(dr, "</div>");
+    duda_response_printf(dr, "</div>");
+    /* --- end first row */
+
+
     duda_response_printf(dr, "<hr>\n");
     duda_response_printf(dr, "<h2>Routing</h2>\n");
     duda_response_printf(dr, "<p class=\"muted\">\n"
@@ -271,7 +319,7 @@ int duda_console_enable(char *map, struct mk_list *list)
         buf[len] = '/';
     }
 
-    return duda_router_map(buf, duda_console_cb_map, "internal", list);
+    return duda_router_map(buf, duda_console_dash_home, "dashboard-home", list);
 }
 
 struct duda_api_console *duda_console_object()
