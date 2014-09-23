@@ -103,6 +103,7 @@ static void dashboard_panel_memory(duda_request_t *dr)
                          "  <thead>\n"
                          "    <tr>\n"
                          "      <th>Worker ID</th>\n"
+                         "      <th>Name</th>\n"
                          "      <th>Bytes</th>\n"
                          "      <th>Total</th>\n"
                          "    </tr>\n"
@@ -118,10 +119,11 @@ static void dashboard_panel_memory(duda_request_t *dr)
         duda_response_printf(dr,
                              "    <tr>\n"
                              "        <td>%lu</td>\n"
+                             "        <td>%s</td>\n"
                              "        <td>%lu</td>\n"
                              "        <td>%s</td>\n"
                              "    </tr>\n",
-                             st->task_id, total, hr
+                             st->task_id, st->worker_name, total, hr
                              );
         total_all += total;
         mk_api->mem_free(hr);
