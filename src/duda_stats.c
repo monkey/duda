@@ -20,11 +20,119 @@
 #if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
 
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "duda.h"
 #include "duda_stats.h"
+#include "duda_stats_proc.h"
 
 #define drp(dr, ...)   duda_response_printf(dr, __VA_ARGS__)
+
+struct duda_proc_task *duda_stats_proc_stat(pid_t pid)
+{
+    int fd;
+    int ret;
+    char *p, *q;
+    char *buf;
+    char pid_path[PROC_PID_SIZE];
+    struct duda_proc_task *t;
+
+    t = mk_api->mem_alloc_z(sizeof(struct duda_proc_task));
+
+    /* Compose path for /proc/PID/stat */
+    ret = snprintf(pid_path, PROC_PID_SIZE, "/proc/%i/stat", pid);
+    if (ret < 0) {
+        printf("Error: could not compose PID path\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fd = open(pid_path, O_RDONLY);
+    if (fd == -1) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+
+    buf = mk_api->mem_alloc_z(8192);
+    ret = read(fd, buf, 8192 - 1);
+    if (ret < 0) {
+        perror("read");
+        exit(EXIT_FAILURE);
+    }
+
+    sscanf(buf, "%d", &t->pid);
+    mk_api->mem_free(buf);
+
+    /*
+     * workaround for process with spaces in the name, so we dont screw up
+     * sscanf(3).
+     */
+    p = buf;
+    while (*p != '(') p++; p++;
+    q = p;
+    while (*q != ')') q++;
+    strncpy(t->comm, p, q - p);
+    q += 2;
+
+    /* Read pending values */
+    sscanf(q, PROC_STAT_FORMAT,
+           &t->state,
+           &t->ppid,
+           &t->pgrp,
+           &t->session,
+           &t->tty_nr,
+           &t->tpgid,
+           &t->flags,
+           &t->minflt,
+           &t->cminflt,
+           &t->majflt,
+           &t->cmajflt,
+           &t->utime,
+           &t->stime,
+           &t->cutime,
+           &t->cstime,
+           &t->priority,
+           &t->nice,
+           &t->num_threads,
+           &t->itrealvalue,
+           &t->starttime,
+           &t->vsize,
+           &t->rss,
+           &t->rlim,
+           &t->startcode,
+           &t->endcode,
+           &t->startstack,
+           &t->kstkesp,
+           &t->kstkeip,
+           &t->signal,
+           &t->blocked,
+           &t->sigignore,
+           &t->sigcatch,
+           &t->wchan,
+           &t->nswap,
+           &t->cnswap,
+           &t->exit_signal,
+           &t->processor,
+           &t->rt_priority,
+           &t->policy,
+           &t->delayacct_blkio_ticks);
+
+    /* Internal conversion */
+    t->dd_rss = (t->rss * duda_stats_pagesize);
+    t->dd_utime_s = (t->utime / duda_stats_cpu_hz);
+    t->dd_utime_ms = ((t->utime * 1000) / duda_stats_cpu_hz);
+    t->dd_stime_s = (t->stime / duda_stats_cpu_hz);
+    t->dd_stime_ms = ((t->stime * 1000) / duda_stats_cpu_hz);
+
+    return t;
+}
+
+void duda_stats_proc_free(struct duda_proc_task *t)
+{
+    mk_api->mem_free(t->dd_rss_hr);
+    mk_api->mem_free(t);
+}
 
 /*
  * This function is invoked by each worker of the stack on initialization,
@@ -33,10 +141,14 @@
 int duda_stats_worker_init()
 {
     struct duda_stats_worker *st;
+    struct duda_proc_task *task;
 
     st = mk_api->mem_alloc(sizeof(struct duda_stats_worker));
     st->task_id     = syscall(__NR_gettid);
-    st->worker_name = NULL;
+
+    task = duda_stats_proc_stat(st->task_id);
+    st->worker_name = mk_api->str_dup(task->comm);
+    duda_stats_proc_free(task);
 
     /* Protect this section as it needs to be atomic */
     pthread_mutex_lock(&duda_mutex_stats);
@@ -63,6 +175,11 @@ int duda_stats_init()
 
     /* Set mutex for stats initialization through workers */
     pthread_mutex_init(&duda_mutex_stats, (pthread_mutexattr_t *) NULL);
+
+    /* Kernel information: PAGESIZE and CPU_HZ */
+    duda_stats_pagesize = sysconf(_SC_PAGESIZE);
+    duda_stats_cpu_hz = sysconf(_SC_CLK_TCK);
+
     return 0;
 }
 

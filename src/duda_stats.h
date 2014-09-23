@@ -25,6 +25,7 @@
 #include <inttypes.h>
 
 #include <monkey/mk_list.h>
+#include "duda_stats_proc.h"
 
 struct duda_stats_worker {
     pid_t     task_id;
@@ -38,6 +39,9 @@ struct duda_stats_worker {
 struct duda_statistics {
     struct mk_list mem;
 };
+
+int duda_stats_cpu_hz;
+int duda_stats_pagesize;
 
 pthread_mutex_t duda_mutex_stats;
 struct duda_statistics duda_stats;
