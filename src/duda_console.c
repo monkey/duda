@@ -88,6 +88,8 @@ static inline void service_info_row(duda_request_t *dr, char *title, char *value
 
 static void dashboard_panel_service_info(duda_request_t *dr)
 {
+    struct web_service *ws = dr->ws_root;
+
     duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Web Service Information");
 
 #if !defined(JEMALLOC_STATS)
@@ -102,19 +104,20 @@ static void dashboard_panel_service_info(duda_request_t *dr)
                          "<table class='table table-striped'>\n"
                          "  <tbody>\n");
 
-    service_info_row(dr, "Name",  dr->ws_root->name.data);
-    service_info_row(dr, "Internal Name", dr->ws_root->fixed_name.data);
-    service_info_row(dr, "Document", dr->ws_root->docroot.data);
-    service_info_row(dr, "Config", dr->ws_root->confdir.data);
-    service_info_row(dr, "Data", dr->ws_root->datadir.data);
-    service_info_row(dr, "Logs", dr->ws_root->logdir.data);
+    service_info_row(dr, "Name",  ws->name.data);
+    service_info_row(dr, "Internal Name", ws->fixed_name.data);
+    service_info_row(dr, "Document Dir", ws->docroot.data);
+    service_info_row(dr, "Config Dir", ws->confdir.data);
+    service_info_row(dr, "Data Dir", ws->datadir.data);
+    service_info_row(dr, "Logs Dir", ws->logdir.data);
+    service_info_row(dr, "is_root", ws->is_root == MK_FALSE ? "No" : "Yes");
+    service_info_row(dr, "bind_messages", ws->bind_messages == MK_FALSE ? "No" : "Yes");
 
     duda_response_printf(dr,
                          "</tbody>\n"
                          "</table>\n");
 
-    duda_response_printf(dr, DD_HTML_PANEL_FOOTER,
-                         "");
+    duda_response_printf(dr, DD_HTML_PANEL_FOOTER, "");
 }
 
 static void dashboard_panel_memory(duda_request_t *dr)
