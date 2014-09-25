@@ -635,7 +635,7 @@ int duda_override_docroot(struct session_request *sr, int uri_offset,
 
     /* Compose new file path */
     memcpy(sr->real_path.data, path, len);
-    strncpy(sr->real_path.data + len,
+    memcpy(sr->real_path.data + len,
             sr->uri_processed.data + uri_offset, sr->uri_processed.len - uri_offset);
     sr->real_path.len = abs(len + sr->uri_processed.len - uri_offset);
     sr->real_path.data[sr->real_path.len] = '\0';
