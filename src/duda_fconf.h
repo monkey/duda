@@ -67,7 +67,6 @@ struct duda_api_fconf {
     #define set_path(dir)  _set_path(self, dir)
     int (*_set_path) (struct web_service *, const char *);
 
-    #define read_file(f) _read_file(self, f)
     char *(*read_file) (const char *);
 
     /* --- specific handlers for struct duda_config --- */
