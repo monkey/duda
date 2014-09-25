@@ -37,7 +37,6 @@ struct web_service {
 
     int  enabled;
     int  is_root;
-    int  url_force_redirect;
     int  bind_messages;
 
     void *handler;

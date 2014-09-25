@@ -462,19 +462,6 @@ void duda_conf_messages_to(struct web_service *ws)
  * available must be invoked from inside duda_main().
  */
 
-
-/*
- * @METHOD_NAME: force_redirect
- * @METHOD_DESC: Instruct the web service to perform an HTTP redirection
- * over the requested URIs who do not contain an ending slash.
- * @METHOD_PROTO: void foce_redirect()
- * @METHOD_RETURN: This method do not return any value.
- */
-void duda_conf_force_redirect(struct web_service *ws)
-{
-    ws->url_force_redirect = MK_TRUE;
-};
-
 /*
  * @METHOD_NAME: bind_messages
  * @METHOD_DESC: Every time the HTTP stack prints out some text messages, these are
@@ -527,7 +514,6 @@ struct duda_api_conf *duda_conf_object()
     struct duda_api_conf *c;
 
     c = mk_api->mem_alloc(sizeof(struct duda_api_conf));
-    c->_force_redirect  = duda_conf_force_redirect;
     c->_bind_messages   = duda_conf_bind_messages;
     c->_service_name    = duda_conf_service_name;
     c->_service_root    = duda_conf_service_root;
