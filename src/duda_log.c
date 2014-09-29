@@ -146,8 +146,6 @@ void duda_logger_writer(void *arg)
                         break;
                     }
                 } while (consumed < bytes);
-
-                i++;
                 continue;
             }
 
@@ -160,8 +158,6 @@ void duda_logger_writer(void *arg)
 
             PLUGIN_TRACE("written %i bytes", bytes);
             close(flog);
-
-            i++;
         }
     }
 }
