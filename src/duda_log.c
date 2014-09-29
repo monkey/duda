@@ -47,10 +47,8 @@ void duda_logger_writer(void *arg)
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
     mk_event_loop_t *evl;
+    duda_logger_context_t *log_ctx;
 
-    duda_logger_context_t *ctx;
-
-    int i;
     int bytes;
     int err;
     int flog;
@@ -100,8 +98,8 @@ void duda_logger_writer(void *arg)
 
             /* go around each Logger */
             mk_list_foreach(head, entry_ws->loggers) {
-                ctx = mk_list_entry(head, duda_logger_context_t, _head);
-                mk_api->ev_add(evl, ctx->pipe_fd[0], MK_EVENT_READ, ctx);
+                log_ctx = mk_list_entry(head, duda_logger_context_t, _head);
+                mk_api->ev_add(evl, log_ctx->pipe_fd[0], MK_EVENT_READ, log_ctx);
             }
         }
     }
@@ -113,14 +111,13 @@ void duda_logger_writer(void *arg)
     while (1) {
         usleep(50000);
         int fd;
-        int num_fds = mk_api->ev_wait(evl);
+        int mask;
 
+        mk_api->ev_wait(evl);
         clk = mk_api->time_unix();
 
-        for (i = 0; i < num_fds; i++) {
-            /* shortcut vars */
-            fd   = evl->events[i].fd;
-            ctx  = evl->events[i].data;
+        mk_event_foreach(evl, fd, mask) {
+            log_ctx  = evl->events[i].data;
 
             err = ioctl(fd, FIONREAD, &bytes);
             if (mk_unlikely(err == -1)){
@@ -134,9 +131,9 @@ void duda_logger_writer(void *arg)
 
             timeout = clk + sec;
 
-            flog = open(ctx->log_path, O_WRONLY | O_CREAT | O_CLOEXEC, 0644);
+            flog = open(log_ctx->log_path, O_WRONLY | O_CREAT | O_CLOEXEC, 0644);
             if (mk_unlikely(flog == -1)) {
-                mk_warn("Could not open logfile '%s'", ctx->log_path);
+                mk_warn("Could not open logfile '%s'", log_ctx->log_path);
 
                 int consumed = 0;
                 char buf[255];
@@ -150,6 +147,7 @@ void duda_logger_writer(void *arg)
                     }
                 } while (consumed < bytes);
 
+                i++;
                 continue;
             }
 
@@ -162,6 +160,8 @@ void duda_logger_writer(void *arg)
 
             PLUGIN_TRACE("written %i bytes", bytes);
             close(flog);
+
+            i++;
         }
     }
 }
