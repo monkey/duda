@@ -414,6 +414,10 @@ void duda_conf_messages_to(struct web_service *ws)
     snprintf(path, buf_size, "/tmp/%s.duda.messages",
              ws->name.data);
 
+    /* Disable buffering */
+    setbuf(stdout, NULL);
+    setbuf(stderr, NULL);
+
     f = freopen(path, "a+", stdout);
     if (!f) {
         perror("freopen");
@@ -445,8 +449,6 @@ void duda_conf_messages_to(struct web_service *ws)
     }
 
     printf("   number of workers: %i\n", mk_api->config->workers);
-    fflush(stdout);
-
 }
 
 /*
