@@ -108,7 +108,7 @@ char *duda_qs_get_id(duda_request_t *dr, int idx)
 {
     char *value = NULL;
 
-    if (dr->qs.count <= 0) {
+    if (idx < 0 || dr->qs.count <= 0) {
         return NULL;
     }
 
