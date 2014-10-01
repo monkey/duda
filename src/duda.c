@@ -745,6 +745,7 @@ int duda_service_run(struct plugin *plugin,
     dr->_st_http_headers_off  = MK_FALSE;
     dr->_st_http_headers_sent = MK_FALSE;
     dr->_st_body_writes = 0;
+    dr->_st_service_end = MK_FALSE;
 
     /* Query string */
     dr->qs.count = 0;
