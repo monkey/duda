@@ -42,8 +42,6 @@ struct duda_api_response {
     int (*_end) (duda_request_t *, void (*end_callback) ());
 
     #define finalize(dr, cb)  _end(dr, cb);
-    int (*_finalize) (duda_request_t *, void (*end_callback) ());
-
     int (*flush)(duda_request_t *dr);
 
 };
