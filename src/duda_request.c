@@ -149,7 +149,7 @@ int duda_request_is_delete(duda_request_t *dr)
 }
 
 /*
- * @METHOD_NAME: content_type
+ * @METHOD_NAME: is_content_type
  * @METHOD_DESC: Compare the content-type of the request with the given string
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: content_type the comparisson string.
