@@ -201,7 +201,7 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
     }
 
     n = (size_t) dr->sr->data.len;
-    data = mk_api->mem_alloc_z(n);
+    data = mk_api->mem_alloc_z(n + 1);
     if (!data) {
         return NULL;
     }
@@ -402,4 +402,3 @@ int duda_request_validate_request(duda_request_t *dr)
 
     return MK_TRUE;
 }
-
