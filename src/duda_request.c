@@ -274,7 +274,8 @@ char *duda_request_header_get(duda_request_t *dr, const char *key)
 
 /*
  * @METHOD_NAME: header_cmp
- * @METHOD_DESC: It compares the value of a given header key.
+ * @METHOD_DESC: It compares the value of a given header key. Use just the Header name
+ * without colon.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
  * @METHOD_PARAM: key HTTP header key
  * @METHOD_PARAM: val the value of the HTTP header key.
@@ -303,14 +304,15 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val
     /* Loop around every request header */
     for (i = 0; i < toc->length; i++) {
         /* Compare header key */
-        if (strncasecmp(row[i].init, key, key_len) == 0) {
+        if (strncasecmp(row[i].init, key, key_len) == 0 &&
+            row[i].init[key_len] == ':') {
+
             /* Match the value */
-            if (strncmp(row[i].init + key_len + 1, val, val_len) == 0) {
+            if (strncmp(row[i].init + key_len + 2, val, val_len) == 0) {
                 return 0;
             }
         }
     }
-
     return -1;
 }
 
