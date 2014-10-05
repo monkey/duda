@@ -516,13 +516,6 @@ int duda_router_root(struct web_service *ws,
     return 0;
 }
 
-/* WIP: register a path to access Duda console for this service */
-int duda_router_console(char *pattern)
-{
-    (void) pattern;
-    return 0;
-}
-
 struct duda_api_router *duda_router_object()
 {
     struct duda_api_router *r;
@@ -530,8 +523,6 @@ struct duda_api_router *duda_router_object()
     r = mk_api->mem_alloc(sizeof(struct duda_api_router));
     r->_map    = duda_router_map;
     r->_root   = duda_router_root;
-
-    //r->console = duda_router_console;
 
     return r;
 }

@@ -100,8 +100,6 @@ struct duda_api_router {
     int (*_root) (struct web_service *,
                   void (*callback)(void *),
                   char *);
-
-    int (*console) (char *);
 };
 
 struct duda_api_router *duda_router_object();
