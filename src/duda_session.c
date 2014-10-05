@@ -76,7 +76,7 @@ int _duda_session_create_store(const char *path)
  * must be invoked from duda_main().
  * @METHOD_PROTO: int init(char *store_name)
  * @METHOD_PARAM: store_name directory name to identify the session files under /dev/shm/duda_sessions/
- * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns NULL.
+ * @METHOD_RETURN: Upon successful completion it returns 0. On error it returns -1.
  */
 int duda_session_init(char *store_name)
 {
@@ -117,7 +117,7 @@ int duda_session_init(char *store_name)
             return -1;
         }
     }
-    
+
     session_store_path = path;
 
     return 0;

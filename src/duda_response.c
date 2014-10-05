@@ -83,6 +83,11 @@ int duda_response_send_headers(duda_request_t *dr)
         dr->sr->headers.content_length = dr->_st_http_content_length;
     }
 
+    if (dr->sr->headers.status <= 0) {
+        duda_api_exception(dr, "Callback did not set the HTTP response status");
+        abort();
+    }
+
     r = mk_api->header_send(dr->cs->socket, dr->cs, dr->sr);
     if (r != 0) {
         /* FIXME: Console error */
