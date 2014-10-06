@@ -36,40 +36,21 @@ struct duda_api_param *duda_param_object()
     struct duda_api_param *p;
 
     p = mk_api->mem_alloc(sizeof(struct duda_api_param));
-    p->count      = duda_param_count;
     p->get        = duda_param_get;
     p->get_number = duda_param_get_number;
-    p->len        = duda_param_len;
 
     return p;
 };
 
-/*
- * @METHOD_NAME: get
- * @METHOD_DESC: For a given key associated to a dynamic Router path, locate the
- * value in the URL and return a new allocated buffer with it value. The buffer
- * is freed by Duda once the callback finish.
- * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: key the identifier key set on the Router, e.g: 'name'.
- * @METHOD_RETURN: Upon successful completion it returns the new memory buffer with
- * the given value in the URL, the buffer is freed once the callback ends. On error it returns NULL.
- */
-char *duda_param_get(duda_request_t *dr, const char *key)
+static inline int get_param_position(duda_request_t *dr, const char *key)
 {
     int i = 0;
-    int match = -1;
     int klen;
-    char *value = NULL;
     struct mk_list *head;
     struct duda_router_field *path_field;
-    struct duda_router_uri_field *field;
 
     if (!key) {
-        return NULL;
-    }
-
-    if (!dr->router_path) {
-        return NULL;
+        return -1;
     }
 
     klen = strlen(key);
@@ -89,11 +70,37 @@ char *duda_param_get(duda_request_t *dr, const char *key)
         }
 
         if (strncmp(path_field->name + 1, key, klen) == 0) {
-            match = i;
-            break;
+            return i;
         }
     next:
         i++;
+    }
+
+    return -1;
+}
+
+/*
+ * @METHOD_NAME: get
+ * @METHOD_DESC: For a given key associated to a dynamic Router path, locate the
+ * value in the URL and return a new allocated buffer with it value. The buffer
+ * is freed by Duda once the callback finish.
+ * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
+ * @METHOD_PARAM: key the identifier key set on the Router, e.g: 'name'.
+ * @METHOD_RETURN: Upon successful completion it returns the new memory buffer with
+ * the given value in the URL, the buffer is freed once the callback ends. On error it returns NULL.
+ */
+char *duda_param_get(duda_request_t *dr, const char *key)
+{
+    int match;
+    char *value = NULL;
+    struct duda_router_uri_field *field;
+
+    if (!key) {
+        return NULL;
+    }
+
+    if (!dr->router_path) {
+        return NULL;
     }
 
     /*
@@ -101,6 +108,7 @@ char *duda_param_get(duda_request_t *dr, const char *key)
      * and register the new buffer with the garbage collector, do not trust
      * the end user will do that.
      */
+    match = get_param_position(dr, key);
     if (match >= 0) {
         field = &dr->router_uri.fields[match];
         value = mk_api->str_copy_substr(field->name, 0, field->name_len);
@@ -116,60 +124,30 @@ char *duda_param_get(duda_request_t *dr, const char *key)
 
 /*
  * @METHOD_NAME: get_number
- * @METHOD_DESC: Return a the value of the given parameter index in
- * integer format. Use only when expecting a numeric value.
+ * @METHOD_DESC: Get the numeric value of the given key. Use only when expecting a numeric value.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: idx numeric parameter position starting from zero
- * @METHOD_PARAM: res stores the parameter value
+ * @METHOD_PARAM: key the identifier key set on the Router, e.g: 'id'.
+ * @METHOD_PARAM: res stores the parameter value.
  * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1.
  */
-int duda_param_get_number(duda_request_t *dr, short int idx, long *res)
+int duda_param_get_number(duda_request_t *dr, const char *key, long *res)
 {
     int ret;
+    int match;
     long number;
+    struct duda_router_uri_field *field;
 
-    if (idx >= dr->n_params) {
+    match = get_param_position(dr, key);
+    if (match == -1) {
         return -1;
     }
 
-    ret = duda_utils_strtol(dr->params[idx].data, dr->params[idx].len, &number);
+    field = &dr->router_uri.fields[match];
+    ret = duda_utils_strtol(field->name, field->name_len, &number);
     if (ret == -1) {
         return -1;
     }
 
     *res = number;
     return 0;
-}
-
-/*
- * @METHOD_NAME: count
- * @METHOD_DESC: Returns the total number of parameters
- * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_RETURN: Upon successful completion it returns the number of parameters,
- * on error it returns -1.
- */
-short int duda_param_count(duda_request_t *dr)
-{
-    if (!dr) {
-        return -1;
-    }
-    return dr->n_params;
-}
-
-/*
- * @METHOD_NAME: len
- * @METHOD_DESC: Returns the string length of a given parameter by index
- * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: idx numeric parameter position starting from zero
- * @METHOD_RETURN: Upon successful completion it returns the parameter string length,
- * on error it returns -1.
- */
-/* Return the length of the parameter */
-short int duda_param_len(duda_request_t *dr, short int idx)
-{
-    if (!dr) {
-        return -1;
-    }
-
-    return dr->params[idx].len;
 }

@@ -24,14 +24,13 @@
 
 struct duda_api_param {
     char *(*get)       (duda_request_t *, const char *);
-    int   (*get_number)(duda_request_t *, short int, long *);
-    short int (*count) (duda_request_t *);
-    short int (*len)   (duda_request_t *, short int);
+    int   (*get_number)(duda_request_t *, const char *, long *);
 };
 
 struct duda_api_param *duda_param_object();
 char *duda_param_get(duda_request_t *dr, const char *key);
-int duda_param_get_number(duda_request_t *dr, short int idx, long *res);
+int duda_param_get_number(duda_request_t *dr, const char *key, long *res);
+
 short int duda_param_count(duda_request_t *dr);
 short int duda_param_len(duda_request_t *dr, short int idx);
 
