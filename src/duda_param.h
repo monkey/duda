@@ -23,14 +23,14 @@
 #include "duda.h"
 
 struct duda_api_param {
-    char *(*get)       (duda_request_t *, short int);
+    char *(*get)       (duda_request_t *, const char *);
     int   (*get_number)(duda_request_t *, short int, long *);
     short int (*count) (duda_request_t *);
     short int (*len)   (duda_request_t *, short int);
 };
 
 struct duda_api_param *duda_param_object();
-char *duda_param_get(duda_request_t *dr, short int i);
+char *duda_param_get(duda_request_t *dr, const char *key);
 int duda_param_get_number(duda_request_t *dr, short int idx, long *res);
 short int duda_param_count(duda_request_t *dr);
 short int duda_param_len(duda_request_t *dr, short int idx);

@@ -61,6 +61,9 @@ typedef struct duda_request {
     /* Parsed URI based on Router format */
     struct duda_router_uri router_uri;
 
+    /* Router path lookup if matched */
+    struct duda_router_path *router_path;
+
     /* Static map */
     struct duda_method *_method;
 

@@ -774,6 +774,7 @@ int duda_service_run(struct plugin *plugin,
     ret = duda_router_path_lookup(web_service, dr, &path);
     if (ret == DUDA_ROUTER_MATCH) {
         PLUGIN_TRACE("Router: %s()", path->callback_name);
+        dr->router_path = path;
         path->callback(dr);
         return 0;
     }

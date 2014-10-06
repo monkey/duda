@@ -20,6 +20,7 @@
 #include "duda_utils.h"
 
 #include <monkey/mk_api.h>
+#include "duda_router.h"
 #include "duda_param.h"
 #include "duda.h"
 
@@ -45,21 +46,72 @@ struct duda_api_param *duda_param_object()
 
 /*
  * @METHOD_NAME: get
- * @METHOD_DESC: Return a new buffer with the value of the given parameter index in
- * string format.
+ * @METHOD_DESC: For a given key associated to a dynamic Router path, locate the
+ * value in the URL and return a new allocated buffer with it value. The buffer
+ * is freed by Duda once the callback finish.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: idx numeric parameter position starting from zero
+ * @METHOD_PARAM: key the identifier key set on the Router, e.g: 'name'.
  * @METHOD_RETURN: Upon successful completion it returns the new memory buffer with
- * the parameter value specified, on error returns NULL.
+ * the given value in the URL, the buffer is freed once the callback ends. On error it returns NULL.
  */
-char *duda_param_get(duda_request_t *dr, short int idx)
+char *duda_param_get(duda_request_t *dr, const char *key)
 {
-    if (idx >= dr->n_params) {
+    int i = 0;
+    int match = -1;
+    int klen;
+    char *value = NULL;
+    struct mk_list *head;
+    struct duda_router_field *path_field;
+    struct duda_router_uri_field *field;
+
+    if (!key) {
         return NULL;
     }
 
-    return mk_api->str_copy_substr(dr->params[idx].data, 0,
-                                   (int) dr->params[idx].len);
+    if (!dr->router_path) {
+        return NULL;
+    }
+
+    klen = strlen(key);
+
+    /*
+     * Determinate the expected position of the given key in the
+     * original Router.
+     */
+    mk_list_foreach(head, &dr->router_path->fields) {
+        path_field = mk_list_entry(head, struct duda_router_field, _head);
+        if (path_field->type != DUDA_ROUTER_DYNAMIC) {
+            goto next;
+        }
+
+        if (klen != (path_field->name_len - 1)) {
+            goto next;
+        }
+
+        if (strncmp(path_field->name + 1, key, klen) == 0) {
+            match = i;
+            break;
+        }
+    next:
+        i++;
+    }
+
+    /*
+     * If the key exists, perform a copy of the incoming data from the URL
+     * and register the new buffer with the garbage collector, do not trust
+     * the end user will do that.
+     */
+    if (match >= 0) {
+        field = &dr->router_uri.fields[match];
+        value = mk_api->str_copy_substr(field->name, 0, field->name_len);
+        if (value) {
+            duda_gc_add(dr, value);
+        }
+        return value;
+    }
+
+    /* Bad luck Brian */
+    return NULL;
 }
 
 /*
