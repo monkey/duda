@@ -153,8 +153,24 @@ void duda_logger_writer(void *arg)
             }
 
             lseek(flog, 0, SEEK_END);
+
+#if defined (__linux__)
             slen = splice(fd, NULL, flog,
                           NULL, bytes, SPLICE_F_MOVE);
+#else
+            long len;
+            char *tmp;
+
+            slen = -1;
+            tmp = mk_api->mem_alloc(bytes);
+            if (tmp) {
+                len = read(fd, tmp, bytes);
+                if (len > 0) {
+                    slen = write(flog, tmp, len);
+                }
+                mk_api->mem_free(tmp);
+            }
+#endif
             if (mk_unlikely(slen == -1)) {
                 mk_warn("Could not write to log file: splice() = %ld", slen);
             }
