@@ -29,7 +29,7 @@ int ws_broadcast_count;
 pthread_mutex_t ws_spawn_mutex;
 
 struct ws_broadcast_worker {
-    pid_t pid;
+    pthread_t pid;
     int channel;
     struct mk_list *conn_list;
 };
