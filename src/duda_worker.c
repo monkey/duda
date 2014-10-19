@@ -72,7 +72,7 @@ int duda_worker_spawn_all(struct mk_list *list)
             exit(EXIT_FAILURE);
         }
     }
-    return tid;
+    return 0;
 }
 
 
