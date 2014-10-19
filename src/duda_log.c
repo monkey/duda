@@ -40,7 +40,10 @@
 void duda_logger_writer(void *arg)
 {
     (void) arg;
+    int i;
+    int fd;
     int sec = 3;
+    int nfds;
     struct mk_list *head_vs;
     struct mk_list *head_ws;
     struct mk_list *head;
@@ -110,13 +113,13 @@ void duda_logger_writer(void *arg)
     /* Reading pipe buffer */
     while (1) {
         usleep(50000);
-        int fd;
-        int mask;
 
         mk_api->ev_wait(evl);
         clk = mk_api->time_unix();
 
-        mk_event_foreach(evl, fd, mask) {
+        nfds = mk_api->ev_translate(evl);
+        for (i = 0; i < nfds; i++) {
+            fd       = evl->events[i].fd;
             log_ctx  = evl->events[i].data;
 
             err = ioctl(fd, FIONREAD, &bytes);
