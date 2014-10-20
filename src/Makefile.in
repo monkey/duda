@@ -3,7 +3,7 @@ CC      = @echo "  CC   $(_PATH)/$@"; $CC
 CC_QUIET= @echo -n; $CC
 CFLAGS	= $CFLAGS
 LDFLAGS = $LDFLAGS
-DEFS    = $DEFS -DUSE_VALGRIND
+DEFS    = $DEFS
 INCDIR  = ../../../include/
 
 OBJECTS = duda.o duda_gc.o duda_mem.o duda_conf.o duda_api.o duda_event.o \
