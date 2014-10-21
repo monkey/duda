@@ -54,21 +54,6 @@ __thread struct mk_list *duda_events_list;
  *
  */
 
-/* Event object / API */
-struct duda_api_event *duda_event_object()
-{
-    struct duda_api_event *e;
-
-    e = mk_api->mem_alloc(sizeof(struct duda_api_event));
-    e->add    = duda_event_add;
-    e->lookup = duda_event_lookup;
-    e->mode   = duda_event_mode;
-    e->delete = duda_event_delete;
-    e->signal = duda_event_signal;
-    e->create_signal_fd = duda_event_create_signal_fd;
-
-    return e;
-};
 
 /*
  * @METHOD_NAME: add
@@ -349,3 +334,118 @@ int duda_event_create_signal_fd()
  */
 
 /* this is a static function defined in duda_event.h */
+
+
+/*
+ * Loop based functions
+ * ====================
+ */
+
+/*
+ * @METHOD_NAME: loop_create
+ * @METHOD_DESC: It creates a new event loop or polling interface.
+ * @METHOD_PROTO: mk_event_loop_t *loop_create(int size)
+ * @METHOD_PARAM: size the maximum number of events that the interface can hold
+ * @METHOD_RETURN: Upon successful completion it returns the polling context,
+ * on error it returns NULL.
+ */
+
+
+/*
+ * @METHOD_NAME: loop_add
+ * @METHOD_DESC: Register a file descriptor on the polling interface. Only
+ * sockets are supported.
+ * @METHOD_PROTO: int loop_add(mk_event_loop_t *loop, int fd, int mask, void *data)
+ * @METHOD_PARAM: loop the loop context returned by loop_create()
+ * @METHOD_PARAM: fd   socket to be monitored
+ * @METHOD_PARAM: mask events that needs to be monitored, it can take the following
+ * values: DUDA_EVENT_READ, DUDA_EVENT_WRITE or DUDA_EVENT_RW.
+ * @METHOD_PARAM: data optional custom reference to register when querying a
+ * triggered event.
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1.
+ */
+
+/*
+ * @METHOD_NAME: loop_delete
+ * @METHOD_DESC: Remove a file descriptor from the loop interface, stop monitoring it.
+ * @METHOD_PROTO: int loop_delete(mk_event_loop_t *loop, int fd)
+ * @METHOD_PARAM: loop the loop context returned by loop_create()
+ * @METHOD_PARAM: fd   socket to be removed
+ * @METHOD_RETURN: Upon successful completion it returns 0, on error it returns -1.
+ */
+
+/*
+ * @METHOD_NAME: loop_timeout_create
+ * @METHOD_DESC: Create and register a timeout file descriptor that expires at certain
+ * interval number of seconds.
+ * @METHOD_PROTO: int loop_timeout_create(mk_event_loop_t *loop, int seconds)
+ * @METHOD_PARAM: loop the loop context returned by loop_create()
+ * @METHOD_PARAM: seconds number of seconds between each expire notification.
+ * @METHOD_RETURN: Upon successful completion it returns the timeout file descriptor,
+ * on error it returns -1.
+ */
+
+/*
+ * @METHOD_NAME: loop_channel_create
+ * @METHOD_DESC: Creates a channel that can be used for notifications. It works like a
+ * pipe, on one side you read and in the other you can write.
+ * @METHOD_PROTO: int loop_channel_create(mk_event_loop_t *loop, int *r_fd, int *w_fd)
+ * @METHOD_PARAM: loop the loop context returned by loop_create()
+ * @METHOD_PARAM: r_fd stores the file descriptor for read operations
+ * @METHOD_PARAM: w_fd stores the file descriptor for write operations
+ * @METHOD_RETURN: Upon successful completion it returns 0 and populate r_fd and w_fd,
+ * on error it returns -1.
+ */
+
+/*
+ * @METHOD_NAME: loop_wait
+ * @METHOD_DESC: It waits for events on a polling interface.
+ * @METHOD_PROTO: int loop_wait(mk_event_loop_t *loop)
+ * @METHOD_PARAM: loop the loop context returned by loop_create()
+ * @METHOD_RETURN: It returns the number of events registered into the interface.
+ */
+int duda_event_loop_wait(mk_event_loop_t *loop)
+{
+    int n;
+
+    n = mk_api->ev_wait(loop);
+    if (n > 0) {
+        mk_api->ev_translate(loop);
+    }
+    return n;
+}
+
+/*
+ * @METHOD_NAME: loop_backend
+ * @METHOD_DESC: It return a string with the name of the backend polling mechanism
+ * in use, e.g: epoll, libkqueue or kqueue.
+ * @METHOD_PROTO: char *loop_backend()
+ * @METHOD_RETURN: It returns the backend name in string format.
+ */
+
+/* Event object / API */
+struct duda_api_event *duda_event_object()
+{
+    struct duda_api_event *e;
+
+    e = mk_api->mem_alloc(sizeof(struct duda_api_event));
+
+    /* Event handlers at worker level */
+    e->add    = duda_event_add;
+    e->lookup = duda_event_lookup;
+    e->mode   = duda_event_mode;
+    e->delete = duda_event_delete;
+    e->signal = duda_event_signal;
+    e->create_signal_fd = duda_event_create_signal_fd;
+
+    /* Custom loop functions */
+    e->loop_create         = mk_api->ev_loop_create;
+    e->loop_add            = mk_api->ev_add;
+    e->loop_delete         = mk_api->ev_del;
+    e->loop_timeout_create = mk_api->ev_timeout_create;
+    e->loop_channel_create = mk_api->ev_channel_create;
+    e->loop_wait           = duda_event_loop_wait;
+    e->loop_backend        = mk_api->ev_backend;
+
+    return e;
+};

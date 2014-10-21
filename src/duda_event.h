@@ -78,6 +78,15 @@ struct duda_api_event {
     int (*delete) (int);
     int (*signal) (uint64_t);
     int (*create_signal_fd) ();
+
+    /* Loop based calls */
+    mk_event_loop_t *(*loop_create) (int);
+    int (*loop_add) (mk_event_loop_t *, int, int, void *);
+    int (*loop_delete) (mk_event_loop_t *, int);
+    int (*loop_timeout_create) (mk_event_loop_t *, int);
+    int (*loop_channel_create) (mk_event_loop_t *, int *, int *);
+    int (*loop_wait) (mk_event_loop_t *);
+    char *(*loop_backend) ();
 };
 
 /* Export an API object */
