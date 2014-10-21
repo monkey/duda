@@ -377,7 +377,8 @@ int duda_event_create_signal_fd()
 /*
  * @METHOD_NAME: loop_timeout_create
  * @METHOD_DESC: Create and register a timeout file descriptor that expires at certain
- * interval number of seconds.
+ * interval number of seconds. After each notification is mandatory that you get the
+ * value delivered through a read(2) operation.
  * @METHOD_PROTO: int loop_timeout_create(mk_event_loop_t *loop, int seconds)
  * @METHOD_PARAM: loop the loop context returned by loop_create()
  * @METHOD_PARAM: seconds number of seconds between each expire notification.
