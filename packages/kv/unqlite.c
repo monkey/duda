@@ -54140,7 +54140,7 @@ static int unixOpen(
     close(fd); /* silently leak if fail, in error */
     return UNQLITE_IOERR;
   }
-  if (0 == SyStrncmp("msdos", fsInfo.f_fstypename, 5)) {
+  if (0 == strncmp("msdos", fsInfo.f_fstypename, 5)) {
     ((unixFile*)pFile)->fsFlags |= UNQLITE_FSFLAGS_IS_MSDOS;
   }
 #endif

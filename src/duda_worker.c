@@ -41,8 +41,15 @@ static void *duda_worker_step(void *arg)
 
     /* call the target function */
     ret = wk->func(wk->arg);
+
+#if defined (__linux__)
     mk_warn("User defined worker thread #%lu has ended",
             syscall(__NR_gettid));
+#elif defined (__APPLE__)
+    uint64_t tid;
+    pthread_threadid_np(NULL, &tid);
+    mk_warn("User defined worker thread #%lu has ended", tid);
+#endif
 
     /* We do not handle threads exit, just put the thread to sleep */
     while (1) {
@@ -72,7 +79,7 @@ int duda_worker_spawn_all(struct mk_list *list)
             exit(EXIT_FAILURE);
         }
     }
-    return tid;
+    return 0;
 }
 
 

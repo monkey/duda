@@ -19,7 +19,13 @@
 
 #include <assert.h>
 #include <string.h>
+
+#if defined (__linux__)
 #include <ucontext.h>
+#elif defined (__APPLE__)
+#include <sys/ucontext.h>
+#endif
+
 #include <limits.h>
 #include "duda.h"
 #include "duda_api.h"
