@@ -185,7 +185,7 @@ int duda_router_redirect(duda_request_t *dr)
     char *buf;
     char *host;
     char *location = NULL;
-    struct session_request *sr = dr->sr;
+    struct mk_http_request *sr = dr->sr;
 
     duda_response_http_status(dr, 301);
 
@@ -337,7 +337,7 @@ int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr)
     int ws_len;
     char *ws_data;
     char *uri_data;
-    struct session_request *sr;
+    struct mk_http_request *sr;
 
     sr = dr->sr;
     ws_len   = ws->fixed_name.len;

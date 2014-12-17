@@ -598,7 +598,7 @@ int duda_service_end(duda_request_t *dr)
  * It override the initial session_request real path set by the virtual
  * host document root path.
  */
-int duda_override_docroot(struct session_request *sr, int uri_offset,
+int duda_override_docroot(struct mk_http_request *sr, int uri_offset,
                           char *path, int len)
 {
     unsigned int new_path_len;
@@ -659,7 +659,7 @@ int duda_override_docroot(struct session_request *sr, int uri_offset,
 int duda_service_html(duda_request_t *dr)
 {
     int ret;
-    struct session_request *sr = dr->sr;
+    struct mk_http_request *sr = dr->sr;
 
     /* Check if we have a local DocumentRoot for this web service */
     if (!dr->ws_root->docroot.data) {
@@ -693,8 +693,8 @@ int duda_service_html(duda_request_t *dr)
 }
 
 int duda_service_run(struct plugin *plugin,
-                     struct client_session *cs,
-                     struct session_request *sr,
+                     struct mk_http_session *cs,
+                     struct mk_http_request *sr,
                      struct web_service *web_service)
 {
     int ret;
@@ -796,7 +796,7 @@ int duda_service_run(struct plugin *plugin,
  * Check the web services registered under the virtual host and try to do a
  * match with the web services name
  */
-struct web_service *duda_get_service_from_uri(struct session_request *sr,
+struct web_service *duda_get_service_from_uri(struct mk_http_request *sr,
                                               struct vhost_services *vs_host)
 {
     struct mk_list *head;
@@ -848,8 +848,8 @@ void _mkp_exit()
 /*
  * Request handler: when the request arrives this callback is invoked.
  */
-int _mkp_stage_30(struct plugin *plugin, struct client_session *cs,
-                  struct session_request *sr)
+int _mkp_stage_30(struct plugin *plugin, struct mk_http_session *cs,
+                  struct mk_http_request *sr)
 {
     struct mk_list *head;
     struct vhost_services *vs_entry, *vs_match=NULL;

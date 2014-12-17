@@ -55,8 +55,8 @@ typedef struct duda_request {
     /* Monkey request data: plugin, client_session & session_request */
     int socket;
     struct plugin *plugin;
-    struct client_session *cs;
-    struct session_request *sr;
+    struct mk_http_session *cs;
+    struct mk_http_request *sr;
 
     /* Parsed URI based on Router format */
     struct duda_router_uri router_uri;

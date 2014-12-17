@@ -171,7 +171,7 @@ int duda_qs_parse(duda_request_t *dr)
     char *key = NULL;
     char *val = NULL;
     struct duda_qs_map *qs = &dr->qs;
-    struct session_request *sr = dr->sr;
+    struct mk_http_request *sr = dr->sr;
 
     /* If we do not have a query string just return */
     if (!sr->query_string.data) {
