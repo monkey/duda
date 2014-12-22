@@ -153,24 +153,16 @@ int duda_cookie_get(duda_request_t *dr, char *key, char **val, int *val_len)
     int i, offset;
     int pos_key, pos_val;
     int length;
-    int header_len = sizeof(COOKIE_HEADER) - 1;
     char *cookie;
-    struct headers_toc *toc;
+    struct mk_http_header *header;
 
-    /* Get headers table-of-content (TOC) */
-    toc = &dr->sr->headers_toc;
-    for (i=0; i < toc->length; i++) {
-        /* Compare header title */
-        if (strncmp(toc->rows[i].init, COOKIE_HEADER, header_len) == 0) {
-            break;
-        }
-    }
-
-    if (i == toc->length) {
+    header = mk_api->header_get(MK_HEADER_COOKIE, dr->sr, NULL, 0);
+    if (!header) {
         return -1;
     }
 
     /* Look for 'cookie key' */
+
     /* FIXME:
      * we must handle the case where the user set two cookies with transversal name/values,
      * like:
@@ -185,15 +177,17 @@ int duda_cookie_get(duda_request_t *dr, char *key, char **val, int *val_len)
      * If someone try to lookup the key 'bob' it will not be found.
      *
      */
-    cookie = toc->rows[i].init + header_len;
+    cookie = header->val.data;
+    length = header->val.len;
     pos_key = mk_api->str_search(cookie, key, MK_STR_SENSITIVE);
+
     if (pos_key == -1) {
         return -1;
     }
-    length = (toc->rows[i].end - toc->rows[i].init) - header_len;
 
     /* Get value position */
-    pos_val = mk_api->str_search_n(cookie + pos_key, "=", MK_STR_SENSITIVE, length - pos_key);
+    pos_val = mk_api->str_search_n(cookie + pos_key, "=", MK_STR_SENSITIVE,
+                                   length - pos_key);
     if (pos_val == -1) {
         return -1;
     }
