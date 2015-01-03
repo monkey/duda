@@ -61,8 +61,8 @@ struct duda_api_request *duda_request_object()
  */
 int duda_request_is_data(duda_request_t *dr)
 {
-    if (dr->sr->method != MK_HTTP_METHOD_POST &&
-        dr->sr->method != MK_HTTP_METHOD_PUT) {
+    if (dr->sr->method != MK_METHOD_POST &&
+        dr->sr->method != MK_METHOD_PUT) {
         return MK_FALSE;
     }
 
@@ -81,7 +81,7 @@ int duda_request_is_data(duda_request_t *dr)
  */
 int duda_request_is_get(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_GET) {
+    if (dr->sr->method == MK_METHOD_GET) {
         return MK_TRUE;
     }
 
@@ -96,7 +96,7 @@ int duda_request_is_get(duda_request_t *dr)
  */
 int duda_request_is_post(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_POST) {
+    if (dr->sr->method == MK_METHOD_POST) {
         return MK_TRUE;
     }
 
@@ -111,7 +111,7 @@ int duda_request_is_post(duda_request_t *dr)
  */
 int duda_request_is_head(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_HEAD) {
+    if (dr->sr->method == MK_METHOD_HEAD) {
         return MK_TRUE;
     }
 
@@ -126,7 +126,7 @@ int duda_request_is_head(duda_request_t *dr)
  */
 int duda_request_is_put(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_PUT) {
+    if (dr->sr->method == MK_METHOD_PUT) {
         return MK_TRUE;
     }
 
@@ -141,7 +141,7 @@ int duda_request_is_put(duda_request_t *dr)
  */
 int duda_request_is_delete(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_DELETE) {
+    if (dr->sr->method == MK_METHOD_DELETE) {
         return MK_TRUE;
     }
 
@@ -231,42 +231,33 @@ long duda_request_content_length(duda_request_t *dr)
 /*
  * @METHOD_NAME: header_get
  * @METHOD_DESC: It returns a new buffer string with with the value of the given
- *               header key. The new buffer must be freed by the user once it finish
- *               their usage.
+ *               header key. The new buffer must be freed by the user once it
+ *               finish their usage.
+ * @METHOD_PROTO: char *header_get(duda_request_t *dr, int name, const char *key, unsigned int len)
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: key HTTP header key
+ * @METHOD_PARAM: name the Header name reference, it can be one of these: MK_HEADER_ACCEPT, MK_HEADER_ACCEPT_CHARSET, MK_HEADER_ACCEPT_ENCODING, MK_HEADER_ACCEPT_LANGUAGE, MK_HEADER_AUTHORIZATION, MK_HEADER_CACHE_CONTROL, MK_HEADER_COOKIE, MK_HEADER_CONNECTION, MK_HEADER_CONTENT_LENGTH, MK_HEADER_CONTENT_RANGE, MK_HEADER_CONTENT_TYPE, MK_HEADER_HOST, MK_HEADER_IF_MODIFIED_SINCE, MK_HEADER_LAST_MODIFIED, MK_HEADER_LAST_MODIFIED_SINCE, MK_HEADER_RANGE, MK_HEADER_REFERER, MK_HEADER_UPGRADE or MK_HEADER_USER_AGENT. If the desired header is not listed in the given options, use MK_HEADER_OTHER and set the desired header name on the 'key' parameter in lowercase string.
+ * @METHOD_PARAM: key Custom/other header key.
+ * @METHOD_PARAM: len the key string length.
  * @METHOD_RETURN: Upon successful completion, it returns a new allocated buffer
  * containing the header value. On error it returns NULL.
  */
-char *duda_request_header_get(duda_request_t *dr, const char *key)
+char *duda_request_header_get(duda_request_t *dr, int name,
+                              const char *key, unsigned int len)
 {
-    int i;
-    int len;
     char *value;
-    int  vsize;
-    struct headers_toc *toc;
-    struct header_toc_row *row;
+    struct mk_http_header *header;
 
     /* Some silly but required validations */
     if (!dr->cs || !dr->sr || !key) {
         return NULL;
     }
 
-    len = strlen(key);
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
-
-    /* Loop around every request header */
-    for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
-        if (strncasecmp(row[i].init, key, len) == 0) {
-            /* Create new buffer */
-            vsize = (row[i].end - (len + 1)  - row[i].init);
-            value = mk_api->mem_alloc(vsize + 1);
-            strncpy(value, row[i].init + len + 1, vsize);
-            value[vsize] = '\0';
-            return value;
-        }
+    header = mk_api->header_get(name, dr->sr, key, len);
+    if (header) {
+        value = mk_api->mem_alloc(header->val.len + 1);
+        memcpy(value, header->val.data, header->val.len);
+        value[header->val.len - 1] = '\0';
+        return value;
     }
 
     return NULL;
@@ -277,40 +268,34 @@ char *duda_request_header_get(duda_request_t *dr, const char *key)
  * @METHOD_DESC: It compares the value of a given header key. Use just the Header name
  * without colon.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: key HTTP header key
+ * @METHOD_PARAM: name the Header name reference, it can be one of these: MK_HEADER_ACCEPT, MK_HEADER_ACCEPT_CHARSET, MK_HEADER_ACCEPT_ENCODING, MK_HEADER_ACCEPT_LANGUAGE, MK_HEADER_AUTHORIZATION, MK_HEADER_CACHE_CONTROL, MK_HEADER_COOKIE, MK_HEADER_CONNECTION, MK_HEADER_CONTENT_LENGTH, MK_HEADER_CONTENT_RANGE, MK_HEADER_CONTENT_TYPE, MK_HEADER_HOST, MK_HEADER_IF_MODIFIED_SINCE, MK_HEADER_LAST_MODIFIED, MK_HEADER_LAST_MODIFIED_SINCE, MK_HEADER_RANGE, MK_HEADER_REFERER, MK_HEADER_UPGRADE or MK_HEADER_USER_AGENT. If the desired header is not listed in the given options, use MK_HEADER_OTHER and set the desired header name on the 'key' parameter in lowercase string.
+ * @METHOD_PARAM: key Custom/other header key (just if MK_HEADER_OTHER is used).
+ * @METHOD_PARAM: len the key string length (just if MK_HEADER_OTHER is used).
  * @METHOD_PARAM: val the value of the HTTP header key.
  * @METHOD_RETURN: if the header values matches it returns 0, if they mismatch or the
  *                 header is not found, it returns -1.
  */
-int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val)
+int duda_request_header_cmp(duda_request_t *dr,
+                            int name, const char *key, unsigned int len,
+                            const char *val)
 {
-    int i;
-    int key_len;
-    int val_len;
-    struct headers_toc *toc;
-    struct header_toc_row *row;
+    struct mk_http_header *header;
 
     /* Some silly but required validations */
     if (!dr->cs || !dr->sr || !key) {
         return -1;
     }
 
-    key_len = strlen(key);
-    val_len = strlen(val);
+    len = strlen(val);
 
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
+    header = mk_api->header_get(name, dr->sr, key, len);
+    if (header) {
+        if (len != header->val.len) {
+            return -1;
+        }
 
-    /* Loop around every request header */
-    for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
-        if (strncasecmp(row[i].init, key, key_len) == 0 &&
-            row[i].init[key_len] == ':') {
-
-            /* Match the value */
-            if (strncmp(row[i].init + key_len + 2, val, val_len) == 0) {
-                return 0;
-            }
+        if (strncmp(header->val.data, val, len) == 0) {
+            return 0;
         }
     }
     return -1;
@@ -321,45 +306,36 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val
  * @METHOD_DESC: It checks if a given header key contains on its value a
  * specific string.
  * @METHOD_PARAM: dr the request context information hold by a duda_request_t type
- * @METHOD_PARAM: key HTTP header key
+ * @METHOD_PARAM: name the Header name reference, it can be one of these: MK_HEADER_ACCEPT, MK_HEADER_ACCEPT_CHARSET, MK_HEADER_ACCEPT_ENCODING, MK_HEADER_ACCEPT_LANGUAGE, MK_HEADER_AUTHORIZATION, MK_HEADER_CACHE_CONTROL, MK_HEADER_COOKIE, MK_HEADER_CONNECTION, MK_HEADER_CONTENT_LENGTH, MK_HEADER_CONTENT_RANGE, MK_HEADER_CONTENT_TYPE, MK_HEADER_HOST, MK_HEADER_IF_MODIFIED_SINCE, MK_HEADER_LAST_MODIFIED, MK_HEADER_LAST_MODIFIED_SINCE, MK_HEADER_RANGE, MK_HEADER_REFERER, MK_HEADER_UPGRADE or MK_HEADER_USER_AGENT. If the desired header is not listed in the given options, use MK_HEADER_OTHER and set the desired header name on the 'key' parameter in lowercase string.
+ * @METHOD_PARAM: key Custom/other header key (just if MK_HEADER_OTHER is used).
+ * @METHOD_PARAM: len the key string length (just if MK_HEADER_OTHER is used).
  * @METHOD_PARAM: val the string to check in the value of the HTTP header key.
- * @METHOD_RETURN: if the header value contains the string it returns 0, if it's not
- * found it returns -1.
+ * @METHOD_RETURN: if the header value contains the string it returns a numver >= 0, otherwise it returns -1.
  */
-int duda_request_header_contains(duda_request_t *dr,
-                                 const char *key, const char *val)
+int duda_request_header_contains(duda_request_t *dr, int name,
+                                 const char *key, unsigned int len,
+                                 const char *val)
 {
-    int i;
     int ret;
-    int len;
-    int key_len;
-    struct headers_toc *toc;
-    struct header_toc_row *row;
+    struct mk_http_header *header;
 
     /* Some silly but required validations */
     if (!dr->cs || !dr->sr || !key) {
         return -1;
     }
 
-    key_len = strlen(key);
-
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
-
-    /* Loop around every request header */
-    for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
-        if (strncasecmp(row[i].init, key, key_len) == 0) {
-            /* Match the value */
-            len = (row[i].end - row[i].init) - key_len - 1;
-            ret = mk_api->str_search_n(row[i].init + key_len + 1,
-                                       val,
-                                       MK_STR_INSENSITIVE,
-                                       len);
-            return ret;
+    header = mk_api->header_get(name, dr->sr, key, len);
+    if (header) {
+        if (len != header->val.len) {
+            return -1;
         }
-    }
 
+        ret = mk_api->str_search_n(header->val.data,
+                                   val,
+                                   MK_STR_INSENSITIVE,
+                                   len);
+        return ret;
+    }
     return -1;
 }
 

@@ -269,10 +269,10 @@ int cb_ws_timeout(int sockfd, void *data)
 int ws_handshake(duda_request_t *dr, int channel)
 {
     int len;
+    int upgrade;
     size_t out_len;
     char buffer[256];
     char accept_token[256];
-    char *row = NULL;
 
     int key_len;
     char *ws_key;
@@ -302,16 +302,20 @@ int ws_handshake(duda_request_t *dr, int channel)
         PLUGIN_TRACE("[FD %i] WebSockets Connection Upgrade\n", dr->socket);
 
         /* Get upgrade type */
-        row = request->header_get(dr, WS_HEADER_UPGRADE);
-        if (strncasecmp(row, WS_UPGRADE_WS, sizeof(WS_UPGRADE_WS) - 1) != 0) {
+        upgrade = request->header_contains(dr,
+                                           MK_HEADER_UPGRADE,
+                                           NULL, 0, WS_UPGRADE_WS);
+        if (upgrade <= 0) {
             ws_invalid_upgrade(dr);
         }
 
         PLUGIN_TRACE("[FD %i] WebSockets Upgrade to 'websocket'\n", dr->socket);
 
         /* Validate Sec-WebSocket-Key */
-        ws_key = request->header_get(dr, WS_HEADER_SEC_WS_KEY);
-
+        ws_key = request->header_get(dr,
+                                     MK_HEADER_OTHER,
+                                     WS_HEADER_SEC_WS_KEY,
+                                     sizeof(WS_HEADER_SEC_WS_KEY) - 1);
         if (!ws_key) {
             PLUGIN_TRACE("[FD %i] WebSockets missing key\n", dr->socket);
             ws_invalid_upgrade(dr);

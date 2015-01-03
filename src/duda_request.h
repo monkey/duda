@@ -31,12 +31,12 @@ struct duda_api_request {
     int (*is_delete)  (duda_request_t *);
     int (*is_content_type) (duda_request_t *, const char *);
     void *(*get_data) (duda_request_t *, unsigned long *);
-    long (*content_length) (duda_request_t *dr);
-    char *(*header_get) (duda_request_t *dr, const char *key);
-    int (*header_cmp) (duda_request_t *dr, const char *key, const char *val);
-    int (*header_contains) (duda_request_t *dr,
-                            const char *key,
-                            const char *val);
+    long (*content_length) (duda_request_t *);
+    char *(*header_get) (duda_request_t *, int, const char *, unsigned int);
+    int (*header_cmp) (duda_request_t *, int, const char *, unsigned int,
+                       const char *);
+    int (*header_contains) (duda_request_t *, int, const char *,
+                            unsigned int, const char *);
     int (*validate_socket) (int);
     int (*validate_request) (duda_request_t *);
 };
@@ -52,10 +52,14 @@ int duda_request_is_delete(duda_request_t *dr);
 int duda_request_is_content_type(duda_request_t *dr, const char *content_type);
 void *duda_request_get_data(duda_request_t *dr, unsigned long *len);
 long duda_request_content_length(duda_request_t *dr);
-char *duda_request_header_get(duda_request_t *dr, const char *key);
-int duda_request_header_cmp(duda_request_t *dr, const char *key,
+char *duda_request_header_get(duda_request_t *dr, int name, const char *key, unsigned int len);
+int duda_request_header_cmp(duda_request_t *dr,
+                            int name,
+                            const char *key, unsigned int len,
                             const char *val);
-int duda_request_header_contains(duda_request_t *dr, const char *key,
+int duda_request_header_contains(duda_request_t *dr,
+                                 int name,
+                                 const char *key, unsigned int len,
                                  const char *val);
 int duda_request_validate_socket(int socket);
 int duda_request_validate_request(duda_request_t *dr);
