@@ -435,7 +435,7 @@ void _mkp_core_thctx()
     char *logger_fmt_cache;
     struct mk_list *head_vs, *head_ws, *head_gl;
     struct mk_list *list_events_write;
-    struct mk_list *events_list;
+    struct rb_root *events_list;
     struct rb_root *dr_list;
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
@@ -453,8 +453,7 @@ void _mkp_core_thctx()
     pthread_setspecific(duda_global_events_write, (void *) list_events_write);
 
     /* Events */
-    events_list = mk_api->mem_alloc_z(sizeof(struct mk_list));
-    mk_list_init(events_list);
+    events_list = mk_api->mem_alloc_z(sizeof(struct rb_root));
     pthread_setspecific(duda_events_list, (void *) events_list);
 
      /* List of all duda_request_t alive */
