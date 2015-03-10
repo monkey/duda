@@ -81,8 +81,9 @@ typedef struct duda_request {
     /* Data queues */
     struct mk_list queue_out;
 
-    /* Lists linked to (events)*/
+    /* Events registration */
     struct mk_list _head_events_write;
+    struct rb_node _head_events_write_rb;
 
     /* Head to red-black tree list that holds all DRs */
     struct rb_node _rb_head;
@@ -94,6 +95,7 @@ typedef struct duda_request {
 struct plugin *duda_plugin;
 
 pthread_key_t duda_global_events_write;
+pthread_key_t duda_global_events_write_rb;
 pthread_key_t duda_global_dr_list;
 pthread_mutex_t duda_mutex_thctx;
 
