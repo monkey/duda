@@ -99,15 +99,16 @@ provides a huge flexibility in terms of what is required to do.
 *  Edit conf/plugins/duda/duda.conf configuration file and set the key
 ServicesRoot with the absolute path where the services files are
 located, e.g:
-
+```
   [DUDA]
       ServicesRoot /home/foo/monkey/services/
       PackagesRoot /home/foo/monkey/plugins/duda/packages/
+```
 
 * Edit the virtual host configuration file where the service will work,
 as an example edit conf/sites/default and add the following
 entry:
-
+```
   [WEB_SERVICE]
       Name          hello
       Enabled       on
@@ -116,6 +117,7 @@ entry:
       ConfDir       /home/foo/monkey/services/hello/conf/    <- optional
       LogDir        /home/foo/monkey/services/hello/logs/    <- optional
       DataDir       /home/foo/monkey/services/hello/data/    <- optional
+```
 
 we have instructed to load service "hello", so Duda will try to locate
 the service file 'hello.duda' under ServicesRoot directory and load it.
