@@ -425,7 +425,6 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
      * KeepAlive was very slow due to this bug. More than 4 hours to found this silly bug.
      */
     mk_api->socket_cork_flag(dr->cs->socket, TCP_CORK_OFF);
-
     if (ret == 0) {
         duda_service_end(dr);
     }

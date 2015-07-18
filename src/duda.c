@@ -402,8 +402,7 @@ int mkp_event_close(int sockfd)
         mk_api->mem_free(dr);
         ret = MK_PLUGIN_RET_EVENT_OWNED;
     }
-
-    return ret;;
+    return ret;
 }
 
 int _mkp_event_close(int sockfd)
@@ -772,7 +771,7 @@ int duda_service_end(duda_request_t *dr)
 
     /* Finalize HTTP stuff with Monkey core */
     ret = mk_api->http_request_end(dr->socket);
-    if (ret < 0) {
+    if (ret >= 0) {
         dr->_st_service_end = MK_TRUE;
     }
     return ret;
@@ -898,6 +897,7 @@ int duda_service_run(struct plugin *plugin,
         dr->plugin = plugin;
 
         dr->socket = cs->socket;
+        dr->_st_service_end = MK_FALSE;
 
         /* Register */
         duda_dr_list_add(dr);
