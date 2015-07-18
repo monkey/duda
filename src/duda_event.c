@@ -97,7 +97,7 @@ int duda_event_add(int sockfd,
                    void *data)
 {
     int rc = -1;
-    struct mk_list *event_list;
+    struct rb_root *root;
     struct duda_event_handler *eh;
     static duda_request_t *dr;
 
@@ -118,8 +118,29 @@ int duda_event_add(int sockfd,
     eh->cb_data = data;
 
     /* Link to thread list */
-    event_list = pthread_getspecific(duda_events_list);
-    mk_list_add(&eh->_head, event_list);
+    root = pthread_getspecific(duda_events_list);
+
+    /* Red-Black tree insert routine */
+    struct rb_node **new = &(root->rb_node);
+    struct rb_node *parent = NULL;
+
+    /* Figure out where to put new node */
+    while (*new) {
+        struct duda_event_handler *this = container_of(*new,
+                                                       struct duda_event_handler,
+                                                       _rb_head);
+        parent = *new;
+        if (eh->sockfd < this->sockfd)
+            new = &((*new)->rb_left);
+        else if (dr->socket > this->sockfd)
+            new = &((*new)->rb_right);
+        else {
+            break;
+        }
+    }
+    /* Add new node and rebalance tree. */
+    mk_api->rb_link_node(&eh->_rb_head, parent, new);
+    mk_api->rb_insert_color(&eh->_rb_head, root);
 
     if (init_mode < DUDA_EVENT_READ || init_mode > DUDA_EVENT_SLEEP) {
         mk_err("Duda: Invalid usage of duda_event_add()");
@@ -156,26 +177,27 @@ int duda_event_add(int sockfd,
  */
 struct duda_event_handler *duda_event_lookup(int sockfd)
 {
-    struct mk_list *head, *event_list;
+    struct rb_root *root;
     struct duda_event_handler *eh;
 
-    event_list = pthread_getspecific(duda_events_list);
-    if (!event_list) {
+    root = pthread_getspecific(duda_events_list);
+    if (!root) {
         return NULL;
     }
 
-    if (mk_list_is_empty(event_list) == 0) {
-        return NULL;
-    }
-
-    mk_list_foreach(head, event_list) {
-        eh = mk_list_entry(head, struct duda_event_handler, _head);
-        if (eh->sockfd == sockfd) {
-            return eh;
+  	struct rb_node *node = root->rb_node;
+  	while (node) {
+  		eh = container_of(node, struct duda_event_handler, _rb_head);
+		if (sockfd < eh->sockfd)
+  			node = node->rb_left;
+		else if (sockfd > eh->sockfd)
+  			node = node->rb_right;
+		else {
+  			return eh;
         }
-    }
+	}
 
-    return NULL;
+	return NULL;
 }
 
 /*
@@ -211,34 +233,32 @@ int duda_event_mode(int sockfd, int mode, int behavior)
  */
 int duda_event_delete(int sockfd)
 {
-    struct mk_list *head, *tmp, *event_list;
+    struct rb_root *root;
     struct duda_event_handler *eh;
     duda_request_t *dr;
 
-    event_list = pthread_getspecific(duda_events_list);
-    if (!event_list) {
+    eh = duda_event_lookup(sockfd);
+    if (!eh) {
         return -1;
     }
 
-    mk_list_foreach_safe(head, tmp, event_list) {
-        eh = mk_list_entry(head, struct duda_event_handler, _head);
-        if (eh->sockfd == sockfd) {
-            mk_list_del(&eh->_head);
-            mk_api->mem_free(eh);
-
-            /* Check if the event socket belongs to an active duda_request_t */
-            dr = duda_dr_list_get(sockfd);
-            if (!dr) {
-                mk_api->event_del(sockfd);
-            }
-            else if (sockfd != dr->socket) {
-                mk_api->event_del(sockfd);
-            }
-            return 0;
-        }
+    root = pthread_getspecific(duda_events_list);
+    if (!root) {
+        return -1;
     }
 
-    return -1;
+    mk_api->rb_erase(&eh->_rb_head, root);
+    mk_api->mem_free(eh);
+
+    /* Check if the event socket belongs to an active duda_request_t */
+    dr = duda_dr_list_get(sockfd);
+    if (!dr) {
+        mk_api->event_del(sockfd);
+    }
+    else if (sockfd != dr->socket) {
+        mk_api->event_del(sockfd);
+    }
+    return 0;
 }
 
 /*

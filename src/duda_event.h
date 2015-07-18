@@ -60,7 +60,7 @@ struct duda_event_handler {
     int (*cb_on_timeout) (int, void *);
 
     void *cb_data;
-    struct mk_list _head;
+    struct rb_node _rb_head;
 };
 
 struct duda_api_event {

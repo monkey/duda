@@ -84,10 +84,10 @@ int duda_queue_flush(duda_request_t *dr)
     int socket = dr->cs->socket;
     short int is_registered;
     unsigned long queue_len=0;
-    struct mk_list *head;
+    struct mk_list *head, *tmp;
     struct duda_queue_item *item;
 
-    mk_list_foreach(head, &dr->queue_out) {
+    mk_list_foreach_safe(head, tmp, &dr->queue_out) {
         item = mk_list_entry(head, struct duda_queue_item, _head);
         if (item->status == DUDA_QSTATUS_INACTIVE) {
             continue;
@@ -152,49 +152,86 @@ int duda_queue_free(struct mk_list *queue)
 int duda_queue_event_register_write(duda_request_t *dr)
 {
     struct mk_list *list;
+    struct rb_root *root;
 
+    /* Linked list */
     list = pthread_getspecific(duda_global_events_write);
     if (!list) {
         return -1;
     }
-
     mk_list_add(&dr->_head_events_write, list);
+
+    /* RB-Tree */
+    root = pthread_getspecific(duda_global_events_write_rb);
+    if (!root) {
+        return -1;
+    }
+
+    /* Red-Black tree insert routine */
+    struct rb_node **new = &(root->rb_node);
+    struct rb_node *parent = NULL;
+
+    /* Figure out where to put new node */
+    while (*new) {
+        duda_request_t *this = container_of(*new,
+                                            duda_request_t,
+                                            _head_events_write_rb);
+        parent = *new;
+        if (dr < this)
+            new = &((*new)->rb_left);
+        else if (dr > this)
+            new = &((*new)->rb_right);
+        else {
+            break;
+        }
+    }
+    /* Add new node and rebalance tree. */
+    mk_api->rb_link_node(&dr->_head_events_write_rb, parent, new);
+    mk_api->rb_insert_color(&dr->_head_events_write_rb, root);
+
     return 0;
 }
 
 int duda_queue_event_unregister_write(duda_request_t *dr)
 {
-    struct mk_list *list, *head, *temp;
-    duda_request_t *entry;
+    struct rb_root *root;
 
-    list = pthread_getspecific(duda_global_events_write);
-    mk_list_foreach_safe(head, temp, list) {
-        entry = mk_list_entry(head, duda_request_t, _head_events_write);
-        if (entry == dr) {
-            mk_list_del(&entry->_head_events_write);
-            pthread_setspecific(duda_global_events_write, list);
-            return 0;
-        }
+    /* Unlink from linked list */
+    mk_list_del(&dr->_head_events_write);
+
+    /* Remove from rb-tree */
+    root = pthread_getspecific(duda_global_events_write_rb);
+    if (!root) {
+        return -1;
     }
+    mk_api->rb_erase(&dr->_head_events_write_rb, root);
 
-    return -1;
+    return 0;
 }
 
 int duda_queue_event_is_registered_write(duda_request_t *dr)
 {
-    struct mk_list *list;
-    struct mk_list *head;
-    duda_request_t *entry;
+    struct rb_root *root;
+    duda_request_t *tmp;
 
-    list = pthread_getspecific(duda_global_events_write);
-    mk_list_foreach(head, list) {
-        entry = mk_list_entry(head, duda_request_t, _head_events_write);
-        if (entry == dr) {
-            return MK_TRUE;
-        }
+    root = pthread_getspecific(duda_global_events_write_rb);
+    if (!root) {
+        return MK_FALSE;
     }
 
-    return MK_FALSE;
+  	struct rb_node *node = root->rb_node;
+  	while (node) {
+  		tmp = container_of(node, duda_request_t, _head_events_write_rb);
+		if (dr < tmp)
+  			node = node->rb_left;
+		else if (dr > tmp)
+  			node = node->rb_right;
+		else {
+  			return MK_TRUE;
+        }
+	}
+
+	return MK_FALSE;
 }
 
 int duda_queue_event_write_callback(int sockfd)
