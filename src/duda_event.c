@@ -132,12 +132,13 @@ int duda_event_add(int sockfd,
         parent = *new;
         if (eh->sockfd < this->sockfd)
             new = &((*new)->rb_left);
-        else if (dr->socket > this->sockfd)
+        else if (eh->sockfd > this->sockfd)
             new = &((*new)->rb_right);
         else {
             break;
         }
     }
+
     /* Add new node and rebalance tree. */
     mk_api->rb_link_node(&eh->_rb_head, parent, new);
     mk_api->rb_insert_color(&eh->_rb_head, root);
