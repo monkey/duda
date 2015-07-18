@@ -53,20 +53,19 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
 {
     int i;
     int count = 0;
+    int ret;
     unsigned int bytes_sent, bytes_to;
     int reset_to = -1;
     struct mk_iov *buf = bb->buf;
 
-    /* FIXME: Temporal Check */
-    if (mk_unlikely(buf->iov_idx > IOV_MAX)) {
-        mk_err("Boddy buffer flush: enqueued data is larger than IOV_MAX (%i)\n",
-                IOV_MAX);
-        exit(EXIT_FAILURE);
-    }
-
-    bytes_sent = mk_api->socket_sendv(sock, buf);
+    ret = mk_api->socket_sendv(sock, buf);
     PLUGIN_TRACE("body_flush: %i/%i", bytes_sent, buf->total_len);
 
+    if (ret == -1) {
+        return -1;
+    }
+
+    bytes_sent = ret;
     /*
      * If the call sent less data than total, we must modify the mk_iov struct
      * to mark the buffers already processed and set them with with length = zero,

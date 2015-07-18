@@ -17,8 +17,10 @@
  *  limitations under the License.
  */
 
+#define  _GNU_SOURCE
 #include <stdio.h>
 #include <stdarg.h>
+#include <limits.h>
 
 #include "mk_mimetype.h"
 
@@ -175,6 +177,20 @@ int duda_response_http_content_type(duda_request_t *dr, char *extension)
     return 0;
 }
 
+static struct duda_queue_item *append_body_buffer(duda_request_t *dr)
+{
+    struct duda_body_buffer *body_buffer;
+    struct duda_queue_item *item;
+
+    body_buffer = duda_body_buffer_new();
+    item = duda_queue_item_new(DUDA_QTYPE_BODY_BUFFER);
+    item->data = body_buffer;
+    duda_queue_add(item, &dr->queue_out);
+
+    return item;
+}
+
+
 /* Compose the body_buffer */
 static int _print(duda_request_t *dr, char *raw, int len, int free)
 {
@@ -184,15 +200,16 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
 
     item = duda_queue_last(&dr->queue_out);
     if (!item || item->type != DUDA_QTYPE_BODY_BUFFER) {
-        body_buffer = duda_body_buffer_new();
-        item = duda_queue_item_new(DUDA_QTYPE_BODY_BUFFER);
-        item->data = body_buffer;
-        duda_queue_add(item, &dr->queue_out);
+        item = append_body_buffer(dr);
     }
     else {
         body_buffer = item->data;
-
+        if (body_buffer->buf->iov_idx == IOV_MAX) {
+            item = append_body_buffer(dr);
+        }
     }
+
+    body_buffer = item->data;
 
     /* perform realloc if body_write() is called more than body_buffer_size */
     if (body_buffer->buf->iov_idx >= body_buffer->size)  {
