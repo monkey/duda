@@ -102,6 +102,11 @@ int duda_queue_flush(duda_request_t *dr)
             break;
         }
 
+        if (ret == -1) {
+            duda_queue_event_unregister_write(dr);
+            return -1;
+        }
+
         if (ret == 0) {
             item->status = DUDA_QSTATUS_INACTIVE;
         }
@@ -248,7 +253,7 @@ int duda_queue_event_write_callback(int sockfd)
             if (ret > 0) {
                 return MK_PLUGIN_RET_EVENT_OWNED;
             }
-            if (duda_service_end(entry) == -1) {
+            if ((ret == -1) || duda_service_end(entry) == -1) {
                 return MK_PLUGIN_RET_EVENT_CLOSE;
             }
             else {
