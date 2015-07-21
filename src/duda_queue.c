@@ -102,16 +102,17 @@ int duda_queue_flush(duda_request_t *dr)
             break;
         }
 
+        is_registered = duda_queue_event_is_registered_write(dr);
         if (ret == -1) {
-            duda_queue_event_unregister_write(dr);
+            if (is_registered == MK_TRUE) {
+                duda_queue_event_unregister_write(dr);
+            }
             return -1;
         }
 
         if (ret == 0) {
             item->status = DUDA_QSTATUS_INACTIVE;
         }
-
-        is_registered = duda_queue_event_is_registered_write(dr);
         queue_len = duda_queue_length(&dr->queue_out);
 
         if (queue_len > 0 && is_registered == MK_FALSE) {
