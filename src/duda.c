@@ -930,9 +930,9 @@ struct mk_plugin_stage mk_plugin_stage_duda = {
 struct mk_plugin mk_plugin_duda = {
 
     /* Identification */
-    .shortname     = "fastcgi",
-    .name          = "FastCGI Client",
-    .version       = "1.0",
+    .shortname     = "duda",
+    .name          = "Duda I/O",
+    .version       = "2.0",
     .hooks         = MK_PLUGIN_STAGE,
 
     /* Init / Exit */
