@@ -38,7 +38,7 @@ struct duda_sendfile *duda_sendfile_new(char *path, off_t offset,
     file = mk_api->mem_alloc(sizeof(struct duda_sendfile));
     file->fd = -1;
 
-    ret = mk_api->file_get_info(path, &file->info);
+    ret = mk_api->file_get_info(path, &file->info, MK_FILE_READ);
     if (ret == -1) {
         mk_api->mem_free(file);
         return NULL;

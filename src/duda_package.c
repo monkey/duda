@@ -35,7 +35,7 @@ duda_package_t *duda_package_load(const char *pkgname,
     duda_package_t *package_info;
 
     mk_api->str_build(&package, &len, "%s/%s.dpkg", packages_root, pkgname);
-    ret = mk_api->file_get_info(package, &finfo);
+    ret = mk_api->file_get_info(package, &finfo, MK_FILE_READ);
 
     if (ret != 0) {
         mk_err("Duda: Package '%s' not found", pkgname);

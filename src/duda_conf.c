@@ -28,7 +28,7 @@ int duda_conf_set_confdir(struct web_service *ws, const char *dir)
     int len;
     struct file_info finfo;
 
-    ret = mk_api->file_get_info(dir, &finfo);
+    ret = mk_api->file_get_info(dir, &finfo, MK_FILE_READ);
     if (ret != 0 || finfo.is_directory != MK_TRUE) {
         return -1;
     }
@@ -59,7 +59,7 @@ int duda_conf_set_datadir(struct web_service *ws, const char *dir)
     int len;
     struct file_info finfo;
 
-    ret = mk_api->file_get_info(dir, &finfo);
+    ret = mk_api->file_get_info(dir, &finfo, MK_FILE_READ);
     if (ret != 0 || finfo.is_directory != MK_TRUE) {
         return -1;
     }
@@ -90,7 +90,7 @@ int duda_conf_set_logdir(struct web_service *ws, const char *dir)
     int len;
     struct file_info finfo;
 
-    ret = mk_api->file_get_info(dir, &finfo);
+    ret = mk_api->file_get_info(dir, &finfo, MK_FILE_READ);
     if (ret != 0 || finfo.is_directory != MK_TRUE) {
         return -1;
     }
@@ -121,8 +121,8 @@ int duda_conf_main_init(const char *confdir)
     unsigned long len;
     char *tmp;
     char *conf_path = NULL;
-    struct mk_config_section *section;
-    struct mk_config *conf;
+    struct mk_rconf_section *section;
+    struct mk_rconf *conf;
     struct file_info finfo;
     struct mk_list *head;
 
@@ -131,16 +131,16 @@ int duda_conf_main_init(const char *confdir)
     conf = mk_api->config_create(conf_path);
 
     mk_list_foreach(head, &conf->sections) {
-        section = mk_list_entry(head, struct mk_config_section, _head);
+        section = mk_list_entry(head, struct mk_rconf_section, _head);
         if (strcasecmp(section->name, "DUDA") != 0) {
             continue;
         }
 
         /* ServicesRoot */
-        services_root = mk_api->config_section_getval(section, "ServicesRoot",
-                                                      MK_CONFIG_VAL_STR);
+        services_root = mk_api->config_section_get_key(section, "ServicesRoot",
+                                                       MK_RCONF_STR);
 
-        if (mk_api->file_get_info(services_root, &finfo) != 0) {
+        if (mk_api->file_get_info(services_root, &finfo, MK_FILE_READ) != 0) {
             mk_err("Duda: Invalid services root path");
             exit(EXIT_FAILURE);
         }
@@ -151,9 +151,9 @@ int duda_conf_main_init(const char *confdir)
         }
 
         /* Packages */
-        packages_root = mk_api->config_section_getval(section, "PackagesRoot",
-                                                      MK_CONFIG_VAL_STR);
-        if (mk_api->file_get_info(packages_root, &finfo) != 0) {
+        packages_root = mk_api->config_section_get_key(section, "PackagesRoot",
+                                                       MK_RCONF_STR);
+        if (mk_api->file_get_info(packages_root, &finfo, MK_FILE_READ) != 0) {
             mk_err("Duda: Invalid packages root path");
             exit(EXIT_FAILURE);
         }
@@ -164,8 +164,8 @@ int duda_conf_main_init(const char *confdir)
         }
 
         /* Duda Document Root (aka '/ddr') */
-        tmp = mk_api->config_section_getval(section, "DocumentRoot",
-                                            MK_CONFIG_VAL_STR);
+        tmp = mk_api->config_section_get_key(section, "DocumentRoot",
+                                             MK_RCONF_STR);
         if (tmp) {
             document_root.data = tmp;
             document_root.len  = strlen(tmp);
@@ -175,7 +175,7 @@ int duda_conf_main_init(const char *confdir)
             document_root.len  = 0;
         }
 
-        if (mk_api->file_get_info(packages_root, &finfo) != 0) {
+        if (mk_api->file_get_info(packages_root, &finfo, MK_FILE_READ) != 0) {
             mk_err("Duda: Invalid document root path");
             exit(EXIT_FAILURE);
         }
@@ -221,7 +221,7 @@ int duda_conf_vhost_init()
     struct mk_list *hosts = &mk_api->config->hosts;
     struct mk_list *head_section;
     struct host *entry_host;
-    struct mk_config_section *section;
+    struct mk_rconf_section *section;
 
     mk_list_init(&services_list);
     mk_list_init(&services_loaded);
@@ -244,7 +244,7 @@ int duda_conf_vhost_init()
             continue;
         }
         mk_list_foreach(head_section, &entry_host->config->sections) {
-            section = mk_list_entry(head_section, struct mk_config_section, _head);
+            section = mk_list_entry(head_section, struct mk_rconf_section, _head);
 
             if (strcasecmp(section->name, "WEB_SERVICE") == 0) {
                 /* Initialize temporal keys */
@@ -256,33 +256,33 @@ int duda_conf_vhost_init()
                 app_logdir  = NULL;
 
                 /* Get section keys */
-                app_name = mk_api->config_section_getval(section,
-                                                         "Name",
-                                                         MK_CONFIG_VAL_STR);
+                app_name = mk_api->config_section_get_key(section,
+                                                          "Name",
+                                                          MK_RCONF_STR);
 
-                app_enabled = (size_t) mk_api->config_section_getval(section,
-                                                                     "Enabled",
-                                                                     MK_CONFIG_VAL_BOOL);
+                app_enabled = (size_t) mk_api->config_section_get_key(section,
+                                                                      "Enabled",
+                                                                      MK_RCONF_BOOL);
 
-                app_is_root = (size_t) mk_api->config_section_getval(section,
-                                                                     "Root",
-                                                                     MK_CONFIG_VAL_BOOL);
+                app_is_root = (size_t) mk_api->config_section_get_key(section,
+                                                                      "Root",
+                                                                      MK_RCONF_BOOL);
 
-                app_docroot = mk_api->config_section_getval(section,
-                                                            "DocumentRoot",
-                                                            MK_CONFIG_VAL_STR);
+                app_docroot = mk_api->config_section_get_key(section,
+                                                             "DocumentRoot",
+                                                             MK_RCONF_STR);
 
-                app_confdir = mk_api->config_section_getval(section,
+                app_confdir = mk_api->config_section_get_key(section,
                                                             "ConfDir",
-                                                            MK_CONFIG_VAL_STR);
+                                                             MK_RCONF_STR);
 
-                app_datadir = mk_api->config_section_getval(section,
-                                                            "DataDir",
-                                                            MK_CONFIG_VAL_STR);
+                app_datadir = mk_api->config_section_get_key(section,
+                                                             "DataDir",
+                                                             MK_RCONF_STR);
 
-                app_logdir = mk_api->config_section_getval(section,
-                                                           "LogDir",
-                                                           MK_CONFIG_VAL_STR);
+                app_logdir = mk_api->config_section_get_key(section,
+                                                            "LogDir",
+                                                            MK_RCONF_STR);
 
                 if (app_name && mk_is_bool(app_enabled)) {
                     ws = mk_api->mem_alloc_z(sizeof(struct web_service));
@@ -303,7 +303,7 @@ int duda_conf_vhost_init()
 
                     /* document root */
                     if (app_docroot) {
-                        ret = mk_api->file_get_info(app_docroot, &finfo);
+                        ret = mk_api->file_get_info(app_docroot, &finfo, MK_FILE_READ);
                         if (ret != 0 || finfo.is_directory != MK_TRUE) {
                             mk_err("Duda: invalid DocumentRoot, it must be a directory");
                             exit(EXIT_FAILURE);
@@ -440,7 +440,7 @@ void duda_conf_messages_to(struct web_service *ws)
            current->tm_min,
            current->tm_sec,
            ws->name.data);
-    printf("   version          : %s\n", VERSION);
+    printf("   version          : %s\n", MK_VERSION_STR);
 
 
     mk_list_foreach(head, &mk_api->config->listeners) {

@@ -20,8 +20,7 @@
 #ifndef DUDA_LOG_H
 #define DUDA_LOG_H
 
-#include <monkey/mk_memory.h>
-
+#include <monkey/mk_api.h>
 #include "duda_conf.h"
 #include "duda.h"
 #include "duda_global.h"
@@ -55,7 +54,7 @@ static inline void *_duda_logger_cb_create(void *data)
     duda_logger_context_t *ctx;
     duda_logger_context_t *info = (duda_logger_context_t *) data;
 
-    mk_bug(!data);
+    //mk_bug(!data);
 
     pthread_mutex_lock(&duda_logger_mutex);
 

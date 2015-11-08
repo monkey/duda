@@ -22,7 +22,9 @@
  * the framework, like web services or packages.
  */
 
-#include <monkey/mk_macros.h>
+#include <monkey/mk_core.h>
+
+#include "duda.h"
 #include "duda_global.h"
 #include "duda_worker.h"
 #include "duda_mem.h"
@@ -92,7 +94,7 @@ static inline void duda_worker_pre_loop(void (*func) (void *), void *data)
 {
     struct duda_worker_pre *pre;
 
-    mk_bug(!func);
+    //mk_bug(!func);
 
     pre = mem->alloc(sizeof(struct duda_worker_pre));
     pre->func = func;

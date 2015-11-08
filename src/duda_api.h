@@ -22,8 +22,7 @@
 
 #include <pthread.h>
 
-#include <monkey/mk_api.h>
-#include <monkey/mk_list.h>
+#include <monkey/mk_core.h>
 
 #include "duda.h"
 #include "duda_gc.h"

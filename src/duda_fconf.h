@@ -20,7 +20,7 @@
 #ifndef MK_DUDA_FCONF_H
 #define MK_DUDA_FCONF_H
 
-#include <monkey/mk_string.h>
+#include <monkey/mk_core.h>
 #include "duda_api.h"
 
 /* config constants */

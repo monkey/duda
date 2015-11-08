@@ -61,8 +61,8 @@ struct duda_api_request *duda_request_object()
  */
 int duda_request_is_data(duda_request_t *dr)
 {
-    if (dr->sr->method != MK_HTTP_METHOD_POST &&
-        dr->sr->method != MK_HTTP_METHOD_PUT) {
+    if (dr->sr->method != MK_METHOD_POST &&
+        dr->sr->method != MK_METHOD_PUT) {
         return MK_FALSE;
     }
 
@@ -81,7 +81,7 @@ int duda_request_is_data(duda_request_t *dr)
  */
 int duda_request_is_get(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_GET) {
+    if (dr->sr->method == MK_METHOD_GET) {
         return MK_TRUE;
     }
 
@@ -96,7 +96,7 @@ int duda_request_is_get(duda_request_t *dr)
  */
 int duda_request_is_post(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_POST) {
+    if (dr->sr->method == MK_METHOD_POST) {
         return MK_TRUE;
     }
 
@@ -111,7 +111,7 @@ int duda_request_is_post(duda_request_t *dr)
  */
 int duda_request_is_head(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_HEAD) {
+    if (dr->sr->method == MK_METHOD_HEAD) {
         return MK_TRUE;
     }
 
@@ -126,7 +126,7 @@ int duda_request_is_head(duda_request_t *dr)
  */
 int duda_request_is_put(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_PUT) {
+    if (dr->sr->method == MK_METHOD_PUT) {
         return MK_TRUE;
     }
 
@@ -141,7 +141,7 @@ int duda_request_is_put(duda_request_t *dr)
  */
 int duda_request_is_delete(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_HTTP_METHOD_DELETE) {
+    if (dr->sr->method == MK_METHOD_DELETE) {
         return MK_TRUE;
     }
 
@@ -244,8 +244,10 @@ char *duda_request_header_get(duda_request_t *dr, const char *key)
     int len;
     char *value;
     int  vsize;
-    struct headers_toc *toc;
-    struct header_toc_row *row;
+    struct mk_http_header *header;
+
+    /* FIXME */
+    return NULL;
 
     /* Some silly but required validations */
     if (!dr->cs || !dr->sr || !key) {
@@ -253,21 +255,17 @@ char *duda_request_header_get(duda_request_t *dr, const char *key)
     }
 
     len = strlen(key);
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
 
-    /* Loop around every request header */
+    /* Loop around every request header
     for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
         if (strncasecmp(row[i].init, key, len) == 0) {
-            /* Create new buffer */
             vsize = (row[i].end - (len + 1)  - row[i].init);
             value = mk_api->mem_alloc(vsize + 1);
             strncpy(value, row[i].init + len + 1, vsize);
             value[vsize] = '\0';
             return value;
         }
-    }
+    }*/
 
     return NULL;
 }
@@ -287,8 +285,9 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val
     int i;
     int key_len;
     int val_len;
-    struct headers_toc *toc;
-    struct header_toc_row *row;
+
+    /* FIXME */
+    return 0;
 
     /* Some silly but required validations */
     if (!dr->cs || !dr->sr || !key) {
@@ -298,21 +297,15 @@ int duda_request_header_cmp(duda_request_t *dr, const char *key, const char *val
     key_len = strlen(key);
     val_len = strlen(val);
 
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
-
-    /* Loop around every request header */
+    /* Loop around every request header
     for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
         if (strncasecmp(row[i].init, key, key_len) == 0 &&
             row[i].init[key_len] == ':') {
-
-            /* Match the value */
             if (strncmp(row[i].init + key_len + 2, val, val_len) == 0) {
                 return 0;
             }
         }
-    }
+        }*/
     return -1;
 }
 
@@ -343,14 +336,9 @@ int duda_request_header_contains(duda_request_t *dr,
 
     key_len = strlen(key);
 
-    toc = &dr->sr->headers_toc;
-    row = toc->rows;
-
-    /* Loop around every request header */
+    /* Loop around every request header
     for (i = 0; i < toc->length; i++) {
-        /* Compare header key */
         if (strncasecmp(row[i].init, key, key_len) == 0) {
-            /* Match the value */
             len = (row[i].end - row[i].init) - key_len - 1;
             ret = mk_api->str_search_n(row[i].init + key_len + 1,
                                        val,
@@ -359,7 +347,7 @@ int duda_request_header_contains(duda_request_t *dr,
             return ret;
         }
     }
-
+    */
     return -1;
 }
 

@@ -81,7 +81,7 @@ struct duda_config *duda_fconf_read_conf(struct web_service *ws, const char *pat
 
     /* Compose full path */
     mk_api->str_build(&tmp, &len, "%s/%s", ws->confdir.data, path);
-    if (mk_api->file_get_info(tmp, &finfo) == -1) {
+    if (mk_api->file_get_info(tmp, &finfo, MK_FILE_READ) == -1) {
         mk_api->mem_free(tmp);
         return NULL;
     }
@@ -107,7 +107,7 @@ struct duda_config *duda_fconf_read_conf(struct web_service *ws, const char *pat
  */
 void duda_fconf_free_conf(struct duda_config *cnf)
 {
-    mk_api->config_free((struct mk_config *) cnf);
+    mk_api->config_free((struct mk_rconf *) cnf);
 }
 
 /*
@@ -124,7 +124,7 @@ struct duda_config_section *duda_fconf_section_get(struct duda_config *cnf, cons
 {
     struct duda_config_section *s;
 
-    s = (struct duda_config_section *) mk_api->config_section_get((struct mk_config *) cnf,
+    s = (struct duda_config_section *) mk_api->config_section_get((struct mk_rconf *) cnf,
                                                                   name);
     return s;
 }
@@ -141,8 +141,8 @@ struct duda_config_section *duda_fconf_section_get(struct duda_config *cnf, cons
 void *duda_fconf_section_key(struct duda_config_section *section,
                              char *name, int type)
 {
-    return mk_api->config_section_getval((struct mk_config_section *) section,
-                                         name, type);
+    return mk_api->config_section_get_key((struct mk_rconf_section *) section,
+                                          name, type);
 }
 
 
@@ -158,7 +158,7 @@ char *duda_fconf_read_file(const char *path)
 
     struct file_info finfo;
 
-    mk_api->file_get_info(path, &finfo);
+    mk_api->file_get_info(path, &finfo, MK_FILE_READ);
     if (finfo.is_file == MK_FALSE) {
         return NULL;
     }

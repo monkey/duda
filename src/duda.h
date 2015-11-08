@@ -19,6 +19,8 @@
 
 #include <monkey/mk_api.h>
 
+extern struct mk_plugin mk_plugin_duda;
+
 #include "duda_webservice.h"
 #include "duda_conf.h"
 #include "duda_gc_map.h"
@@ -54,7 +56,7 @@ typedef struct duda_request {
 
     /* Monkey request data: plugin, client_session & session_request */
     int socket;
-    struct plugin *plugin;
+    struct mk_plugin *plugin;
     struct mk_http_session *cs;
     struct mk_http_request *sr;
 
@@ -95,7 +97,7 @@ typedef struct duda_request {
 
 
 /* self identifier for the plugin context inside Monkey internals */
-struct plugin *duda_plugin;
+struct mk_plugin *duda_plugin;
 
 pthread_key_t duda_global_events_write;
 pthread_key_t duda_global_dr_list;

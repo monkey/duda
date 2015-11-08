@@ -88,7 +88,7 @@ int duda_response_send_headers(duda_request_t *dr)
         abort();
     }
 
-    r = mk_api->header_send(dr->cs->socket, dr->cs, dr->sr);
+    r = mk_api->header_prepare(dr->cs, dr->sr);
     if (r != 0) {
         /* FIXME: Console error */
         return -1;
@@ -208,12 +208,10 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
 
     /* Link data */
     if (free == MK_TRUE) {
-        mk_api->iov_add_entry(body_buffer->buf, raw, len,
-                              dd_iov_none, MK_IOV_FREE_BUF);
+        mk_api->iov_add(body_buffer->buf, raw, len, MK_FALSE);
     }
     else {
-        mk_api->iov_add_entry(body_buffer->buf, raw, len,
-                              dd_iov_none, MK_IOV_NOT_FREE_BUF);
+        mk_api->iov_add(body_buffer->buf, raw, len, MK_FALSE);
     }
 
     return 0;

@@ -92,18 +92,18 @@ int duda_session_init(char *store_name)
      * interface /run/ depending of the Linux distribution. We need to
      * check which one is being used by the system.
      */
-    ret = mk_api->file_get_info("/dev/shm", &finfo);
+    ret = mk_api->file_get_info("/dev/shm", &finfo, MK_FILE_READ);
     if (ret == 0) {
         session_store_path = SESSION_STORE_PATH_DEV;
     }
     else {
-        ret = mk_api->file_get_info("/run/shm", &finfo);
+        ret = mk_api->file_get_info("/run/shm", &finfo, MK_FILE_READ);
         if (ret == 0) {
             session_store_path = SESSION_STORE_PATH_RUN;
         }
     }
 
-    ret = mk_api->file_get_info(session_store_path, &finfo);
+    ret = mk_api->file_get_info(session_store_path, &finfo, MK_FILE_READ);
     if (ret != 0) {
         if (_duda_session_create_store(session_store_path) != 0) {
             return -1;
@@ -111,7 +111,7 @@ int duda_session_init(char *store_name)
     }
 
     mk_api->str_build(&path, &len, "%s/%s", session_store_path, store_name);
-    ret = mk_api->file_get_info(path, &finfo);
+    ret = mk_api->file_get_info(path, &finfo, MK_FILE_READ);
     if (ret != 0) {
         if (_duda_session_create_store(path) != 0) {
             return -1;

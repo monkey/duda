@@ -20,7 +20,7 @@
 #ifndef DUDA_MEM_H
 #define DUDA_MEM_H
 
-#include <monkey/mk_memory.h>
+#include <monkey/mk_core.h>
 
 struct duda_api_mem {
     void *(*alloc)   (const size_t);

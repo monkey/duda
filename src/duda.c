@@ -20,7 +20,7 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
 
-#include <monkey/mk_list.h>
+#include <monkey/mk_core.h>
 #include <monkey/mk_api.h>
 
 #include "duda.h"
@@ -35,13 +35,6 @@
 #include "duda_worker.h"
 #include "duda_dthread.h"
 #include "duda_package.h"
-
-MONKEY_PLUGIN("duda",                                     /* shortname */
-              "Duda Web Services Framework",              /* name */
-              VERSION,                                    /* version */
-              MK_PLUGIN_CORE_PRCTX |
-              MK_PLUGIN_CORE_THCTX | MK_PLUGIN_STAGE_30); /* hooks */
-
 
 /* Register a new duda_request into the thread context list */
 static void duda_dr_list_add(duda_request_t *dr)
@@ -217,7 +210,7 @@ int duda_load_services()
                               "%s/%s.duda", services_root, entry_ws->name.data);
 
             /* Validate path, file and library load */
-            if (mk_api->file_get_info(service_path, &finfo) != 0 ||
+            if (mk_api->file_get_info(service_path, &finfo, MK_FILE_READ) != 0 ||
                 finfo.is_file != MK_TRUE ||
                 !(entry_ws->handler = duda_load_library(service_path))) {
 
@@ -412,7 +405,7 @@ static void _thread_worker_pre_loop(struct mk_list *list)
  * When running in a user-defined thread, some things will not be initialized
  * properly such as the event file descriptor. Not an issue.
  */
-void _mkp_core_thctx()
+void duda_worker_init()
 {
     int rc;
     int fds[2];
@@ -434,7 +427,7 @@ void _mkp_core_thctx()
     pthread_setspecific(duda_global_events_write, (void *) list_events_write);
 
     /* Events */
-    duda_events_list = mk_api->mem_alloc_z(sizeof(struct mk_list));
+    duda_events_list = mk_api->mem_alloc_z(sizeof(struct rb_root));
     mk_list_init(duda_events_list);
 
      /* List of all duda_request_t alive */
@@ -503,11 +496,11 @@ void _mkp_core_thctx()
     }
 }
 
-int _mkp_core_prctx(struct server_config *config)
+int duda_master_init(struct mk_server_config *config)
 {
     struct mk_list *head;
     struct web_service *ws;
-    struct plugin *mk_plugin;
+    struct mk_plugin *plugin;
 
 #if defined(MALLOC_JEMALLOC) && defined(JEMALLOC_STATS)
     /* Initialize stats context */
@@ -525,14 +518,14 @@ int _mkp_core_prctx(struct server_config *config)
      * assign the reference to the global reference 'duda_plugin'.
      */
     duda_plugin = NULL;
-    mk_list_foreach(head, config->plugins) {
-        mk_plugin = mk_list_entry(head, struct plugin, _head);
-        if (strcmp(mk_plugin->shortname, "duda") == 0) {
-            duda_plugin = mk_plugin;
+    mk_list_foreach(head, &config->plugins) {
+        plugin = mk_list_entry(head, struct mk_plugin, _head);
+        if (strcmp(plugin->shortname, "duda") == 0) {
+            duda_plugin = plugin;
             break;
         }
     }
-    mk_bug(!duda_plugin);
+    //mk_bug(!duda_plugin);
 
     /* Initialize some pointers */
     duda_mem_init();
@@ -554,7 +547,7 @@ int _mkp_core_prctx(struct server_config *config)
     return 0;
 }
 
-int _mkp_init(struct plugin_api **api, char *confdir)
+int duda_plugin_init(struct plugin_api **api, char *confdir)
 {
     mk_api = *api;
 
@@ -587,7 +580,7 @@ int duda_service_end(duda_request_t *dr)
     duda_gc_free_content(dr);
 
     /* Finalize HTTP stuff with Monkey core */
-    ret = mk_api->http_request_end(dr->socket);
+    ret = mk_api->http_request_end(dr->cs, MK_TRUE);
     if (ret < 0) {
         dr->_st_service_end = MK_TRUE;
     }
@@ -641,7 +634,7 @@ int duda_override_docroot(struct mk_http_request *sr, int uri_offset,
     sr->real_path.data[sr->real_path.len] = '\0';
 
     int ret;
-    ret = mk_api->file_get_info(sr->real_path.data, &sr->file_info);
+    ret = mk_api->file_get_info(sr->real_path.data, &sr->file_info, MK_FILE_READ);
     if (ret == -1) {
         return -1;
     }
@@ -692,7 +685,7 @@ int duda_service_html(duda_request_t *dr)
     return ret;
 }
 
-int duda_service_run(struct plugin *plugin,
+int duda_service_run(struct mk_plugin *plugin,
                      struct mk_http_session *cs,
                      struct mk_http_request *sr,
                      struct web_service *web_service)
@@ -817,7 +810,7 @@ struct web_service *duda_get_service_from_uri(struct mk_http_request *sr,
 }
 
 /* Hook for when Monkey core start exiting: SIGTERM */
-void _mkp_exit()
+int duda_plugin_exit()
 {
     struct mk_list *head_vh;
     struct mk_list *head_ws, *head_temp_ws;
@@ -848,8 +841,11 @@ void _mkp_exit()
 /*
  * Request handler: when the request arrives this callback is invoked.
  */
-int _mkp_stage_30(struct plugin *plugin, struct mk_http_session *cs,
-                  struct mk_http_request *sr)
+int duda_stage30(struct mk_plugin *plugin,
+                 struct mk_http_session *cs,
+                 struct mk_http_request *sr,
+                 int n_params,
+                 struct mk_list *params)
 {
     struct mk_list *head;
     struct vhost_services *vs_entry, *vs_match=NULL;
@@ -910,3 +906,39 @@ int _mkp_stage_30(struct plugin *plugin, struct mk_http_session *cs,
     /* There is nothing we can do... */
     return MK_PLUGIN_RET_NOT_ME;
 }
+
+int duda_stage30_hangup(struct mk_plugin *plugin,
+                        struct mk_http_session *cs,
+                        struct mk_http_request *sr)
+{
+    (void) plugin;
+    (void) cs;
+    (void) sr;
+
+    return 0;
+}
+
+struct mk_plugin_stage mk_plugin_stage_duda = {
+    .stage30        = &duda_stage30,
+    .stage30_hangup = &duda_stage30_hangup
+};
+
+struct mk_plugin mk_plugin_duda = {
+
+    /* Identification */
+    .shortname     = "fastcgi",
+    .name          = "FastCGI Client",
+    .version       = "1.0",
+    .hooks         = MK_PLUGIN_STAGE,
+
+    /* Init / Exit */
+    .init_plugin   = duda_plugin_init,
+    .exit_plugin   = duda_plugin_exit,
+
+    /* Init Levels */
+    .master_init   = duda_master_init,
+    .worker_init   = duda_worker_init,
+
+    /* Type */
+    .stage         = &mk_plugin_stage_duda
+};

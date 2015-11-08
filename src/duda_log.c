@@ -49,7 +49,7 @@ void duda_logger_writer(void *arg)
     struct mk_list *head;
     struct vhost_services *entry_vs;
     struct web_service *entry_ws;
-    mk_event_loop_t *evl;
+    struct mk_event_loop *evl;
     duda_logger_context_t *log_ctx;
 
     int bytes;
@@ -102,7 +102,7 @@ void duda_logger_writer(void *arg)
             /* go around each Logger */
             mk_list_foreach(head, entry_ws->loggers) {
                 log_ctx = mk_list_entry(head, duda_logger_context_t, _head);
-                mk_api->ev_add(evl, log_ctx->pipe_fd[0], MK_EVENT_READ, log_ctx);
+                /* FIXME mk_api->ev_add(evl, log_ctx->pipe_fd[0], MK_EVENT_READ, log_ctx); */
             }
         }
     }
@@ -117,7 +117,7 @@ void duda_logger_writer(void *arg)
         mk_api->ev_wait(evl);
         clk = mk_api->time_unix();
 
-        nfds = mk_api->ev_translate(evl);
+        /* FIXME nfds = mk_api->ev_translate(evl); */
         for (i = 0; i < nfds; i++) {
             fd       = evl->events[i].fd;
             log_ctx  = evl->events[i].data;

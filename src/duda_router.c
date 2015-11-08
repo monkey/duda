@@ -218,12 +218,12 @@ int duda_router_redirect(duda_request_t *dr)
     if (port_redirect > 0) {
         len = snprintf(buf, redirect_size,
                        "Location: %s://%s:%i%s",
-                       mk_api->config->transport, host, port_redirect, location);
+                       "FIXME" /*mk_api->config->transport*/, host, port_redirect, location);
     }
     else {
         len = snprintf(buf, redirect_size,
                        "Location: %s://%s%s",
-                       mk_api->config->transport, host, location);
+                       "FIXME" /*mk_api->config->transport */, host, location);
     }
 
     duda_response_http_header_n(dr, buf, len);

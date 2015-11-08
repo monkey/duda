@@ -21,6 +21,7 @@
 #define DUDA_EVENT_H
 
 #include <monkey/mk_api.h>
+#include <monkey/mk_core.h>
 #include "duda.h"
 #include "duda_objects.h"
 
@@ -80,12 +81,12 @@ struct duda_api_event {
     int (*create_signal_fd) ();
 
     /* Loop based calls */
-    mk_event_loop_t *(*loop_create) (int);
-    int (*loop_add) (mk_event_loop_t *, int, int, void *);
-    int (*loop_delete) (mk_event_loop_t *, int);
-    int (*loop_timeout_create) (mk_event_loop_t *, int);
-    int (*loop_channel_create) (mk_event_loop_t *, int *, int *);
-    int (*loop_wait) (mk_event_loop_t *);
+    struct mk_event_loop *(*loop_create) (int);
+    int (*loop_add) (struct mk_event_loop *, int, int, uint32_t, void *);
+    int (*loop_delete) (struct mk_event_loop *, struct mk_event *);
+    int (*loop_timeout_create) (struct mk_event_loop *, int, void *);
+    int (*loop_channel_create) (struct mk_event_loop *, int *, int *, void *);
+    int (*loop_wait) (struct mk_event_loop *);
     char *(*loop_backend) ();
 };
 

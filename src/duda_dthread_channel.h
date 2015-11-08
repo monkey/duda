@@ -20,7 +20,7 @@
 #ifndef DUDA_API_DTHREAD_CHANNEL_H
 #define DUDA_API_DTHREAD_CHANNEL_H
 
-#include <monkey/mk_list.h>
+#include <monkey/mk_core.h>
 
 #define DTHREAD_CHANNEL_OK      0
 #define DTHREAD_CHANNEL_BROKEN  -EPIPE

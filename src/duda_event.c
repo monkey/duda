@@ -19,7 +19,7 @@
 
 #include "duda_event.h"
 
-__thread struct mk_list *duda_events_list;
+//__thread struct rb_root *duda_events_list;
 
 /*
  * @OBJ_NAME: event
@@ -405,13 +405,13 @@ int duda_event_create_signal_fd()
  * @METHOD_PARAM: loop the loop context returned by loop_create()
  * @METHOD_RETURN: It returns the number of events registered into the interface.
  */
-int duda_event_loop_wait(mk_event_loop_t *loop)
+int duda_event_loop_wait(struct mk_event_loop *loop)
 {
     int n;
 
     n = mk_api->ev_wait(loop);
     if (n > 0) {
-        mk_api->ev_translate(loop);
+        //mk_api->ev_translate(loop);
     }
     return n;
 }

@@ -24,7 +24,7 @@
 #include <pthread.h>
 #include <inttypes.h>
 
-#include <monkey/mk_list.h>
+#include <monkey/mk_core.h>
 #include "duda_stats_proc.h"
 
 struct duda_stats_worker {

@@ -20,7 +20,7 @@
 #ifndef DUDA_API_WORKER_H
 #define DUDA_API_WORKER_H
 
-#include <monkey/mk_list.h>
+#include <monkey/mk_core.h>
 
 
 /* Defines a node for the pre-worker loop */
