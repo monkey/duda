@@ -41,7 +41,7 @@ int duda_body_buffer_expand(struct duda_body_buffer *bb)
 {
     int size = bb->buf->size + BODY_BUFFER_SIZE;
 
-    if (mk_api->iov_realloc(bb->buf, size) == -1) {
+    if (!mk_api->iov_realloc(bb->buf, size)) {
         return -1;
     }
 

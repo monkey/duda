@@ -110,5 +110,6 @@ void *duda_load_symbol(void *handle, const char *symbol);
 int duda_service_end(duda_request_t *dr);
 
 duda_request_t *duda_dr_list_get(int socket);
+void duda_worker_init();
 
 #endif

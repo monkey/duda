@@ -836,6 +836,8 @@ int duda_plugin_exit()
             }
         }
     }
+
+    return 0;
 }
 
 /*
@@ -850,6 +852,8 @@ int duda_stage30(struct mk_plugin *plugin,
     struct mk_list *head;
     struct vhost_services *vs_entry, *vs_match=NULL;
     struct web_service *web_service;
+    (void) n_params;
+    (void) params;
 
     /* Match virtual host */
     mk_list_foreach(head, &services_list) {

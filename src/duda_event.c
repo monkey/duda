@@ -19,7 +19,7 @@
 
 #include "duda_event.h"
 
-//__thread struct rb_root *duda_events_list;
+__thread struct mk_list *duda_events_list;
 
 /*
  * @OBJ_NAME: event

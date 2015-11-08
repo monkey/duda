@@ -37,7 +37,7 @@ static void *duda_worker_step(void *arg)
     struct duda_worker *wk = (struct duda_worker *) arg;
 
     /* initialize same data as done for server workers */
-    _mkp_core_thctx();
+    duda_worker_init();
 
     /* call the target function */
     ret = wk->func(wk->arg);
