@@ -108,6 +108,7 @@ void *duda_load_library(const char *path)
 {
     void *handle;
 
+    printf("load_lib: path='%s'\n", path);
     handle = dlopen(path, RTLD_LAZY);
     if (!handle) {
         mk_warn("dlopen() %s", dlerror());
@@ -163,15 +164,25 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
     }
 
     if (service_init(api, ws) == 0) {
+        printf("loading\n");
         PLUGIN_TRACE("[%s] duda_main()", ws->name.data);
         ws->router_list = duda_load_symbol(ws->handler, "duda_router_list");
         ws->global      = duda_load_symbol(ws->handler, "duda_global_dist");
         ws->pre_loop    = duda_load_symbol(ws->handler, "duda_pre_loop");
         ws->packages    = duda_load_symbol(ws->handler, "duda_ws_packages");
-        ws->workers     = duda_load_symbol(ws->handler, "duda_worker_list");
+        ws->workers     = (struct mk_list *) duda_load_symbol(ws->handler, "duda_worker_list");
         ws->loggers     = duda_load_symbol(ws->handler, "duda_logger_main_list");
         ws->setup       = duda_load_symbol(ws->handler, "_setup");
         ws->exit_cb     = duda_load_symbol_passive(ws->handler, "duda_exit");
+
+        if (!ws->workers) {
+            printf("error reading symbol!: %p\n", ws->workers);
+            exit(1);
+        }
+
+        printf("ref=%p\n",  &ws->workers);
+        printf("next=%p\n", ws->workers->next);
+        printf("pre=%p\n", ws->workers->prev);
 
         /* Console dashboard, enabled if the service used console->dashboard() */
         if (ws->dashboard) {

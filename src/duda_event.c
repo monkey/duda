@@ -111,7 +111,10 @@ int duda_event_add(int sockfd,
         exit(EXIT_FAILURE);
     }
 
-    /* Check if the event socket belongs to an active duda_request_t */
+    /*
+       FIXME!!
+
+       Check if the event socket belongs to an active duda_request_t
     dr = duda_dr_list_get(sockfd);
     if (dr) {
         if (sockfd != dr->socket) {
@@ -122,9 +125,11 @@ int duda_event_add(int sockfd,
         }
     }
     else {
-        rc = mk_api->event_add(sockfd, init_mode, duda_plugin, behavior);
-    }
-
+        rc = mk_api->event_add(sockfd, init_mode, behavior,
+                               duda_plugin,
+                               NULL, NULL, NULL, NULL, NULL);
+                               }*/
+    return 0;
     return rc;
 }
 

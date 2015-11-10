@@ -1,0 +1,4 @@
+[DUDA]
+    ServicesRoot /home/edsiper/coding/duda-examples/001_hello_world
+    PackagesRoot @PROJECT_SOURCE_DIR@/plugins/duda/packages
+    DocumentRoot @PROJECT_SOURCE_DIR@/plugins/duda/htdocs

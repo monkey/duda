@@ -128,7 +128,7 @@ int duda_conf_main_init(const char *confdir)
 
     /* Read Duda configuration file */
     mk_api->str_build(&conf_path, &len, "%s/duda.conf", confdir);
-    conf = mk_api->config_create(conf_path);
+    conf = mk_api->config_open(conf_path);
 
     mk_list_foreach(head, &conf->sections) {
         section = mk_list_entry(head, struct mk_rconf_section, _head);

@@ -107,6 +107,7 @@ int _duda_main(struct duda_api_objects *dapi);
 #define duda_main()                                                     \
     _duda_bootstrap_main(struct duda_api_objects *dapi,                 \
                          struct web_service *ws) {                      \
+        printf("boot!\n");                                              \
         /* API Objects */                                               \
         monkey   = dapi->monkey;                                        \
         map      = dapi->map;                                           \
@@ -145,6 +146,9 @@ int _duda_main(struct duda_api_objects *dapi);
         mk_list_init(&duda_pre_loop);                                   \
         mk_list_init(&duda_ws_packages);                                \
         mk_list_init(&duda_worker_list);                                \
+        printf("next=%p\n", duda_worker_list.next);                     \
+        printf("pre=%p\n", duda_worker_list.next);                      \
+        printf("ref=%p\n", &duda_worker_list);                          \
         mk_list_init(&duda_router_list);                                \
                                                                         \
         /* logger main list: logger keys defined in duda_main() */      \

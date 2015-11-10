@@ -31,7 +31,7 @@ set(src
   )
 
 MONKEY_PLUGIN(duda "${src}")
-
+add_subdirectory(conf)
 #add_subdirectory(src)
 
 #add_subdirectory(packages)
