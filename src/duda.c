@@ -535,7 +535,6 @@ int duda_master_init(struct mk_server_config *config)
             break;
         }
     }
-    //mk_bug(!duda_plugin);
 
     /* Initialize some pointers */
     duda_mem_init();

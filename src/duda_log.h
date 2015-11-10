@@ -52,8 +52,6 @@ static inline void *_duda_logger_cb_create(void *data)
     duda_logger_context_t *ctx;
     duda_logger_context_t *info = (duda_logger_context_t *) data;
 
-    //mk_bug(!data);
-
     pthread_mutex_lock(&duda_logger_mutex);
 
     ctx = malloc(sizeof(duda_logger_context_t));

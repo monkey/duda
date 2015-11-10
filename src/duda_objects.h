@@ -97,8 +97,6 @@ static inline void duda_worker_pre_loop(void (*func) (void *), void *data)
 {
     struct duda_worker_pre *pre;
 
-    //mk_bug(!func);
-
     pre = mem->alloc(sizeof(struct duda_worker_pre));
     pre->func = func;
     pre->data = data;
