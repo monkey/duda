@@ -32,6 +32,10 @@
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H
 
+#ifdef DUDA_CORE
+#error "OBJECTS USED IN THE WRONG CONTEXT"
+#endif
+
 /* List of symbols that are populated by the web service on start */
 struct mk_list MK_EXPORT duda_global_dist;
 struct mk_list MK_EXPORT duda_pre_loop;
@@ -45,7 +49,7 @@ struct mk_list MK_EXPORT duda_router_list;
  * the _setup structure holds function references and flags
  * that modify the behavior of the web service
  */
-struct duda_setup _setup;
+struct duda_setup MK_EXPORT _setup;
 
 /* Objects exported to the web service */
 struct plugin_api *monkey;
@@ -79,7 +83,6 @@ struct web_service *self;
 #include <sys/syscall.h>   /* For SYS_xxx definitions */
 
 /* Static functions that depends on webservice or package specific data */
-
 static inline void duda_global_init(duda_global_t *global,
                                     void *(*callback)(void *),
                                     void *data)

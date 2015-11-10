@@ -105,7 +105,7 @@ int _duda_main(struct duda_api_objects *dapi);
  * initialization, then it invoke the end-user routine under _duda_main()
  */
 #define duda_main()                                                     \
-    _duda_bootstrap_main(struct duda_api_objects *dapi,                 \
+    MK_EXPORT _duda_bootstrap_main(struct duda_api_objects *dapi,                 \
                          struct web_service *ws) {                      \
         printf("boot!\n");                                              \
         /* API Objects */                                               \

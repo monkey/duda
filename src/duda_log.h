@@ -24,8 +24,6 @@
 #include "duda_conf.h"
 #include "duda.h"
 #include "duda_global.h"
-#include "duda_objects.h"
-
 
 typedef struct {
     int enabled;
@@ -64,7 +62,7 @@ static inline void *_duda_logger_cb_create(void *data)
     ctx->name = strdup(info->name);
     ctx->key  = info->key;
 
-    mk_list_add(&ctx->_head, &duda_logger_worker_list);
+    /* FIXME: mk_list_add(&ctx->_head, &duda_logger_worker_list); */
     pthread_mutex_unlock(&duda_logger_mutex);
 
     return ctx;
@@ -84,8 +82,13 @@ static inline int duda_logger_create(duda_logger_t *log, char *name)
     /* fill the fields */
     ctx->name     = name;
     ctx->log_path = NULL;
-    monkey->str_build(&ctx->log_path, &len, "%s/%s", self->logdir.data, name);
-    ctx->ws       = self;
+    /* FIXME:
+       monkey->str_build(&ctx->log_path, &len, "%s/%s", self->logdir.data, name);
+    */
+
+    /* FIXME
+       ctx->ws       = self;
+    */
     ctx->key      = log;
     if (pipe(ctx->pipe_fd) == -1) {
         perror("pipe");
@@ -96,11 +99,18 @@ static inline int duda_logger_create(duda_logger_t *log, char *name)
      * we link this data to a main list, so from Duda context we can query
      * all Loggers created
      */
-    mk_list_add(&ctx->_head, &duda_logger_main_list);
+
+
+    /* FIXME:
+       mk_list_add(&ctx->_head, &duda_logger_main_list);
+    */
 
     memset(log, 0, sizeof(duda_logger_t));
     log->enabled = MK_TRUE;
-    duda_global_init(&log->global_key, _duda_logger_cb_create, (void *) ctx);
+
+    /* FIXME
+       duda_global_init(&log->global_key, _duda_logger_cb_create, (void *) ctx);
+    */
     return 0;
 }
 

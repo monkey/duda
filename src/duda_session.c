@@ -27,7 +27,6 @@
 #include <monkey/mk_api.h>
 #include "duda_session.h"
 #include "duda.h"
-#include "webservice.h"
 #include "duda_conf.h"
 
 /*
@@ -63,7 +62,7 @@ int _duda_session_create_store(const char *path)
 
     ret = mkdir(path, SESSION_DEFAULT_PERM);
     if (ret != 0) {
-        mk_err("duda_session: could not create SESSION_STORE_PATH '%s'", SESSION_STORE_PATH);
+        /* FIXME mk_err("duda_session: could not create SESSION_STORE_PATH '%s'", SESSION_STORE_PATH); */
         return -1;
     }
 

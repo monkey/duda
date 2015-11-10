@@ -30,9 +30,10 @@ set(src
   src/duda_dthread_channel.c
   )
 
+add_definitions(-DDUDA_CORE=1)
 MONKEY_PLUGIN(duda "${src}")
 add_subdirectory(conf)
-#add_subdirectory(src)
 
+# FIXME!
 #add_subdirectory(packages)
 #add_subdirectory(docs)

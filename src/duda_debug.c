@@ -18,7 +18,6 @@
  */
 
 #include <monkey/mk_api.h>
-#include "webservice.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -123,4 +122,3 @@ void duda_debug_bug(const char *format, ...)
 
     _duda_debug_footer();
 }
-

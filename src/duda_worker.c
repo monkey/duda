@@ -17,6 +17,9 @@
  *  limitations under the License.
  */
 
+#define _GNU_SOURCE         /* See feature_test_macros(7) */
+#include <unistd.h>
+#include <sys/syscall.h>
 #include <pthread.h>
 
 #include "duda.h"
@@ -98,7 +101,7 @@ struct duda_api_worker *duda_worker_object()
 
     wk = mk_api->mem_alloc(sizeof(struct duda_api_worker));
     wk->_spawn = duda_worker_spawn;
-    wk->pre_loop = duda_worker_pre_loop;
+    /* FIXME: wk->pre_loop = duda_worker_pre_loop; */
 
     return wk;
 }

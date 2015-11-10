@@ -272,7 +272,9 @@ int duda_event_fd_read(int fd, void *data)
     /* read the value */
     s = read(fd, &val, sizeof(uint64_t));
     if (s != sizeof(uint64_t)) {
-        msg->warn("Error reading signal value");
+        /* FIXME
+          msg->warn("Error reading signal value");
+        */
         return -1;
     }
 
@@ -302,7 +304,7 @@ int duda_event_create_signal_fd()
     struct duda_event_signal_channel *esc;
 
     if (pipe(fds) == -1) {
-        msg->err("Error creating pipe");
+        /* FIXME msg->err("Error creating pipe"); */
         return -1;
     }
 

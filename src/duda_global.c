@@ -20,9 +20,6 @@
 #include <monkey/mk_api.h>
 #include "duda_global.h"
 
-#include "webservice.h"
-
-
 /*
  * @OBJ_NAME: global
  * @OBJ_MENU: Global Worker
@@ -82,7 +79,7 @@ struct duda_api_global *duda_global_object()
     struct duda_api_global *obj;
 
     obj = mk_api->mem_alloc(sizeof(struct duda_api_global));
-    obj->init  = duda_global_init;
+    /* FIXME obj->init  = duda_global_init; */
     obj->set   = duda_global_set;
     obj->get   = duda_global_get;
 

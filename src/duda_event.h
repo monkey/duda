@@ -23,7 +23,6 @@
 #include <monkey/mk_api.h>
 #include <monkey/mk_core.h>
 #include "duda.h"
-#include "duda_objects.h"
 
 #define DUDA_EVENT_READ             MK_EVENT_READ
 #define DUDA_EVENT_WRITE            MK_EVENT_WRITE
@@ -119,7 +118,9 @@ int duda_event_create_signal_fd();
 
 static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
 {
-    _setup.event_signal_cb = func;
+    /* FIXME
+       _setup.event_signal_cb = func;
+    */
 }
 
 
