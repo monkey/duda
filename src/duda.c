@@ -179,10 +179,6 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
             exit(1);
         }
 
-        printf("ref=%p\n",  ws->workers);
-        printf("next=%p\n", ws->workers->next);
-        printf("pre=%p\n", ws->workers->prev);
-
         /* Console dashboard, enabled if the service used console->dashboard() */
         if (ws->dashboard) {
             duda_console_enable(ws->dashboard, ws->router_list);
