@@ -17,6 +17,8 @@
  *  limitations under the License.
  */
 
+#define _GNU_SOURCE             /* See feature_test_macros(7) */
+
 #include <string.h>
 #include <monkey/mk_api.h>
 

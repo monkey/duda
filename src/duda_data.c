@@ -17,7 +17,6 @@
  *  limitations under the License.
  */
 
-#include <string.h>
 #include <monkey/mk_api.h>
 
 #include "duda.h"

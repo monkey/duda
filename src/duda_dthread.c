@@ -17,6 +17,8 @@
  *  limitations under the License.
  */
 
+#include <monkey/mk_api.h>
+
 #include <assert.h>
 #include <string.h>
 

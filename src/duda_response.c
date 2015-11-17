@@ -17,10 +17,10 @@
  *  limitations under the License.
  */
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <monkey/mk_api.h>
 #include <monkey/mk_mimetype.h>
 
+#include <stdarg.h>
 #include "duda.h"
 #include "duda_api.h"
 #include "duda_queue.h"
@@ -60,6 +60,9 @@ int duda_response_headers_off(duda_request_t *dr)
 int duda_response_send_headers(duda_request_t *dr)
 {
     int r;
+    size_t bytes = 0;
+    struct mk_list *head;
+    struct mk_stream *stream;
 
     if (dr->_st_http_headers_off == MK_TRUE) {
         dr->_st_http_headers_sent = MK_TRUE;
@@ -77,7 +80,11 @@ int duda_response_send_headers(duda_request_t *dr)
 
     /* Calculate body length */
     if (dr->_st_http_content_length == -2) {
-        dr->sr->headers.content_length = duda_queue_length(&dr->queue_out);
+        mk_list_foreach(head, &dr->channel.streams) {
+            stream = mk_list_entry(head, struct mk_stream, _head);
+            bytes += stream->bytes_total;
+        }
+        dr->sr->headers.content_length = bytes;
     }
     else if (dr->_st_http_content_length >= 0) {
         dr->sr->headers.content_length = dr->_st_http_content_length;
@@ -96,6 +103,13 @@ int duda_response_send_headers(duda_request_t *dr)
 
     /* Change flag status */
     dr->_st_http_headers_sent = MK_TRUE;
+
+    /*
+     * Concatenate list, link temporal dr->channel nodes to parent channel
+     * streams list.
+     */
+    mk_list_cat(&dr->channel.streams, &(dr->cs->channel)->streams);
+
     return 0;
 }
 
@@ -182,31 +196,18 @@ int duda_response_http_content_type(duda_request_t *dr, char *extension)
 /* Compose the body_buffer */
 static int _print(duda_request_t *dr, char *raw, int len, int free)
 {
-    int ret;
     struct duda_body_buffer *body_buffer;
-    struct duda_queue_item *item;
 
-    item = duda_queue_last(&dr->queue_out);
-    if (!item || item->type != DUDA_QTYPE_BODY_BUFFER) {
-        body_buffer = duda_body_buffer_new();
-        item = duda_queue_item_new(DUDA_QTYPE_BODY_BUFFER);
-        item->data = body_buffer;
-        duda_queue_add(item, &dr->queue_out);
-    }
-    else {
-        body_buffer = item->data;
+    mk_api->stream_set(NULL,
+                       MK_STREAM_COPYBUF,
+                       &dr->channel,
+                       raw,
+                       len,
+                       NULL,
+                       NULL, NULL, NULL);
+    return 0;
 
-    }
-
-    /* perform realloc if body_write() is called more than body_buffer_size */
-    if (body_buffer->buf->iov_idx >= body_buffer->size)  {
-        ret = duda_body_buffer_expand(body_buffer);
-        if (ret == -1) {
-            return -1;
-        }
-    }
-
-    /* Link data */
+    /* FIXME! Link data */
     if (free == MK_TRUE) {
         mk_api->iov_add(body_buffer->buf, raw, len, MK_FALSE);
     }
@@ -382,6 +383,7 @@ int duda_response_continue(duda_request_t *dr)
  * @METHOD_RETURN: Upon successful completion it returns 0, otherwise it can generate an explicit
  * program exit due to bad API usage.
  */
+
 int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
 {
     int ret;
@@ -393,13 +395,14 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     }
 
     dr->end_callback = end_cb;
+
     ret = duda_response_send_headers(dr);
     if (ret == -1) {
         return -1;
     }
 
     /* flush some enqueued content */
-    ret = duda_queue_flush(dr);
+    //ret = duda_queue_flush(dr);
 
     /*
      * The lesson of the day Feb 2, 2013: I must NEVER forget that when sending the
@@ -412,7 +415,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     mk_api->socket_cork_flag(dr->cs->socket, TCP_CORK_OFF);
 
     if (ret == 0) {
-        duda_service_end(dr);
+        //duda_service_end(dr);
     }
 
     return 0;

@@ -118,6 +118,7 @@ int duda_event_create_signal_fd();
 
 static inline void duda_event_set_signal_callback(void (*func) (int, uint64_t))
 {
+    (void) func;
     /* FIXME
        _setup.event_signal_cb = func;
     */

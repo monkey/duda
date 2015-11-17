@@ -68,7 +68,6 @@ static inline void *_duda_logger_cb_create(void *data)
 
 static inline int duda_logger_create(duda_logger_t *log, char *name)
 {
-    unsigned long len;
     duda_logger_context_t *ctx;
 
     /*

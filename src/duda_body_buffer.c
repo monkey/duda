@@ -64,7 +64,8 @@ int duda_body_buffer_flush(int sock, struct duda_body_buffer *bb)
         exit(EXIT_FAILURE);
     }
 
-    bytes_sent = mk_api->socket_sendv(sock, buf);
+    //bytes_sent = mk_api->socket_sendv(sock, buf);
+    bytes_sent = writev(sock, buf->io, buf->iov_idx);
     PLUGIN_TRACE("body_flush: %i/%i", bytes_sent, buf->total_len);
     /*
      * If the call sent less data than total, we must modify the mk_iov struct

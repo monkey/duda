@@ -17,6 +17,8 @@
  *  limitations under the License.
  */
 
+#include <monkey/mk_api.h>
+
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -24,7 +26,6 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include <monkey/mk_api.h>
 #include "duda_session.h"
 #include "duda.h"
 #include "duda_conf.h"

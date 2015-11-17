@@ -64,7 +64,7 @@ static void duda_dr_list_add(duda_request_t *dr)
     mk_api->rb_insert_color(&dr->_rb_head, root);
 }
 
-duda_request_t *duda_dr_list_get(int socket)
+duda_request_t *duda_dr_list_get(struct mk_http_request *sr)
 {
     struct rb_root *root;
     duda_request_t *dr;
@@ -77,9 +77,9 @@ duda_request_t *duda_dr_list_get(int socket)
   	struct rb_node *node = root->rb_node;
   	while (node) {
   		dr = container_of(node, duda_request_t, _rb_head);
-		if (socket < dr->socket)
+		if (sr < dr->sr)
   			node = node->rb_left;
-		else if (socket > dr->socket)
+		else if (sr > dr->sr)
   			node = node->rb_right;
 		else {
   			return dr;
@@ -89,9 +89,9 @@ duda_request_t *duda_dr_list_get(int socket)
 	return NULL;
 }
 
-static duda_request_t *duda_dr_list_del(int socket)
+static duda_request_t *duda_dr_list_del(struct mk_http_request *sr)
 {
-    duda_request_t *dr = duda_dr_list_get(socket);
+    duda_request_t *dr = duda_dr_list_get(sr);
     struct rb_root *root;
 
     if (!dr) {
@@ -108,7 +108,6 @@ void *duda_load_library(const char *path)
 {
     void *handle;
 
-    printf("load_lib: path='%s'\n", path);
     handle = dlopen(path, RTLD_LAZY);
     if (!handle) {
         mk_warn("dlopen() %s", dlerror());
@@ -173,11 +172,6 @@ int duda_service_register(struct duda_api_objects *api, struct web_service *ws)
         ws->loggers     = duda_load_symbol(ws->handler, "duda_logger_main_list");
         ws->setup       = duda_load_symbol(ws->handler, "_setup");
         ws->exit_cb     = duda_load_symbol_passive(ws->handler, "duda_exit");
-
-        if (!ws->workers) {
-            printf("error reading symbol!: %p\n", ws->workers);
-            exit(1);
-        }
 
         /* Console dashboard, enabled if the service used console->dashboard() */
         if (ws->dashboard) {
@@ -323,6 +317,8 @@ int _mkp_event_write(int sockfd)
 
 int mkp_event_close(int sockfd)
 {
+    (void) sockfd;
+    /* FIXME
     int ret;
     struct duda_event_handler *eh = duda_event_lookup(sockfd);
     duda_request_t *dr = NULL;
@@ -347,7 +343,9 @@ int mkp_event_close(int sockfd)
         ret = MK_PLUGIN_RET_EVENT_OWNED;
     }
 
-    return ret;;
+    return ret;
+    */
+    return 0;
 }
 
 int _mkp_event_close(int sockfd)
@@ -645,8 +643,6 @@ int duda_override_docroot(struct mk_http_request *sr, int uri_offset,
     }
 
     sr->stage30_blocked = MK_TRUE;
-
-    //printf("new path: '%s'\n", sr->real_path.data);
     return 0;
 }
 
@@ -699,7 +695,7 @@ int duda_service_run(struct mk_plugin *plugin,
     struct duda_request *dr;
     struct duda_router_path *path;
 
-    dr = duda_dr_list_get(cs->socket);
+    dr = duda_dr_list_get(sr);
     if (!dr) {
         dr = mk_api->mem_alloc(sizeof(duda_request_t));
         if (!dr) {
@@ -715,6 +711,7 @@ int duda_service_run(struct mk_plugin *plugin,
         dr->plugin = plugin;
 
         dr->socket = cs->socket;
+        dr->sr     = sr;
 
         /* Register */
         duda_dr_list_add(dr);
@@ -737,6 +734,7 @@ int duda_service_run(struct mk_plugin *plugin,
 
     /* data queues */
     mk_list_init(&dr->queue_out);
+    mk_list_init(&dr->channel.streams);
 
     /* statuses */
     dr->_st_http_content_length = -2;      /* not set */

@@ -17,13 +17,14 @@
  *  limitations under the License.
  */
 
+#include <monkey/mk_api.h>
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdarg.h>
 
-#include <monkey/mk_api.h>
 #include "duda.h"
 #include "duda_api.h"
 #include "duda_conf.h"

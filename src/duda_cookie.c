@@ -17,8 +17,6 @@
  *  limitations under the License.
  */
 
-#include <stdio.h>
-
 #include <monkey/mk_api.h>
 #include "duda_cookie.h"
 #include "duda.h"

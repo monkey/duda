@@ -17,10 +17,10 @@
  *  limitations under the License.
  */
 
+#include <monkey/mk_api.h>
+
 #include <stdio.h>
 #include <stdarg.h>
-
-#include <monkey/mk_api.h>
 
 #include "duda_debug.h"
 #include "duda_console.h"

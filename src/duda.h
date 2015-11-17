@@ -60,6 +60,18 @@ typedef struct duda_request {
     struct mk_http_session *cs;
     struct mk_http_request *sr;
 
+    /*
+     * Temporal Channel: we require to set our HTTP headers response as the
+     * the first item of the data stream of this service call, but we cannot
+     * do that until we know what data the web service is going to add. The
+     * approach is to set a separate channel (this 'channel') to be used
+     * to keep a list of streams set by the web service caller.
+     *
+     * When the response is going to be send, we re-link the streams into the
+     * parent dr->cs->channel.
+     */
+    struct mk_channel channel;
+
     /* Parsed URI based on Router format */
     struct duda_router_uri router_uri;
 
@@ -109,7 +121,7 @@ void *duda_load_library(const char *path);
 void *duda_load_symbol(void *handle, const char *symbol);
 int duda_service_end(duda_request_t *dr);
 
-duda_request_t *duda_dr_list_get(int socket);
+duda_request_t *duda_dr_list_get(struct mk_http_request *sr);
 void duda_worker_init();
 
 #endif

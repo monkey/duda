@@ -17,6 +17,8 @@
  *  limitations under the License.
  */
 
+#include <monkey/mk_api.h>
+
 #include <stdlib.h>
 #include <assert.h>
 #include "duda_api.h"
