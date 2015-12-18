@@ -393,6 +393,11 @@ int mkp_event_close(int sockfd)
         ret = MK_PLUGIN_RET_EVENT_OWNED;
     }
 
+    int is_registered = duda_queue_event_is_registered_write(dr);
+    if (is_registered == MK_TRUE) {
+        duda_queue_event_unregister_write(dr);
+    }
+
     dr = duda_dr_list_del(sockfd);
     if (dr) {
         if (dr->_st_service_end == MK_FALSE) {
