@@ -244,17 +244,17 @@ int duda_queue_event_write_callback(int sockfd)
 {
     int ret = MK_PLUGIN_RET_CONTINUE;
     struct mk_list *list, *temp, *head;
-    duda_request_t *entry;
+    duda_request_t *dr;
 
     list = pthread_getspecific(duda_global_events_write);
     mk_list_foreach_safe(head, temp, list) {
-        entry = mk_list_entry(head, duda_request_t, _head_events_write);
-        if (entry->cs->socket == sockfd) {
-            ret = duda_queue_flush(entry);
+        dr = mk_list_entry(head, duda_request_t, _head_events_write);
+        if (dr->socket == sockfd) {
+            ret = duda_queue_flush(dr);
             if (ret > 0) {
                 return MK_PLUGIN_RET_EVENT_OWNED;
             }
-            if ((ret == -1) || duda_service_end(entry) == -1) {
+            if ((ret == -1) || duda_service_end(dr) == -1) {
                 return MK_PLUGIN_RET_EVENT_CLOSE;
             }
             else {
