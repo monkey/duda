@@ -426,6 +426,8 @@ int ws_send_data(int sockfd,
      */
     unsigned int frame_mask = 0;
     int n;
+    size_t total = 0;
+    size_t sent = 0;
 
     if (payload_len > (sizeof(_buf) - 16)) {
         buf = monkey->mem_alloc_z(payload_len + 16);
@@ -446,8 +448,8 @@ int ws_send_data(int sockfd,
     }
     else if (payload_len >= 126 && payload_len <= 0xFFFF) {
         buf[1] |= ((frame_mask << 7) | 126);
-        buf[2] = payload_len >> 8;
-        buf[3] = payload_len & 0x0F;
+        buf[2] = (payload_len & 0x0000ff00) >> 8;
+        buf[3] = (payload_len & 0x000000ff);
         offset = 4;
     }
     else {
@@ -458,12 +460,17 @@ int ws_send_data(int sockfd,
 
     memcpy(buf + offset, payload_data, payload_len);
 
-    n = monkey->socket_send(sockfd, buf, offset + payload_len);
-    if (n <= 0) {
-        if (buf != _buf) {
-            monkey->mem_free(buf);
+    total = offset + payload_len;
+    while (sent < total) {
+        n = monkey->socket_send(sockfd, buf + sent, total - sent);
+        if (n <= 0) {
+            if (buf != _buf) {
+                monkey->mem_free(buf);
+            }
+            return -1;
         }
-        return -1;
+        sent += n;
+        n = sent;
     }
 
     if (buf != _buf) {
