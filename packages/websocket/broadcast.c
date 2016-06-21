@@ -122,11 +122,14 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data,
                  uint64_t len, int msg_type, int channel)
 {
     int n;
+    uint64_t chunk;
+    uint64_t sent = 0;
     struct mk_list *head;
     struct ws_broadcast_t *entry;
     struct ws_broadcast_frame br;
 
     /* internal broadcast frame */
+    memset(&br, '\0', sizeof(br));
     br.len     = len;
     br.type    = msg_type;
     br.channel = channel;
@@ -138,18 +141,29 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data,
         br.source = 0;
     }
 
-    memset(br.data, '\0', sizeof(br.data));
-    memcpy(br.data, data, len);
-
-    mk_list_foreach(head, &ws_broadcast_channels) {
-        entry = mk_list_entry(head, struct ws_broadcast_t, _head);
-
-        /* write the fixed size frame */
-        n = write(entry->pipe[1], &br, sizeof(br));
-        if (n < 0) {
-            printf("Duda/WS: error broadcasting message\n");
+    chunk = sizeof(br.data);
+    while (sent < len) {
+        if (len - sent < chunk) {
+            br.len = (len - sent);
+            memcpy(br.data, data, len - sent);
         }
+        else {
+            br.len = chunk;
+            memcpy(br.data, data + sent, chunk);
+        }
+
+        mk_list_foreach(head, &ws_broadcast_channels) {
+            entry = mk_list_entry(head, struct ws_broadcast_t, _head);
+
+            /* write the fixed size frame */
+            n = write(entry->pipe[1], &br, sizeof(br));
+            if (n < 0) {
+                printf("Duda/WS: error broadcasting message\n");
+            }
+        }
+        sent += br.len;
     }
+
     return 0;
 }
 

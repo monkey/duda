@@ -22,7 +22,7 @@
 #ifndef WEBSOCKET_BROADCAST_H
 #define WEBSOCKET_BROADCAST_H
 
-#define BROADCAST_BUFFER    1024  /* 1Kb */
+#define BROADCAST_BUFFER    4096  /* 1Kb */
 
 int ws_broadcast_count;
 
