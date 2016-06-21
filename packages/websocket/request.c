@@ -137,6 +137,12 @@ void *cb_request_list_init()
     struct ws_broadcast_worker *bw;
     struct sched_list_node *thinfo = NULL;
 
+    thinfo = monkey->sched_worker_info();
+    if (!thinfo) {
+        return NULL;
+    }
+
+
     /* Initialize the list for each request based in a handshake */
     list = monkey->mem_alloc_z(sizeof(struct mk_list));
     mk_list_init(list);
@@ -153,8 +159,6 @@ void *cb_request_list_init()
     if (ws_config->is_broadcast == MK_TRUE) {
         /* Critical section */
         pthread_mutex_lock(&ws_spawn_mutex);
-
-        thinfo = monkey->sched_worker_info();
 
         /* Broadcast worker info */
         bw = monkey->mem_alloc(sizeof(struct ws_broadcast_worker));
