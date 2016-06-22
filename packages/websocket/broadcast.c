@@ -145,7 +145,7 @@ int ws_broadcast(ws_request_t *wr, unsigned char *data,
     while (sent < len) {
         if (len - sent < chunk) {
             br.len = (len - sent);
-            memcpy(br.data, data, len - sent);
+            memcpy(br.data, data + sent, len - sent);
         }
         else {
             br.len = chunk;
