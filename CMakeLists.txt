@@ -44,8 +44,8 @@ endif()
 # General Headers
 include_directories(
   include/
-  lib/
-  lib/monkey/include
+  deps/
+  deps/monkey/include
   )
 
 # mk_core is aware about jemalloc usage, we need to disable this as
@@ -68,7 +68,7 @@ DUDA_SET_OPTION(MK_PLUGIN_FASTCGI    OFF)
 DUDA_SET_OPTION(MK_PLUGIN_LOGGER     OFF)
 DUDA_SET_OPTION(MK_PLUGIN_MANDRIL    OFF)
 DUDA_SET_OPTION(MK_PLUGIN_TLS        OFF)
-add_subdirectory(lib/monkey)
+add_subdirectory(deps/monkey)
 
 if(DUDA_TRACE)
   DUDA_DEFINITION(DUDA_HAVE_TRACE)

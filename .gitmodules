@@ -1,3 +1,3 @@
-[submodule "lib/monkey"]
-	path = lib/monkey
+[submodule "deps/monkey"]
+	path = deps/monkey
 	url = git@github.com:monkey/monkey
