@@ -108,7 +108,9 @@ int duda_response_send_headers(duda_request_t *dr)
      * Concatenate list, link temporal dr->channel nodes to parent channel
      * streams list.
      */
-    mk_list_cat(&dr->channel.streams, &(dr->cs->channel)->streams);
+
+    /* FIXME: dst-2 */
+    //mk_list_cat(&dr->channel.streams, &(dr->cs->channel)->streams);
 
     return 0;
 }

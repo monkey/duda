@@ -6,6 +6,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__FILENAME__='\"$(subst ${CMAKE_SOURCE_DIR
 
 include(GNUInstallDirs)
 
+# Find pthreads
+find_package(Threads)
+
 # Output paths
 set(DUDA_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")

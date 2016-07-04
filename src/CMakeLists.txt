@@ -1,5 +1,6 @@
 set(src
   duda.c
+  duda_old_launcher.c
   duda_gc.c
   duda_mem.c
   duda_conf.c
@@ -29,3 +30,6 @@ set(src
   duda_router.c
   duda_dthread_channel.c
   )
+
+add_executable(duda ${src})
+target_link_libraries(duda pthread dl)
