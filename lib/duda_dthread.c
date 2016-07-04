@@ -29,9 +29,9 @@
 #endif
 
 #include <limits.h>
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_dthread.h"
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_dthread.h>
 
 /*
  * @OBJ_NAME: dthread

@@ -27,10 +27,10 @@
 #include <stdarg.h>
 
 #include <monkey/mk_api.h>
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_conf.h"
-#include "duda_stats.h"
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_conf.h>
+#include <duda/duda_stats.h>
 
 /*
  * Logger writer: this function runs in a separate thread and its main job

@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-#include "duda_event.h"
+#include <duda/duda_event.h>
 
 __thread struct mk_list *duda_events_list;
 

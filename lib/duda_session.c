@@ -26,9 +26,9 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include "duda_session.h"
-#include "duda.h"
-#include "duda_conf.h"
+#include <duda/duda_session.h>
+#include <duda/duda.h>
+#include <duda/duda_conf.h>
 
 /*
  * @OBJ_NAME: session

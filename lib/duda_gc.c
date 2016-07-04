@@ -17,9 +17,9 @@
  *  limitations under the License.
  */
 
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_gc.h"
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_gc.h>
 
 /*
  * @OBJ_NAME: gc

@@ -17,8 +17,102 @@
  *  limitations under the License.
  */
 
-int main()
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <getopt.h>
+
+#include <duda.h>
+
+#ifdef DUDA_HAVE_MTRACE
+#include <mcheck.h>
+#endif
+
+static void duda_help(int rc)
 {
+    printf("Usage: duda [OPTION]\n\n");
+    printf("%sAvailable Options%s\n", ANSI_BOLD, ANSI_RESET);
+    printf("  -v, --version\t\tshow version number\n");
+    printf("  -h, --help\t\tprint this help\n\n");
+    exit(rc);
+}
+
+static void duda_version()
+{
+    printf("Duda I/O v%s\n", DUDA_VERSION_STR);
+    exit(EXIT_SUCCESS);
+}
+
+static void duda_banner()
+{
+    printf("%sDuda I/O v%s%s\n", ANSI_BOLD, DUDA_VERSION_STR, ANSI_RESET);
+    printf("%sCopyright (C) Eduardo Silva <eduardo@monkey.io>%s\n\n",
+           ANSI_BOLD ANSI_YELLOW, ANSI_RESET);
+}
+
+
+static void duda_signal_handler(int signal)
+{
+    write(STDERR_FILENO, "[engine] caught signal\n", 23);
+
+    switch (signal) {
+    case SIGINT:
+    case SIGQUIT:
+    case SIGHUP:
+    case SIGTERM:
+#ifdef FLB_HAVE_MTRACE
+        /* Stop tracing malloc and free */
+        muntrace();
+#endif
+        _exit(EXIT_SUCCESS);
+    default:
+        break;
+    }
+}
+
+static void duda_signal_init()
+{
+    signal(SIGINT,  &duda_signal_handler);
+    signal(SIGQUIT, &duda_signal_handler);
+    signal(SIGHUP,  &duda_signal_handler);
+    signal(SIGTERM, &duda_signal_handler);
+}
+
+int main(int argc, char **argv)
+{
+    int opt;
+
+    /* Setup long-options */
+    static const struct option long_opts[] = {
+        { "version", no_argument      , NULL, 'v' },
+        { "help",    no_argument      , NULL, 'h' },
+        { NULL, 0, NULL, 0 }
+    };
+
+#ifdef DUDA_HAVE_MTRACE
+    /* Start tracing malloc and free */
+    mtrace();
+#endif
+
+    duda_signal_init();
+
+    /* Parse the command line options */
+    while ((opt = getopt_long(argc, argv, "vh",
+                              long_opts, NULL)) != -1) {
+
+        switch (opt) {
+        case 'h':
+            duda_help(EXIT_SUCCESS);
+            break;
+        case 'v':
+            duda_version();
+            exit(EXIT_SUCCESS);
+        default:
+            duda_help(EXIT_FAILURE);
+        }
+    }
+
     /* be a good citizen */
     return 0;
 }

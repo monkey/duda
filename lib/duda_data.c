@@ -19,9 +19,9 @@
 
 #include <monkey/mk_api.h>
 
-#include "duda.h"
-#include "duda_gc.h"
-#include "duda_data.h"
+#include <duda/duda.h>
+#include <duda/duda_gc.h>
+#include <duda/duda_data.h>
 
 /*
  * @OBJ_NAME: data

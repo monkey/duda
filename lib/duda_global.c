@@ -18,7 +18,7 @@
  */
 
 #include <monkey/mk_api.h>
-#include "duda_global.h"
+#include <duda/duda_global.h>
 
 /*
  * @OBJ_NAME: global

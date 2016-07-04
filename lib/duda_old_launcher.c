@@ -23,18 +23,18 @@
 #include <monkey/mk_core.h>
 #include <monkey/mk_api.h>
 
-#include "duda.h"
-#include "duda_gc.h"
-#include "duda_qs.h"
-#include "duda_conf.h"
-#include "duda_stats.h"
-#include "duda_event.h"
-#include "duda_queue.h"
-#include "duda_console.h"
-#include "duda_log.h"
-#include "duda_worker.h"
-#include "duda_dthread.h"
-#include "duda_package.h"
+#include <duda/duda.h>
+#include <duda/duda_gc.h>
+#include <duda/duda_qs.h>
+#include <duda/duda_conf.h>
+#include <duda/duda_stats.h>
+#include <duda/duda_event.h>
+#include <duda/duda_queue.h>
+#include <duda/duda_console.h>
+#include <duda/duda_log.h>
+#include <duda/duda_worker.h>
+#include <duda/duda_dthread.h>
+#include <duda/duda_package.h>
 
 /* Register a new duda_request into the thread context list */
 static void duda_dr_list_add(duda_request_t *dr)

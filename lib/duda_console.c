@@ -25,12 +25,12 @@
 #include <fcntl.h>
 #include <stdarg.h>
 
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_conf.h"
-#include "duda_router.h"
-#include "duda_webservice.h"
-#include "duda_stats.h"
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_conf.h>
+#include <duda/duda_router.h>
+#include <duda/duda_webservice.h>
+#include <duda/duda_stats.h>
 
 /*
  * @OBJ_NAME: console

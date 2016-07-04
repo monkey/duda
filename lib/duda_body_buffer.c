@@ -22,8 +22,8 @@
 
 #include <monkey/mk_api.h>
 
-#include "duda_event.h"
-#include "duda_body_buffer.h"
+#include <duda/duda_event.h>
+#include <duda/duda_body_buffer.h>
 
 struct duda_body_buffer *duda_body_buffer_new()
 {

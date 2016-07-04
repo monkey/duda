@@ -18,8 +18,8 @@
  */
 
 #include <monkey/mk_api.h>
-#include "duda.h"
-#include "duda_request.h"
+#include <duda/duda.h>
+#include <duda/duda_request.h>
 
 /*
  * @OBJ_NAME: request

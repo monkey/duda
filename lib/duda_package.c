@@ -18,9 +18,9 @@
  */
 
 #include <monkey/mk_api.h>
-#include "duda.h"
-#include "duda_conf.h"
-#include "duda_package.h"
+#include <duda/duda.h>
+#include <duda/duda_conf.h>
+#include <duda/duda_package.h>
 
 duda_package_t *duda_package_load(const char *pkgname,
                                   struct duda_api_objects *api,

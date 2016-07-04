@@ -22,7 +22,7 @@
 #include <string.h>
 #include <monkey/mk_api.h>
 
-#include "duda_conf.h"
+#include <duda/duda_conf.h>
 
 int duda_conf_set_confdir(struct web_service *ws, const char *dir)
 {

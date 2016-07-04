@@ -1,0 +1,35 @@
+set(src
+  duda_old_launcher.c
+  duda_gc.c
+  duda_mem.c
+  duda_conf.c
+  duda_api.c
+  duda_event.c
+  duda_body_buffer.c
+  duda_sendfile.c
+  duda_debug.c
+  duda_global.c
+  duda_package.c
+  duda_param.c
+  duda_session.c
+  duda_cookie.c
+  duda_request.c
+  duda_response.c
+  duda_queue.c
+  duda_console.c
+  duda_log.c
+  duda_qs.c
+  duda_worker.c
+  duda_stats.c
+  duda_fconf.c
+  duda_data.c
+  duda_xtime.c
+  duda_utils.c
+  duda_dthread.c
+  duda_router.c
+  duda_dthread_channel.c
+  )
+
+add_library(duda-static STATIC ${src})
+target_link_libraries(duda-static pthread dl)
+set_target_properties(duda-static PROPERTIES OUTPUT_NAME duda)

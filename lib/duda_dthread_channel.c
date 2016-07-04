@@ -21,9 +21,9 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include "duda_api.h"
-#include "duda_dthread.h"
-#include "duda_dthread_channel.h"
+#include <duda/duda_api.h>
+#include <duda/duda_dthread.h>
+#include <duda/duda_dthread_channel.h>
 
 struct duda_dthread_channel_elem_t {
     void *data;

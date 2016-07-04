@@ -17,8 +17,8 @@
  *  limitations under the License.
  */
 
-#include "duda.h"
-#include "duda_mem.h"
+#include <duda/duda.h>
+#include <duda/duda_mem.h>
 
 /*
  * @OBJ_NAME: mem

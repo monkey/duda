@@ -19,9 +19,9 @@
 
 #include <monkey/mk_api.h>
 
-#include "duda.h"
-#include "duda_conf.h"
-#include "duda_fconf.h"
+#include <duda/duda.h>
+#include <duda/duda_conf.h>
+#include <duda/duda_fconf.h>
 
 /*
  * @OBJ_NAME: fconf

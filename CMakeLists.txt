@@ -101,4 +101,15 @@ if(DUDA_MTRACE)
   endif()
 endif()
 
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/duda/duda_info.h.in"
+  "${PROJECT_SOURCE_DIR}/include/duda/duda_info.h"
+  )
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/duda/duda_version.h.in"
+  "${PROJECT_SOURCE_DIR}/include/duda/duda_version.h"
+  )
+
+add_subdirectory(lib)
 add_subdirectory(src)

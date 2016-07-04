@@ -19,8 +19,8 @@
 
 #include <monkey/mk_api.h>
 
-#include "duda.h"
-#include "duda_router.h"
+#include <duda/duda.h>
+#include <duda/duda_router.h>
 
 #define ROUTER_REDIR_SIZE 64
 

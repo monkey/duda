@@ -22,9 +22,9 @@
 #include <sys/syscall.h>
 #include <pthread.h>
 
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_worker.h"
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_worker.h>
 
 /* --- Local functions --- */
 

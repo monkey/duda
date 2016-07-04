@@ -23,7 +23,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "duda_sendfile.h"
+#include <duda/duda_sendfile.h>
 
 struct duda_sendfile *duda_sendfile_new(char *path, off_t offset,
                                         size_t count)

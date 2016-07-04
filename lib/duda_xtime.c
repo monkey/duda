@@ -18,7 +18,7 @@
  */
 
 #include <monkey/mk_api.h>
-#include "duda_xtime.h"
+#include <duda/duda_xtime.h>
 
 /*
  * @OBJ_NAME: xtime

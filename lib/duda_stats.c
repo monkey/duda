@@ -24,9 +24,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "duda.h"
-#include "duda_stats.h"
-#include "duda_stats_proc.h"
+#include <duda/duda.h>
+#include <duda/duda_stats.h>
+#include <duda/duda_stats_proc.h>
 
 #define drp(dr, ...)   duda_response_printf(dr, __VA_ARGS__)
 

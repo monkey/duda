@@ -22,27 +22,27 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "duda_debug.h"
-#include "duda_console.h"
-#include "duda.h"
-#include "duda_api.h"
-#include "duda_mem.h"
-#include "duda_param.h"
-#include "duda_session.h"
-#include "duda_xtime.h"
-#include "duda_cookie.h"
-#include "duda_package.h"
-#include "duda_event.h"
-#include "duda_queue.h"
-#include "duda_global.h"
-#include "duda_sendfile.h"
-#include "duda_body_buffer.h"
-#include "duda_data.h"
-#include "duda_fconf.h"
-#include "duda_qs.h"
-#include "duda_worker.h"
-#include "duda_dthread.h"
-#include "duda_router.h"
+#include <duda/duda_debug.h>
+#include <duda/duda_console.h>
+#include <duda/duda.h>
+#include <duda/duda_api.h>
+#include <duda/duda_mem.h>
+#include <duda/duda_param.h>
+#include <duda/duda_session.h>
+#include <duda/duda_xtime.h>
+#include <duda/duda_cookie.h>
+#include <duda/duda_package.h>
+#include <duda/duda_event.h>
+#include <duda/duda_queue.h>
+#include <duda/duda_global.h>
+#include <duda/duda_sendfile.h>
+#include <duda/duda_body_buffer.h>
+#include <duda/duda_data.h>
+#include <duda/duda_fconf.h>
+#include <duda/duda_qs.h>
+#include <duda/duda_worker.h>
+#include <duda/duda_dthread.h>
+#include <duda/duda_router.h>
 
 struct duda_api_objects *duda_api_master()
 {
