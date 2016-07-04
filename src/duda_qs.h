@@ -2,7 +2,7 @@
 
 /*  Duda I/O
  *  --------
- *  Copyright (C) 2012-2014, Eduardo Silva P. <eduardo@monkey.io>
+ *  Copyright (C) 2012-2016, Eduardo Silva P. <eduardo@monkey.io>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
