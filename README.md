@@ -13,6 +13,15 @@ to the [dst-1](https://github.com/monkey/duda/tree/dst-1) branch:
 https://github.com/monkey/duda/tree/dst-1
 
 
+## Build Instructions
+
+```
+$ git submodule update --init
+$ cd build/
+$ cmake ../
+$ make
+```
+
 ## Author
 
 Eduardo Silva <eduardo@monkey.io>
