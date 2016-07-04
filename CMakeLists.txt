@@ -1,39 +1,101 @@
-set(src
-  src/duda.c
-  src/duda_gc.c
-  src/duda_mem.c
-  src/duda_conf.c
-  src/duda_api.c
-  src/duda_event.c
-  src/duda_body_buffer.c
-  src/duda_sendfile.c
-  src/duda_debug.c
-  src/duda_global.c
-  src/duda_package.c
-  src/duda_param.c
-  src/duda_session.c
-  src/duda_cookie.c
-  src/duda_request.c
-  src/duda_response.c
-  src/duda_queue.c
-  src/duda_console.c
-  src/duda_log.c
-  src/duda_qs.c
-  src/duda_worker.c
-  src/duda_stats.c
-  src/duda_fconf.c
-  src/duda_data.c
-  src/duda_xtime.c
-  src/duda_utils.c
-  src/duda_dthread.c
-  src/duda_router.c
-  src/duda_dthread_channel.c
+cmake_minimum_required(VERSION 2.8)
+project(dud)
+
+# Update CFLAGS
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__FILENAME__='\"$(subst ${CMAKE_SOURCE_DIR}/,,$(abspath $<))\"'")
+
+include(GNUInstallDirs)
+
+# Output paths
+set(DUDA_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/library")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/library")
+
+# Fluent Bit Version
+set(DUDA_VERSION_MAJOR  0)
+set(DUDA_VERSION_MINOR  2)
+set(DUDA_VERSION_PATCH  0)
+set(DUDA_VERSION_STR "${DUDA_VERSION_MAJOR}.${DUDA_VERSION_MINOR}.${DUDA_VERSION_PATCH}")
+
+# Build Options
+option(DUDA_ALL               "Enable all features"          No)
+option(DUDA_DEBUG             "Build with debug symbols"     No)
+option(DUDA_TLS               "Build with SSL/TLS support"   No)
+option(DUDA_TRACE             "Enable trace mode"            No)
+option(DUDA_MTRACE            "Enable mtrace support"        No)
+
+# Enable all features
+if(DUDA_ALL)
+endif()
+
+# Macro to set definitions
+macro(DUDA_DEFINITION var)
+  add_definitions(-D${var})
+  set(DUDA_BUILD_FLAGS "${DUDA_BUILD_FLAGS}#ifndef ${var}\n#define ${var}\n#endif\n")
+  set(DUDA_INFO_FLAGS "${DUDA_INFO_FLAGS} ${var}")
+endmacro()
+
+# Enable Debug symbols if specified
+if(DUDA_DEBUG)
+  set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+# General Headers
+include_directories(
+  include/
+  lib/
+  lib/monkey/include
   )
 
-add_definitions(-DDUDA_CORE=1)
-MONKEY_PLUGIN(duda "${src}")
-add_subdirectory(conf)
+# mk_core is aware about jemalloc usage, we need to disable this as
+# fluent-bit do not use it.
+set(WITH_SYSTEM_MALLOC  1 CACHE BOOL "Use system memory allocator")
 
-# FIXME!
-#add_subdirectory(packages)
-#add_subdirectory(docs)
+macro(DUDA_SET_OPTION option value)
+  set(${option} ${value} CACHE "" INTERNAL FORCE)
+endmacro()
+
+# MK Core
+DUDA_SET_OPTION(MK_SYSTEM_MALLOC      ON)
+DUDA_SET_OPTION(MK_WITHOUT_BIN        ON)
+DUDA_SET_OPTION(MK_WITHOUT_CONF       ON)
+DUDA_SET_OPTION(MK_PLUGIN_AUTH       OFF)
+DUDA_SET_OPTION(MK_PLUGIN_CGI        OFF)
+DUDA_SET_OPTION(MK_PLUGIN_CHEETAH    OFF)
+DUDA_SET_OPTION(MK_PLUGIN_DIRLISTING OFF)
+DUDA_SET_OPTION(MK_PLUGIN_FASTCGI    OFF)
+DUDA_SET_OPTION(MK_PLUGIN_LOGGER     OFF)
+DUDA_SET_OPTION(MK_PLUGIN_MANDRIL    OFF)
+DUDA_SET_OPTION(MK_PLUGIN_TLS        OFF)
+add_subdirectory(lib/monkey)
+
+if(DUDA_TRACE)
+  DUDA_DEFINITION(DUDA_HAVE_TRACE)
+endif()
+
+# Valgrind support
+check_c_source_compiles("
+  #include <valgrind/valgrind.h>
+  int main() {
+     return 0;
+  }" DUDA_HAVE_VALGRIND)
+
+if(DUDA_VALGRIND OR DUDA_HAVE_VALGRIND)
+  DUDA_DEFINITION(DUDA_HAVE_VALGRIND)
+endif()
+
+# mtrace support
+if(DUDA_MTRACE)
+  check_c_source_compiles("
+    #include <mcheck.h>
+    int main() {
+       return 0;
+    }" DUDA_HAVE_MTRACE)
+
+  if(DUDA_HAVE_MTRACE AND DUDA_DEBUG)
+    DUDA_DEFINITION(DUDA_HAVE_MTRACE)
+  endif()
+endif()
+
+add_subdirectory(src)
