@@ -17,23 +17,31 @@
  *  limitations under the License.
  */
 
-#ifndef DUDA_H
-#define DUDA_H
+#ifndef DUDA_LIB_H
+#define DUDA_LIB_H
 
-#include <mk_core.h>
-#include <monkey/mk_lib.h>
+/* Duda runtime context */
+struct duda {
+    /* Monkey runtime context */
+    mk_ctx_t *monkey;
 
-#include <duda/duda_info.h>
-#include <duda/duda_version.h>
-#include <duda/duda_lib.h>
-#include <duda/duda.h>
-#include <duda/duda_router.h>
-#include <duda/duda_objects.h>
-#include <duda/duda_service.h>
+    /* Setup */
+    char *tcp_port;
 
-/* Special headers for web services only */
-#ifndef DUDA_LIB_CORE
-#include <duda/duda_bootstrap.h>
-#endif /* !DUDA_LIB_CORE */
+    /* List head for active web services */
+    struct mk_list services;
+};
+
+#define DUDA_DEFAULT_PORT   "8080"
+
+struct duda *duda_create();
+int duda_destroy(struct duda *duda_ctx);
+
+struct duda_service *duda_service_create(struct duda *d, char *root, char *log,
+                                         char *data, char *html, char *service);
+int duda_service_destroy(struct duda_service *ds);
+
+int duda_start(struct duda *duda_ctx);
+int duda_stop(struct duda *duda_ctx);
 
 #endif

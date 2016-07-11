@@ -184,7 +184,8 @@ void duda_logger_writer(void *arg)
 /* Initialize Logger internals, no API exposed */
 int duda_logger_init()
 {
-    mk_api->worker_spawn(duda_logger_writer, NULL);
+    pthread_t t;
+    mk_api->worker_spawn(duda_logger_writer, NULL, &t);
     return 0;
 }
 

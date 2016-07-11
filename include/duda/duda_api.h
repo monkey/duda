@@ -109,7 +109,7 @@ struct duda_api_objects {
     struct duda_api_router *router;
 };
 
-struct duda_api_objects *duda_api_master();
+struct duda_api_objects *duda_api_create();
 
 /* MAP specific Duda calls */
 struct duda_api_main {

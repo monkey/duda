@@ -44,16 +44,16 @@
 #include <duda/duda_dthread.h>
 #include <duda/duda_router.h>
 
-struct duda_api_objects *duda_api_master()
+struct duda_api_objects *duda_api_create()
 {
     struct duda_api_objects *objs;
 
     /* Alloc memory */
-    objs = mk_api->mem_alloc(sizeof(struct duda_api_objects));
-    objs->duda     = mk_api->mem_alloc(sizeof(struct duda_api_main));
+    objs = mk_mem_malloc(sizeof(struct duda_api_objects));
+    objs->duda     = mk_mem_malloc(sizeof(struct duda_api_main));
     objs->monkey   = mk_api;
-    objs->msg      = mk_api->mem_alloc(sizeof(struct duda_api_msg));
-    objs->debug    = mk_api->mem_alloc(sizeof(struct duda_api_debug));
+    objs->msg      = mk_mem_malloc(sizeof(struct duda_api_msg));
+    objs->debug    = mk_mem_malloc(sizeof(struct duda_api_debug));
 
     /* MAP Duda calls */
     objs->duda->package_load = duda_package_load;
@@ -65,12 +65,16 @@ struct duda_api_objects *duda_api_master()
     objs->msg->bug   = duda_debug_bug;
 
     /* Assign Objects */
+    /*
     objs->global   = duda_global_object();
     objs->event    = duda_event_object();
     objs->gc       = duda_gc_object();
     objs->mem      = duda_mem_object();
     objs->request  = duda_request_object();
+    */
     objs->response = duda_response_object();
+
+    /*
     objs->console  = duda_console_object();
     objs->logger   = duda_logger_object();
     objs->param    = duda_param_object();
@@ -84,7 +88,7 @@ struct duda_api_objects *duda_api_master()
     objs->worker   = duda_worker_object();
     objs->dthread  = duda_dthread_object();
     objs->router   = duda_router_object();
-
+    */
     /* FIXME - DEBUG object */
 #ifdef DEBUG
     objs->debug->stacktrace = mk_api->stacktrace;

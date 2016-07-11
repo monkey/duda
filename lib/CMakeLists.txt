@@ -1,4 +1,6 @@
 set(src
+  duda.c
+  duda_service.c
   duda_old_launcher.c
   duda_gc.c
   duda_mem.c
@@ -30,6 +32,7 @@ set(src
   duda_dthread_channel.c
   )
 
+add_definitions(-DDUDA_LIB_CORE)
 add_library(duda-static STATIC ${src})
-target_link_libraries(duda-static pthread dl)
+target_link_libraries(duda-static pthread dl monkey-core-static)
 set_target_properties(duda-static PROPERTIES OUTPUT_NAME duda)

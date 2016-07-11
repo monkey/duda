@@ -31,10 +31,18 @@
 
 static void duda_help(int rc)
 {
-    printf("Usage: duda [OPTION]\n\n");
-    printf("%sAvailable Options%s\n", ANSI_BOLD, ANSI_RESET);
-    printf("  -v, --version\t\tshow version number\n");
-    printf("  -h, --help\t\tprint this help\n\n");
+    printf("Usage: duda -w serv1.duda [OPTIONS] -w serv2.duda [OPTIONS] \n\n");
+    printf("%sWeb Service Options%s\n", ANSI_BOLD, ANSI_RESET);
+    printf("  -r, --root\t\troot path for logs/, html/ and data/ dirs\n");
+    printf("  -l, --logdir\t\tlogs directory\n");
+    printf("  -d, --datadir\t\tdata directory\n");
+    printf("  -t, --htmldir\t\thtml directory\n");
+    printf("  -w, --webservice\tweb service file path (.duda)\n");
+    printf("\n");
+
+    printf("%sOther Options%s\n", ANSI_BOLD, ANSI_RESET);
+    printf("  -h, --help\t\tprint this help\n");
+    printf("  -v, --version\t\tshow version number\n\n");
     exit(rc);
 }
 
@@ -50,7 +58,6 @@ static void duda_banner()
     printf("%sCopyright (C) Eduardo Silva <eduardo@monkey.io>%s\n\n",
            ANSI_BOLD ANSI_YELLOW, ANSI_RESET);
 }
-
 
 static void duda_signal_handler(int signal)
 {
@@ -82,11 +89,25 @@ static void duda_signal_init()
 int main(int argc, char **argv)
 {
     int opt;
+    int ret;
+    char *opt_root = NULL;
+    char *opt_logdir = NULL;
+    char *opt_datadir = NULL;
+    char *opt_htmldir = NULL;
+    char *opt_webservice = NULL;
+    struct duda *duda_ctx;
+    struct duda_service *srv;
 
     /* Setup long-options */
     static const struct option long_opts[] = {
-        { "version", no_argument      , NULL, 'v' },
-        { "help",    no_argument      , NULL, 'h' },
+        { "root",       required_argument, NULL, 'r' },
+        { "logdir",     required_argument, NULL, 'l' },
+        { "datadir",    required_argument, NULL, 'd' },
+        { "htmldir",    required_argument, NULL, 't' },
+        { "webservice", required_argument, NULL, 'w' },
+        { "port",       required_argument, NULL, 'p' },
+        { "version",    no_argument      , NULL, 'v' },
+        { "help",       no_argument      , NULL, 'h' },
         { NULL, 0, NULL, 0 }
     };
 
@@ -97,11 +118,55 @@ int main(int argc, char **argv)
 
     duda_signal_init();
 
+    /* Always create a Duda context from the beginning */
+    duda_ctx = duda_create();
+    if (!duda_ctx) {
+        exit(EXIT_FAILURE);
+    }
+
     /* Parse the command line options */
-    while ((opt = getopt_long(argc, argv, "vh",
+    while ((opt = getopt_long(argc, argv, "r:l:d:t:w:p:vh",
                               long_opts, NULL)) != -1) {
 
         switch (opt) {
+        case 'r':
+            opt_root = optarg;
+            break;
+        case 'l':
+            opt_logdir = optarg;
+            break;
+        case 'd':
+            opt_datadir = optarg;
+            break;
+        case 't':
+            opt_htmldir = optarg;
+            break;
+        case 'w':
+            if (opt_webservice) {
+                /* A new service load request found, process the previous one */
+                srv = duda_service_create(duda_ctx, opt_root, opt_logdir,
+                                          opt_datadir, opt_htmldir, optarg);
+                if (!srv) {
+                    fprintf(stderr, "Error loading service %s\n", optarg);
+                    duda_destroy(duda_ctx);
+                    exit(EXIT_FAILURE);
+                }
+
+                /* Reset web service params */
+                opt_root       = NULL;
+                opt_logdir     = NULL;
+                opt_datadir    = NULL;
+                opt_htmldir    = NULL;
+                opt_webservice = NULL;
+                srv            = NULL;
+            }
+            else {
+                opt_webservice = optarg;
+            }
+            break;
+        case 'p':
+            duda_ctx->tcp_port = mk_string_dup(optarg);
+            break;
         case 'h':
             duda_help(EXIT_SUCCESS);
             break;
@@ -112,6 +177,20 @@ int main(int argc, char **argv)
             duda_help(EXIT_FAILURE);
         }
     }
+
+    /* Load any remaining service */
+    if (opt_webservice) {
+        srv = duda_service_create(duda_ctx, opt_root, opt_logdir,
+                                  opt_datadir, opt_htmldir, opt_webservice);
+        if (!srv) {
+            fprintf(stderr, "Error loading service %s\n", opt_webservice);
+            duda_destroy(duda_ctx);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    /* Start the service */
+    duda_start(duda_ctx);
 
     /* be a good citizen */
     return 0;

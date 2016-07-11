@@ -227,7 +227,7 @@ int duda_load_services()
             mk_api->mem_free(service_path);
 
             /* Register service */
-            api = duda_api_master();
+            api = duda_api_create();
             duda_service_register(api, entry_ws);
         }
     }

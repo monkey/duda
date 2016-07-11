@@ -17,8 +17,6 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-
 extern struct mk_plugin mk_plugin_duda;
 
 #include "duda_webservice.h"
