@@ -99,11 +99,11 @@ static char *service_path(char *root, char *path)
 /* Lookup and load web service symbols */
 static int map_internals(struct duda_service *ds, struct duda_api_objects *api)
 {
-    int (*cb_main) (struct duda_api_objects *, struct duda_service *);
+    int (*cb_main) (struct duda_service *, struct duda_api_objects *);
 
-    /* Load and invoke duda_main() */
+    /* Lookup and invoke duda_main() */
     cb_main = (int (*)()) load_symbol(ds->dl_handle, "_duda_bootstrap");
-    cb_main(api, ds);
+    cb_main(ds, api);
 }
 
 /* Creates a web service instance */
