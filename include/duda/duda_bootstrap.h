@@ -29,13 +29,16 @@ int _duda_main();
  * initialization, then it invoke the end-user routine under _duda_main()
  */
 #define duda_main()                                                     \
-    MK_EXPORT _duda_bootstrap(struct duda_api_objects *dapi,            \
-                              struct duda_service *ds) {                \
+    MK_EXPORT _duda_bootstrap(struct duda_service *ds,                  \
+                              struct duda_api_objects *dapi) {          \
+                                                                        \
         /* API Objects */                                               \
         response = dapi->response;                                      \
-        return _duda_main(dapi);                                        \
+        router   = dapi->router;                                        \
+                                                                        \
+        return _duda_main(ds);                                          \
     }                                                                   \
-    int _duda_main(struct duda_api_objects *dapi)
+    int _duda_main(struct duda_service *ds)
 
 
 #endif

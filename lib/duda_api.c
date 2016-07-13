@@ -73,6 +73,7 @@ struct duda_api_objects *duda_api_create()
     objs->request  = duda_request_object();
     */
     objs->response = duda_response_object();
+    objs->router   = duda_router_object();
 
     /*
     objs->console  = duda_console_object();
@@ -87,7 +88,6 @@ struct duda_api_objects *duda_api_create()
     objs->fconf    = duda_fconf_object();
     objs->worker   = duda_worker_object();
     objs->dthread  = duda_dthread_object();
-    objs->router   = duda_router_object();
     */
     /* FIXME - DEBUG object */
 #ifdef DEBUG

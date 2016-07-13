@@ -97,14 +97,13 @@ static char *service_path(char *root, char *path)
 }
 
 /* Lookup and load web service symbols */
-static int map_internals(struct duda_service *ds)
+static int map_internals(struct duda_service *ds, struct duda_api_objects *api)
 {
-    int (*cb_main) (struct duda_api_objects *, struct web_service *);
+    int (*cb_main) (struct duda_api_objects *, struct duda_service *);
 
     /* Load and invoke duda_main() */
     cb_main = (int (*)()) load_symbol(ds->dl_handle, "_duda_bootstrap");
-
-    cb_main(NULL, NULL);
+    cb_main(api, ds);
 }
 
 /* Creates a web service instance */
@@ -114,6 +113,7 @@ struct duda_service *duda_service_create(struct duda *d, char *root, char *log,
     int ret;
     void *handle;
     struct duda_service *ds;
+    struct duda_api_objects *api;
 
     if (!d) {
         return NULL;
@@ -183,8 +183,12 @@ struct duda_service *duda_service_create(struct duda *d, char *root, char *log,
     ds->dl_handle = handle;
     mk_list_add(&ds->_head, &d->services);
 
-    printf("api=%p\n", duda_api_create());
-    map_internals(ds);
+    /* Initialize references for API objects */
+    mk_list_init(&ds->router_list);
+
+    api = duda_api_create();
+    map_internals(ds, api);
+
     return ds;
 }
 

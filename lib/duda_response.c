@@ -264,7 +264,7 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
 
         size *= 2;  /* twice the old size */
         if ((np = mk_api->mem_realloc(p, size)) == NULL) {
-            mk_api->mem_free(p);
+            mk_mem_free(p);
             return - 1;
         } else {
             p = np;
@@ -274,7 +274,7 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
 
     ret = _print(dr, p, n, MK_TRUE);
     if (ret == -1) {
-        mk_api->mem_free(p);
+        mk_mem_free(p);
     }
 
     return ret;

@@ -20,6 +20,8 @@
 #ifndef DUDA_H
 #define DUDA_H
 
+#define _GNU_SOURCE
+
 #include <mk_core.h>
 #include <monkey/mk_lib.h>
 
@@ -34,6 +36,7 @@
 /* Special headers for web services only */
 #ifndef DUDA_LIB_CORE
 #include <duda/duda_bootstrap.h>
+#include <duda/duda_service_internal.h>
 #endif /* !DUDA_LIB_CORE */
 
 #endif

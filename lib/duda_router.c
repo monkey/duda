@@ -38,8 +38,8 @@ struct duda_router_path *router_new_path(char *pattern,
 {
     struct duda_router_path *path;
 
-    path                = mk_api->mem_alloc(sizeof(struct duda_router_path));
-    path->pattern       = mk_api->str_dup(pattern);
+    path                = mk_mem_malloc(sizeof(struct duda_router_path));
+    path->pattern       = mk_string_dup(pattern);
     path->pattern_len   = strlen(pattern);
     path->callback      = callback;
     path->callback_name = callback_name;
@@ -59,12 +59,11 @@ struct duda_router_path *router_new_path(char *pattern,
 
 static int router_add_static(char *pattern,
                              void (*callback)(duda_request_t *),
-                             char *callback_name,
                              struct mk_list *list)
 {
     struct duda_router_path *path;
 
-    path = router_new_path(pattern, callback, callback_name, list);
+    path = router_new_path(pattern, callback, "", list);
     if (!path) {
         return -1;
     }
@@ -85,13 +84,13 @@ static struct mk_list *router_split_pattern(char *pattern)
     struct mk_list *list;
     struct mk_string_line *new;
 
-    list = mk_api->mem_alloc(sizeof(struct mk_list));
+    list = mk_mem_malloc(sizeof(struct mk_list));
     mk_list_init(list);
 
     len = strlen(pattern);
 
     while (i < len) {
-        end = mk_api->str_char_search(pattern + i, '/', len - i);
+        end = mk_string_char_search(pattern + i, '/', len - i);
 
         if (end >= 0 && end + i < len) {
             end += i;
@@ -101,18 +100,18 @@ static struct mk_list *router_split_pattern(char *pattern)
                 continue;
             }
 
-            val = mk_api->str_copy_substr(pattern, i, end);
+            val = mk_string_copy_substr(pattern, i, end);
             val_len = end - i;
         }
         else {
-            val = mk_api->str_copy_substr(pattern, i, len);
+            val = mk_string_copy_substr(pattern, i, len);
             val_len = len - i;
             end = len;
 
         }
 
         /* Alloc node */
-        new = mk_api->mem_alloc(sizeof(struct mk_string_line));
+        new = mk_mem_malloc(sizeof(struct mk_string_line));
         new->val = val;
         new->len = val_len;
 
@@ -125,7 +124,6 @@ static struct mk_list *router_split_pattern(char *pattern)
 
 static int router_add_dynamic(char *pattern,
                               void (*callback)(duda_request_t *),
-                              char *callback_name,
                               struct mk_list *list)
 {
     struct mk_list *head;
@@ -147,7 +145,7 @@ static int router_add_dynamic(char *pattern,
         return -1;
     }
 
-    path = router_new_path(pattern, callback, callback_name, list);
+    path = router_new_path(pattern, callback, "", list);
     if (!path) {
         return -1;
     }
@@ -157,19 +155,19 @@ static int router_add_dynamic(char *pattern,
         entry = mk_list_entry(head, struct mk_string_line, _head);
 
         /* allocate memory for the field, lookup the type and register */
-        field = mk_api->mem_alloc(sizeof(struct duda_router_field));
+        field = mk_mem_malloc(sizeof(struct duda_router_field));
         if (entry->val[0] == ':') {
             field->type = DUDA_ROUTER_FVAR;
         }
         else {
             field->type = DUDA_ROUTER_FKEY;
         }
-        field->name = mk_api->str_dup(entry->val);
+        field->name = mk_string_dup(entry->val);
         field->name_len = entry->len;
 
         mk_list_add(&field->_head, &path->fields);
     }
-    mk_api->str_split_free(plist);
+    mk_string_split_free(plist);
     return 0;
 }
 
@@ -471,58 +469,35 @@ int duda_router_uri_parse(duda_request_t *dr)
  * @METHOD_PARAM: callback the callback function invoked once the pattern matches.
  * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
  */
-int duda_router_map(char *pattern,
-                    void (*callback)(duda_request_t *),
-                    char *callback_name,
-                    struct mk_list *list)
+int duda_router_map(struct duda_service *ds,
+                    char *pattern,
+                    void (*callback)(duda_request_t *))
 {
     int ret;
     char *tmp;
 
-    if (!pattern || !callback || !list) {
+    if (!pattern || !callback) {
         mk_err("Duda: invalid usage of map method.");
-        exit(EXIT_FAILURE);
+        return -1;
     }
 
     tmp = strstr(pattern, ":");
     if (!tmp) {
-        ret = router_add_static(pattern, callback, callback_name, list);
+        ret = router_add_static(pattern, callback, &ds->router_list);
     }
     else {
-        ret = router_add_dynamic(pattern, callback, callback_name, list);
+        ret = router_add_dynamic(pattern, callback, &ds->router_list);
     }
 
     return ret;
-}
-
-/*
- * @METHOD_NAME: root
- * @METHOD_DESC: It maps the root URL to a specific callback function.
- * @METHOD_PROTO: int root(void (*callback)(duda_request_t *))
- * @METHOD_PARAM: callback the callback function invoked once the pattern matches.
- * @METHOD_RETURN: Upon successful completion it returns 0, on error returns -1.
- */
-int duda_router_root(struct web_service *ws,
-                     void (*cb) (void *),
-                     char *name)
-{
-    if (!cb) {
-        return -1;
-    }
-
-    ws->router_root_name = name;
-    ws->router_root_cb   = cb;
-
-    return 0;
 }
 
 struct duda_api_router *duda_router_object()
 {
     struct duda_api_router *r;
 
-    r = mk_api->mem_alloc(sizeof(struct duda_api_router));
-    r->_map    = duda_router_map;
-    r->_root   = duda_router_root;
+    r      = mk_mem_malloc(sizeof(struct duda_api_router));
+    r->map = duda_router_map;
 
     return r;
 }

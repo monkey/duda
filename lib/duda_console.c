@@ -314,7 +314,8 @@ int duda_console_enable(char *map, struct mk_list *list)
         buf[len] = '/';
     }
 
-    return duda_router_map(buf, duda_console_dash_home, "dashboard-home", list);
+    //FIXME return duda_router_map(buf, duda_console_dash_home, "dashboard-home", list);
+    return -1;
 }
 
 struct duda_api_console *duda_console_object()

@@ -17,10 +17,11 @@
  *  limitations under the License.
  */
 
-#include "duda_api.h"
-
 #ifndef MK_DUDA_ROUTER_H
 #define MK_DUDA_ROUTER_H
+
+#include <duda/duda_api.h>
+#include <duda/duda_service_internal.h>
 
 #define DUDA_ROUTER_STATIC     0
 #define DUDA_ROUTER_DYNAMIC    1
@@ -90,16 +91,9 @@ struct duda_api_router {
      *
      * The list head is read as a symbol later inside duda.c .
      */
-    #define map(pattern, callback) \
-        _map(pattern, callback, #callback, &duda_router_list)
-    int (*_map) (char *,
-                 void (*callback)(duda_request_t *),
-                 char *callback_name, struct mk_list *);
-
-    #define root(callback) _root(self, (void *) callback, #callback)
-    int (*_root) (struct web_service *,
-                  void (*callback)(void *),
-                  char *);
+    int (*map) (struct duda_service *,
+                char *,
+                void (*callback)(duda_request_t *));
 };
 
 struct duda_api_router *duda_router_object();
@@ -110,9 +104,7 @@ int duda_router_uri_parse(duda_request_t *dr);
 int duda_router_path_lookup(struct web_service *ws,
                             duda_request_t *dr,
                             struct duda_router_path **path);
-int duda_router_map(char *pattern,
-                    void (*callback)(duda_request_t *),
-                    char *callback_name,
-                    struct mk_list *list);
-
+int duda_router_map(struct duda_service *ds,
+                    char *pattern,
+                    void (*callback)(duda_request_t *));
 #endif
