@@ -17,8 +17,7 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-#include <duda/duda_global.h>
+#include <duda/objects/duda_global.h>
 
 /*
  * @OBJ_NAME: global

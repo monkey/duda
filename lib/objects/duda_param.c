@@ -17,12 +17,11 @@
  *  limitations under the License.
  */
 
+#include <duda/duda.h>
+#include <duda/objects/duda_router.h>
+#include <duda/objects/duda_param.h>
 #include <duda/duda_utils.h>
 
-#include <monkey/mk_api.h>
-#include <duda/duda_router.h>
-#include <duda/duda_param.h>
-#include <duda/duda.h>
 
 /*
  * @OBJ_NAME: param

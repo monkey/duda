@@ -57,6 +57,7 @@ int duda_destroy(struct duda *duda_ctx)
 
 static void duda_switcher(mk_request_t *request)
 {
+    /* A new request have arrived */
     mk_http_status(request, 200);
     mk_http_send(request, "Hello from Duda!", 16, NULL);
 }

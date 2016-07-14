@@ -17,9 +17,9 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-#include <duda/duda_cookie.h>
+
 #include <duda/duda.h>
+#include <duda/objects/duda_cookie.h>
 
 /*
  * @OBJ_NAME: cookie
@@ -95,6 +95,7 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
      * Destroy a cookie
      */
     if (expires == COOKIE_EXPIRE_TIME) {
+        /* FIXME: COOKIE DISABLED
         mk_api->iov_add(dr->sr->headers._extra_rows,
                         dr->appname.data, dr->appname.len, MK_FALSE);
         mk_api->iov_add(dr->sr->headers._extra_rows,
@@ -103,6 +104,7 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
                         dd_cookie_expire_value.data,
                         dd_cookie_expire_value.len,
                         MK_FALSE);
+        */
         return 0;
     }
 
@@ -111,20 +113,23 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
         exp.data = mk_api->mem_alloc(COOKIE_MAX_DATE_LEN);
         exp.len = mk_api->time_to_gmt(&exp.data, expires);
 
+        /* FIXME
         mk_api->iov_add(dr->sr->headers._extra_rows, dr->appname.data,
                         dr->appname.len, MK_FALSE);
         mk_api->iov_add(dr->sr->headers._extra_rows,
                         dd_cookie_expire.data, dd_cookie_expire.len, MK_FALSE);
         mk_api->iov_add(dr->sr->headers._extra_rows,
                         exp.data, exp.len, MK_FALSE);
-
+        */
         return 0;
     }
 
+    /* FIXME
     mk_api->iov_add(dr->sr->headers._extra_rows,
                     dr->appname.data, dr->appname.len, MK_FALSE);
     mk_api->iov_add(dr->sr->headers._extra_rows,
                     dd_cookie_crlf.data, dd_cookie_crlf.len, MK_FALSE);
+    */
     return 0;
 }
 

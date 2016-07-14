@@ -25,17 +25,17 @@
 #include <monkey/mk_core.h>
 
 #include "duda.h"
-#include "duda_gc.h"
 #include "duda_event.h"
-#include "duda_global.h"
-#include "duda_cookie.h"
-#include "duda_console.h"
-#include "duda_log.h"
-#include "duda_request.h"
-#include "duda_response.h"
-#include "duda_worker.h"
-#include "duda_dthread.h"
-#include "duda_router.h"
+#include "objects/duda_gc.h"
+#include "objects/duda_log.h"
+#include "objects/duda_global.h"
+#include "objects/duda_cookie.h"
+#include "objects/duda_console.h"
+#include "objects/duda_request.h"
+#include "objects/duda_response.h"
+#include "objects/duda_worker.h"
+#include "objects/duda_dthread.h"
+#include "objects/duda_router.h"
 
 /* data types */
 typedef void * duda_callback_t;

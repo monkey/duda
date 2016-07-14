@@ -17,10 +17,8 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-
 #include <duda/duda.h>
-#include <duda/duda_router.h>
+#include <duda/objects/duda_router.h>
 
 #define ROUTER_REDIR_SIZE 64
 
@@ -378,7 +376,7 @@ static inline int uri_add(struct duda_router_uri *ruri, char *buf, int size)
 /* For an incoming URI, parse it and store the results on dr->router_uri */
 int duda_router_uri_parse(duda_request_t *dr)
 {
-    int i;
+    int i = 0;
     int len;
     int start = -1;
     int end   = -1;
@@ -389,12 +387,14 @@ int duda_router_uri_parse(duda_request_t *dr)
     uri = dr->sr->uri_processed.data;
     dr->router_uri.len = 0;
 
+    /* FIXME
     if (dr->ws_root->is_root == MK_FALSE) {
         i = dr->ws_root->name.len + 1;
     }
     else {
         i = 0;
     }
+    */
 
     for (; i < len; i++) {
         if (uri[i] != '/') {

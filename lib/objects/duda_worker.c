@@ -24,7 +24,7 @@
 
 #include <duda/duda.h>
 #include <duda/duda_api.h>
-#include <duda/duda_worker.h>
+#include <duda/objects/duda_worker.h>
 
 /* --- Local functions --- */
 

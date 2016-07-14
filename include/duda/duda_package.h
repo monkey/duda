@@ -25,20 +25,20 @@
 
 #include <monkey/mk_api.h>
 #include "duda_api.h"
-#include "duda_global.h"
+#include "objects/duda_global.h"
 #include "duda_package.h"
-#include "duda_param.h"
-#include "duda_session.h"
-#include "duda_cookie.h"
-#include "duda_data.h"
+#include "objects/duda_param.h"
+#include "objects/duda_session.h"
+#include "objects/duda_cookie.h"
+#include "objects/duda_data.h"
 #include "duda_conf.h"
-#include "duda_xtime.h"
-#include "duda_console.h"
-#include "duda_log.h"
-#include "duda_gc.h"
+#include "objects/duda_xtime.h"
+#include "objects/duda_console.h"
+#include "objects/duda_log.h"
+#include "objects/duda_gc.h"
 #include "duda_fconf.h"
-#include "duda_qs.h"
-#include "duda_dthread.h"
+#include "objects/duda_qs.h"
+#include "objects/duda_dthread.h"
 
 struct duda_package {
     char *name;

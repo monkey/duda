@@ -18,7 +18,7 @@
  */
 
 #include <duda/duda.h>
-#include <duda/duda_mem.h>
+#include <duda/objects/duda_mem.h>
 
 /*
  * @OBJ_NAME: mem
@@ -30,15 +30,15 @@
 
 struct duda_api_mem *duda_mem_object()
 {
-  struct duda_api_mem *obj;
+    struct duda_api_mem *obj;
 
-  obj = mk_api->mem_alloc(sizeof(struct duda_api_mem));
-  obj->alloc   = mk_mem_alloc;
-  obj->alloc_z = mk_mem_alloc_z;
-  obj->realloc = mk_mem_realloc;
-  obj->free    = mk_mem_free;
+    obj = mk_mem_alloc(sizeof(struct duda_api_mem));
+    obj->alloc   = mk_mem_alloc;
+    obj->alloc_z = mk_mem_alloc_z;
+    obj->realloc = mk_mem_realloc;
+    obj->free    = mk_mem_free;
 
-  return obj;
+    return obj;
 }
 
 

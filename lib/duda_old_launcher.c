@@ -24,17 +24,20 @@
 #include <monkey/mk_api.h>
 
 #include <duda/duda.h>
-#include <duda/duda_gc.h>
-#include <duda/duda_qs.h>
+#include <duda/duda_old.h>
 #include <duda/duda_conf.h>
 #include <duda/duda_stats.h>
 #include <duda/duda_event.h>
 #include <duda/duda_queue.h>
-#include <duda/duda_console.h>
-#include <duda/duda_log.h>
-#include <duda/duda_worker.h>
-#include <duda/duda_dthread.h>
 #include <duda/duda_package.h>
+
+#include <duda/duda_request.h>
+#include <duda/objects/duda_gc.h>
+#include <duda/objects/duda_qs.h>
+#include <duda/objects/duda_console.h>
+#include <duda/objects/duda_log.h>
+#include <duda/objects/duda_worker.h>
+#include <duda/objects/duda_dthread.h>
 
 /* Register a new duda_request into the thread context list */
 static void duda_dr_list_add(duda_request_t *dr)
@@ -652,38 +655,8 @@ int duda_override_docroot(struct mk_http_request *sr, int uri_offset,
  */
 int duda_service_html(duda_request_t *dr)
 {
-    int ret;
-    struct mk_http_request *sr = dr->sr;
-
-    /* Check if we have a local DocumentRoot for this web service */
-    if (!dr->ws_root->docroot.data) {
-        return -1;
-    }
-
-    /* Check the web service name in the URI */
-    if (dr->ws_root->is_root == MK_FALSE) {
-        if (strncmp(sr->uri_processed.data + 1, dr->ws_root->name.data,
-                    dr->ws_root->name.len) != 0) {
-            return -1;
-        }
-
-        /*
-         * We need to override the document root set by the virtual host
-         * logic in the session_request using the service name plus the
-         * the web service document root.
-         */
-        ret = duda_override_docroot(sr, dr->ws_root->name.len + 1,
-                                    dr->ws_root->docroot.data,
-                                    dr->ws_root->docroot.len);
-    }
-    else {
-        /* Direct override */
-        ret = duda_override_docroot(sr, 1,
-                                    dr->ws_root->docroot.data,
-                                    dr->ws_root->docroot.len);
-    }
-
-    return ret;
+    /* FIXME: deprecate this */
+    return -1;
 }
 
 int duda_service_run(struct mk_plugin *plugin,
@@ -707,8 +680,8 @@ int duda_service_run(struct mk_plugin *plugin,
         duda_gc_init(dr);
 
         /* service details */
-        dr->ws_root = web_service;
-        dr->plugin = plugin;
+        //dr->ws_root = web_service;
+        //dr->plugin = plugin;
 
         dr->socket = cs->socket;
         dr->sr     = sr;
@@ -727,14 +700,14 @@ int duda_service_run(struct mk_plugin *plugin,
 
     /* method invoked */
     dr->_method = NULL;
-    dr->n_params = 0;
+    //dr->n_params = 0;
 
     /* callbacks */
     dr->end_callback = NULL;
 
     /* data queues */
     mk_list_init(&dr->queue_out);
-    mk_list_init(&dr->channel.streams);
+    //mk_list_init(&dr->channel.streams);
 
     /* statuses */
     dr->_st_http_content_length = -2;      /* not set */

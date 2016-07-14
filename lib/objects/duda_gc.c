@@ -19,7 +19,7 @@
 
 #include <duda/duda.h>
 #include <duda/duda_api.h>
-#include <duda/duda_gc.h>
+#include <duda/objects/duda_gc.h>
 
 /*
  * @OBJ_NAME: gc

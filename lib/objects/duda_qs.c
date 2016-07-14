@@ -19,8 +19,8 @@
 
 #include <monkey/mk_api.h>
 #include <duda/duda.h>
-#include <duda/duda_gc.h>
-#include <duda/duda_qs.h>
+#include <duda/objects/duda_gc.h>
+#include <duda/objects/duda_qs.h>
 #include <duda/duda_qs_map.h>
 
 /*

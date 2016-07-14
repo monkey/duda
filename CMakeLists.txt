@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(dud)
+project(duda C)
 
 # Update CFLAGS
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__FILENAME__='\"$(subst ${CMAKE_SOURCE_DIR}/,,$(abspath $<))\"'")
@@ -47,7 +47,9 @@ endif()
 # General Headers
 include_directories(
   include/
-  deps/monkey/include
+  include/duda/
+  deps/monkey/mk_core/include/
+  deps/monkey/include/
   )
 
 macro(DUDA_SET_OPTION option value)

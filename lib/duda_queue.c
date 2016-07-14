@@ -20,6 +20,7 @@
 #include <monkey/mk_api.h>
 
 #include <duda/duda.h>
+#include <duda/duda_old.h>
 #include <duda/duda_event.h>
 #include <duda/duda_queue.h>
 #include <duda/duda_sendfile.h>

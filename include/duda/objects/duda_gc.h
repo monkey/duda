@@ -17,10 +17,10 @@
  *  limitations under the License.
  */
 
-#include "duda.h"
-
 #ifndef DUDA_GC_H
 #define DUDA_GC_H
+
+#include "duda/duda_request.h"
 
 /* Garbage Collector object: gc->x() */
 struct duda_api_gc {

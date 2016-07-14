@@ -25,9 +25,9 @@
 #include <monkey/mk_core.h>
 
 #include "duda.h"
-#include "duda_global.h"
-#include "duda_worker.h"
-#include "duda_mem.h"
+#include "objects/duda_global.h"
+#include "objects/duda_worker.h"
+#include "objects/duda_mem.h"
 
 #ifndef DUDA_OBJECTS_H
 #define DUDA_OBJECTS_H

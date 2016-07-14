@@ -17,8 +17,8 @@
  *  limitations under the License.
  */
 
-#ifndef DUDA_REQUEST_H
-#define DUDA_REQUEST_H
+#ifndef DUDA_OBJECT_REQUEST_H
+#define DUDA_OBJECT_REQUEST_H
 
 #include "duda.h"
 

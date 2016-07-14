@@ -23,7 +23,7 @@
 #include <monkey/mk_api.h>
 #include "duda_conf.h"
 #include "duda.h"
-#include "duda_global.h"
+#include "objects/duda_global.h"
 
 typedef struct {
     int enabled;

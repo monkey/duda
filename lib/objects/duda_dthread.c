@@ -17,8 +17,6 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-
 #include <assert.h>
 #include <string.h>
 
@@ -31,7 +29,7 @@
 #include <limits.h>
 #include <duda/duda.h>
 #include <duda/duda_api.h>
-#include <duda/duda_dthread.h>
+#include <duda/objects/duda_dthread.h>
 
 /*
  * @OBJ_NAME: dthread

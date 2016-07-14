@@ -49,6 +49,8 @@ duda_package_t *duda_package_load(const char *pkgname,
         return NULL;
     }
 
+    /*
+       FIXME: PACKAGES DISABLED FOR NOW
     handler = duda_load_library(package);
     if (!handler) {
         mk_warn("Duda: Invalid Package format '%s'", pkgname);
@@ -61,7 +63,7 @@ duda_package_t *duda_package_load(const char *pkgname,
         mk_err("Duda: the package '%s' is broken", pkgname);
         exit(EXIT_FAILURE);
     }
-
+    */
     package_info = package_main(api, ws);
     package_info->handler = handler;
     mk_api->mem_free(package);

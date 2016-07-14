@@ -28,7 +28,7 @@
 #include <duda/duda.h>
 #include <duda/duda_api.h>
 #include <duda/duda_conf.h>
-#include <duda/duda_router.h>
+#include <duda/objects/duda_router.h>
 #include <duda/duda_webservice.h>
 #include <duda/duda_stats.h>
 
@@ -43,16 +43,9 @@
 /* callback for /app/console/messages */
 void duda_console_cb_messages(duda_request_t *dr)
 {
-    int size = 1024;
-    char buf[size];
+    (void) dr;
 
-    /* Create new path */
-    snprintf(buf, size, "/tmp/%s.duda.messages", dr->ws_root->name.data);
-
-    /* response */
-    duda_response_http_status(dr, 200);
-    duda_response_http_header(dr, "Content-Type: text/plain");
-    duda_response_sendfile(dr, buf);
+    duda_response_http_status(dr, 500);
     duda_response_end(dr, NULL);
 }
 
@@ -85,31 +78,6 @@ static inline void service_info_row(duda_request_t *dr, char *title, char *value
 {
     duda_response_printf(dr, "<tr><td><strong>%s</strong></td><td>%s</td></tr>\n",
                          title, !value ? "": value);
-}
-
-static void dashboard_panel_service_info(duda_request_t *dr)
-{
-    struct web_service *ws = dr->ws_root;
-
-    duda_response_printf(dr, DD_HTML_PANEL_HEADER, "primary", "Web Service Information");
-    duda_response_printf(dr,
-                         "<table class='table table-striped'>\n"
-                         "  <tbody>\n");
-
-    service_info_row(dr, "Name",  ws->name.data);
-    service_info_row(dr, "Internal Name", ws->fixed_name.data);
-    service_info_row(dr, "Document Dir", ws->docroot.data);
-    service_info_row(dr, "Config Dir", ws->confdir.data);
-    service_info_row(dr, "Data Dir", ws->datadir.data);
-    service_info_row(dr, "Logs Dir", ws->logdir.data);
-    service_info_row(dr, "is_root", ws->is_root == MK_FALSE ? "No" : "Yes");
-    service_info_row(dr, "bind_messages", ws->bind_messages == MK_FALSE ? "No" : "Yes");
-
-    duda_response_printf(dr,
-                         "</tbody>\n"
-                         "</table>\n");
-
-    duda_response_printf(dr, DD_HTML_PANEL_FOOTER, "");
 }
 
 static void dashboard_panel_memory(duda_request_t *dr)
@@ -168,51 +136,6 @@ static void dashboard_panel_memory(duda_request_t *dr)
                          "the information above represents a global view of the server");
 }
 
-/* callback for Dashboard home */
-void duda_console_dash_home(duda_request_t *dr)
-{
-    duda_response_http_status(dr, 200);
-    duda_response_http_header(dr, "Content-Type: text/html");
-
-    /* Header */
-    duda_response_printf(dr, DD_HTML_HEADER, "Console Map", DD_HTML_CSS);
-    duda_response_printf(dr, DD_HTML_NAVBAR_BASIC, "", "Dashboard");
-
-    duda_response_printf(dr,
-                         "<div class=\"container\">"
-                         "  <div class=\"duda-template\">"
-                         "    <h1>Dashboard: %s/</h1>\n"
-                         "      <address>\n"
-                         "        General information of <strong>%s</strong> web service\n"
-                         "      </address>\n",
-                         dr->ws_root->name.data,
-                         dr->ws_root->name.data);
-
-    /* First row: service info and memory usage */
-    duda_response_printf(dr, "<div class='row'>");
-    duda_response_printf(dr, "<div class='col-md-7'>");
-    dashboard_panel_service_info(dr);
-    duda_response_printf(dr, "</div>");
-
-    duda_response_printf(dr, "<div class='col-md-5'>");
-    dashboard_panel_memory(dr);
-    duda_response_printf(dr, "</div>");
-    duda_response_printf(dr, "</div>");
-    /* --- end first row */
-
-
-    duda_response_printf(dr, "<hr>\n");
-    duda_response_printf(dr, "<h2>Routing</h2>\n");
-    duda_response_printf(dr, "<p class=\"muted\">\n"
-                             "   the following section list the static URL maps and "
-                             "   the interfaces/methods defined through the API.\n"
-                             "</p>\n");
-
-    /* Footer */
-    duda_response_print(dr, DD_HTML_FOOTER, sizeof(DD_HTML_FOOTER) - 1);
-    duda_response_end(dr, NULL);
-}
-
 /*
  * @METHOD_NAME: debug
  * @METHOD_DESC: It format and and prints a customized message to the web service
@@ -226,53 +149,6 @@ void duda_console_write(duda_request_t *dr,
                         char *file, int line,
                         char *format, ...)
 {
-    int fd;
-    int buf_size = 1024;
-    char buf[buf_size];
-    char path[buf_size];
-    mk_ptr_t *now;
-
-    /* Guess we need no more than 128 bytes. */
-    int n, size = 128;
-    char *p, *np;
-    va_list ap;
-
-    if ((p = mk_api->mem_alloc(size)) == NULL) {
-        return;
-    }
-
-    while (1) {
-        /* Try to print in the allocated space. */
-        va_start(ap, format);
-        n = vsnprintf(p, size, format, ap);
-        va_end(ap);
-        /* If that worked, return the string. */
-        if (n > -1 && n < size)
-            break;
-
-        size *= 2;  /* twice the old size */
-        if ((np = mk_api->mem_realloc (p, size)) == NULL) {
-            free(p);
-            return;
-        } else {
-            p = np;
-        }
-    }
-
-    snprintf(path, buf_size, "/tmp/%s.duda.messages",
-             dr->ws_root->name.data);
-    fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
-    if (fd == -1) {
-        perror("open");
-    }
-
-    now = mk_api->time_human();
-    n = snprintf(buf, buf_size, "%s [fd=%i] [%s:%i] %s\n",
-                 now->data, dr->cs->socket, file, line, p);
-    n = write(fd, buf, n);
-    close(fd);
-
-    mk_api->mem_free(p);
 }
 
 /*

@@ -17,13 +17,11 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-
 #include <stdlib.h>
 #include <assert.h>
 #include <duda/duda_api.h>
-#include <duda/duda_dthread.h>
-#include <duda/duda_dthread_channel.h>
+#include <duda/objects/duda_dthread.h>
+#include <duda/objects/duda_dthread_channel.h>
 
 struct duda_dthread_channel_elem_t {
     void *data;

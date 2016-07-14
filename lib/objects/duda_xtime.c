@@ -17,8 +17,8 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-#include <duda/duda_xtime.h>
+#include <duda.h>
+#include <duda/objects/duda_xtime.h>
 
 /*
  * @OBJ_NAME: xtime

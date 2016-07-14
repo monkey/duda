@@ -17,17 +17,15 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-#include <monkey/mk_mimetype.h>
-
 #include <stdarg.h>
+
 #include <duda/duda.h>
 #include <duda/duda_api.h>
 #include <duda/duda_queue.h>
 #include <duda/duda_event.h>
 #include <duda/duda_sendfile.h>
 #include <duda/duda_body_buffer.h>
-#include <duda/duda_response.h>
+#include <duda/objects/duda_response.h>
 
 /*
  * @OBJ_NAME: response
@@ -80,11 +78,13 @@ int duda_response_send_headers(duda_request_t *dr)
 
     /* Calculate body length */
     if (dr->_st_http_content_length == -2) {
+        /* FIXME
         mk_list_foreach(head, &dr->channel.streams) {
             stream = mk_list_entry(head, struct mk_stream, _head);
             bytes += stream->bytes_total;
         }
         dr->sr->headers.content_length = bytes;
+        */
     }
     else if (dr->_st_http_content_length >= 0) {
         dr->sr->headers.content_length = dr->_st_http_content_length;
@@ -187,10 +187,12 @@ int duda_response_http_content_type(duda_request_t *dr, char *extension)
         return -1;
     }
 
+    /* FIXME
     header = mk_api->mem_alloc(32);
     len = snprintf(header, 32, "Content-Type: %s", m->type.data);
     duda_response_http_header_n(dr, header, len - 2);
     duda_gc_add(dr, header);
+    */
 
     return 0;
 }
@@ -200,6 +202,7 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
 {
     struct duda_body_buffer *body_buffer;
 
+    /* FIXME
     mk_api->stream_set(NULL,
                        MK_STREAM_COPYBUF,
                        &dr->channel,
@@ -207,6 +210,7 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
                        len,
                        NULL,
                        NULL, NULL, NULL);
+    */
     return 0;
 
     /* FIXME! Link data */

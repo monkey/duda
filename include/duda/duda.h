@@ -2,7 +2,7 @@
 
 /*  Duda I/O
  *  --------
- *  Copyright (C) 2012-2016, Eduardo Silva P. <eduardo@monkey.io>
+ *  Copyright (C) 2012-2016, Eduardo Silva P. <eduardo@monkey.io>.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,109 +17,27 @@
  *  limitations under the License.
  */
 
-extern struct mk_plugin mk_plugin_duda;
+#ifndef DUDA_H
+#define DUDA_H
 
-#include "duda_webservice.h"
-#include "duda_conf.h"
-#include "duda_gc_map.h"
-#include "duda_qs_map.h"
-#include "duda_router_uri.h"
+#define _GNU_SOURCE
 
-#ifndef DUDA_MAIN_H
-#define DUDA_MAIN_H
+#include <monkey/mk_core.h>
+#include <monkey/mk_lib.h>
 
-#define MAP_WS_APP_NAME   0X00
-#define MAP_WS_INTERFACE  0X10
-#define MAP_WS_METHOD     0X20
-#define MAP_WS_PARAM      0X30
-#define MAP_WS_END        0X40
+#include "duda_info.h"
+#include "duda_version.h"
+#include "duda_lib.h"
+#include "duda.h"
+#include "duda_api.h"
+#include "duda_objects.h"
+#include "duda_service.h"
+#include "duda_request.h"
 
-/* Max number of parameters allowed in Duda URI */
-#define MAP_WS_MAX_PARAMS 8
-
-/*
- * This struct represent the web service request, as well it contains detailed
- * information about the response type and buffers associated
- */
-typedef struct duda_request {
-
-    /* web service details */
-    struct web_service *ws_root;
-
-    mk_ptr_t appname;
-    mk_ptr_t interface;
-    mk_ptr_t method;
-    mk_ptr_t params[MAP_WS_MAX_PARAMS];
-    short int n_params;
-
-    /* Monkey request data: plugin, client_session & session_request */
-    int socket;
-    struct mk_plugin *plugin;
-    struct mk_http_session *cs;
-    struct mk_http_request *sr;
-
-    /*
-     * Temporal Channel: we require to set our HTTP headers response as the
-     * the first item of the data stream of this service call, but we cannot
-     * do that until we know what data the web service is going to add. The
-     * approach is to set a separate channel (this 'channel') to be used
-     * to keep a list of streams set by the web service caller.
-     *
-     * When the response is going to be send, we re-link the streams into the
-     * parent dr->cs->channel.
-     */
-    struct mk_channel channel;
-
-    /* Parsed URI based on Router format */
-    struct duda_router_uri router_uri;
-
-    /* Router path lookup if matched */
-    struct duda_router_path *router_path;
-
-    /* Static map */
-    struct duda_method *_method;
-
-    /* Callback functions */
-    void (*end_callback) (struct duda_request *);
-
-    /* Internal statuses */
-    long _st_http_content_length;         /* Fixed content length size     */
-    unsigned int _st_http_headers_sent;   /* HTTP headers sent ?           */
-    unsigned int _st_http_headers_off;    /* should we send headers ?      */
-    unsigned int _st_body_writes;         /* Number of body_writes invoked */
-    unsigned int _st_service_end;         /* Did a service_end() ran ?     */
-
-    /* Query string */
-    struct duda_qs_map qs;
-
-    /* Gargabe collector */
-    struct duda_gc_map gc;
-
-    /* Data queues */
-    struct mk_list queue_out;
-
-    /* Lists linked to (events)*/
-    struct mk_list _head_events_write;
-
-    /* Head to red-black tree list that holds all DRs */
-    struct rb_node _rb_head;
-} duda_request_t;
-
-
-/* self identifier for the plugin context inside Monkey internals */
-struct mk_plugin *duda_plugin;
-
-pthread_key_t duda_global_events_write;
-pthread_key_t duda_global_dr_list;
-pthread_mutex_t duda_mutex_thctx;
-
-mk_ptr_t dd_iov_none;
-
-void *duda_load_library(const char *path);
-void *duda_load_symbol(void *handle, const char *symbol);
-int duda_service_end(duda_request_t *dr);
-
-duda_request_t *duda_dr_list_get(struct mk_http_request *sr);
-void duda_worker_init();
+/* Special headers for web services only */
+#ifndef DUDA_LIB_CORE
+#include "duda_bootstrap.h"
+#include "duda/duda_service_internal.h"
+#endif /* !DUDA_LIB_CORE */
 
 #endif

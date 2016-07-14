@@ -20,8 +20,8 @@
 #include <monkey/mk_api.h>
 
 #include <duda/duda.h>
-#include <duda/duda_gc.h>
-#include <duda/duda_data.h>
+#include <duda/objects/duda_gc.h>
+#include <duda/objects/duda_data.h>
 
 /*
  * @OBJ_NAME: data
@@ -79,7 +79,7 @@ char *duda_data_locate(duda_request_t *dr, const char *filename)
     int len;
     int flen;
     char *path;
-    struct web_service *ws = dr->ws_root;
+    struct web_service *ws;
 
     /* some minor validations */
     if (!ws) {

@@ -17,8 +17,6 @@
  *  limitations under the License.
  */
 
-#include <monkey/mk_api.h>
-
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -26,9 +24,9 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-#include <duda/duda_session.h>
 #include <duda/duda.h>
 #include <duda/duda_conf.h>
+#include <duda/objects/duda_session.h>
 
 /*
  * @OBJ_NAME: session
