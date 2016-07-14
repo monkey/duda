@@ -87,7 +87,7 @@ static char *service_path(char *root, char *path)
     len_path = strlen(path);
     size = (len_root + len_path + 2);
 
-    new_path = mk_mem_malloc(size);
+    new_path = mk_mem_alloc(size);
     if (!new_path) {
         return NULL;
     }
@@ -153,7 +153,7 @@ struct duda_service *duda_service_create(struct duda *d, char *root, char *log,
     }
 
     /* Create web service context */
-    ds = mk_mem_malloc_z(sizeof(struct duda_service));
+    ds = mk_mem_alloc_z(sizeof(struct duda_service));
     if (!ds) {
         dlclose(handle);
         return NULL;

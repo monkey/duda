@@ -460,7 +460,7 @@ struct duda_api_response *duda_response_object()
 {
     struct duda_api_response *obj;
 
-    obj = mk_mem_malloc(sizeof(struct duda_api_response));
+    obj = mk_mem_alloc(sizeof(struct duda_api_response));
     obj->send_headers        = duda_response_send_headers;
     obj->headers_off         = duda_response_headers_off;
     obj->http_status         = duda_response_http_status;

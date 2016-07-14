@@ -32,7 +32,7 @@ struct duda_api_request *duda_request_object()
 {
     struct duda_api_request *r;
 
-    r = mk_mem_malloc(sizeof(struct duda_api_request));
+    r = mk_mem_alloc(sizeof(struct duda_api_request));
     r->is_data   = duda_request_is_data;
     r->is_get    = duda_request_is_get;
     r->is_post   = duda_request_is_post;
@@ -201,7 +201,7 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
     }
 
     n = (size_t) dr->sr->data.len;
-    data = mk_mem_malloc_z(n + 1);
+    data = mk_mem_alloc_z(n + 1);
     if (!data) {
         return NULL;
     }
@@ -262,7 +262,7 @@ char *duda_request_header_get(duda_request_t *dr, int name,
     for (i = 0; i < toc->length; i++) {
         if (strncasecmp(row[i].init, key, len) == 0) {
             vsize = (row[i].end - (len + 1)  - row[i].init);
-            value = mk_mem_malloc(vsize + 1);
+            value = mk_mem_alloc(vsize + 1);
             strncpy(value, row[i].init + len + 1, vsize);
             value[vsize] = '\0';
             return value;
@@ -270,7 +270,7 @@ char *duda_request_header_get(duda_request_t *dr, int name,
     }*/
     header = mk_api->header_get(name, dr->sr, key, len);
     if (header) {
-        value = mk_mem_malloc(header->val.len + 1);
+        value = mk_mem_alloc(header->val.len + 1);
         memcpy(value, header->val.data, header->val.len);
         value[header->val.len - 1] = '\0';
         return value;

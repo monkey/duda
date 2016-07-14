@@ -49,11 +49,11 @@ struct duda_api_objects *duda_api_create()
     struct duda_api_objects *objs;
 
     /* Alloc memory */
-    objs = mk_mem_malloc(sizeof(struct duda_api_objects));
-    objs->duda     = mk_mem_malloc(sizeof(struct duda_api_main));
+    objs = mk_mem_alloc(sizeof(struct duda_api_objects));
+    objs->duda     = mk_mem_alloc(sizeof(struct duda_api_main));
     objs->monkey   = mk_api;
-    objs->msg      = mk_mem_malloc(sizeof(struct duda_api_msg));
-    objs->debug    = mk_mem_malloc(sizeof(struct duda_api_debug));
+    objs->msg      = mk_mem_alloc(sizeof(struct duda_api_msg));
+    objs->debug    = mk_mem_alloc(sizeof(struct duda_api_debug));
 
     /* MAP Duda calls */
     objs->duda->package_load = duda_package_load;

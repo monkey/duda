@@ -28,7 +28,7 @@ struct duda *duda_create()
     struct duda *d;
 
     /* Create and initialize a Duda context */
-    d = mk_mem_malloc_z(sizeof(struct duda));
+    d = mk_mem_alloc_z(sizeof(struct duda));
     if (!d) {
         return NULL;
     }

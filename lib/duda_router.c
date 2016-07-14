@@ -38,7 +38,7 @@ struct duda_router_path *router_new_path(char *pattern,
 {
     struct duda_router_path *path;
 
-    path                = mk_mem_malloc(sizeof(struct duda_router_path));
+    path                = mk_mem_alloc(sizeof(struct duda_router_path));
     path->pattern       = mk_string_dup(pattern);
     path->pattern_len   = strlen(pattern);
     path->callback      = callback;
@@ -84,7 +84,7 @@ static struct mk_list *router_split_pattern(char *pattern)
     struct mk_list *list;
     struct mk_string_line *new;
 
-    list = mk_mem_malloc(sizeof(struct mk_list));
+    list = mk_mem_alloc(sizeof(struct mk_list));
     mk_list_init(list);
 
     len = strlen(pattern);
@@ -111,7 +111,7 @@ static struct mk_list *router_split_pattern(char *pattern)
         }
 
         /* Alloc node */
-        new = mk_mem_malloc(sizeof(struct mk_string_line));
+        new = mk_mem_alloc(sizeof(struct mk_string_line));
         new->val = val;
         new->len = val_len;
 
@@ -155,7 +155,7 @@ static int router_add_dynamic(char *pattern,
         entry = mk_list_entry(head, struct mk_string_line, _head);
 
         /* allocate memory for the field, lookup the type and register */
-        field = mk_mem_malloc(sizeof(struct duda_router_field));
+        field = mk_mem_alloc(sizeof(struct duda_router_field));
         if (entry->val[0] == ':') {
             field->type = DUDA_ROUTER_FVAR;
         }
@@ -496,7 +496,7 @@ struct duda_api_router *duda_router_object()
 {
     struct duda_api_router *r;
 
-    r      = mk_mem_malloc(sizeof(struct duda_api_router));
+    r      = mk_mem_alloc(sizeof(struct duda_api_router));
     r->map = duda_router_map;
 
     return r;
