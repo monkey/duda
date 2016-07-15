@@ -48,7 +48,6 @@ endif()
 include_directories(
   include/
   include/duda/
-  deps/monkey/mk_core/include/
   deps/monkey/include/
   )
 
