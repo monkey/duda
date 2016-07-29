@@ -83,19 +83,19 @@ int duda_response_send_headers(duda_request_t *dr)
             stream = mk_list_entry(head, struct mk_stream, _head);
             bytes += stream->bytes_total;
         }
-        dr->sr->headers.content_length = bytes;
+        dr->request->headers.content_length = bytes;
         */
     }
     else if (dr->_st_http_content_length >= 0) {
-        dr->sr->headers.content_length = dr->_st_http_content_length;
+        dr->request->headers.content_length = dr->_st_http_content_length;
     }
 
-    if (dr->sr->headers.status <= 0) {
+    if (dr->request->headers.status <= 0) {
         duda_api_exception(dr, "Callback did not set the HTTP response status");
         abort();
     }
 
-    r = mk_api->header_prepare(dr->cs, dr->sr);
+    r = mk_api->header_prepare(dr->session, dr->request);
     if (r != 0) {
         /* FIXME: Console error */
         return -1;
@@ -110,7 +110,7 @@ int duda_response_send_headers(duda_request_t *dr)
      */
 
     /* FIXME: dst-2 */
-    //mk_list_cat(&dr->channel.streams, &(dr->cs->channel)->streams);
+    //mk_list_cat(&dr->channel.streams, &(dr->session->channel)->streams);
 
     return 0;
 }
@@ -124,7 +124,7 @@ int duda_response_send_headers(duda_request_t *dr)
  */
 int duda_response_http_status(duda_request_t *dr, int status)
 {
-    mk_api->header_set_http_status(dr->sr, status);
+    mk_http_status(dr->request, status);
     return 0;
 }
 
@@ -138,7 +138,7 @@ int duda_response_http_status(duda_request_t *dr, int status)
  */
 int duda_response_http_header(duda_request_t *dr, char *row)
 {
-    return mk_api->header_add(dr->sr, row, strlen(row));
+    return mk_api->header_add(dr->request, row, strlen(row));
 }
 
 /*
@@ -152,7 +152,7 @@ int duda_response_http_header(duda_request_t *dr, char *row)
  */
 int duda_response_http_header_n(duda_request_t *dr, char *row, int len)
 {
-    return mk_api->header_add(dr->sr, row, len);
+    return mk_api->header_add(dr->request, row, len);
 }
 
 /*
@@ -211,6 +211,7 @@ static int _print(duda_request_t *dr, char *raw, int len, int free)
                        NULL,
                        NULL, NULL, NULL);
     */
+    mk_http_send(dr->request, raw, len, NULL);
     return 0;
 
     /* FIXME! Link data */
@@ -253,7 +254,7 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
     char *p, *np;
     va_list ap;
 
-    if ((p = mk_api->mem_alloc(size)) == NULL) {
+    if ((p = mk_mem_alloc(size)) == NULL) {
         return -1;
     }
 
@@ -267,7 +268,7 @@ int duda_response_printf(duda_request_t *dr, const char *format, ...)
             break;
 
         size *= 2;  /* twice the old size */
-        if ((np = mk_api->mem_realloc(p, size)) == NULL) {
+        if ((np = mk_mem_realloc(p, size)) == NULL) {
             mk_mem_free(p);
             return - 1;
         } else {
@@ -357,7 +358,7 @@ int duda_response_wait(duda_request_t *dr)
      * send the socket to sleep, the behavior is not required as the Monkey 'event
      * states' already have the previous mode and behavior
      */
-    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_SLEEP, -1);
+    return mk_api->event_socket_change_mode(dr->session->socket, DUDA_EVENT_SLEEP, -1);
 }
 
 /*
@@ -370,7 +371,7 @@ int duda_response_wait(duda_request_t *dr)
  */
 int duda_response_continue(duda_request_t *dr)
 {
-    return mk_api->event_socket_change_mode(dr->cs->socket, DUDA_EVENT_WAKEUP, -1);
+    return mk_api->event_socket_change_mode(dr->session->socket, DUDA_EVENT_WAKEUP, -1);
 }
 
 /*
@@ -395,7 +396,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
     int ret;
 
     /* Make sure the caller set a valid HTTP response code */
-    if (dr->sr->headers.status == 0 && dr->_st_http_headers_off == MK_FALSE) {
+    if (dr->request->headers.status == 0 && dr->_st_http_headers_off == MK_FALSE) {
         duda_api_exception(dr, "Callback did not set the HTTP response status");
         abort();
     }
@@ -418,7 +419,7 @@ int duda_response_end(duda_request_t *dr, void (*end_cb) (duda_request_t *))
      *
      * KeepAlive was very slow due to this bug. More than 4 hours to found this silly bug.
      */
-    mk_api->socket_cork_flag(dr->cs->socket, TCP_CORK_OFF);
+    mk_api->socket_cork_flag(dr->session->socket, TCP_CORK_OFF);
 
     if (ret == 0) {
         //duda_service_end(dr);

@@ -158,7 +158,7 @@ int duda_session_create(duda_request_t *dr, char *name, char *value, int expires
      * then generate the UUID to send the proper Cookie to the
      * client.
      */
-    e = ((long) &dr) + ((long) &dr->cs) + (dr->cs->socket);
+    e = ((long) &dr) + ((long) &dr->session) + (dr->session->socket);
     uuid = mk_api->mem_alloc(SESSION_UUID_SIZE);
     if (!uuid) {
         mk_warn("duda_session: could not allocate space for UUID");

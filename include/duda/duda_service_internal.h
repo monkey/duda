@@ -20,21 +20,21 @@
 #ifndef DUDA_SERVICE_INTERNAL_H
 #define DUDA_SERVICE_INTERNAL_H
 
-#include <duda.h>
+#include "duda.h"
 
 /* Web Service context */
 struct duda_service {
     /* Configuration paths */
-    char *path_root;           /* Prefix path for web service requirements */
-    char *path_log;            /* Directory for logs                 */
-    char *path_data;           /* Private data directory             */
-    char *path_html;           /* Public HTML files                  */
-    char *path_service;        /* Path for web service file (.duda)  */
-    void *dl_handle;           /* Service/Shared library handle      */
-    struct mk_list _head;      /* link to parent list duda->services */
+    char *path_root;            /* Prefix path for web service requirements */
+    char *path_log;             /* Directory for logs                 */
+    char *path_data;            /* Private data directory             */
+    char *path_html;            /* Public HTML files                  */
+    char *path_service;         /* Path for web service file (.duda)  */
+    void *dl_handle;            /* Service/Shared library handle      */
+    struct mk_list _head;       /* link to parent list duda->services */
 
     /* Specific requirements by API Objects used in duda_main() context */
-    struct mk_list router_list;
+    struct mk_list router_list; /* list head for routing paths        */
 };
 
 #endif

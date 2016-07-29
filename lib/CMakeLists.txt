@@ -2,6 +2,7 @@ set(src
   # Library core
   duda.c
   duda_service.c
+  duda_request.c
   duda_old_launcher.c
   duda_conf.c
   duda_api.c

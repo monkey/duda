@@ -80,9 +80,9 @@ duda_request_t *duda_dr_list_get(struct mk_http_request *sr)
   	struct rb_node *node = root->rb_node;
   	while (node) {
   		dr = container_of(node, duda_request_t, _rb_head);
-		if (sr < dr->sr)
+		if (sr < dr->request)
   			node = node->rb_left;
-		else if (sr > dr->sr)
+		else if (sr > dr->request)
   			node = node->rb_right;
 		else {
   			return dr;
@@ -586,7 +586,7 @@ int duda_service_end(duda_request_t *dr)
     duda_gc_free_content(dr);
 
     /* Finalize HTTP stuff with Monkey core */
-    ret = mk_api->http_request_end(dr->cs, MK_TRUE);
+    ret = mk_api->http_request_end(dr->session, MK_TRUE);
     if (ret < 0) {
         dr->_st_service_end = MK_TRUE;
     }
@@ -683,8 +683,8 @@ int duda_service_run(struct mk_plugin *plugin,
         //dr->ws_root = web_service;
         //dr->plugin = plugin;
 
-        dr->socket = cs->socket;
-        dr->sr     = sr;
+        dr->socket  = cs->socket;
+        dr->request = sr;
 
         /* Register */
         duda_dr_list_add(dr);
@@ -695,8 +695,8 @@ int duda_service_run(struct mk_plugin *plugin,
      * session the previous session_request is not longer valid, we need
      * to set the new one.
      */
-    dr->cs = cs;
-    dr->sr = sr;
+    dr->session = cs;
+    dr->request = sr;
 
     /* method invoked */
     dr->_method = NULL;
@@ -729,7 +729,7 @@ int duda_service_run(struct mk_plugin *plugin,
     if (web_service->router_root_cb) {
         if (duda_router_is_request_root(web_service, dr) == MK_TRUE) {
             /* Check if it needs redirection */
-            if (dr->sr->uri_processed.data[dr->sr->uri_processed.len - 1] != '/') {
+            if (dr->request->uri_processed.data[dr->request->uri_processed.len - 1] != '/') {
                 duda_router_redirect(dr);
             }
             else {

@@ -20,10 +20,9 @@
 #ifndef DUDA_LOG_H
 #define DUDA_LOG_H
 
-#include <monkey/mk_api.h>
-#include "duda_conf.h"
-#include "duda.h"
-#include "objects/duda_global.h"
+#include <duda/duda.h>
+#include <duda/duda_conf.h>
+#include "duda_global.h"
 
 typedef struct {
     int enabled;

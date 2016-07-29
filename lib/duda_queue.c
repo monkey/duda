@@ -82,7 +82,7 @@ unsigned long duda_queue_length(struct mk_list *queue)
 int duda_queue_flush(duda_request_t *dr)
 {
     int ret = -1;
-    int socket = dr->cs->socket;
+    int socket = dr->session->socket;
     short int is_registered;
     unsigned long queue_len=0;
     struct mk_list *head;
@@ -207,7 +207,7 @@ int duda_queue_event_write_callback(int sockfd)
     list = pthread_getspecific(duda_global_events_write);
     mk_list_foreach_safe(head, temp, list) {
         entry = mk_list_entry(head, duda_request_t, _head_events_write);
-        if (entry->cs->socket == sockfd) {
+        if (entry->session->socket == sockfd) {
             ret = duda_queue_flush(entry);
             if (ret > 0) {
                 return MK_PLUGIN_RET_EVENT_OWNED;

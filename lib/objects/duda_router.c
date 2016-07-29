@@ -181,35 +181,35 @@ int duda_router_redirect(duda_request_t *dr)
     char *buf;
     char *host;
     char *location = NULL;
-    struct mk_http_request *sr = dr->sr;
+    struct mk_http_request *sr = dr->request;
 
     duda_response_http_status(dr, 301);
 
-    if (dr->sr->host.data && sr->port > 0) {
-        if (dr->sr->port != mk_api->config->standard_port) {
-            port_redirect = dr->sr->port;
+    if (dr->request->host.data && sr->port > 0) {
+        if (dr->request->port != mk_api->config->standard_port) {
+            port_redirect = dr->request->port;
         }
     }
 
-    redirect_size = (ROUTER_REDIR_SIZE + dr->sr->host.len +
-                     dr->sr->uri_processed.len + 2);
+    redirect_size = (ROUTER_REDIR_SIZE + dr->request->host.len +
+                     dr->request->uri_processed.len + 2);
 
     buf = duda_gc_alloc(dr, redirect_size);
-    host = mk_api->pointer_to_buf(dr->sr->host);
+    host = mk_api->pointer_to_buf(dr->request->host);
     duda_gc_add(dr, host);
 
     /*
      * Add ending slash to the location string
      */
-    location = (char *) duda_gc_alloc(dr, dr->sr->uri_processed.len + 2);
+    location = (char *) duda_gc_alloc(dr, dr->request->uri_processed.len + 2);
     if (!location) {
         /* FIXME: Need to raise memory problem message somewhere */
         exit(EXIT_FAILURE);
     }
 
-    memcpy(location, dr->sr->uri_processed.data, dr->sr->uri_processed.len);
-    location[dr->sr->uri_processed.len]     = '/';
-    location[dr->sr->uri_processed.len + 1] = '\0';
+    memcpy(location, dr->request->uri_processed.data, dr->request->uri_processed.len);
+    location[dr->request->uri_processed.len]     = '/';
+    location[dr->request->uri_processed.len + 1] = '\0';
 
     if (port_redirect > 0) {
         len = snprintf(buf, redirect_size,
@@ -237,8 +237,8 @@ int duda_router_redirect(duda_request_t *dr)
  * There is a specific exception where 'path' can be NULL and the return
  * value zero, just when the path_lookup instructed a HTTP redirection.
  */
-int duda_router_path_lookup(struct web_service *ws,
-                            duda_request_t *dr,
+int duda_router_path_lookup(struct duda_service *ds,
+                            mk_request_t *sr,
                             struct duda_router_path **path)
 {
     int offset = 0;
@@ -246,23 +246,14 @@ int duda_router_path_lookup(struct web_service *ws,
     char *uri_data;
     struct mk_list *head;
     struct duda_router_path *p;
-
+    duda_request_t *dr = NULL; /* FIXME */
     *path = NULL;
 
-    /*
-     * Check URI offset, it will depends on if the running web service
-     * 'owns' the complete HTTP server or not. The offset finally represents
-     * the position when the rules starts
-     */
-    if (ws->is_root == MK_FALSE) {
-        offset = ws->name.len + 1;
-    }
-
-    uri_len  = dr->sr->uri_processed.len - offset;
-    uri_data = dr->sr->uri_processed.data + offset;
+    uri_data = sr->uri_processed.data;
+    uri_len  = sr->uri_processed.len;
 
     /* Go around each router rule */
-    mk_list_foreach(head, ws->router_list) {
+    mk_list_foreach(head, &ds->router_list) {
         p = mk_list_entry(head, struct duda_router_path, _head);
 
         /* Static processing */
@@ -335,7 +326,7 @@ int duda_router_is_request_root(struct web_service *ws, duda_request_t *dr)
     char *uri_data;
     struct mk_http_request *sr;
 
-    sr = dr->sr;
+    sr = dr->request;
     ws_len   = ws->fixed_name.len;
     ws_data  = ws->fixed_name.data;
     uri_len  = sr->uri_processed.len;
@@ -383,8 +374,8 @@ int duda_router_uri_parse(duda_request_t *dr)
     int size;
     char *uri;
 
-    len = dr->sr->uri_processed.len;
-    uri = dr->sr->uri_processed.data;
+    len = dr->request->uri_processed.len;
+    uri = dr->request->uri_processed.data;
     dr->router_uri.len = 0;
 
     /* FIXME

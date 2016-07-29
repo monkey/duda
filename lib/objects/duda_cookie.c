@@ -71,22 +71,22 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
      * has not been allocated, we will do it by our selfs and add the required iov
      * entries to compose the Cookie row.
      */
-    if (!dr->sr->headers._extra_rows) {
-        dr->sr->headers._extra_rows = mk_api->iov_create(MK_PLUGIN_HEADER_EXTRA_ROWS * 2, 0);
+    if (!dr->request->headers._extra_rows) {
+        dr->request->headers._extra_rows = mk_api->iov_create(MK_PLUGIN_HEADER_EXTRA_ROWS * 2, 0);
     }
 
     /* Add 'Set-Cookie: ' */
-    mk_api->iov_add(dr->sr->headers._extra_rows,
+    mk_api->iov_add(dr->request->headers._extra_rows,
                     COOKIE_SET, sizeof(COOKIE_SET) -1, MK_FALSE);
 
     /* Append 'KEY=' */
-    mk_api->iov_add(dr->sr->headers._extra_rows, key, key_len, MK_FALSE);
-    mk_api->iov_add(dr->sr->headers._extra_rows,
+    mk_api->iov_add(dr->request->headers._extra_rows, key, key_len, MK_FALSE);
+    mk_api->iov_add(dr->request->headers._extra_rows,
                     dd_cookie_equal.data, dd_cookie_equal.len, MK_FALSE);
 
     /* Append 'VALUE; path=' */
-    mk_api->iov_add(dr->sr->headers._extra_rows, val, val_len, MK_FALSE);
-    mk_api->iov_add(dr->sr->headers._extra_rows,
+    mk_api->iov_add(dr->request->headers._extra_rows, val, val_len, MK_FALSE);
+    mk_api->iov_add(dr->request->headers._extra_rows,
                     dd_cookie_path.data, dd_cookie_path.len, MK_FALSE);
 
     /*
@@ -96,11 +96,11 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
      */
     if (expires == COOKIE_EXPIRE_TIME) {
         /* FIXME: COOKIE DISABLED
-        mk_api->iov_add(dr->sr->headers._extra_rows,
+        mk_api->iov_add(dr->request->headers._extra_rows,
                         dr->appname.data, dr->appname.len, MK_FALSE);
-        mk_api->iov_add(dr->sr->headers._extra_rows,
+        mk_api->iov_add(dr->request->headers._extra_rows,
                         dd_cookie_expire.data, dd_cookie_expire.len, MK_FALSE);
-        mk_api->iov_add(dr->sr->headers._extra_rows,
+        mk_api->iov_add(dr->request->headers._extra_rows,
                         dd_cookie_expire_value.data,
                         dd_cookie_expire_value.len,
                         MK_FALSE);
@@ -114,20 +114,20 @@ int duda_cookie_set(duda_request_t *dr, char *key, int key_len,
         exp.len = mk_api->time_to_gmt(&exp.data, expires);
 
         /* FIXME
-        mk_api->iov_add(dr->sr->headers._extra_rows, dr->appname.data,
+        mk_api->iov_add(dr->request->headers._extra_rows, dr->appname.data,
                         dr->appname.len, MK_FALSE);
-        mk_api->iov_add(dr->sr->headers._extra_rows,
+        mk_api->iov_add(dr->request->headers._extra_rows,
                         dd_cookie_expire.data, dd_cookie_expire.len, MK_FALSE);
-        mk_api->iov_add(dr->sr->headers._extra_rows,
+        mk_api->iov_add(dr->request->headers._extra_rows,
                         exp.data, exp.len, MK_FALSE);
         */
         return 0;
     }
 
     /* FIXME
-    mk_api->iov_add(dr->sr->headers._extra_rows,
+    mk_api->iov_add(dr->request->headers._extra_rows,
                     dr->appname.data, dr->appname.len, MK_FALSE);
-    mk_api->iov_add(dr->sr->headers._extra_rows,
+    mk_api->iov_add(dr->request->headers._extra_rows,
                     dd_cookie_crlf.data, dd_cookie_crlf.len, MK_FALSE);
     */
     return 0;
@@ -166,7 +166,7 @@ int duda_cookie_get(duda_request_t *dr, char *key, char **val, int *val_len)
     char *cookie;
     struct mk_http_header *header;
 
-    header = mk_api->header_get(MK_HEADER_COOKIE, dr->sr, NULL, 0);
+    header = mk_api->header_get(MK_HEADER_COOKIE, dr->request, NULL, 0);
     if (!header) {
         return -1;
     }

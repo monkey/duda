@@ -20,8 +20,7 @@
 #ifndef DUDA_CONSOLE_H
 #define DUDA_CONSOLE_H
 
-#include "duda.h"
-//#include "duda_api.h"
+#include <duda/duda.h>
 
 #define DD_HTML_HEADER                            \
     "<html>\n"                                    \

@@ -60,12 +60,12 @@ struct duda_api_request *duda_request_object()
  */
 int duda_request_is_data(duda_request_t *dr)
 {
-    if (dr->sr->method != MK_METHOD_POST &&
-        dr->sr->method != MK_METHOD_PUT) {
+    if (dr->request->method != MK_METHOD_POST &&
+        dr->request->method != MK_METHOD_PUT) {
         return MK_FALSE;
     }
 
-    if (dr->sr->content_length <= 0) {
+    if (dr->request->content_length <= 0) {
         return MK_FALSE;
     }
 
@@ -80,7 +80,7 @@ int duda_request_is_data(duda_request_t *dr)
  */
 int duda_request_is_get(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_METHOD_GET) {
+    if (dr->request->method == MK_METHOD_GET) {
         return MK_TRUE;
     }
 
@@ -95,7 +95,7 @@ int duda_request_is_get(duda_request_t *dr)
  */
 int duda_request_is_post(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_METHOD_POST) {
+    if (dr->request->method == MK_METHOD_POST) {
         return MK_TRUE;
     }
 
@@ -110,7 +110,7 @@ int duda_request_is_post(duda_request_t *dr)
  */
 int duda_request_is_head(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_METHOD_HEAD) {
+    if (dr->request->method == MK_METHOD_HEAD) {
         return MK_TRUE;
     }
 
@@ -125,7 +125,7 @@ int duda_request_is_head(duda_request_t *dr)
  */
 int duda_request_is_put(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_METHOD_PUT) {
+    if (dr->request->method == MK_METHOD_PUT) {
         return MK_TRUE;
     }
 
@@ -140,7 +140,7 @@ int duda_request_is_put(duda_request_t *dr)
  */
 int duda_request_is_delete(duda_request_t *dr)
 {
-    if (dr->sr->method == MK_METHOD_DELETE) {
+    if (dr->request->method == MK_METHOD_DELETE) {
         return MK_TRUE;
     }
 
@@ -162,16 +162,16 @@ int duda_request_is_content_type(duda_request_t *dr, const char *content_type)
         return MK_FALSE;
     }
 
-    if (dr->sr->content_type.len <= 0) {
+    if (dr->request->content_type.len <= 0) {
         return MK_FALSE;
     }
 
     len = strlen(content_type);
-    if (len != dr->sr->content_type.len) {
+    if (len != dr->request->content_type.len) {
         return MK_FALSE;
     }
 
-    if (strncmp(dr->sr->content_type.data, content_type, len) != 0) {
+    if (strncmp(dr->request->content_type.data, content_type, len) != 0) {
         return MK_FALSE;
     }
 
@@ -194,18 +194,18 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
     void *data;
 
     /* Some silly but required validations */
-    if (!dr->cs || !dr->sr || !dr->sr->data.data) {
+    if (!dr->session || !dr->request || !dr->request->data.data) {
         *len = 0;
         return NULL;
     }
 
-    n = (size_t) dr->sr->data.len;
+    n = (size_t) dr->request->data.len;
     data = mk_mem_alloc_z(n + 1);
     if (!data) {
         return NULL;
     }
 
-    memcpy(data, dr->sr->data.data, n);
+    memcpy(data, dr->request->data.data, n);
     *len = n;
 
     return data;
@@ -220,11 +220,11 @@ void *duda_request_get_data(duda_request_t *dr, unsigned long *len)
 long duda_request_content_length(duda_request_t *dr)
 {
     /* Some silly but required validations */
-    if (!dr->cs || !dr->sr || !dr->sr->data.data) {
+    if (!dr->session || !dr->request || !dr->request->data.data) {
         return -1;
     }
 
-    return dr->sr->content_length;
+    return dr->request->content_length;
 }
 
 /*
@@ -251,7 +251,7 @@ char *duda_request_header_get(duda_request_t *dr, int name,
     return NULL;
 
     /* Some silly but required validations */
-    if (!dr->cs || !dr->sr || !key) {
+    if (!dr->session || !dr->request || !key) {
         return NULL;
     }
 
@@ -267,7 +267,7 @@ char *duda_request_header_get(duda_request_t *dr, int name,
             return value;
         }
     }*/
-    header = mk_api->header_get(name, dr->sr, key, len);
+    header = mk_api->header_get(name, dr->request, key, len);
     if (header) {
         value = mk_mem_alloc(header->val.len + 1);
         memcpy(value, header->val.data, header->val.len);
@@ -303,7 +303,7 @@ int duda_request_header_cmp(duda_request_t *dr,
     struct mk_http_header *header;
 
     /* Some silly but required validations
-    if (!dr->cs || !dr->sr || !key) {
+    if (!dr->session || !dr->request || !key) {
         return -1;
     }
     */
@@ -321,7 +321,7 @@ int duda_request_header_cmp(duda_request_t *dr,
     */
     len = strlen(val);
 
-    header = mk_api->header_get(name, dr->sr, key, len);
+    header = mk_api->header_get(name, dr->request, key, len);
     if (header) {
         if (len != header->val.len) {
             return -1;
@@ -353,11 +353,11 @@ int duda_request_header_contains(duda_request_t *dr, int name,
     struct mk_http_header *header;
 
     /* Some silly but required validations */
-    if (!dr->cs || !dr->sr || !key) {
+    if (!dr->session || !dr->request || !key) {
         return -1;
     }
 
-    header = mk_api->header_get(name, dr->sr, key, len);
+    header = mk_api->header_get(name, dr->request, key, len);
     if (header) {
         if (len != header->val.len) {
             return -1;

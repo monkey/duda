@@ -55,11 +55,38 @@ int duda_destroy(struct duda *duda_ctx)
     return 0;
 }
 
-static void duda_switcher(mk_request_t *request)
+static void duda_switcher(mk_request_t *request, void *data)
 {
-    /* A new request have arrived */
-    mk_http_status(request, 200);
-    mk_http_send(request, "Hello from Duda!", 16, NULL);
+    int ret;
+    struct mk_list *head;
+    struct mk_list *r_head;
+    struct duda *duda_ctx;
+    struct duda_service *service;
+    struct duda_router_path *path;
+    struct duda_request *dr;
+
+    duda_ctx = data;
+
+    /* Iterate registered services and find a route */
+    mk_list_foreach(head, &duda_ctx->services) {
+        service = mk_list_entry(head, struct duda_service, _head);
+
+        /* Check service route paths */
+        ret = duda_router_path_lookup(service, request, &path);
+        if (ret == DUDA_ROUTER_MATCH) {
+            dr = duda_request_create(request, service, path);
+            if (!dr) {
+                goto error;
+            }
+            path->callback(dr);
+            return;
+        }
+    }
+
+ error:
+    /* Handle a custom error */
+    mk_http_status(request, 500);
+    mk_http_send(request, "Hello from Duda!\n", 17, NULL);
 }
 
 int duda_start(struct duda *duda_ctx)
@@ -93,7 +120,7 @@ int duda_start(struct duda *duda_ctx)
     mk_vhost_set(vh,
                  "Name", "default",
                  NULL);
-    mk_vhost_handler(vh, "/", duda_switcher);
+    mk_vhost_handler(vh, "/", duda_switcher, duda_ctx);
     mk_start(duda_ctx->monkey);
 }
 

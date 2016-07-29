@@ -20,7 +20,7 @@
 #ifndef DUDA_OBJECT_REQUEST_H
 #define DUDA_OBJECT_REQUEST_H
 
-#include "duda.h"
+#include <duda/duda.h>
 
 struct duda_api_request {
     int (*is_data)    (duda_request_t *);

@@ -20,7 +20,7 @@
 #ifndef DUDA_COOKIE_H
 #define DUDA_COOKIE_H
 
-#include "duda.h"
+#include <duda/duda.h>
 
 #define COOKIE_CRLF          "\r\n"
 #define COOKIE_EQUAL         "="

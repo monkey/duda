@@ -104,6 +104,8 @@ static int map_internals(struct duda_service *ds, struct duda_api_objects *api)
     /* Lookup and invoke duda_main() */
     cb_main = (int (*)()) load_symbol(ds->dl_handle, "_duda_bootstrap");
     cb_main(ds, api);
+
+
 }
 
 /* Creates a web service instance */
